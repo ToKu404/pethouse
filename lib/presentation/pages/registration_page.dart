@@ -9,10 +9,10 @@ class FormRegistration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Registration Form"),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: Text("Registration Form"),
+      //   centerTitle: true,
+      // ),
       body: Container(
         margin: EdgeInsets.all(24),
         child: Form(
