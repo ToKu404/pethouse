@@ -13,85 +13,88 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.all(kMargin),
-          child: Form(
-            child: ListView(
-              children: [
-                const SizedBox(
-                  height: 42,
-                ),
-                Center(
-                  child: Text('Sign Up',
-                      style: Theme.of(context).textTheme.headline5),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                //USERNAME
-                TextFormField(
-                  decoration: InputDecoration(
-                      fillColor: const Color(0xFF929292),
-                      labelText: 'Username',
-                      border: OutlineInputBorder(borderRadius: kBorderRadius)),
-                ),
-                const SizedBox(
-                  height: 19,
-                ),
-                //  EMAIL ADDRESS
-                TextFormField(
-                  decoration: InputDecoration(
-                      fillColor: const Color(0xFF929292),
-                      labelText: 'Email Address',
-                      border: OutlineInputBorder(borderRadius: kBorderRadius)),
-                ),
-                //  PASSWORD
-                const SizedBox(
-                  height: 19,
-                ),
-                const PasswordField(),
-                const SizedBox(
-                  height: 19,
-                ),
-                const ConfirmPasswordField(),
-                const SizedBox(
-                  height: 19,
-                ),
-                GradientButton(
-                    height: 50, width: 100, onTap: () {}, text: 'Create Account'),
-                const SizedBox(
-                  height: 19,
-                ),
-                BorderIconButton(
-                  height: 50,
-                  width: double.infinity,
-                  onTap: () {},
-                  text: 'Continue with google',
-                  iconPath: "assets/icons/icon_google.svg",
-                ),
-                const SizedBox(
-                  height: 19,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        body: SafeArea(
+            child: Container(
+                margin: const EdgeInsets.all(kMargin),
+                child: Form(
+                    child: ListView(
                   children: [
-                    const Text('Already have Account ?'),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, LoginPage.ROUTE_NAME);
-                      },
-                      child: const Text('Log In'),
-                    )
+                    const SizedBox(
+                      height: 42,
+                    ),
+                    Center(
+                      child: Text('Sign Up',
+                          style: Theme.of(context).textTheme.headline5),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    //USERNAME
+                    TextFormField(
+                      decoration: InputDecoration(
+                          fillColor: const Color(0xFF929292),
+                          // hintText: 'John Doe',
+                          labelText: 'Username',
+                          border:
+                              OutlineInputBorder(borderRadius: kBorderRadius)),
+                    ),
+                    const SizedBox(
+                      height: 19,
+                    ),
+                    //  EMAIL ADDRESS
+                    TextFormField(
+                      decoration: InputDecoration(
+                          fillColor: const Color(0xFF929292),
+                          labelText: 'Email Address',
+                          border:
+                              OutlineInputBorder(borderRadius: kBorderRadius)),
+                    ),
+                    //  PASSWORD
+                    const SizedBox(
+                      height: 19,
+                    ),
+                    const PasswordField(),
+                    const SizedBox(
+                      height: 19,
+                    ),
+                    const ConfirmPasswordField(),
+                    const SizedBox(
+                      height: 19,
+                    ),
+                    GradientButton(
+                        height: 50,
+                        width: 100,
+                        onTap: () {},
+                        text: 'Create Account'),
+                    const SizedBox(
+                      height: 19,
+                    ),
+                    BorderIconButton(
+                      height: 50,
+                      width: double.infinity,
+                      onTap: () {},
+                      text: 'Continue with google',
+                      iconPath: "assets/icons/icon_google.svg",
+                    ),
+                    const SizedBox(
+                      height: 19,
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Already have Account ?'),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, LoginPage.ROUTE_NAME);
+                          },
+                          child: const Text('Log In'),
+                        )
+                      ],
+                    ),
                   ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+                )))));
   }
 }
 
@@ -118,7 +121,7 @@ class _PasswordFieldState extends State<PasswordField> {
                 setState(() => obsecurePassword = !obsecurePassword),
             icon: Icon(
               obsecurePassword ? Icons.visibility : Icons.visibility_off,
-
+              color: kGreyTransparant,
             ),
           ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
@@ -148,6 +151,7 @@ class _ConfirmPasswordFieldState extends State<ConfirmPasswordField> {
                 setState(() => obsecurePassword = !obsecurePassword),
             icon: Icon(
               obsecurePassword ? Icons.visibility : Icons.visibility_off,
+              color: kGreyTransparant,
             ),
           ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
