@@ -1,6 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pethouse/presentation/pages/account_page.dart';
 import 'package:pethouse/presentation/pages/dashboard_page.dart';
 import 'package:pethouse/utils/styles.dart';
 
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> screens = [
     DashboardPage(),
     DashboardPage(),
-    DashboardPage(),
+    AccountPage(),
   ];
   final PageStorageBucket bucket = PageStorageBucket();
 
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
           color: kGrey,
           activeColor: kPrimaryColor,
           elevation: 0,
-          onTap: (int i) => print('click index=$i'),
+          onTap: setBottomBarIndex,
         ));
   }
 }

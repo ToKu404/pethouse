@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50,
                       width: double.infinity,
                       onTap: () {
-                        Navigator.pushReplacementNamed(
+                        Navigator.pushNamed(
                             context, HomePage.ROUTE_NAME);
                       },
                       text: 'Login'),
