@@ -18,7 +18,7 @@ class AccountPage extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Image.asset('assets/vectors/image_user.png'),
+              Image.asset('assets/images/image_user.png'),
               const SizedBox(
                 height: 5,
               ),
