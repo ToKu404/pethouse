@@ -1,8 +1,10 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pethouse/presentation/pages/account_page.dart';
 import 'package:pethouse/presentation/pages/dashboard_page.dart';
+import 'package:pethouse/presentation/pages/schedule_page.dart';
 import 'package:pethouse/utils/styles.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,7 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> screens = [
     DashboardPage(),
-    DashboardPage(),
+    SchedulePage(),
     AccountPage(),
   ];
   final PageStorageBucket bucket = PageStorageBucket();
@@ -32,20 +34,48 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: screens[currentTab],
-        bottomNavigationBar: ConvexAppBar(
-          style: TabStyle.reactCircle,
-          items: const [
-            TabItem(icon: Icons.dashboard),
-            TabItem(icon: FontAwesomeIcons.paw),
-            TabItem(icon: Icons.person),
-          ],
-          initialActiveIndex: 1,
+      appBar: AppBar(
+          elevation: .7,
+          title: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icons/pethouse_icon.svg",
+                color: kDarkBrown,
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+              Text(
+                "Pethouse",
+                style: kTextTheme.headline5,
+              )
+            ],
+          ),
           backgroundColor: kWhite,
-          color: kGrey,
-          activeColor: kPrimaryColor,
-          elevation: 0,
-          onTap: setBottomBarIndex,
-        ));
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                'assets/icons/notif_icon.svg',
+                color: kDarkBrown,
+              ),
+            )
+          ]),
+      body: screens[currentTab],
+      bottomNavigationBar: ConvexAppBar(
+        style: TabStyle.reactCircle,
+        items: const [
+          TabItem(icon: Icons.dashboard),
+          TabItem(icon: FontAwesomeIcons.paw),
+          TabItem(icon: Icons.person),
+        ],
+        initialActiveIndex: 1,
+        backgroundColor: kWhite,
+        color: kGrey,
+        activeColor: kPrimaryColor,
+        elevation: 0,
+        onTap: setBottomBarIndex,
+      ),
+    );
   }
 }
