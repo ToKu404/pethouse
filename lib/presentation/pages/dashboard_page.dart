@@ -24,10 +24,9 @@ class DashboardPage extends StatelessWidget {
             onTap: (){
               Navigator.pushNamed(context, CheckInternetPage.ROUTE_NAME);
             },
-          )
+          ),
         ],
       ),
-      child: DashboardPetCard(),
     );
   }
 }
