@@ -3,6 +3,7 @@ import 'package:pethouse/presentation/pages/check_internet_page.dart';
 import 'package:pethouse/presentation/widgets/dashboard_pet_card.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
 
+
 class DashboardPage extends StatelessWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
@@ -26,6 +27,7 @@ class DashboardPage extends StatelessWidget {
           )
         ],
       ),
+      child: DashboardPetCard(),
     );
   }
 }

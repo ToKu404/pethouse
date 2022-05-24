@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
           activeColor: kPrimaryColor,
           elevation: 0,
           onTap: setBottomBarIndex,
+          onTap: (int i) => print('click index=$i'),
         ));
   }
 }
