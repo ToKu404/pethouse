@@ -106,7 +106,7 @@ class PasswordField extends StatefulWidget {
 }
 
 class _PasswordFieldState extends State<PasswordField> {
-  bool obsecurePassword = true;
+  bool obsecurePassword = false;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -137,7 +137,7 @@ class ConfirmPasswordField extends StatefulWidget {
 }
 
 class _ConfirmPasswordFieldState extends State<ConfirmPasswordField> {
-  bool obsecurePassword = true;
+  bool obsecurePassword = false;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
