@@ -13,50 +13,53 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(kPadding),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Image.asset('assets/images/image_user.png'),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(username, style: kTextTheme.subtitle1),
-              const SizedBox(
-                height: 3,
-              ),
-              Text(email, style: kTextTheme.bodyText1),
-              const SizedBox(
-                height: 5,
-              ),
-              GradientButton(
-                height: 34,
-                width: 120,
-                text: 'Edit Profile',
-                onTap: () {
-                  Navigator.pushNamed(context, EditProfilePage.ROUTE_NAME);
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              CardAccount(
-                title: 'ChangePassword',
-                trailing: Icons.navigate_next,
-                leading: Icons.lock,
-              ),
-              CardAccount(
-                title: 'Language',
-                trailing: Icons.navigate_next,
-                leading: Icons.language,
-              ),
-              CardDarkMode(),
-              CardAccount(
-                title: 'Log Out',
-                trailing: Icons.navigate_next,
-                leading: Icons.logout,
-              ),
-            ],
+          child: Center(
+            child: Column(
+              children: [
+                Image.asset('assets/images/image_user.png'),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(username, style: kTextTheme.subtitle1),
+                const SizedBox(
+                  height: 3,
+                ),
+                Text(email, style: kTextTheme.bodyText1),
+                const SizedBox(
+                  height: 5,
+                ),
+                GradientButton(
+                  height: 34,
+                  width: 120,
+                  text: 'Edit Profile',
+                  onTap: () {
+                    Navigator.pushNamed(context, EditProfilePage.ROUTE_NAME);
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ChangePassword(
+                  title: 'ChangePassword',
+                  trailing: Icons.navigate_next,
+                  leading: Icons.lock,
+                ),
+                ChangeLanguage(
+                  title: 'Language',
+                  trailing: Icons.navigate_next,
+                  leading: Icons.language,
+                ),
+                CardDarkMode(),
+                LogOut(
+                  title: 'Log Out',
+                  trailing: null,
+                  leading: Icons.logout,
+                ),
+
+              ],
+            ),
           ),
         ),
       ),

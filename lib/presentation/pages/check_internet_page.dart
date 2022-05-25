@@ -20,11 +20,11 @@ class CheckInternetPage extends StatelessWidget {
                 'assets/vectors/dog_sleep.svg',
                 fit: BoxFit.cover,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 19,
               ),
               Text('Please check your internet connection',style: kTextTheme.subtitle2,),
-              SizedBox(
+              const SizedBox(
                 height: 19,
               ),
               GradientButton(height: 52, width: 200, onTap: (){
