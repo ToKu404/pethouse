@@ -17,6 +17,8 @@ dependencies:
   convex_bottom_bar: ^3.0.0
   dotted_border: ^2.0.0+2
   percent_indicator: ^4.2.2
+  carousel_slider: ^4.1.1
+
 
 
 dev_dependencies:
