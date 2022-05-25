@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/presentation/pages/account/change_password_page.dart';
 import 'package:pethouse/presentation/pages/account/edit_profile_page.dart';
-import 'package:pethouse/presentation/pages/account_page.dart';
-import 'package:pethouse/presentation/pages/check_internet_page.dart';
-import 'package:pethouse/presentation/pages/login_page.dart';
-import 'package:pethouse/presentation/pages/register_page.dart';
+import 'package:pethouse/presentation/pages/account/account_page.dart';
+import 'package:pethouse/presentation/pages/home_page.dart';
+import 'package:pethouse/presentation/pages/mypet/pet_description_page.dart';
+import 'package:pethouse/presentation/pages/other/check_internet_page.dart';
+import 'package:pethouse/presentation/pages/auth/login_page.dart';
+import 'package:pethouse/presentation/pages/auth/register_page.dart';
 import 'package:pethouse/utils/styles.dart';
 
-import 'presentation/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         EditProfilePage.ROUTE_NAME: (context) => EditProfilePage(),
         ChangePasswordPage.ROUTE_NAME: (context) => ChangePasswordPage(),
         CheckInternetPage.ROUTE_NAME: (context) => CheckInternetPage(),
+        PetDescriptionPage.ROUTE_NAME:(context) => PetDescriptionPage(),
       },
     );
   }

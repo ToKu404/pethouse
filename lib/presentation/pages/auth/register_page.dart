@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pethouse/presentation/pages/login_page.dart';
+import 'package:pethouse/presentation/pages/auth/login_page.dart';
 import 'package:pethouse/utils/styles.dart';
 
-import '../widgets/border_button.dart';
-import '../widgets/gredient_button.dart';
+import '../../widgets/border_button.dart';
+import '../../widgets/gredient_button.dart';
 
 class RegisterPage extends StatelessWidget {
   static const ROUTE_NAME = 'register';
