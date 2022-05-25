@@ -22,8 +22,8 @@ AppBar CustomAppBar(String name) {
         ),
       ),
     ),
-    title: const Text(
-      'Add Pet',
+    title: Text(
+      name,
       style: TextStyle(
         color: kDarkBrown,
         fontSize: 16,
