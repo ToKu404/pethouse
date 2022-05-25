@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
+import 'package:pethouse/presentation/widgets/sub_appbar.dart';
 import 'package:pethouse/utils/styles.dart';
 
 class AddPet extends StatelessWidget {
@@ -9,53 +10,8 @@ class AddPet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(57),
-        child: AppBar(
-          centerTitle: true,
-          backgroundColor: kWhite,
-          leading: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: InkWell(
-              child: Container(
-                height: 32,
-                width: 32,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(500),
-                ),
-                child: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          title: const Text(
-            'Add Pet',
-            style: TextStyle(
-              color: kDarkBrown,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: [
-            Container(
-              height: 57,
-              decoration: BoxDecoration(
-                color: kWhite,
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 3,
-                      offset: const Offset(0, 2)),
-                ],
-              ),
-              child: Row(
-                children: [],
-              ),
-            ),
-          ],
-        ),
+        preferredSize: Size.fromHeight(57),
+        child: CustomAppBar('Add Pet'),
       ),
       body: SafeArea(
         child: Padding(
