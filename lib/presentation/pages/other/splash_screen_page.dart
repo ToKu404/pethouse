@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pethouse/presentation/pages/auth/login_page.dart';
+import 'package:pethouse/utils/styles.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -16,8 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 7), () {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      Navigator.pushReplacementNamed(context, LoginPage.ROUTE_NAME);
     });
   }
 
@@ -28,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // logo here
             SvgPicture.asset(
@@ -39,16 +40,22 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             Column(
               children: [
-                Text("PETHOUSE",
-                  style: Theme.of(context).textTheme.headline1,
-                    ),
-                Text("Join and Discover The Best Habit Tracker for Your Pet",
-                  style: Theme.of(context).textTheme.bodyText2,
+                Text(
+                  "PETHOUSE",
+                  style: kTextTheme.headline1?.copyWith(color: kDarkBrown),
+                ),
+                Text(
+                  "Join and Discover The Best Habit Tracker for Your Pet",
+                  style: kTextTheme.bodyText2,
                 ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 75, right: 30, left: 30,),
+              padding: const EdgeInsets.only(
+                top: 75,
+                right: 30,
+                left: 30,
+              ),
               child: LinearProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4B2710)),
               ),
