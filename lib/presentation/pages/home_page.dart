@@ -2,9 +2,9 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pethouse/presentation/pages/account_page.dart';
+import 'package:pethouse/presentation/pages/account/account_page.dart';
 import 'package:pethouse/presentation/pages/dashboard_page.dart';
-import 'package:pethouse/presentation/pages/schedule_page.dart';
+import 'package:pethouse/presentation/pages/schedule/schedule_page.dart';
 import 'package:pethouse/utils/styles.dart';
 
 class HomePage extends StatefulWidget {

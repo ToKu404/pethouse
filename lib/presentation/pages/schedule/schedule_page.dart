@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pethouse/utils/styles.dart';
 
-import '../widgets/card_schedule_status.dart';
+import '../../widgets/card_schedule_status.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({Key? key}) : super(key: key);

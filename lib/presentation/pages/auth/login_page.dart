@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pethouse/presentation/pages/home_page.dart';
-import 'package:pethouse/presentation/pages/register_page.dart';
+import 'package:pethouse/presentation/pages/auth/register_page.dart';
 import 'package:pethouse/utils/styles.dart';
 
-import '../widgets/border_button.dart';
-import '../widgets/gredient_button.dart';
+import '../../widgets/border_button.dart';
+import '../../widgets/gredient_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
