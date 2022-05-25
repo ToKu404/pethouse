@@ -1,12 +1,127 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pethouse/presentation/widgets/card_schedule_status.dart';
+import 'package:pethouse/utils/styles.dart';
 
-class SchedulePage extends StatelessWidget {
+
+class SchedulePage extends StatefulWidget {
   const SchedulePage({Key? key}) : super(key: key);
 
   static const ROUTE_NAME = "schedule-page";
 
   @override
+  State<SchedulePage> createState() => _SchedulePageState();
+}
+
+class _SchedulePageState extends State<SchedulePage> {
+  int activePage = 1;
+  late PageController _pageController;
+  List<String> images = [
+    "https://media.istockphoto.com/photos/calico-cat-with-green-eyes-lying-on-cardboard-scratch-board-picture-id1326411219?b=1&k=20&m=1326411219&s=170667a&w=0&h=TNQTmK1E0vIZk5eF9tLrJGfy1dzNlj-Yc_UutJDYcAs=",
+    "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fGNhdCUyMGphcGFufGVufDB8fDB8fA%3D%3D&w=1000&q=80",
+    "https://media.istockphoto.com/photos/cat-with-blue-eyes-looks-at-camera-picture-id1067347086?b=1&k=20&m=1067347086&s=170667a&w=0&h=kLUll2ujZmQo8JjMQYuxyVCtCtdd6W6ylzu6fJqu8PI="
+  ];
+  List pets = ["Neko", "Bobo", "Lopa"];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.8, initialPage: 1);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Center();
+    return Column(
+      children: [
+        CarouselSlider.builder(
+          itemCount: images.length,
+          itemBuilder: (ctx, index, _) {
+            return Transform.scale(
+                scale: index == activePage ? 1 : .7,
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: index == activePage
+                            ? Border.all(
+                                width: 7,
+                                color: Color(0xFFFFC46A),
+                              )
+                            : Border.all(width: 5, color: kGrey),
+                        image: DecorationImage(
+                            image: NetworkImage(images[index]),
+                            fit: BoxFit.cover),
+                      ),
+                    ),
+                    index == activePage
+                        ? Container()
+                        : Container(
+                            color: kWhite.withOpacity(.8),
+                          )
+                  ],
+                ));
+          },
+          options: CarouselOptions(
+            autoPlay: false,
+            enableInfiniteScroll: true,
+            viewportFraction: .5,
+            initialPage: activePage,
+            onPageChanged: (index, reason) {
+              setState(() {
+                activePage = index;
+              });
+            },
+          ),
+        ),
+        PetScheduleList(petName: pets[activePage]),
+      ],
+    );
   }
 }
+
+class PetScheduleList extends StatelessWidget {
+  final String petName;
+  const PetScheduleList({
+    Key? key,
+    required this.petName,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Column(
+      children: [
+        InkWell(
+          onTap: () {},
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${petName} Task',
+                  style: kTextTheme.headline5,
+                ),
+                const Icon(
+                  FontAwesomeIcons.angleRight,
+                  size: 18,
+                  color: kDarkBrown,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: kPadding),
+          child: CardScheduleStatus(),
+        ),
+      ],
+    ));
+  }
+}
+

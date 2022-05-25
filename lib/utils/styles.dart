@@ -16,19 +16,23 @@ const double kPadding = 10.0;
 final TextTheme kTextTheme = TextTheme(
   headline1: GoogleFonts.poppins(fontSize: 41, fontWeight: FontWeight.w700),
   headline2: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.w600),
-  headline3: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w600),
+  headline3: GoogleFonts.poppins(
+      fontSize: 21, fontWeight: FontWeight.w600, color: kSecondaryColor),
   headline4: GoogleFonts.poppins(
       fontSize: 21, fontWeight: FontWeight.w700, color: kDarkBrown),
   headline5: GoogleFonts.poppins(
       fontSize: 18, fontWeight: FontWeight.w700, color: kDarkBrown),
   headline6: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
-  subtitle1: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600,color: kDarkBrown),
+  subtitle1: GoogleFonts.poppins(
+      fontSize: 14, fontWeight: FontWeight.w600, color: kDarkBrown),
   subtitle2: GoogleFonts.poppins(
       fontSize: 12, fontWeight: FontWeight.w500, color: kDarkBrown),
-  bodyText1: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400,color: kGreyTransparant),
+  bodyText1: GoogleFonts.poppins(
+      fontSize: 12, fontWeight: FontWeight.w400, color: kGreyTransparant),
   bodyText2: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w300),
   button: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
-  caption: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w400,color: kDarkBrown),
+  caption: GoogleFonts.poppins(
+      fontSize: 10, fontWeight: FontWeight.w400, color: kDarkBrown),
   overline: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w400),
 );
 

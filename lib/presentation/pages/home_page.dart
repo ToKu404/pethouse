@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int currentTab = 0;
+  int currentTab = 1;
 
   setBottomBarIndex(index) {
     setState(() {
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
           TabItem(icon: FontAwesomeIcons.paw),
           TabItem(icon: Icons.person),
         ],
-        initialActiveIndex: 1,
+        initialActiveIndex: currentTab,
         backgroundColor: kWhite,
         color: kGrey,
         activeColor: kPrimaryColor,
