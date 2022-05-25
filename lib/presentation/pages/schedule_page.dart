@@ -1,8 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pethouse/presentation/widgets/card_schedule_status.dart';
 import 'package:pethouse/utils/styles.dart';
+
+import '../widgets/schedule_status_card.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({Key? key}) : super(key: key);
@@ -128,7 +129,7 @@ class _SchedulePageState extends State<SchedulePage> {
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: kPadding),
-            child: CardScheduleStatus(),
+            child: ScheduleStatusCard(),
           ),
           SizedBox(
             height: 10,
