@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
 import 'package:pethouse/utils/styles.dart';
 
@@ -13,6 +14,7 @@ class EditProfilePage extends StatelessWidget {
 
       appBar: AppBar(
         title: Text('Edit Profile',style: TextStyle(color: Colors.black)),
+        leading: btnBack_decoration(),
         centerTitle: true,
         elevation: 5,
         backgroundColor: kWhite,

@@ -7,6 +7,7 @@ const Color kDarkBrown = Color(0xFF4B2710);
 const Color kWhite = Colors.white;
 const Color kGrey = Color(0xFFD4D4D4);
 const Color kGreyTransparant = Color(0xFF878787);
+const Color kOrange = Color(0xFFEF9F21);
 
 BorderRadius kBorderRadius = BorderRadius.circular(10);
 
@@ -22,18 +23,18 @@ final TextTheme kTextTheme = TextTheme(
       fontSize: 21, fontWeight: FontWeight.w700, color: kDarkBrown),
   headline5: GoogleFonts.poppins(
       fontSize: 18, fontWeight: FontWeight.w700, color: kDarkBrown),
-  headline6: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+  headline6: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700,color: kWhite),
   subtitle1: GoogleFonts.poppins(
       fontSize: 14, fontWeight: FontWeight.w600, color: kDarkBrown),
   subtitle2: GoogleFonts.poppins(
       fontSize: 12, fontWeight: FontWeight.w500, color: kDarkBrown),
   bodyText1: GoogleFonts.poppins(
       fontSize: 12, fontWeight: FontWeight.w400, color: kGreyTransparant),
-  bodyText2: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w300),
+  bodyText2: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w300,color: kDarkBrown),
   button: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
   caption: GoogleFonts.poppins(
       fontSize: 10, fontWeight: FontWeight.w400, color: kDarkBrown),
-  overline: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w400),
+  overline: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400,color: kOrange),
 );
 
 const kColorScheme = ColorScheme(
