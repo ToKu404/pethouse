@@ -255,8 +255,8 @@ class _GenderRadioState extends State<GenderRadio> {
             color: (_selectedGender == Index) ? Color(0XFFFFE6CF) : kWhite,
             borderRadius: kBorderRadius,
             border: Border.all(
-              color: Color(0xFF929292),
-              width: 0.1,
+              color: Colors.grey,
+              width: 1,
             ),
           ),
           child: Row(
@@ -269,7 +269,7 @@ class _GenderRadioState extends State<GenderRadio> {
               Text(
                 name,
                 style: TextStyle(
-                  color: Color(0xFF929292),
+                  color: Colors.grey,
                   fontWeight: (_selectedGender == Index)
                       ? FontWeight.bold
                       : FontWeight.normal,
