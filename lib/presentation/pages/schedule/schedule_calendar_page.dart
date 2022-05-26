@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pethouse/presentation/pages/activity/add_medical_activity.dart';
+import 'package:pethouse/presentation/pages/activity/add_new_task.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -212,44 +214,47 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
                   Icons.task,
                   color: kSecondaryColor,
                 ),
-                onTap: () => showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text("Add Event"),
-                        content: TextFormField(
-                          controller: _eventController,
-                        ),
-                        actions: [
-                          TextButton(
-                            child: Text("Cancel"),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          TextButton(
-                            child: Text("Ok"),
-                            onPressed: () {
-                              if (_eventController.text.isEmpty) {
-                              } else {
-                                if (selectedEvents[selectedDay] != null) {
-                                  selectedEvents[selectedDay]?.add(
-                                    Event(title: _eventController.text),
-                                  );
-                                } else {
-                                  selectedEvents[selectedDay] = [
-                                    Event(title: _eventController.text)
-                                  ];
-                                }
-                              }
-                              Navigator.pop(context);
-                              _eventController.clear();
-                              setState(() {});
-                              return;
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+                onTap: () => Navigator.pushReplacementNamed(context, AddNewTaskActivity.ROUTE_NAME),
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (context) => AlertDialog(
+                    //     title: Text("Add Event"),
+                    //     content: TextFormField(
+                    //       controller: _eventController,
+                    //     ),
+                    //     actions: [
+                    //       TextButton(
+                    //         child: Text("Cancel"),
+                    //         onPressed: () => Navigator.pop(context),
+                    //       ),
+                    //       TextButton(
+                    //         child: Text("Ok"),
+                    //         onPressed: () {
+                    //           if (_eventController.text.isEmpty) {
+                    //           } else {
+                    //             if (selectedEvents[selectedDay] != null) {
+                    //               selectedEvents[selectedDay]?.add(
+                    //                 Event(title: _eventController.text),
+                    //               );
+                    //             } else {
+                    //               selectedEvents[selectedDay] = [
+                    //                 Event(title: _eventController.text)
+                    //               ];
+                    //             }
+                    //           }
+                    //           Navigator.pop(context);
+                    //           _eventController.clear();
+                    //           setState(() {});
+                    //           return;
+                    //         },
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+
                 foregroundColor: kSecondaryColor,
-                label: 'Task'),
+                label: 'Task',
+            ),
             SpeedDialChild(
               child: Icon(
                 Icons.medical_services,
@@ -257,6 +262,7 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
               ),
               foregroundColor: kSecondaryColor,
               label: 'Medical',
+              onTap: () => Navigator.pushNamed(context, AddMedicalActivity.ROUTE_NAME)
             ),
           ],
         ));

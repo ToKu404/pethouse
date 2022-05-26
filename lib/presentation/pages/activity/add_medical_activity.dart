@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
 }
 
 class AddMedicalActivity extends StatelessWidget {
+  static const ROUTE_NAME = "medical_activity";
+
   const AddMedicalActivity({Key? key}) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class AddMedicalActivity extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(57),
         child: CustomAppBar('Medical Activity'),
+
       ),
       body: SafeArea(
         child: Padding(

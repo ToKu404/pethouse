@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pethouse/presentation/pages/account/change_password_page.dart';
 import 'package:pethouse/presentation/pages/account/edit_profile_page.dart';
 import 'package:pethouse/presentation/pages/account/account_page.dart';
+import 'package:pethouse/presentation/pages/activity/add_medical_activity.dart';
+import 'package:pethouse/presentation/pages/activity/add_new_task.dart';
 import 'package:pethouse/presentation/pages/adopt_page.dart';
 import 'package:pethouse/presentation/pages/home_page.dart';
 import 'package:pethouse/presentation/pages/mypet/pet_description_page.dart';
@@ -40,6 +42,9 @@ class MyApp extends StatelessWidget {
         AdoptPage.ROUTE_NAME: (context) => const AdoptPage(),
                 DetailPetrivia.ROUTE_NAME: (context) => DetailPetrivia(),
         ScheduleCalendarPage.ROUTE_NAME: (context) => ScheduleCalendarPage(),
+        AddMedicalActivity.ROUTE_NAME: (context) => AddMedicalActivity(),
+        AddNewTaskActivity.ROUTE_NAME: (context) => AddNewTaskActivity(),
+
       },
     );
   }
