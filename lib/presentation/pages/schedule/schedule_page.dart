@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pethouse/presentation/pages/schedule/schedule_calendar_page.dart';
 import 'package:pethouse/utils/styles.dart';
 
 import '../../widgets/card_schedule_status.dart';
@@ -105,7 +106,9 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, ScheduleCalendarPage.ROUTE_NAME);
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding),
               child: Row(
