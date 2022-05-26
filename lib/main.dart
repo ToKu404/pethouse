@@ -9,6 +9,8 @@ import 'package:pethouse/presentation/pages/other/check_internet_page.dart';
 import 'package:pethouse/presentation/pages/auth/login_page.dart';
 import 'package:pethouse/presentation/pages/auth/register_page.dart';
 import 'package:pethouse/presentation/pages/other/splash_screen_page.dart';
+import 'package:pethouse/presentation/pages/petrivia/detail_petrivia.dart';
+import 'package:pethouse/presentation/pages/schedule/schedule_calendar_page.dart';
 import 'package:pethouse/utils/styles.dart';
 
 void main() {
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
         CheckInternetPage.ROUTE_NAME: (context) => const CheckInternetPage(),
         PetDescriptionPage.ROUTE_NAME: (context) => const PetDescriptionPage(),
         AdoptPage.ROUTE_NAME: (context) => const AdoptPage(),
+                DetailPetrivia.ROUTE_NAME: (context) => DetailPetrivia(),
+        ScheduleCalendarPage.ROUTE_NAME: (context) => ScheduleCalendarPage(),
       },
     );
   }

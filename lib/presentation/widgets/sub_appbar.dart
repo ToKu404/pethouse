@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pethouse/utils/styles.dart';
 
 AppBar CustomAppBar(String name) {
@@ -24,7 +25,7 @@ AppBar CustomAppBar(String name) {
     ),
     title: Text(
       name,
-      style: TextStyle(
+      style: GoogleFonts.poppins(
         color: kDarkBrown,
         fontSize: 16,
         fontWeight: FontWeight.bold,
