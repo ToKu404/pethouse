@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class DetailPetrivia extends StatelessWidget {
   const DetailPetrivia({Key? key}) : super(key: key);
+  static const ROUTE_NAME = "detail-petrivia-page";
+
 
   @override
   Widget build(BuildContext context) {
