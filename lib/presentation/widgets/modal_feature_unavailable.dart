@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pethouse/utils/styles.dart';
 
 class FeatureUnavailable extends StatelessWidget {
@@ -38,7 +39,7 @@ class FeatureUnavailable extends StatelessWidget {
           ),
           Text(
             'Feature Not Yet Available',
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               color: kDarkBrown,
               fontSize: 18,
             ),

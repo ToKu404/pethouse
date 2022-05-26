@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pethouse/utils/styles.dart';
 
-class AdoptionSuccess extends StatelessWidget {
-  const AdoptionSuccess({Key? key}) : super(key: key);
+class OpenAdoptionSuccess extends StatelessWidget {
+  const OpenAdoptionSuccess({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class AdoptionSuccess extends StatelessWidget {
           ),
           Text(
             'Success',
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               color: kDarkBrown,
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -72,7 +73,7 @@ class AdoptionSuccess extends StatelessWidget {
           ),
           Text(
             'Your open adoption activity was successful',
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               color: kWhite,
               fontSize: 10,
             ),
