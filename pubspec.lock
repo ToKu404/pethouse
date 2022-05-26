@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+  colorful_iconify_flutter:
+    dependency: transitive
+    description:
+      name: colorful_iconify_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   convex_bottom_bar:
     dependency: "direct main"
     description:
@@ -158,6 +165,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
+  iconify_flutter:
+    dependency: "direct main"
+    description:
+      name: iconify_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   intl:
     dependency: transitive
     description:

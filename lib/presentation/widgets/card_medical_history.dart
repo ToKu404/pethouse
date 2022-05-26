@@ -15,7 +15,7 @@ class CardMedicalHistory extends StatelessWidget {
         height: 52,
         child: ListTile(
           leading: Icon(Icons.history,color: kWhite,),
-          title: Text('Medical history',style: kTextTheme.headline6,),
+          title: Text('Medical History',style: kTextTheme.headline6,),
           trailing: Icon(Icons.navigate_next,color: kWhite,),
           onTap: () => {},
         ),
