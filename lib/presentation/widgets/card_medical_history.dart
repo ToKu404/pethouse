@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pethouse/presentation/widgets/modal_medical_history.dart';
 import 'package:pethouse/utils/styles.dart';
 
 class CardMedicalHistory extends StatelessWidget {
@@ -17,7 +18,13 @@ class CardMedicalHistory extends StatelessWidget {
           leading: Icon(Icons.history,color: kWhite,),
           title: Text('Medical History',style: kTextTheme.headline6,),
           trailing: Icon(Icons.navigate_next,color: kWhite,),
-          onTap: () => {},
+          onTap: () => {showModalBottomSheet<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return BottomNavMedicalHistory();
+                }
+              )
+          },
         ),
       ),
     );
