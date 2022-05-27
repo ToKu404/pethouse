@@ -5,6 +5,7 @@ import 'package:pethouse/presentation/pages/account/account_page.dart';
 import 'package:pethouse/presentation/pages/activity/add_medical_activity.dart';
 import 'package:pethouse/presentation/pages/activity/add_new_task.dart';
 import 'package:pethouse/presentation/pages/adopt_page.dart';
+import 'package:pethouse/presentation/pages/detail_adopt_page.dart';
 import 'package:pethouse/presentation/pages/home_page.dart';
 import 'package:pethouse/presentation/pages/mypet/pet_description_page.dart';
 import 'package:pethouse/presentation/pages/other/check_internet_page.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         ScheduleCalendarPage.ROUTE_NAME: (context) => ScheduleCalendarPage(),
         AddMedicalActivity.ROUTE_NAME: (context) => AddMedicalActivity(),
         AddNewTaskActivity.ROUTE_NAME: (context) => AddNewTaskActivity(),
-
+        DetailAdoptPage.ROUTE_NAME:(context) => DetailAdoptPage(),
       },
     );
   }

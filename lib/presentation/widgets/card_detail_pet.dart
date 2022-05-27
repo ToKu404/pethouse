@@ -8,7 +8,6 @@ class CardDetailPet extends StatelessWidget {
 
   final String content;
 
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -24,7 +23,6 @@ class CardDetailPet extends StatelessWidget {
                 end: Alignment.bottomCenter),
             borderRadius: kBorderRadius,
           ),
-          width: 120,
           height: 68,
           child: Column(
             children: [

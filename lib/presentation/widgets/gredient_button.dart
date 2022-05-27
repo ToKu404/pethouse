@@ -33,10 +33,8 @@ class GradientButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: kBorderRadius,
         ),
-        child: Text(
-          '${text}',
-          style: const TextStyle(color: Colors.white),
-        ),
+        child: Text('${text}',
+            style: kTextTheme.subtitle1?.copyWith(color: kWhite)),
       ),
     );
   }

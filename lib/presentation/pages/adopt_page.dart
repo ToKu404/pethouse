@@ -251,22 +251,20 @@ class AdoptPage extends StatelessWidget {
               style: kTextTheme.subtitle1,
             ),
           ),
-          Expanded(
-            child: GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                  horizontal: kPadding, vertical: kPadding),
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: .72,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10),
-              itemCount: 20,
-              itemBuilder: (context, index) {
-                return AdoptCard();
-              },
-            ),
+          GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            padding:
+                EdgeInsets.symmetric(horizontal: kPadding, vertical: kPadding),
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: .72,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10),
+            itemCount: 20,
+            itemBuilder: (context, index) {
+              return AdoptCard();
+            },
           )
         ],
       )),

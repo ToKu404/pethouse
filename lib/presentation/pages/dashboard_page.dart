@@ -49,7 +49,7 @@ class DashboardPage extends StatelessWidget {
             padding: const EdgeInsets.all(kPadding),
             child: Text(
               "MyPets",
-              style: kTextTheme.headline6,
+              style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
             ),
           ),
           SizedBox(
@@ -106,7 +106,7 @@ class DashboardPage extends StatelessWidget {
             padding: const EdgeInsets.all(kPadding),
             child: Text(
               "Petrivia!",
-              style: kTextTheme.headline6,
+              style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
             ),
           ),
           Column(
