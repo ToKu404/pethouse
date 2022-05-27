@@ -4,11 +4,11 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:pethouse/presentation/widgets/card_detail_pet.dart';
 import 'package:pethouse/presentation/widgets/card_medical_history.dart';
 import 'package:pethouse/presentation/widgets/card_periodic_summary.dart';
+import 'package:pethouse/presentation/widgets/modal_medical_history.dart';
 import 'package:pethouse/utils/styles.dart';
 import 'package:colorful_iconify_flutter/icons/twemoji.dart';
 import 'package:colorful_iconify_flutter/icons/noto.dart';
-
-
+import 'package:iconify_flutter/icons/carbon.dart';
 
 class PetDescriptionPage extends StatelessWidget {
   final String description =
@@ -20,7 +20,6 @@ class PetDescriptionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -43,7 +42,9 @@ class PetDescriptionPage extends StatelessWidget {
                           child: Container(
                             width: 32,
                             height: 32,
-                            decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0x30000000)),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0x30000000)),
                             child: Icon(
                               FontAwesomeIcons.arrowLeft,
                               size: 24,
@@ -57,7 +58,9 @@ class PetDescriptionPage extends StatelessWidget {
                           child: Container(
                             width: 32,
                             height: 32,
-                            decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0x30000000)),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0x30000000)),
                             child: Icon(
                               Icons.more_vert,
                               size: 24,
@@ -65,15 +68,14 @@ class PetDescriptionPage extends StatelessWidget {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                   )
                 ],
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(top: 4, left: 16,right: 16,bottom: 16),
+                padding: const EdgeInsets.only(
+                    top: 4, left: 16, right: 16, bottom: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -99,6 +101,30 @@ class PetDescriptionPage extends StatelessWidget {
                               ],
                             )
                           ],
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () => {},
+                          child: Container(
+                            height: 32,
+                            width: 41,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: kOrange,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: kGreyTransparant,
+                                  offset: Offset(0.0, 1.0), //(x,y)
+                                  blurRadius: 6.0,
+                                )
+                              ],
+                            ),
+                            padding: EdgeInsets.all(3),
+                            child: Iconify(
+                              Carbon.certificate,
+                              color: kWhite,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -177,10 +203,40 @@ class PetDescriptionPage extends StatelessWidget {
                         padding: const EdgeInsets.all(kPadding),
                         child: Column(
                           children: [
-                            CardPeriodicSummary(iconfy: Iconify(Noto.shower,size: 36,), titlePeriodic: 'Shower',typePeriodic: 'Activity',datePeriodic: '20 Agustus 2022' ),
-                            CardPeriodicWeight(iconfy: Iconify(Twemoji.man_lifting_weights,size: 36,), titlePeriodic: 'Weight',typePeriodic: 'Measured',datePeriodic: '20 September 2022',weightValue: 4.3, ),
-                            CardPeriodicSummary(iconfy: Iconify(Twemoji.drop_of_blood,size: 34,), titlePeriodic: 'Weight',typePeriodic: 'Measured',datePeriodic: '18 Januari 2022'),
-                            CardPeriodicSummary(iconfy: Iconify(Noto.toothbrush,size: 34,), titlePeriodic: 'Weight',typePeriodic: 'Measured',datePeriodic: '3 Februari 2023'),
+                            CardPeriodicSummary(
+                                iconfy: Iconify(
+                                  Noto.shower,
+                                  size: 36,
+                                ),
+                                titlePeriodic: 'Shower',
+                                typePeriodic: 'Activity',
+                                datePeriodic: '20 Agustus 2022'),
+                            CardPeriodicWeight(
+                              iconfy: Iconify(
+                                Twemoji.man_lifting_weights,
+                                size: 36,
+                              ),
+                              titlePeriodic: 'Weight',
+                              typePeriodic: 'Measured',
+                              datePeriodic: '20 September 2022',
+                              weightValue: 4.3,
+                            ),
+                            CardPeriodicSummary(
+                                iconfy: Iconify(
+                                  Twemoji.drop_of_blood,
+                                  size: 34,
+                                ),
+                                titlePeriodic: 'Weight',
+                                typePeriodic: 'Measured',
+                                datePeriodic: '18 Januari 2022'),
+                            CardPeriodicSummary(
+                                iconfy: Iconify(
+                                  Noto.toothbrush,
+                                  size: 34,
+                                ),
+                                titlePeriodic: 'Weight',
+                                typePeriodic: 'Measured',
+                                datePeriodic: '3 Februari 2023'),
                           ],
                         ),
                       ),
