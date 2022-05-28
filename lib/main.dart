@@ -15,8 +15,14 @@ import 'package:pethouse/presentation/pages/other/splash_screen_page.dart';
 import 'package:pethouse/presentation/pages/petrivia/detail_petrivia.dart';
 import 'package:pethouse/presentation/pages/schedule/schedule_calendar_page.dart';
 import 'package:pethouse/utils/styles.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -31,7 +37,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(colorScheme: kColorScheme),
       initialRoute: SplashScreen.ROUTE_NAME,
       routes: {
-        SplashScreen.ROUTE_NAME:(context) => SplashScreen(),
+        SplashScreen.ROUTE_NAME: (context) => SplashScreen(),
         RegisterPage.ROUTE_NAME: (context) => const RegisterPage(),
         LoginPage.ROUTE_NAME: (context) => const LoginPage(),
         HomePage.ROUTE_NAME: (context) => const HomePage(),
@@ -41,11 +47,11 @@ class MyApp extends StatelessWidget {
         CheckInternetPage.ROUTE_NAME: (context) => const CheckInternetPage(),
         PetDescriptionPage.ROUTE_NAME: (context) => const PetDescriptionPage(),
         AdoptPage.ROUTE_NAME: (context) => const AdoptPage(),
-                DetailPetrivia.ROUTE_NAME: (context) => DetailPetrivia(),
+        DetailPetrivia.ROUTE_NAME: (context) => DetailPetrivia(),
         ScheduleCalendarPage.ROUTE_NAME: (context) => ScheduleCalendarPage(),
         AddMedicalActivity.ROUTE_NAME: (context) => AddMedicalActivity(),
         AddNewTaskActivity.ROUTE_NAME: (context) => AddNewTaskActivity(),
-        DetailAdoptPage.ROUTE_NAME:(context) => DetailAdoptPage(),
+        DetailAdoptPage.ROUTE_NAME: (context) => DetailAdoptPage(),
       },
     );
   }

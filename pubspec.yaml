@@ -21,6 +21,7 @@ dependencies:
   table_calendar: ^3.0.5
   flutter_speed_dial: ^6.0.0
   iconify_flutter: ^0.0.4
+  firebase_core: ^1.17.1
 
 
 dev_dependencies:
