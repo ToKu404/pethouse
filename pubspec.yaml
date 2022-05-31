@@ -22,6 +22,7 @@ dependencies:
   flutter_speed_dial: ^6.0.0
   iconify_flutter: ^0.0.4
   firebase_core: ^1.17.1
+  cloud_firestore: ^3.1.17
 
 
 dev_dependencies:

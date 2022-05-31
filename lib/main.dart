@@ -4,6 +4,7 @@ import 'package:pethouse/presentation/pages/account/edit_profile_page.dart';
 import 'package:pethouse/presentation/pages/account/account_page.dart';
 import 'package:pethouse/presentation/pages/activity/add_medical_activity.dart';
 import 'package:pethouse/presentation/pages/activity/add_new_task.dart';
+import 'package:pethouse/presentation/pages/add_pet.dart';
 import 'package:pethouse/presentation/pages/adopt_page.dart';
 import 'package:pethouse/presentation/pages/detail_adopt_page.dart';
 import 'package:pethouse/presentation/pages/home_page.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         AddMedicalActivity.ROUTE_NAME: (context) => AddMedicalActivity(),
         AddNewTaskActivity.ROUTE_NAME: (context) => AddNewTaskActivity(),
         DetailAdoptPage.ROUTE_NAME: (context) => DetailAdoptPage(),
+        AddPet.ROUTE_NAME: (context) => AddPet(),
       },
     );
   }
