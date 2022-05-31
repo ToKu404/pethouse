@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
+import 'package:pethouse/presentation/widgets/custom_dropdown.dart';
+import 'package:pethouse/presentation/widgets/date_picker.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import 'package:pethouse/presentation/widgets/sub_appbar.dart';
 import 'package:pethouse/utils/styles.dart';
 
 void main() {
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Pethouse',
+      title: 'Medical Activity',
       theme: ThemeData(colorScheme: kColorScheme),
       home: const AddMedicalActivity(),
     );
@@ -28,10 +30,13 @@ class AddMedicalActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(57),
-        child: CustomAppBar('Medical Activity'),
-
+      appBar: AppBar(
+        title:
+            Text('Update Your Password', style: TextStyle(color: Colors.black)),
+        leading: btnBack_decoration(),
+        centerTitle: true,
+        elevation: 5,
+        backgroundColor: kWhite,
       ),
       body: SafeArea(
         child: Padding(
@@ -125,7 +130,15 @@ class AddMedicalActivity extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: const DropdownActivityHistory(),
+                        child: CustomDropDown(
+                          dropdownHint: 'Select Activity',
+                          dropdownList: [
+                            'Select Activity',
+                            'Vaccination',
+                            'Sick',
+                            'Full Check',
+                          ],
+                        ),
                       ),
                     ),
                     const Padding(
@@ -144,24 +157,15 @@ class AddMedicalActivity extends StatelessWidget {
                     Row(
                       children: [
                         Flexible(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              fillColor: const Color(0xFF929292),
-                              hintText: 'Add Expired Date',
-                              border: OutlineInputBorder(
-                                  borderRadius: kBorderRadius),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.calendar_month,
-                            color: Colors.grey,
-                            size: 30,
+                          child: CustomDatePicker(
+                            icon: Icon(Icons.date_range_rounded),
+                            tanggalAkhir:
+                                DateTime.now().add(Duration(days: 366)),
+                            tanggalAwal: DateTime.now(),
+                            initDate: DateTime.now().add(Duration(days: 1)),
+                            onDateChanged: (selectedDate) {
+                              // Aksi yang diperlukan saat mengganti kalender
+                            },
                           ),
                         ),
                       ],
@@ -224,47 +228,6 @@ class AddMedicalActivity extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class DropdownActivityHistory extends StatefulWidget {
-  const DropdownActivityHistory({Key? key}) : super(key: key);
-
-  @override
-  State<DropdownActivityHistory> createState() =>
-      _DropdownActivityHistoryState();
-}
-
-class _DropdownActivityHistoryState extends State<DropdownActivityHistory> {
-  String dropdownValue = 'Select Medical Activity';
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButton<String>(
-          value: dropdownValue,
-          icon: const Icon(Icons.arrow_drop_down_rounded),
-          style: GoogleFonts.poppins(
-            color: Color.fromARGB(255, 109, 109, 109),
-            fontSize: 16,
-          ),
-          items: <String>[
-            'Select Medical Activity',
-            'Vaccination',
-            'Sick',
-            'Full Check'
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownValue = newValue!;
-            });
-          }),
     );
   }
 }

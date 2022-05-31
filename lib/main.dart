@@ -9,6 +9,7 @@ import 'package:pethouse/presentation/pages/adopt_page.dart';
 import 'package:pethouse/presentation/pages/detail_adopt_page.dart';
 import 'package:pethouse/presentation/pages/home_page.dart';
 import 'package:pethouse/presentation/pages/mypet/pet_description_page.dart';
+import 'package:pethouse/presentation/pages/open_adopt.dart';
 import 'package:pethouse/presentation/pages/other/check_internet_page.dart';
 import 'package:pethouse/presentation/pages/auth/login_page.dart';
 import 'package:pethouse/presentation/pages/auth/register_page.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Pethouse',
-      theme: ThemeData(colorScheme: kColorScheme),
+      theme: ThemeData(colorScheme: kColorScheme,  timePickerTheme: kTimePickerTheme,),
       initialRoute: SplashScreen.ROUTE_NAME,
       routes: {
         SplashScreen.ROUTE_NAME: (context) => SplashScreen(),
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         AddNewTaskActivity.ROUTE_NAME: (context) => AddNewTaskActivity(),
         DetailAdoptPage.ROUTE_NAME: (context) => DetailAdoptPage(),
         AddPet.ROUTE_NAME: (context) => AddPet(),
+        OpenAdopt.ROUTE_NAME: (context) => OpenAdopt(),
       },
     );
   }

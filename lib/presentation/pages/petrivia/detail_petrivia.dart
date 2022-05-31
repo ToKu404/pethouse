@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
 
 class DetailPetrivia extends StatelessWidget {
@@ -29,18 +30,7 @@ class DetailPetrivia extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
+                        btnBack_decoration(),
                       ],
                     ),
                   ),

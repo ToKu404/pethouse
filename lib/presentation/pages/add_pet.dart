@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
+import 'package:pethouse/presentation/widgets/date_picker.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
 import 'package:pethouse/utils/styles.dart';
 
 class AddPet extends StatelessWidget {
   static const ROUTE_NAME = 'add_pet';
-  const AddPet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Pet',style: TextStyle(color: Colors.black)),
+        title: const Text('Add  Pet', style: TextStyle(color: Colors.black)),
         leading: btnBack_decoration(),
         centerTitle: true,
         elevation: 5,
@@ -111,24 +111,15 @@ class AddPet extends StatelessWidget {
                         Row(
                           children: [
                             Flexible(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  fillColor: const Color(0xFF929292),
-                                  hintText: 'Add Date of Birth',
-                                  border: OutlineInputBorder(
-                                      borderRadius: kBorderRadius),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.calendar_month,
-                                color: Colors.grey,
-                                size: 30,
+                              child: CustomDatePicker(
+                                icon: Icon(Icons.date_range_rounded),
+                                tanggalAkhir:
+                                    DateTime.now().add(Duration(days: 366)),
+                                tanggalAwal: DateTime.now(),
+                                initDate: DateTime.now().add(Duration(days: 1)),
+                                onDateChanged: (selectedDate) {
+                                  // Aksi yang diperlukan saat mengganti kalender
+                                },
                               ),
                             ),
                           ],
@@ -256,10 +247,10 @@ class _GenderRadioState extends State<GenderRadio> {
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-            color: (_selectedGender == Index) ? Color(0XFFFFE6CF) : kWhite,
+            color: kWhite,
             borderRadius: kBorderRadius,
             border: Border.all(
-              color: Colors.grey,
+              color: (_selectedGender == Index) ? kPrimaryColor : Colors.grey,
               width: 1,
             ),
           ),
@@ -273,7 +264,7 @@ class _GenderRadioState extends State<GenderRadio> {
               Text(
                 name,
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: color,
                   fontWeight: (_selectedGender == Index)
                       ? FontWeight.bold
                       : FontWeight.normal,
