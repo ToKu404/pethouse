@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import 'package:pethouse/presentation/widgets/sub_appbar.dart';
 import 'package:pethouse/utils/styles.dart';
 
 class AddPet extends StatelessWidget {
+  static const ROUTE_NAME = 'add_pet';
   const AddPet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(57),
-        child: CustomAppBar('Add Pet'),
+      appBar: AppBar(
+        title: Text('Add Pet',style: TextStyle(color: Colors.black)),
+        leading: btnBack_decoration(),
+        centerTitle: true,
+        elevation: 5,
+        backgroundColor: kWhite,
       ),
       body: SafeArea(
         child: Padding(
