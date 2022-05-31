@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pethouse/presentation/pages/activity/add_medical_activity.dart';
 import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
+import 'package:pethouse/presentation/widgets/custom_dropdown.dart';
+import 'package:pethouse/presentation/widgets/date_picker.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
+import 'package:pethouse/presentation/widgets/time_picker.dart';
 import 'package:pethouse/utils/styles.dart';
 
 class AddNewTaskActivity extends StatelessWidget {
@@ -13,7 +16,7 @@ class AddNewTaskActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Task',style: TextStyle(color: Colors.black)),
+        title: Text('New Task', style: TextStyle(color: Colors.black)),
         leading: btnBack_decoration(),
         centerTitle: true,
         elevation: 5,
@@ -108,7 +111,20 @@ class AddNewTaskActivity extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: const DropdownActivityHistory(),
+                        child: CustomDropDown(
+                          dropdownHint: 'Select Activity',
+                          dropdownList: [
+                            'Select Activity',
+                            'Feed',
+                            'Walk',
+                            'Pee',
+                            'Vitamin',
+                            'Shower',
+                            'Grooming',
+                            'Weight Scale',
+                            'Period'
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -127,24 +143,15 @@ class AddNewTaskActivity extends StatelessWidget {
                     Row(
                       children: [
                         Flexible(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              fillColor: const Color(0xFF929292),
-                              labelText: '02 February 2023',
-                              border: OutlineInputBorder(
-                                  borderRadius: kBorderRadius),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.calendar_month,
-                            color: Colors.grey,
-                            size: 30,
+                          child: CustomDatePicker(
+                            icon: Icon(Icons.date_range_rounded),
+                            tanggalAkhir:
+                                DateTime.now().add(Duration(days: 366)),
+                            tanggalAwal: DateTime.now(),
+                            initDate: DateTime.now().add(Duration(days: 1)),
+                            onDateChanged: (selectedDate) {
+                              // Aksi yang diperlukan saat mengganti kalender
+                            },
                           ),
                         ),
                       ],
@@ -168,18 +175,21 @@ class AddNewTaskActivity extends StatelessWidget {
                               height: 10,
                             ),
                             Container(
-                              width: 136,
-                              height: 42,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: kBorderRadius,
                                 border: Border.all(
                                   color: Colors.grey,
-                                  width: 1.0,
+                                  width: 1,
                                 ),
                               ),
+                              width: 136,
+                              height: 50,
                               child: Center(
-                                child: Text(
-                                  '11.00 Am', style: kTextTheme.subtitle2,
+                                child: Flexible(
+                                  child: CustomTimePicker(
+                                    hintText: 'Start',
+                                    onTimeChanged: (selectedTime) {},
+                                  ),
                                 ),
                               ),
                             ),
@@ -202,18 +212,19 @@ class AddNewTaskActivity extends StatelessWidget {
                               height: 10,
                             ),
                             Container(
-                              width: 137,
-                              height: 42,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: kBorderRadius,
                                 border: Border.all(
                                   color: Colors.grey,
-                                  width: 1.0,
+                                  width: 1,
                                 ),
                               ),
+                              width: 136,
+                              height: 50,
                               child: Center(
-                                child: Text(
-                                  '13.00 Pm', style: kTextTheme.subtitle2,
+                                child: CustomTimePicker(
+                                  hintText: 'End',
+                                  onTimeChanged: (selectedTime) {},
                                 ),
                               ),
                             ),
@@ -224,20 +235,56 @@ class AddNewTaskActivity extends StatelessWidget {
                     const SizedBox(
                       height: 19,
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        fillColor: const Color(0xFF929292),
-                        labelText: 'Repeat',
-                        border: OutlineInputBorder(borderRadius: kBorderRadius),
+                    Text(
+                      'Repeat',
+                      style: GoogleFonts.poppins(
+                        color: kDarkBrown,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: CustomDropDown(
+                          dropdownHint: 'Select One',
+                          dropdownList: [
+                            'Select One',
+                            'Everyday',
+                            'Every Week',
+                            'Every Month',
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 19,
                     ),
+                    Text(
+                      'Description',
+                      style: TextStyle(
+                        color: kDarkBrown,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     TextFormField(
                       decoration: InputDecoration(
                         fillColor: const Color(0xFF929292),
-                        labelText: 'Description',
+                        hintText: 'Add Activity Description',
                         border: OutlineInputBorder(borderRadius: kBorderRadius),
                       ),
                       maxLines: 3,

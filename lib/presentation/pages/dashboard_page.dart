@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pethouse/presentation/pages/add_pet.dart';
 import 'package:pethouse/presentation/widgets/adopt_banner_card.dart';
 import 'package:pethouse/presentation/widgets/card_petrivia.dart';
 import 'package:pethouse/presentation/widgets/dashboard_pet_card.dart';
@@ -62,7 +63,9 @@ class DashboardPage extends StatelessWidget {
                 itemBuilder: ((context, index) {
                   if (index == 0) {
                     return InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, AddPet.ROUTE_NAME);
+                      },
                       child: Padding(
                         padding: const EdgeInsets.only(
                             top: 5, right: 10, bottom: .4),

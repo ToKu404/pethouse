@@ -23,18 +23,59 @@ final TextTheme kTextTheme = TextTheme(
       fontSize: 21, fontWeight: FontWeight.w700, color: kDarkBrown),
   headline5: GoogleFonts.poppins(
       fontSize: 18, fontWeight: FontWeight.w700, color: kDarkBrown),
-  headline6: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700,color: kWhite),
+  headline6: GoogleFonts.poppins(
+      fontSize: 16, fontWeight: FontWeight.w700, color: kWhite),
   subtitle1: GoogleFonts.poppins(
       fontSize: 14, fontWeight: FontWeight.w600, color: kDarkBrown),
   subtitle2: GoogleFonts.poppins(
       fontSize: 12, fontWeight: FontWeight.w500, color: kDarkBrown),
   bodyText1: GoogleFonts.poppins(
       fontSize: 12, fontWeight: FontWeight.w400, color: kGreyTransparant),
-  bodyText2: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w300,color: kDarkBrown),
+  bodyText2: GoogleFonts.poppins(
+      fontSize: 12, fontWeight: FontWeight.w300, color: kDarkBrown),
   button: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
   caption: GoogleFonts.poppins(
       fontSize: 10, fontWeight: FontWeight.w400, color: kDarkBrown),
-  overline: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400,color: kOrange),
+  overline: GoogleFonts.poppins(
+      fontSize: 12, fontWeight: FontWeight.w400, color: kOrange),
+);
+
+final kTimePickerTheme = TimePickerThemeData(
+  backgroundColor: kWhite,
+  hourMinuteShape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    side: BorderSide(color: kPrimaryColor, width: 1),
+  ),
+  dayPeriodColor: MaterialStateColor.resolveWith((states) =>
+      states.contains(MaterialState.selected) ? kSecondaryColor : kWhite),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    side: BorderSide(color: kPrimaryColor, width: 1),
+  ),
+  dayPeriodTextColor: kDarkBrown,
+  dayPeriodShape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    side: BorderSide(color: kPrimaryColor, width: 1),
+  ),
+  hourMinuteColor: MaterialStateColor.resolveWith((states) =>
+      states.contains(MaterialState.selected) ? kSecondaryColor : kWhite),
+  hourMinuteTextColor: MaterialStateColor.resolveWith((states) =>
+      states.contains(MaterialState.selected) ? kWhite : kSecondaryColor),
+  dialHandColor: kDarkBrown,
+  dialBackgroundColor: kSecondaryColor,
+  hourMinuteTextStyle:
+      const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  dayPeriodTextStyle:
+      const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+  helpTextStyle: const TextStyle(
+      fontSize: 12, fontWeight: FontWeight.bold, color: kDarkBrown),
+  inputDecorationTheme: const InputDecorationTheme(
+    border: InputBorder.none,
+    contentPadding: EdgeInsets.all(0),
+  ),
+  dialTextColor: MaterialStateColor.resolveWith((states) =>
+      states.contains(MaterialState.selected) ? kWhite : kDarkBrown),
+  entryModeIconColor: kPrimaryColor,
 );
 
 const kColorScheme = ColorScheme(
@@ -45,7 +86,7 @@ const kColorScheme = ColorScheme(
   surface: kDarkBrown,
   background: kWhite,
   error: Colors.red,
-  onPrimary: kPrimaryColor,
+  onPrimary: kWhite,
   onSecondary: kDarkBrown,
   onSurface: kDarkBrown,
   onBackground: kWhite,
