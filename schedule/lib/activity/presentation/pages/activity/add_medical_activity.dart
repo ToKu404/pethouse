@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
-import 'package:pethouse/presentation/widgets/custom_dropdown.dart';
-import 'package:pethouse/presentation/widgets/date_picker.dart';
-import 'package:pethouse/presentation/widgets/gredient_button.dart';
 import 'package:core/core.dart';
+import 'package:schedule/activity/presentation/widgets/btnback_decoration.dart';
+import 'package:schedule/activity/presentation/widgets/custom_dropdown.dart';
+import 'package:schedule/activity/presentation/widgets/date_picker.dart';
+import 'package:schedule/activity/presentation/widgets/gredient_button.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,7 +32,7 @@ class AddMedicalActivity extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title:
-            Text('Update Your Password', style: TextStyle(color: Colors.black)),
+            Text('Medical Activity', style: TextStyle(color: Colors.black)),
         leading: btnBack_decoration(),
         centerTitle: true,
         elevation: 5,

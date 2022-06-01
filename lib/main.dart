@@ -1,9 +1,8 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:pethouse/presentation/pages/activity/add_medical_activity.dart';
-import 'package:pethouse/presentation/pages/activity/add_new_task.dart';
+import 'package:schedule/activity/presentation/pages/activity/add_medical_activity.dart';
+import 'package:schedule/activity/presentation/pages/activity/add_new_task.dart';
 import 'package:pethouse/presentation/pages/mypet/add_pet.dart';
 import 'package:pethouse/presentation/pages/adopt/adopt_page.dart';
 import 'package:pethouse/presentation/pages/adopt/detail_adopt_page.dart';
