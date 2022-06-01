@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pethouse/presentation/pages/auth/register_page.dart';
 import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class ChangePasswordPage extends StatelessWidget {
   static const ROUTE_NAME = 'change_password';

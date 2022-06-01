@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/styles.dart';
+import 'package:core/core.dart';
 
 class GradientButton extends StatelessWidget {
   final double height;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class CardDetailPet extends StatelessWidget {
   final String type;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/presentation/pages/auth/login_page.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 import '../../widgets/border_button.dart';
 import '../../widgets/gredient_button.dart';

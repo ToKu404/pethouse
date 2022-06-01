@@ -7,7 +7,7 @@ import 'package:pethouse/presentation/pages/activity/add_new_task.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
-import '../../../utils/styles.dart';
+import 'package:core/core.dart';
 
 class ScheduleCalendarPage extends StatefulWidget {
   static const ROUTE_NAME = 'schedule-calander-page';

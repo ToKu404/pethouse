@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 import '../widgets/adopt_card.dart';
 

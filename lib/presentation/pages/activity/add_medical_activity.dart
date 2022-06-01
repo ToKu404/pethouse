@@ -4,7 +4,7 @@ import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
 import 'package:pethouse/presentation/widgets/custom_dropdown.dart';
 import 'package:pethouse/presentation/widgets/date_picker.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 void main() {
   runApp(MyApp());

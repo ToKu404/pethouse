@@ -6,7 +6,7 @@ import 'package:pethouse/presentation/widgets/custom_dropdown.dart';
 import 'package:pethouse/presentation/widgets/date_picker.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
 import 'package:pethouse/presentation/widgets/time_picker.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class AddNewTaskActivity extends StatelessWidget {
   static const ROUTE_NAME = "add_newTask_activity";

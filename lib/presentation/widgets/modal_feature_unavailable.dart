@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class FeatureUnavailable extends StatelessWidget {
   const FeatureUnavailable({Key? key}) : super(key: key);
