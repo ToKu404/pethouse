@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pethouse/presentation/pages/account/account_page.dart';
 import 'package:pethouse/presentation/pages/dashboard_page.dart';
 import 'package:pethouse/presentation/pages/schedule/schedule_page.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

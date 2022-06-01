@@ -1,4 +1,6 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pethouse/presentation/pages/account/change_password_page.dart';
 import 'package:pethouse/presentation/pages/account/edit_profile_page.dart';
 import 'package:pethouse/presentation/pages/account/account_page.dart';
@@ -9,22 +11,28 @@ import 'package:pethouse/presentation/pages/adopt_page.dart';
 import 'package:pethouse/presentation/pages/detail_adopt_page.dart';
 import 'package:pethouse/presentation/pages/home_page.dart';
 import 'package:pethouse/presentation/pages/mypet/pet_description_page.dart';
-import 'package:pethouse/presentation/pages/open_adopt.dart';
 import 'package:pethouse/presentation/pages/other/check_internet_page.dart';
 import 'package:pethouse/presentation/pages/auth/login_page.dart';
 import 'package:pethouse/presentation/pages/auth/register_page.dart';
 import 'package:pethouse/presentation/pages/other/splash_screen_page.dart';
 import 'package:pethouse/presentation/pages/petrivia/detail_petrivia.dart';
 import 'package:pethouse/presentation/pages/schedule/schedule_calendar_page.dart';
-import 'package:pethouse/utils/styles.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:user/presentation/blocs/auth_cubit/auth_cubit.dart';
+import 'package:user/presentation/blocs/reset_password_bloc/reset_password_bloc.dart';
+import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
+import 'package:user/presentation/blocs/sign_up_bloc/sign_up_bloc.dart';
+import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
+import 'package:user/presentation/blocs/user_profile_bloc/user_profile_bloc.dart';
 import 'firebase_options.dart';
+import 'injection.dart' as di;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  di.init();
   runApp(const MyApp());
 }
 
@@ -33,30 +41,84 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Pethouse',
-      theme: ThemeData(colorScheme: kColorScheme,  timePickerTheme: kTimePickerTheme,),
-      initialRoute: SplashScreen.ROUTE_NAME,
-      routes: {
-        SplashScreen.ROUTE_NAME: (context) => SplashScreen(),
-        RegisterPage.ROUTE_NAME: (context) => const RegisterPage(),
-        LoginPage.ROUTE_NAME: (context) => const LoginPage(),
-        HomePage.ROUTE_NAME: (context) => const HomePage(),
-        AccountPage.ROUTE_NAME: (context) => AccountPage(),
-        EditProfilePage.ROUTE_NAME: (context) => const EditProfilePage(),
-        ChangePasswordPage.ROUTE_NAME: (context) => ChangePasswordPage(),
-        CheckInternetPage.ROUTE_NAME: (context) => const CheckInternetPage(),
-        PetDescriptionPage.ROUTE_NAME: (context) => const PetDescriptionPage(),
-        AdoptPage.ROUTE_NAME: (context) => const AdoptPage(),
-        DetailPetrivia.ROUTE_NAME: (context) => DetailPetrivia(),
-        ScheduleCalendarPage.ROUTE_NAME: (context) => ScheduleCalendarPage(),
-        AddMedicalActivity.ROUTE_NAME: (context) => AddMedicalActivity(),
-        AddNewTaskActivity.ROUTE_NAME: (context) => AddNewTaskActivity(),
-        DetailAdoptPage.ROUTE_NAME: (context) => DetailAdoptPage(),
-        AddPet.ROUTE_NAME: (context) => AddPet(),
-        OpenAdopt.ROUTE_NAME: (context) => OpenAdopt(),
-      },
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => di.locator<SignInBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<SignUpBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<AuthCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<UserDbBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<UserProfileBloc>(),
+          ),
+          BlocProvider(create: (_) => di.locator<ResetPasswordBloc>()),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Pethouse',
+          theme: ThemeData(
+            colorScheme: kColorScheme,
+            timePickerTheme: kTimePickerTheme,
+          ),
+          home: const SplashScreen(),
+          navigatorObservers: [routeObserver],
+          onGenerateRoute: (RouteSettings setting) {
+            switch (setting.name) {
+              case SplashScreen.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const SplashScreen());
+              case RegisterPage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const RegisterPage());
+              case LoginPage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const LoginPage());
+              case HomePage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const HomePage());
+              case AccountPage.ROUTE_NAME:
+                return MaterialPageRoute(builder: (context) => AccountPage());
+              case EditProfilePage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const EditProfilePage());
+              case ChangePasswordPage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => ChangePasswordPage());
+              case CheckInternetPage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const CheckInternetPage());
+              case PetDescriptionPage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const PetDescriptionPage());
+              case AdoptPage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const AdoptPage());
+              case DetailPetrivia.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const DetailPetrivia());
+              case ScheduleCalendarPage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => ScheduleCalendarPage());
+              case AddMedicalActivity.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const AddMedicalActivity());
+              case AddNewTaskActivity.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const AddNewTaskActivity());
+              case DetailAdoptPage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const DetailAdoptPage());
+              case AddPet.ROUTE_NAME:
+                return MaterialPageRoute(builder: (context) => AddPet());
+            }
+          },
+        ));
   }
 }

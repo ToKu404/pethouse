@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class CardScheduleStatus extends StatelessWidget {
   const CardScheduleStatus({Key? key}) : super(key: key);

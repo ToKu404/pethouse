@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class btnBack_decoration extends StatelessWidget {
   const btnBack_decoration({Key? key}) : super(key: key);
