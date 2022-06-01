@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "402974201557-rbp7j651mcbva0orl2jiggrflahbf9em.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pethouse",
+            "certificate_hash": "ae8d9a2d6068833b1cd0693681e6412945a2ec04"
+          }
+        },
+        {
           "client_id": "402974201557-dkop3n63ho9vl3el3ehqd3l5orqc6ro3.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "402974201557-dkop3n63ho9vl3el3ehqd3l5orqc6ro3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "402974201557-89e08oujj9m1k1pdih7uhlilpesc9nmj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pethouse"
+              }
             }
           ]
         }

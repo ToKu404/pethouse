@@ -1,7 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pethouse/presentation/pages/add_pet.dart';
+import 'package:pethouse/presentation/pages/mypet/add_pet.dart';
 import 'package:pethouse/presentation/widgets/adopt_banner_card.dart';
 import 'package:pethouse/presentation/widgets/card_petrivia.dart';
 import 'package:pethouse/presentation/widgets/dashboard_pet_card.dart';
@@ -57,7 +57,7 @@ class DashboardPage extends StatelessWidget {
             height: 105,
             width: double.infinity,
             child: ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: kPadding),
+                padding: const EdgeInsets.symmetric(horizontal: kPadding),
                 scrollDirection: Axis.horizontal,
                 itemCount: 5,
                 itemBuilder: ((context, index) {
@@ -101,10 +101,10 @@ class DashboardPage extends StatelessWidget {
                   }
                 })),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          AdoptBannerCard(),
+          const AdoptBannerCard(),
           Padding(
             padding: const EdgeInsets.all(kPadding),
             child: Text(
@@ -113,9 +113,9 @@ class DashboardPage extends StatelessWidget {
             ),
           ),
           Column(
-            children: _listPetrivia.map((e) => CardPetrivia()).toList(),
+            children: _listPetrivia.map((e) => const CardPetrivia()).toList(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
         ],

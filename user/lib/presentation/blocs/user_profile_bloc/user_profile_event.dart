@@ -10,7 +10,7 @@ abstract class UserProfileEvent extends Equatable {
 class ImageUploaded extends UserProfileEvent {
   final String userId;
   final String oldImageUrl;
-  ImageUploaded(this.userId, this.oldImageUrl);
+  const ImageUploaded(this.userId, this.oldImageUrl);
 
   @override
   List<Object> get props => [userId];
@@ -46,7 +46,7 @@ class NameChanged extends UserProfileEvent {
 
 class SubmitUpdate extends UserProfileEvent {
   final String userId;
-  SubmitUpdate(this.userId);
+  const SubmitUpdate(this.userId);
 
   @override
   List<Object> get props => [userId];

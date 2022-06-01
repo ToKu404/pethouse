@@ -35,13 +35,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpValidate> {
           ),
         ) {
     on<SignUpInit>(_signUpInit);
-    on<EmailChanged>(_onEmailChanged);
+    on<RegisterEmailChanged>(_onEmailChanged);
     on<NameChanged>(_onNameChanged);
-    on<PasswordChanged>(_onPasswordChanged);
+    on<RegisterPasswordChanged>(_onPasswordChanged);
     on<ConfirmPasswordChanged>(_onConfirmPasswordChanged);
-    on<FormSucceeded>(_onFormSucceeded);
+    on<RegisterFormSucceeded>(_onFormSucceeded);
     on<SubmitSignUp>(_onSubmitSignUp);
-    on<ShowHidePasswordPress>(_onShowHidePasswordPress);
+    on<RegisterShowHidePasswordPress>(_onShowHidePasswordPress);
     on<ShowHideConfirmPasswordPress>(_onShowHideConfirmPasswordPress);
   }
 
@@ -84,7 +84,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpValidate> {
     return displayName!.isNotEmpty;
   }
 
-  _onEmailChanged(EmailChanged event, Emitter<SignUpValidate> emit) {
+  _onEmailChanged(RegisterEmailChanged event, Emitter<SignUpValidate> emit) {
     emit(
       state.copyWith(
         isFormSuccessful: false,
@@ -97,7 +97,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpValidate> {
     );
   }
 
-  _onPasswordChanged(PasswordChanged event, Emitter<SignUpValidate> emit) {
+  _onPasswordChanged(
+      RegisterPasswordChanged event, Emitter<SignUpValidate> emit) {
     emit(
       state.copyWith(
         isFormSuccessful: false,
@@ -135,7 +136,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpValidate> {
     ));
   }
 
-  _onFormSucceeded(FormSucceeded event, Emitter<SignUpValidate> emit) {
+  _onFormSucceeded(RegisterFormSucceeded event, Emitter<SignUpValidate> emit) {
     emit(state.copyWith(isFormSuccessful: true));
   }
 
@@ -173,7 +174,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpValidate> {
   }
 
   _onShowHidePasswordPress(
-      ShowHidePasswordPress event, Emitter<SignUpValidate> emit) {
+      RegisterShowHidePasswordPress event, Emitter<SignUpValidate> emit) {
     emit(
       state.copyWith(isPasswordVisible: !state.isPasswordVisible),
     );
