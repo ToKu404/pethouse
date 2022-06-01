@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
 import 'package:pethouse/presentation/widgets/date_picker.dart';
 
-import '../../utils/styles.dart';
+import 'package:core/core.dart';
 import '../widgets/gredient_button.dart';
 
 class OpenAdopt extends StatelessWidget {

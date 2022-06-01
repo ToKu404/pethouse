@@ -5,7 +5,7 @@ import 'package:pethouse/presentation/pages/add_pet.dart';
 import 'package:pethouse/presentation/widgets/adopt_banner_card.dart';
 import 'package:pethouse/presentation/widgets/card_petrivia.dart';
 import 'package:pethouse/presentation/widgets/dashboard_pet_card.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class DashboardPage extends StatelessWidget {
   DashboardPage({Key? key}) : super(key: key);

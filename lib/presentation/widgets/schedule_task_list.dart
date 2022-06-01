@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../utils/styles.dart';
+import 'package:core/core.dart';
 
 class ScheduleTaskList extends StatefulWidget {
   const ScheduleTaskList({Key? key}) : super(key: key);

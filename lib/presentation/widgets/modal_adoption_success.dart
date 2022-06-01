@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class AdoptionSuccess extends StatelessWidget {
   const AdoptionSuccess({Key? key}) : super(key: key);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pethouse/presentation/pages/account/edit_profile_page.dart';
 import 'package:pethouse/presentation/widgets/card_account.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class AccountPage extends StatelessWidget {
   static const ROUTE_NAME = 'account';

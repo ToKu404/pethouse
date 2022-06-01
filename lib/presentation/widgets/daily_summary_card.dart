@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-import '../../utils/styles.dart';
+import 'package:core/core.dart';
 import '../pages/mypet/pet_description_page.dart';
 
 class DailySummaryCard extends StatelessWidget {

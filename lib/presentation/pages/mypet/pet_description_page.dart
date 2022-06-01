@@ -6,7 +6,7 @@ import 'package:pethouse/presentation/widgets/card_medical_history.dart';
 import 'package:pethouse/presentation/widgets/card_periodic_summary.dart';
 import 'package:pethouse/presentation/widgets/daily_summary_card.dart';
 import 'package:pethouse/presentation/widgets/modal_medical_history.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 import 'package:colorful_iconify_flutter/icons/twemoji.dart';
 import 'package:colorful_iconify_flutter/icons/noto.dart';
 import 'package:iconify_flutter/icons/carbon.dart';

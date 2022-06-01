@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import 'package:pethouse/utils/styles.dart';
+import 'package:core/core.dart';
 
 class HomeScheduleNoPetPage extends StatelessWidget {
   static const ROUTE_NAME = 'home_schedule_no_pet';

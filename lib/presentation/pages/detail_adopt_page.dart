@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
 import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import '../../utils/styles.dart';
+import 'package:core/core.dart';
 import '../widgets/card_detail_pet.dart';
 
 class DetailAdoptPage extends StatelessWidget {
