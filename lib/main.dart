@@ -1,24 +1,20 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pethouse/presentation/pages/account/change_password_page.dart';
-import 'package:pethouse/presentation/pages/account/edit_profile_page.dart';
-import 'package:pethouse/presentation/pages/account/account_page.dart';
+
 import 'package:pethouse/presentation/pages/activity/add_medical_activity.dart';
 import 'package:pethouse/presentation/pages/activity/add_new_task.dart';
-import 'package:pethouse/presentation/pages/add_pet.dart';
-import 'package:pethouse/presentation/pages/adopt_page.dart';
-import 'package:pethouse/presentation/pages/detail_adopt_page.dart';
-import 'package:pethouse/presentation/pages/home_page.dart';
+import 'package:pethouse/presentation/pages/mypet/add_pet.dart';
+import 'package:pethouse/presentation/pages/adopt/adopt_page.dart';
+import 'package:pethouse/presentation/pages/adopt/detail_adopt_page.dart';
+import 'package:pethouse/presentation/pages/main_page.dart';
 import 'package:pethouse/presentation/pages/mypet/pet_description_page.dart';
 import 'package:pethouse/presentation/pages/other/check_internet_page.dart';
-import 'package:pethouse/presentation/pages/auth/login_page.dart';
-import 'package:pethouse/presentation/pages/auth/register_page.dart';
-import 'package:pethouse/presentation/pages/other/splash_screen_page.dart';
+import 'package:user/user.dart';
+import 'package:pethouse/presentation/pages/splash_page.dart';
 import 'package:pethouse/presentation/pages/petrivia/detail_petrivia.dart';
 import 'package:pethouse/presentation/pages/schedule/schedule_calendar_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:user/presentation/blocs/auth_cubit/auth_cubit.dart';
 import 'package:user/presentation/blocs/reset_password_bloc/reset_password_bloc.dart';
 import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:user/presentation/blocs/sign_up_bloc/sign_up_bloc.dart';
@@ -69,8 +65,8 @@ class MyApp extends StatelessWidget {
           ),
           home: const SplashScreen(),
           navigatorObservers: [routeObserver],
-          onGenerateRoute: (RouteSettings setting) {
-            switch (setting.name) {
+          onGenerateRoute: (RouteSettings settings) {
+            switch (settings.name) {
               case SplashScreen.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const SplashScreen());
@@ -80,17 +76,27 @@ class MyApp extends StatelessWidget {
               case LoginPage.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const LoginPage());
-              case HomePage.ROUTE_NAME:
+              case MainPage.ROUTE_NAME:
+                final uid = settings.arguments as String;
                 return MaterialPageRoute(
-                    builder: (context) => const HomePage());
-              case AccountPage.ROUTE_NAME:
-                return MaterialPageRoute(builder: (context) => AccountPage());
+                    builder: (_) => MainPage(
+                          userId: uid,
+                        ));
+              case ProfilePage.ROUTE_NAME:
+                final uid = settings.arguments as String;
+                return MaterialPageRoute(
+                    builder: (context) => ProfilePage(
+                          userId: uid,
+                        ));
               case EditProfilePage.ROUTE_NAME:
+                final uid = settings.arguments as String;
                 return MaterialPageRoute(
-                    builder: (context) => const EditProfilePage());
-              case ChangePasswordPage.ROUTE_NAME:
-                return MaterialPageRoute(
-                    builder: (context) => ChangePasswordPage());
+                    builder: (context) => EditProfilePage(
+                          uid: uid,
+                        ));
+              // case ChangePasswordPage.ROUTE_NAME:
+              //   return MaterialPageRoute(
+              //       builder: (context) => ChangePasswordPage());
               case CheckInternetPage.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const CheckInternetPage());

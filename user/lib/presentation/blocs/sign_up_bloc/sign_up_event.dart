@@ -7,9 +7,9 @@ abstract class SignUpEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class EmailChanged extends SignUpEvent {
+class RegisterEmailChanged extends SignUpEvent {
   final String email;
-  const EmailChanged(this.email);
+  const RegisterEmailChanged(this.email);
 
   @override
   List<Object> get props => [email];
@@ -23,9 +23,9 @@ class NameChanged extends SignUpEvent {
   List<Object> get props => [name];
 }
 
-class PasswordChanged extends SignUpEvent {
+class RegisterPasswordChanged extends SignUpEvent {
   final String password;
-  const PasswordChanged(this.password);
+  const RegisterPasswordChanged(this.password);
 
   @override
   List<Object> get props => [password];
@@ -43,9 +43,8 @@ class SignUpInit extends SignUpEvent {}
 
 class SubmitSignUp extends SignUpEvent {}
 
-class FormSucceeded extends SignUpEvent {}
+class RegisterFormSucceeded extends SignUpEvent {}
 
-class ShowHidePasswordPress extends SignUpEvent {}
+class RegisterShowHidePasswordPress extends SignUpEvent {}
 
 class ShowHideConfirmPasswordPress extends SignUpEvent {}
-

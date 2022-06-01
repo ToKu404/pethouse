@@ -1,6 +1,7 @@
 name: user
 description: A new Flutter package project.
 version: 0.0.1
+publish_to: none
 homepage:
 
 environment:
@@ -19,8 +20,11 @@ dependencies:
   cloud_firestore: ^3.1.17
   firebase_storage: ^10.2.17
   permission_handler: ^9.2.0
+  flutter_svg: ^1.0.3
   image_picker: ^0.8.5+3
   google_sign_in: ^5.3.2
+  core:
+    path: ../core
 
 dev_dependencies:
   flutter_test:

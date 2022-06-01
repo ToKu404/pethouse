@@ -2,20 +2,21 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pethouse/presentation/pages/account/account_page.dart';
 import 'package:pethouse/presentation/pages/dashboard_page.dart';
 import 'package:pethouse/presentation/pages/schedule/schedule_page.dart';
 import 'package:core/core.dart';
+import 'package:user/user.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-  static const ROUTE_NAME = "home";
+class MainPage extends StatefulWidget {
+  final String userId;
+  const MainPage({Key? key, required this.userId}) : super(key: key);
+  static const ROUTE_NAME = "main-page";
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MainPageState extends State<MainPage> {
   int currentTab = 1;
 
   setBottomBarIndex(index) {
@@ -24,15 +25,17 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  final List<Widget> screens = [
-    DashboardPage(),
-    SchedulePage(),
-    AccountPage(),
-  ];
   final PageStorageBucket bucket = PageStorageBucket();
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screens = [
+      DashboardPage(),
+      const SchedulePage(),
+      ProfilePage(
+        userId: widget.userId,
+      ),
+    ];
     return Scaffold(
       appBar: AppBar(
           elevation: .7,

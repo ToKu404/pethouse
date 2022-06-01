@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pethouse/presentation/pages/auth/login_page.dart';
 import 'package:core/core.dart';
+import 'package:user/presentation/pages/auth_pages/login_page.dart';
+import 'package:user/presentation/blocs/auth_cubit/auth_cubit.dart';
+
+import 'main_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
-  static const ROUTE_NAME = "splashscreen";
+  static const ROUTE_NAME = "splash-screen";
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -16,15 +20,38 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 7), () {
-      Navigator.pushReplacementNamed(context, LoginPage.ROUTE_NAME);
-    });
+    BlocProvider.of<AuthCubit>(context).authenticationStarted();
   }
 
   @override
   Widget build(BuildContext context) {
+    return BlocListener<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is Authenticated) {
+          Timer(
+            const Duration(seconds: 7),
+            () => Navigator.pushReplacementNamed(context, MainPage.ROUTE_NAME,
+                arguments: state.uid),
+          );
+        } else {
+          Timer(
+            const Duration(seconds: 7),
+            () => Navigator.pushReplacementNamed(context, LoginPage.ROUTE_NAME),
+          );
+        }
+      },
+      child: const _BuildSplashLayout(),
+    );
+  }
+}
+
+class _BuildSplashLayout extends StatelessWidget {
+  const _BuildSplashLayout({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 195, 142),
+      backgroundColor: const Color.fromARGB(255, 255, 195, 142),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
               'assets/vectors/splash.svg',
               height: 240,
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Column(
@@ -50,20 +77,21 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(
+            const Padding(
+              padding: EdgeInsets.only(
                 top: 75,
                 right: 30,
                 left: 30,
               ),
               child: LinearProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4B2710)),
+                valueColor: AlwaysStoppedAnimation<Color>(kDarkBrown),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text("version 1.0",
-                style: Theme.of(context).textTheme.overline,
+              child: Text(
+                "version 1.0",
+                style: kTextTheme.overline,
               ),
             ),
           ],
