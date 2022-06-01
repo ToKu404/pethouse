@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:core/core.dart';
 
-import '../widgets/adopt_card.dart';
+import '../../widgets/adopt_card.dart';
 
 class AdoptPage extends StatelessWidget {
   const AdoptPage({Key? key}) : super(key: key);

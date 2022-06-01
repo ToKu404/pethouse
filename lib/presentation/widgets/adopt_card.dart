@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pethouse/presentation/pages/detail_adopt_page.dart';
+import 'package:pethouse/presentation/pages/adopt/detail_adopt_page.dart';
 import 'package:core/core.dart';
 
 class AdoptCard extends StatelessWidget {
