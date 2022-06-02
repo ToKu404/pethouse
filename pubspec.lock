@@ -583,6 +583,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
+  schedule:
+    dependency: "direct main"
+    description:
+      path: schedule
+      relative: true
+    source: path
+    version: "0.0.1"
   simple_gesture_detector:
     dependency: transitive
     description:

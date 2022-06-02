@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
-import 'package:pethouse/presentation/widgets/custom_dropdown.dart';
-import 'package:pethouse/presentation/widgets/date_picker.dart';
-import 'package:pethouse/presentation/widgets/gredient_button.dart';
 import 'package:core/core.dart';
+import 'package:schedule/activity/domain/entities/medical_entity.dart';
+import 'package:schedule/activity/presentation/blocs/addmedical_bloc/medical_bloc.dart';
+import 'package:schedule/activity/presentation/widgets/btnback_decoration.dart';
+import 'package:schedule/activity/presentation/widgets/date_picker.dart';
+import 'package:schedule/activity/presentation/widgets/gredient_button.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,17 +25,39 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AddMedicalActivity extends StatelessWidget {
+class AddMedicalActivity extends StatefulWidget {
   static const ROUTE_NAME = "medical_activity";
 
   const AddMedicalActivity({Key? key}) : super(key: key);
 
   @override
+  State<AddMedicalActivity> createState() => _AddMedicalActivityState();
+}
+
+class _AddMedicalActivityState extends State<AddMedicalActivity> {
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  DateTime dateTime = DateTime.now();
+  final List<String> dropdownList = [
+    'Select Activity',
+    'Vaccination',
+    'Sick',
+    'Full Check',
+  ];
+   String dropdownHint = 'Select Activity';
+
+  @override
+  void dispose() {
+    super.dispose();
+    _descriptionController.dispose();
+    _locationController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('Update Your Password', style: TextStyle(color: Colors.black)),
+        title: Text('Medical Activity', style: TextStyle(color: Colors.black)),
         leading: btnBack_decoration(),
         centerTitle: true,
         elevation: 5,
@@ -130,14 +155,26 @@ class AddMedicalActivity extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: CustomDropDown(
-                          dropdownHint: 'Select Activity',
-                          dropdownList: [
-                            'Select Activity',
-                            'Vaccination',
-                            'Sick',
-                            'Full Check',
-                          ],
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                              value: dropdownHint,
+                              icon: const Icon(Icons.arrow_drop_down_rounded),
+                              style: GoogleFonts.poppins(
+                                color: Color.fromARGB(255, 109, 109, 109),
+                                fontSize: 16,
+                              ),
+                              items:
+                              dropdownList.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownHint = newValue!;
+                                });
+                              }),
                         ),
                       ),
                     ),
@@ -164,7 +201,8 @@ class AddMedicalActivity extends StatelessWidget {
                             tanggalAwal: DateTime.now(),
                             initDate: DateTime.now().add(Duration(days: 1)),
                             onDateChanged: (selectedDate) {
-                              // Aksi yang diperlukan saat mengganti kalender
+                              dateTime = selectedDate;
+                              print(dateTime);
                             },
                           ),
                         ),
@@ -184,6 +222,7 @@ class AddMedicalActivity extends StatelessWidget {
                       ),
                     ),
                     TextFormField(
+                      controller: _locationController,
                       decoration: InputDecoration(
                         fillColor: const Color(0xFF929292),
                         hintText: 'Add Activity Location',
@@ -204,6 +243,7 @@ class AddMedicalActivity extends StatelessWidget {
                       ),
                     ),
                     TextFormField(
+                      controller: _descriptionController,
                       decoration: InputDecoration(
                         fillColor: const Color(0xFF929292),
                         hintText: 'Add Activity Description',
@@ -220,7 +260,17 @@ class AddMedicalActivity extends StatelessWidget {
                   child: GradientButton(
                       height: 50,
                       width: double.infinity,
-                      onTap: () {},
+                      onTap: () {
+                        final description = _descriptionController.text;
+                        final location = _locationController.text;
+                        BlocProvider.of<MedicalBloc>(context).add(CreateMedical(
+                            medicalEntity: MedicalEntity(
+                          activity: dropdownHint,
+                          location: location,
+                          description: description,
+                          expiredDate: Timestamp.fromDate(dateTime),
+                        )));
+                      },
                       text: 'Save Medical Activity'),
                 )
               ],
@@ -231,3 +281,4 @@ class AddMedicalActivity extends StatelessWidget {
     );
   }
 }
+

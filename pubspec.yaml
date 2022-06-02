@@ -29,6 +29,8 @@ dependencies:
     path: core
   user:
     path: user
+  schedule:
+    path: schedule
   firebase_auth: ^3.3.19
   firebase_storage: ^10.2.17
 
