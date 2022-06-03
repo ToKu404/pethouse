@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pethouse/presentation/pages/pet/add_pet.dart';
 import 'package:pethouse/presentation/pages/pet/pet_description_page.dart';
+import 'package:schedule/activity/presentation/blocs/addmedical_bloc/medical_bloc.dart';
 import 'package:schedule/activity/presentation/pages/activity/add_medical_activity.dart';
 import 'package:schedule/activity/presentation/pages/activity/add_new_task.dart';
 import 'package:pethouse/presentation/pages/adopt/adopt_page.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<UserProfileBloc>(),
           ),
           BlocProvider(create: (_) => di.locator<ResetPasswordBloc>()),
+          BlocProvider(create: (_) => di.locator<MedicalBloc>())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
