@@ -1,14 +1,15 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pethouse/presentation/pages/pet/add_pet.dart';
+import 'package:pethouse/presentation/pages/pet/pet_description_page.dart';
 import 'package:schedule/activity/presentation/blocs/addmedical_bloc/medical_bloc.dart';
+import 'package:schedule/activity/presentation/blocs/addtask_bloc/task_bloc.dart';
 import 'package:schedule/activity/presentation/pages/activity/add_medical_activity.dart';
 import 'package:schedule/activity/presentation/pages/activity/add_new_task.dart';
-import 'package:pethouse/presentation/pages/mypet/add_pet.dart';
 import 'package:pethouse/presentation/pages/adopt/adopt_page.dart';
 import 'package:pethouse/presentation/pages/adopt/detail_adopt_page.dart';
 import 'package:pethouse/presentation/pages/main_page.dart';
-import 'package:pethouse/presentation/pages/mypet/pet_description_page.dart';
 import 'package:pethouse/presentation/pages/other/check_internet_page.dart';
 import 'package:user/user.dart';
 import 'package:pethouse/presentation/pages/splash_page.dart';
@@ -55,7 +56,8 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<UserProfileBloc>(),
           ),
           BlocProvider(create: (_) => di.locator<ResetPasswordBloc>()),
-          BlocProvider(create: (_) => di.locator<MedicalBloc>())
+          BlocProvider(create: (_) => di.locator<MedicalBloc>()),
+          BlocProvider(create: (_) => di.locator<TaskBloc>())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
