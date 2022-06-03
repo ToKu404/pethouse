@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:pethouse/presentation/widgets/card_detail_pet.dart';
-import 'package:pethouse/presentation/widgets/card_medical_history.dart';
-import 'package:pethouse/presentation/widgets/card_periodic_summary.dart';
-import 'package:pethouse/presentation/widgets/daily_summary_card.dart';
-import 'package:pethouse/presentation/widgets/modal_medical_history.dart';
 import 'package:core/core.dart';
 import 'package:colorful_iconify_flutter/icons/twemoji.dart';
 import 'package:colorful_iconify_flutter/icons/noto.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
-
-import '../../widgets/card_account.dart';
+import 'package:pethouse/presentation/widgets/card_detail_pet.dart';
+import 'package:pethouse/presentation/widgets/card_medical_history.dart';
+import 'package:pethouse/presentation/widgets/card_periodic_summary.dart';
+import 'package:pethouse/presentation/widgets/daily_summary_card.dart';
 
 class PetDescriptionPage extends StatelessWidget {
   final String description =
