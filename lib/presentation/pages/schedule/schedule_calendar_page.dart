@@ -214,7 +214,7 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
                   Icons.task,
                   color: kSecondaryColor,
                 ),
-                onTap: () => Navigator.pushReplacementNamed(context, AddNewTaskActivity.ROUTE_NAME),
+                onTap: () => Navigator.pushNamed(context, AddNewTaskActivity.ROUTE_NAME),
                     // showDialog(
                     //   context: context,
                     //   builder: (context) => AlertDialog(

@@ -1,18 +1,55 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:core/core.dart';
 import 'package:schedule/activity/presentation/widgets/btnback_decoration.dart';
-import 'package:schedule/activity/presentation/widgets/custom_dropdown.dart';
 import 'package:schedule/activity/presentation/widgets/date_picker.dart';
 import 'package:schedule/activity/presentation/widgets/gredient_button.dart';
 import 'package:schedule/activity/presentation/widgets/time_picker.dart';
+import '../../../domain/entities/task_entity.dart';
+import '../../blocs/addtask_bloc/task_bloc.dart';
 
-class AddNewTaskActivity extends StatelessWidget {
+class AddNewTaskActivity extends StatefulWidget {
   static const ROUTE_NAME = "add_newTask_activity";
   const AddNewTaskActivity({Key? key}) : super(key: key);
+  @override
+  State<AddNewTaskActivity> createState() => _AddNewTaskActivityState();
+}
+
+class _AddNewTaskActivityState extends State<AddNewTaskActivity> {
+  final TextEditingController _descriptionController = TextEditingController();
+  DateTime dateTime = DateTime.now();
+  TimeOfDay timeOfDayStart = TimeOfDay.now();
+  TimeOfDay timeOfDayEnd = TimeOfDay.now();
+  final List<String> dropdownList = [
+    'Select Activity',
+    'Feed',
+    'Walk',
+    'Pee',
+    'Vitamin',
+    'Shower',
+    'Grooming',
+    'Weight Scale',
+    'Period',
+  ];
+  String dropdownHint = 'Select Activity';
+  final List<String> dropdownList1 = [
+  'Select One',
+  'Everyday',
+  'Every Week',
+  'Every Month',
+  ];
+  String dropdownHint1 = 'Select One';
+
 
   @override
+  void dispose() {
+    super.dispose();
+    _descriptionController.dispose();
+  }
+
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -32,34 +69,22 @@ class AddNewTaskActivity extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Ikhsan',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                              color: kDarkBrown,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Ikhsan',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        color: kDarkBrown,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Your best animal  Activity Medical ',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                              color: const Color(0XFFCCA88A),
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Your best animal  Activity Medical ',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        color: const Color(0XFFCCA88A),
+                        fontSize: 10,
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
@@ -111,19 +136,26 @@ class AddNewTaskActivity extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: CustomDropDown(
-                          dropdownHint: 'Select Activity',
-                          dropdownList: [
-                            'Select Activity',
-                            'Feed',
-                            'Walk',
-                            'Pee',
-                            'Vitamin',
-                            'Shower',
-                            'Grooming',
-                            'Weight Scale',
-                            'Period'
-                          ],
+                        child:  DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                              value: dropdownHint,
+                              icon: const Icon(Icons.arrow_drop_down_rounded),
+                              style: GoogleFonts.poppins(
+                                color: Color.fromARGB(255, 109, 109, 109),
+                                fontSize: 16,
+                              ),
+                              items:
+                              dropdownList.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownHint = newValue!;
+                                });
+                              }),
                         ),
                       ),
                     ),
@@ -140,21 +172,17 @@ class AddNewTaskActivity extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: CustomDatePicker(
-                            icon: Icon(Icons.date_range_rounded),
-                            tanggalAkhir:
-                                DateTime.now().add(Duration(days: 366)),
-                            tanggalAwal: DateTime.now(),
-                            initDate: DateTime.now().add(Duration(days: 1)),
-                            onDateChanged: (selectedDate) {
-                              // Aksi yang diperlukan saat mengganti kalender
-                            },
-                          ),
-                        ),
-                      ],
+                    CustomDatePicker(
+                      icon: Icon(Icons.date_range_rounded),
+                      tanggalAkhir:
+                          DateTime.now().add(Duration(days: 366)),
+                      tanggalAwal: DateTime.now(),
+                      initDate: DateTime.now().add(Duration(days: 1)),
+                      onDateChanged: (selectedDate) {
+                        dateTime = selectedDate;
+                        print(dateTime);
+                        // Aksi yang diperlukan saat mengganti kalender
+                      },
                     ),
                     const SizedBox(
                       height: 19,
@@ -185,11 +213,11 @@ class AddNewTaskActivity extends StatelessWidget {
                               width: 136,
                               height: 50,
                               child: Center(
-                                child: Flexible(
-                                  child: CustomTimePicker(
-                                    hintText: 'Start',
-                                    onTimeChanged: (selectedTime) {},
-                                  ),
+                                child: CustomTimePicker(
+                                  hintText: 'Start',
+                                  onTimeChanged: (selectedTime) {
+                                    timeOfDayStart = selectedTime;
+                                  },
                                 ),
                               ),
                             ),
@@ -224,7 +252,9 @@ class AddNewTaskActivity extends StatelessWidget {
                               child: Center(
                                 child: CustomTimePicker(
                                   hintText: 'End',
-                                  onTimeChanged: (selectedTime) {},
+                                  onTimeChanged: (selectedTime) {
+                                    timeOfDayEnd = selectedTime;
+                                  },
                                 ),
                               ),
                             ),
@@ -257,14 +287,26 @@ class AddNewTaskActivity extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: CustomDropDown(
-                          dropdownHint: 'Select One',
-                          dropdownList: [
-                            'Select One',
-                            'Everyday',
-                            'Every Week',
-                            'Every Month',
-                          ],
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                              value: dropdownHint1,
+                              icon: const Icon(Icons.arrow_drop_down_rounded),
+                              style: GoogleFonts.poppins(
+                                color: Color.fromARGB(255, 109, 109, 109),
+                                fontSize: 16,
+                              ),
+                              items:
+                              dropdownList1.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownHint1 = newValue!;
+                                });
+                              }),
                         ),
                       ),
                     ),
@@ -282,6 +324,7 @@ class AddNewTaskActivity extends StatelessWidget {
                       height: 10,
                     ),
                     TextFormField(
+                      controller: _descriptionController,
                       decoration: InputDecoration(
                         fillColor: const Color(0xFF929292),
                         hintText: 'Add Activity Description',
@@ -298,7 +341,18 @@ class AddNewTaskActivity extends StatelessWidget {
                   child: GradientButton(
                       height: 50,
                       width: double.infinity,
-                      onTap: () {},
+                      onTap: () {
+                        final description = _descriptionController.text;
+                        BlocProvider.of<TaskBloc>(context).add(CreateTask(
+                            taskEntity: TaskEntity(
+                              activity: dropdownHint,
+                              repeat: dropdownHint1,
+                              description: description,
+                              date: Timestamp.fromDate(dateTime),
+                              startTime: Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDayStart.hour, timeOfDayStart.minute)),
+                              endTime: Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDayEnd.hour, timeOfDayEnd.minute))
+                            )));
+                      },
                       text: 'Schedule'),
                 )
               ],

@@ -1,0 +1,145 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Pethouse",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "Pethouse (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Pethouse (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "adopt",
+            "cwd": "adopt",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "adopt (profile mode)",
+            "cwd": "adopt",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "adopt (release mode)",
+            "cwd": "adopt",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "core",
+            "cwd": "core",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "core (profile mode)",
+            "cwd": "core",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "core (release mode)",
+            "cwd": "core",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "pet",
+            "cwd": "pet",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "pet (profile mode)",
+            "cwd": "pet",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "pet (release mode)",
+            "cwd": "pet",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "petrivia",
+            "cwd": "petrivia",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "petrivia (profile mode)",
+            "cwd": "petrivia",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "petrivia (release mode)",
+            "cwd": "petrivia",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "schedule",
+            "cwd": "schedule",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "schedule (profile mode)",
+            "cwd": "schedule",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "schedule (release mode)",
+            "cwd": "schedule",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "user",
+            "cwd": "user",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "user (profile mode)",
+            "cwd": "user",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "user (release mode)",
+            "cwd": "user",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
