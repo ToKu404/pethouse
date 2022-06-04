@@ -1,229 +1,285 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pet/domain/entities/pet_entity.dart';
+import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 
 import '../widgets/btnback_decoration.dart';
 import '../widgets/date_picker.dart';
 import '../widgets/gredient_button.dart';
 
-class AddPet extends StatelessWidget {
+class AddPet extends StatefulWidget {
   static const ROUTE_NAME = 'add_pet';
 
   @override
+  State<AddPet> createState() => _AddPetState();
+}
+
+class _AddPetState extends State<AddPet> {
+  DateTime dateTime = DateTime.now();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _breedController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  String imgUrl = '';
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _breedController.dispose();
+    _descriptionController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add  Pet', style: TextStyle(color: Colors.black)),
-        leading: btnBack_decoration(),
-        centerTitle: true,
-        elevation: 5,
-        backgroundColor: kWhite,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    color: const Color(0XFFF3F3F3),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: InkWell(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.add_photo_alternate_outlined,
-                          color: kDarkBrown,
-                          size: 40,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: Text(
-                            'Add Picture',
-                            style: TextStyle(
-                              color: kDarkBrown,
-                              fontSize: 12,
+    return BlocListener<AddPetBloc, AddPetState>(
+      listener: (context, state) {
+        if (state is UpPhotoSucces) {
+          imgUrl = state.imgUrl;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Add  Pet', style: TextStyle(color: Colors.black)),
+          leading: btnBack_decoration(),
+          centerTitle: true,
+          elevation: 5,
+          backgroundColor: kWhite,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      print('hai');
+                      BlocProvider.of<AddPetBloc>(context).add(SetPhoto());
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        color: const Color(0XFFF3F3F3),
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.add_photo_alternate_outlined,
+                            color: kDarkBrown,
+                            size: 40,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20),
+                            child: Text(
+                              'Add Picture',
+                              style: TextStyle(
+                                color: kDarkBrown,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Form(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(
-                            bottom: 10,
-                          ),
-                          child: Text(
-                            'Pet Name',
-                            style: TextStyle(
-                              color: kDarkBrown,
-                              fontSize: 12,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Form(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 10,
                             ),
-                          ),
-                        ),
-                        TextFormField(
-                          autofocus: true,
-                          decoration: InputDecoration(
-                            fillColor: const Color(0xFF929292),
-                            hintText: 'Add Pet Name',
-                            border:
-                                OutlineInputBorder(borderRadius: kBorderRadius),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                            bottom: 10,
-                            top: 10,
-                          ),
-                          child: Text(
-                            'Gender',
-                            style: TextStyle(
-                              color: kDarkBrown,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        GenderRadio(),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                            bottom: 10,
-                            top: 10,
-                          ),
-                          child: Text(
-                            'Date of Birth',
-                            style: TextStyle(
-                              color: kDarkBrown,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: CustomDatePicker(
-                                icon: Icon(Icons.date_range_rounded),
-                                tanggalAkhir:
-                                    DateTime.now().add(Duration(days: 366)),
-                                tanggalAwal: DateTime.now(),
-                                initDate: DateTime.now().add(Duration(days: 1)),
-                                onDateChanged: (selectedDate) {
-                                  // Aksi yang diperlukan saat mengganti kalender
-                                },
+                            child: Text(
+                              'Pet Name',
+                              style: TextStyle(
+                                color: kDarkBrown,
+                                fontSize: 12,
                               ),
                             ),
-                          ],
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 10,
                           ),
-                          child: Text(
-                            'Breed',
-                            style: TextStyle(
-                              color: kDarkBrown,
-                              fontSize: 12,
+                          TextFormField(
+                            autofocus: true,
+                            controller: _nameController,
+                            decoration: InputDecoration(
+                              fillColor: const Color(0xFF929292),
+                              hintText: 'Add Pet Name',
+                              border: OutlineInputBorder(
+                                  borderRadius: kBorderRadius),
                             ),
                           ),
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            fillColor: const Color(0xFF929292),
-                            hintText: 'Add Pet Breed',
-                            border:
-                                OutlineInputBorder(borderRadius: kBorderRadius),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            'Certificate',
-                            style: TextStyle(
-                              color: kDarkBrown,
-                              fontSize: 12,
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 10,
+                              top: 10,
                             ),
-                          ),
-                        ),
-                        InkWell(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: kBorderRadius,
-                              border: Border.all(
-                                color: Color(0xFF929292),
+                            child: Text(
+                              'Gender',
+                              style: TextStyle(
+                                color: kDarkBrown,
+                                fontSize: 12,
                               ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.upload,
+                          ),
+                          GenderRadio(),
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 10,
+                              top: 10,
+                            ),
+                            child: Text(
+                              'Date of Birth',
+                              style: TextStyle(
+                                color: kDarkBrown,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: CustomDatePicker(
+                                  icon: Icon(Icons.date_range_rounded),
+                                  tanggalAkhir:
+                                      DateTime.now().add(Duration(days: 366)),
+                                  tanggalAwal: DateTime.now(),
+                                  initDate:
+                                      DateTime.now().add(Duration(days: 1)),
+                                  onDateChanged: (selectedDate) {
+                                    dateTime = selectedDate;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            child: Text(
+                              'Breed',
+                              style: TextStyle(
+                                color: kDarkBrown,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _breedController,
+                            decoration: InputDecoration(
+                              fillColor: const Color(0xFF929292),
+                              hintText: 'Add Pet Breed',
+                              border: OutlineInputBorder(
+                                  borderRadius: kBorderRadius),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            child: Text(
+                              'Certificate',
+                              style: TextStyle(
+                                color: kDarkBrown,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: kBorderRadius,
+                                border: Border.all(
                                   color: Color(0xFF929292),
                                 ),
-                                SizedBox(
-                                  width: 30,
-                                ),
-                                Text(
-                                  'Select From Directory',
-                                  style: TextStyle(
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.upload,
                                     color: Color(0xFF929292),
-                                    fontSize: 16,
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    width: 30,
+                                  ),
+                                  Text(
+                                    'Select From Directory',
+                                    style: TextStyle(
+                                      color: Color(0xFF929292),
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            'Description',
-                            style: TextStyle(
-                              color: kDarkBrown,
-                              fontSize: 12,
+                          const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            child: Text(
+                              'Description',
+                              style: TextStyle(
+                                color: kDarkBrown,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            fillColor: const Color(0xFF929292),
-                            hintText: 'Add Pet Description',
-                            border:
-                                OutlineInputBorder(borderRadius: kBorderRadius),
+                          TextFormField(
+                            controller: _descriptionController,
+                            decoration: InputDecoration(
+                              fillColor: const Color(0xFF929292),
+                              hintText: 'Add Pet Description',
+                              border: OutlineInputBorder(
+                                  borderRadius: kBorderRadius),
+                            ),
+                            maxLines: 5,
                           ),
-                          maxLines: 5,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20,
-                          ),
-                          child: GradientButton(
-                              height: 50,
-                              width: double.infinity,
-                              onTap: () {},
-                              text: 'Save Pet'),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 20,
+                            ),
+                            child: GradientButton(
+                                height: 50,
+                                width: double.infinity,
+                                onTap: () {
+                                  final name = _nameController.text;
+                                  final breed = _breedController.text;
+                                  final description =
+                                      _descriptionController.text;
+                                  BlocProvider.of<AddPetBloc>(context)
+                                      .add(CreatePet(
+                                          petEntity: PetEntity(
+                                    imgUrl: imgUrl,
+                                    name: name,
+                                    gender: '',
+                                    dateOfBirth: dateTime,
+                                    breed: breed,
+                                    fileUrl: '',
+                                    description: description,
+                                  )));
+                                },
+                                text: 'Save Pet'),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

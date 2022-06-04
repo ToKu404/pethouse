@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class PetEntity extends Equatable {
   final String? petId;
+  final String? imgUrl;
   final String? name;
   final String? gender;
   final DateTime? dateOfBirth;
@@ -12,6 +13,7 @@ class PetEntity extends Equatable {
 
   PetEntity(
       { this.petId,
+        required this.imgUrl,
         required this.name,
         required this.gender,
         required this.dateOfBirth,
@@ -20,5 +22,5 @@ class PetEntity extends Equatable {
         required this.description});
 
   @override
-  List<Object?> get props => [name, gender, dateOfBirth, breed, fileUrl, description];
+  List<Object?> get props => [imgUrl, name, gender, dateOfBirth, breed, fileUrl, description];
 }
