@@ -5,10 +5,11 @@ import 'package:core/core.dart';
 import 'package:colorful_iconify_flutter/icons/twemoji.dart';
 import 'package:colorful_iconify_flutter/icons/noto.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
-import 'package:pet/presentation/widgets/card_detail_pet.dart';
-import 'package:pet/presentation/widgets/card_medical_history.dart';
-import 'package:pet/presentation/widgets/card_periodic_summary.dart';
-import 'package:pet/presentation/widgets/daily_summary_card.dart';
+
+import '../widgets/card_detail_pet.dart';
+import '../widgets/card_medical_history.dart';
+import '../widgets/card_periodic_summary.dart';
+import '../widgets/daily_summary_card.dart';
 
 class PetDescriptionPage extends StatelessWidget {
   final String description =
