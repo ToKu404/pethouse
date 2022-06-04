@@ -65,6 +65,7 @@ class _AddPetState extends State<AddPet> {
                       width: double.infinity,
                       height: 250,
                       decoration: BoxDecoration(
+                        image: (imgUrl != '') ? DecorationImage(image: NetworkImage(imgUrl),) : null,
                         color: const Color(0XFFF3F3F3),
                         borderRadius: BorderRadius.circular(7),
                       ),
@@ -308,7 +309,7 @@ class _GenderRadioState extends State<GenderRadio> {
             borderRadius: kBorderRadius,
             border: Border.all(
               color: (_selectedGender == Index) ? kPrimaryColor : Colors.grey,
-              width: 1,
+              width: (_selectedGender == Index) ? 2 : 1,
             ),
           ),
           child: Row(
