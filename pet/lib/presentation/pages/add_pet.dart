@@ -1,8 +1,9 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:pet/presentation/widgets/btnback_decoration.dart';
-import 'package:pet/presentation/widgets/date_picker.dart';
-import 'package:pet/presentation/widgets/gredient_button.dart';
+
+import '../widgets/btnback_decoration.dart';
+import '../widgets/date_picker.dart';
+import '../widgets/gredient_button.dart';
 
 class AddPet extends StatelessWidget {
   static const ROUTE_NAME = 'add_pet';
