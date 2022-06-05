@@ -31,6 +31,8 @@ dependencies:
     path: user
   schedule:
     path: schedule
+  pet:
+    path: pet
   firebase_auth: ^3.3.19
   firebase_storage: ^10.2.17
 

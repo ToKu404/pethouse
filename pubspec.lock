@@ -541,6 +541,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
+  pet:
+    dependency: "direct main"
+    description:
+      path: pet
+      relative: true
+    source: path
+    version: "0.0.1"
   petitparser:
     dependency: transitive
     description:
