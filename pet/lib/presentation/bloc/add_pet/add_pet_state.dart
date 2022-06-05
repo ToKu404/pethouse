@@ -28,3 +28,11 @@ class UpPhotoSucces extends AddPetState {
   @override
   List<Object> get props => [imgUrl];
 }
+
+class UpCertificateSucces extends AddPetState {
+  final String ctfUrl;
+
+  UpCertificateSucces(this.ctfUrl);
+  @override
+  List<Object> get props => [ctfUrl];
+}

@@ -20,4 +20,10 @@ class PetFirebaseRepositoryImpl implements PetFirebaseRepository {
     // TODO: implement addPhoto
     return petFirebaseDataSource.addPhoto(imgUrl);
   }
+  
+  @override
+  Future<String> addCertificate(File ctfUrl) {
+    // TODO: implement addCertificate
+    return petFirebaseDataSource.addCertificate(ctfUrl);
+  }
 }

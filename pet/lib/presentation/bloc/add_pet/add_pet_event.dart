@@ -17,3 +17,6 @@ class CreatePet extends AddPetEvent{
 
 class SetPhoto extends AddPetEvent{
 }
+
+class SetCertificate extends AddPetEvent{
+}

@@ -25,6 +25,7 @@ dependencies:
   flutter_bloc: ^8.0.1 
   firebase_storage: ^10.2.17
   image_picker: ^0.8.5+3
+  google_fonts: ^2.3.3
 
 
 dev_dependencies:

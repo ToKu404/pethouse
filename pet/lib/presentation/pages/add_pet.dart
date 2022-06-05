@@ -4,14 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 
 import '../widgets/btnback_decoration.dart';
 import '../widgets/date_picker.dart';
 import '../widgets/gredient_button.dart';
-
-int _selectedGender = 0;
 
 class AddPet extends StatefulWidget {
   static const ROUTE_NAME = 'add_pet';
@@ -26,9 +25,19 @@ class _AddPetState extends State<AddPet> {
   final TextEditingController _breedController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   String imgUrl = '';
+  String ctfUrl = '';
   String gender = '';
   bool isPhotoUploaded = false;
+  bool isCertificateUploaded = false;
   int _selectedGender = 0;
+  String dropdownHint = 'Select Type of Pet';
+  final List<String> dropdownPetList = [
+    'Select Type of Pet',
+    'Cat',
+    'Dog',
+    'Hamster',
+    'Fish',
+  ];
 
   @override
   void dispose() {
@@ -48,6 +57,10 @@ class _AddPetState extends State<AddPet> {
         if (state is UpPhotoSucces) {
           imgUrl = state.imgUrl;
           isPhotoUploaded = true;
+        }
+        if (state is UpCertificateSucces) {
+          ctfUrl = state.ctfUrl;
+          isCertificateUploaded = true;
         }
       },
       child: Scaffold(
@@ -75,8 +88,8 @@ class _AddPetState extends State<AddPet> {
                       decoration: BoxDecoration(
                         image: (isPhotoUploaded == true)
                             ? DecorationImage(
-                                image: NetworkImage(
-                                    'https://asset.kompas.com/crops/SV5q4gPkeD8YJTuzO31BqTr9DEI=/192x128:1728x1152/750x500/data/photo/2021/03/06/60436a28b258b.jpg'),
+                                image: NetworkImage(imgUrl),
+                                // 'https://asset.kompas.com/crops/SV5q4gPkeD8YJTuzO31BqTr9DEI=/192x128:1728x1152/750x500/data/photo/2021/03/06/60436a28b258b.jpg'),
                                 fit: BoxFit.cover,
                               )
                             : null,
@@ -113,6 +126,60 @@ class _AddPetState extends State<AddPet> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Pet Type',
+                            style: GoogleFonts.poppins(
+                              color: kDarkBrown,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                    value: dropdownHint,
+                                    icon: const Icon(
+                                        Icons.arrow_drop_down_rounded),
+                                    style: GoogleFonts.poppins(
+                                      color: Color.fromARGB(255, 109, 109, 109),
+                                      fontSize: 16,
+                                    ),
+                                    items: dropdownPetList
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        dropdownHint = newValue!;
+                                      });
+                                    }),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 19,
+                          ),
                           const Padding(
                             padding: EdgeInsets.only(
                               bottom: 10,
@@ -223,6 +290,10 @@ class _AddPetState extends State<AddPet> {
                             ),
                           ),
                           InkWell(
+                            onTap: () {
+                              BlocProvider.of<AddPetBloc>(context)
+                                  .add(SetCertificate());
+                            },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               height: 50,
@@ -243,9 +314,13 @@ class _AddPetState extends State<AddPet> {
                                     width: 30,
                                   ),
                                   Text(
-                                    'Select From Directory',
+                                    (isCertificateUploaded == true)
+                                        ? 'Certificate Has Been Chosen'
+                                        : 'Select From Directory',
                                     style: TextStyle(
-                                      color: Color(0xFF929292),
+                                      color: (isCertificateUploaded == true)
+                                          ? kSecondaryColor
+                                          : Color(0xFF929292),
                                       fontSize: 16,
                                     ),
                                   ),
@@ -291,11 +366,12 @@ class _AddPetState extends State<AddPet> {
                                       .add(CreatePet(
                                           petEntity: PetEntity(
                                     imgUrl: imgUrl,
+                                    petType: dropdownHint,
                                     name: name,
                                     gender: gender,
                                     dateOfBirth: dateTime,
                                     breed: breed,
-                                    fileUrl: '',
+                                    fileUrl: ctfUrl,
                                     description: description,
                                   )));
                                 },

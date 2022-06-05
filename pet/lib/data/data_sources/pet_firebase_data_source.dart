@@ -9,6 +9,7 @@ import 'package:pet/presentation/pages/add_pet.dart';
 abstract class PetFirebaseDataSource {
   Future<void> addPet(PetEntity petEntity);
   Future<String> addPhoto(File imgUrl);
+  Future<String> addCertificate(File ctfUrl);
 }
 
 class PetFirebaseDataSourceImpl implements PetFirebaseDataSource {
@@ -29,6 +30,7 @@ class PetFirebaseDataSourceImpl implements PetFirebaseDataSource {
       final newPet = PetModel(
               petId: petId,
               imgUrl: petEntity.imgUrl,
+              petType: petEntity.petType,
               name: petEntity.name,
               gender: petEntity.gender,
               dateOfBirth: petEntity.dateOfBirth,
@@ -49,6 +51,16 @@ class PetFirebaseDataSourceImpl implements PetFirebaseDataSource {
     String imgName = basename(imgUrl.path);
     final ref = firebaseStorage.ref().child('petPhoto').child(imgName);
     await ref.putFile(imgUrl);
+
+    return await ref.getDownloadURL();
+  }
+
+  @override
+  Future<String> addCertificate(File ctfUrl) async {
+    // TODO: implement addPhoto
+    String ctfName = basename(ctfUrl.path);
+    final ref = firebaseStorage.ref().child('certificatePhoto').child(ctfName);
+    await ref.putFile(ctfUrl);
 
     return await ref.getDownloadURL();
   }
