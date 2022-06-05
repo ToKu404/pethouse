@@ -17,5 +17,3 @@ class CreatePet extends AddPetEvent{
 
 class SetPhoto extends AddPetEvent{
 }
-
-

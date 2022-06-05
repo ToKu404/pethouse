@@ -11,6 +11,8 @@ import '../widgets/btnback_decoration.dart';
 import '../widgets/date_picker.dart';
 import '../widgets/gredient_button.dart';
 
+int _selectedGender = 0;
+
 class AddPet extends StatefulWidget {
   static const ROUTE_NAME = 'add_pet';
 
@@ -24,6 +26,9 @@ class _AddPetState extends State<AddPet> {
   final TextEditingController _breedController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   String imgUrl = '';
+  String gender = '';
+  bool isPhotoUploaded = false;
+  int _selectedGender = 0;
 
   @override
   void dispose() {
@@ -31,6 +36,9 @@ class _AddPetState extends State<AddPet> {
     _nameController.dispose();
     _breedController.dispose();
     _descriptionController.dispose();
+    imgUrl = '';
+    gender = '';
+    isPhotoUploaded = false;
   }
 
   @override
@@ -39,6 +47,7 @@ class _AddPetState extends State<AddPet> {
       listener: (context, state) {
         if (state is UpPhotoSucces) {
           imgUrl = state.imgUrl;
+          isPhotoUploaded = true;
         }
       },
       child: Scaffold(
@@ -58,37 +67,44 @@ class _AddPetState extends State<AddPet> {
                 children: [
                   InkWell(
                     onTap: () {
-                      print('hai');
                       BlocProvider.of<AddPetBloc>(context).add(SetPhoto());
                     },
                     child: Container(
                       width: double.infinity,
                       height: 250,
                       decoration: BoxDecoration(
-                        image: (imgUrl != '') ? DecorationImage(image: NetworkImage(imgUrl),) : null,
+                        image: (isPhotoUploaded == true)
+                            ? DecorationImage(
+                                image: NetworkImage(
+                                    'https://asset.kompas.com/crops/SV5q4gPkeD8YJTuzO31BqTr9DEI=/192x128:1728x1152/750x500/data/photo/2021/03/06/60436a28b258b.jpg'),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                         color: const Color(0XFFF3F3F3),
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.add_photo_alternate_outlined,
-                            color: kDarkBrown,
-                            size: 40,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Text(
-                              'Add Picture',
-                              style: TextStyle(
-                                color: kDarkBrown,
-                                fontSize: 12,
-                              ),
+                      child: (isPhotoUploaded == true)
+                          ? null
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.add_photo_alternate_outlined,
+                                  color: kDarkBrown,
+                                  size: 40,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 20),
+                                  child: Text(
+                                    'Add Picture',
+                                    style: TextStyle(
+                                      color: kDarkBrown,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                   Padding(
@@ -110,7 +126,6 @@ class _AddPetState extends State<AddPet> {
                             ),
                           ),
                           TextFormField(
-                            autofocus: true,
                             controller: _nameController,
                             decoration: InputDecoration(
                               fillColor: const Color(0xFF929292),
@@ -132,7 +147,18 @@ class _AddPetState extends State<AddPet> {
                               ),
                             ),
                           ),
-                          GenderRadio(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              CustomGender(
+                                  1, 'Female', Icons.female, false, Colors.red),
+                              SizedBox(
+                                width: 30,
+                              ),
+                              CustomGender(
+                                  2, 'Male', Icons.male, false, Colors.blue),
+                            ],
+                          ),
                           const Padding(
                             padding: EdgeInsets.only(
                               bottom: 10,
@@ -153,7 +179,7 @@ class _AddPetState extends State<AddPet> {
                                   icon: Icon(Icons.date_range_rounded),
                                   tanggalAkhir:
                                       DateTime.now().add(Duration(days: 366)),
-                                  tanggalAwal: DateTime.now(),
+                                  tanggalAwal: DateTime.utc(1900, 1, 1),
                                   initDate:
                                       DateTime.now().add(Duration(days: 1)),
                                   onDateChanged: (selectedDate) {
@@ -266,7 +292,7 @@ class _AddPetState extends State<AddPet> {
                                           petEntity: PetEntity(
                                     imgUrl: imgUrl,
                                     name: name,
-                                    gender: '',
+                                    gender: gender,
                                     dateOfBirth: dateTime,
                                     breed: breed,
                                     fileUrl: '',
@@ -287,15 +313,6 @@ class _AddPetState extends State<AddPet> {
       ),
     );
   }
-}
-
-class GenderRadio extends StatefulWidget {
-  @override
-  State<GenderRadio> createState() => _GenderRadioState();
-}
-
-class _GenderRadioState extends State<GenderRadio> {
-  int _selectedGender = 0;
 
   @override
   Widget CustomGender(
@@ -334,23 +351,74 @@ class _GenderRadioState extends State<GenderRadio> {
         onTap: () {
           setState(() {
             _selectedGender = Index;
+            gender = name;
           });
         },
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        CustomGender(1, 'Female', Icons.female, false, Colors.red),
-        SizedBox(
-          width: 30,
-        ),
-        CustomGender(2, 'Male', Icons.male, false, Colors.blue),
-      ],
-    );
-  }
+// class GenderRadio extends StatefulWidget {
+//   @override
+//   State<GenderRadio> createState() => _GenderRadioState();
+// }
+
+// class _GenderRadioState extends State<GenderRadio> {
+
+//   @override
+//   Widget CustomGender(
+//       int Index, String name, IconData icon, bool isSelected, Color color) {
+//     return Expanded(
+//       child: InkWell(
+//         child: Container(
+//           height: 50,
+//           decoration: BoxDecoration(
+//             color: kWhite,
+//             borderRadius: kBorderRadius,
+//             border: Border.all(
+//               color: (_selectedGender == Index) ? kPrimaryColor : Colors.grey,
+//               width: (_selectedGender == Index) ? 2 : 1,
+//             ),
+//           ),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//             children: [
+//               Icon(
+//                 icon,
+//                 color: color,
+//               ),
+//               Text(
+//                 name,
+//                 style: TextStyle(
+//                   color: color,
+//                   fontWeight: (_selectedGender == Index)
+//                       ? FontWeight.bold
+//                       : FontWeight.normal,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         onTap: () {
+//           setState(() {
+//             _selectedGender = Index;
+//           });
+//         },
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         CustomGender(1, 'Female', Icons.female, false, Colors.red),
+//         SizedBox(
+//           width: 30,
+//         ),
+//         CustomGender(2, 'Male', Icons.male, false, Colors.blue),
+//       ],
+//     );
+//   }
 }
