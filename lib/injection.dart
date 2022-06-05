@@ -2,6 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pet/data/data_sources/pet_firebase_data_source.dart';
+import 'package:pet/data/repositories/pet_firebase_repository_impl.dart';
+import 'package:pet/domain/repositories/pet_firebase_repository.dart';
+import 'package:pet/domain/usecases/add_certificate_usecase.dart';
+import 'package:pet/domain/usecases/add_pet_usecase.dart';
+import 'package:pet/domain/usecases/add_photo_usecase.dart';
+import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:schedule/activity/data/data_sources/task_firebase_data_source.dart';
 import 'package:schedule/activity/data/repositories/task_firebase_repository_impl.dart';
 import 'package:schedule/activity/domain/repositories/medicaladd_firebase_repository.dart';
@@ -36,17 +43,19 @@ import 'package:user/presentation/blocs/user_profile_bloc/user_profile_bloc.dart
 import 'package:schedule/activity/data/repositories/medical_firebase_repository_impl.dart';
 import 'package:schedule/activity/data/data_sources/medical_firebase_data_source.dart';
 
-
 final locator = GetIt.instance;
 
 void init() {
   // repositoriy
   locator.registerLazySingleton<FirebaseRepository>(
       () => FirebaseRepositoryImpl(firebaseDataSource: locator()));
-  locator.registerLazySingleton<MedicalFirebaseRepository>(
-          () => MedicalFirebaseRepositoryImpl(medicalFirebaseDataSource:locator()));
+  locator.registerLazySingleton<MedicalFirebaseRepository>(() =>
+      MedicalFirebaseRepositoryImpl(medicalFirebaseDataSource: locator()));
   locator.registerLazySingleton<TaskFirebaseRepository>(
-          () => TaskFirebaseRepositoryImpl(taskFirebaseDataSource:locator()));
+      () => TaskFirebaseRepositoryImpl(taskFirebaseDataSource: locator()));
+  locator.registerLazySingleton<PetFirebaseRepository>(
+      () => PetFirebaseRepositoryImpl(petFirebaseDataSource: locator()));
+
   // datasource
   locator.registerLazySingleton<FirebaseDataSource>(() =>
       FirebaseDataSourceImpl(
@@ -57,7 +66,11 @@ void init() {
   locator.registerLazySingleton<MedicalFirebaseDataSource>(
       () => MedicalFirebaseDataSourceImpl(medicalFireStore: locator()));
   locator.registerLazySingleton<TaskFirebaseDataSource>(
-          () => TaskFirebaseDataSourceImpl(taskFireStore: locator()));
+      () => TaskFirebaseDataSourceImpl(taskFireStore: locator()));
+  locator.registerLazySingleton<PetFirebaseDataSource>(() =>
+      PetFirebaseDataSourceImpl(
+          petFireStore: locator(), firebaseStorage: locator()));
+
   // usecases
   locator.registerLazySingleton(
       () => SignInUsecase(firebaseRepository: locator()));
@@ -86,11 +99,17 @@ void init() {
       () => VerifyEmailUsecase(firebaseRepository: locator()));
   locator.registerLazySingleton(
       () => DeleteUserUsecase(firebaseRepository: locator()));
+  locator.registerLazySingleton(
+      () => AddMedicalUseCase(firebaseRepository: locator()));
+  locator.registerLazySingleton(
+      () => AddTaskUseCase(firebaseRepository: locator()));
+  locator.registerLazySingleton(
+      () => AddPetUseCase(firebaseRepository: locator()));
+  locator.registerLazySingleton(
+      () => AddPhotoUseCase(firebaseRepository: locator()));
+  locator.registerLazySingleton(
+      () => AddCertificateUseCase(firebaseRepository: locator()));
 
-  locator.registerLazySingleton(() =>
-      AddMedicalUseCase(firebaseRepository: locator()));
-  locator.registerLazySingleton(() =>
-      AddTaskUseCase(firebaseRepository: locator()));
   // bloc & cubit
   locator.registerFactory(
       () => SignInBloc(signInUsecase: locator(), signInWithGoogle: locator()));
@@ -111,10 +130,13 @@ void init() {
       updateUserDataUsecase: locator(),
       deleteOldImageUsecase: locator()));
 
-  locator.registerFactory(() =>
-      MedicalBloc(addMedicalUsecase: locator()));
-  locator.registerFactory(() =>
-      TaskBloc(addTaskUsecase: locator()));
+  locator.registerFactory(() => MedicalBloc(addMedicalUsecase: locator()));
+  locator.registerFactory(() => TaskBloc(addTaskUsecase: locator()));
+  locator.registerFactory(() => AddPetBloc(
+        addPetUsecase: locator(),
+        addPhotoUsecase: locator(),
+        addCertificateUsecase: locator(),
+      ));
 
   //external
   final auth = FirebaseAuth.instance;
