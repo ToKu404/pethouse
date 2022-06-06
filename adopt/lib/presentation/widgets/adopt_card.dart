@@ -1,17 +1,18 @@
+import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../pages/detail_adopt_page.dart';
 class AdoptCard extends StatelessWidget {
-  const AdoptCard({Key? key}) : super(key: key);
+  final AdoptEntity adoptEntity;
+  const AdoptCard({Key? key, required this.adoptEntity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Navigator.pushNamed(context, DETAIL_ADOPT_ROUTE_NAME),
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: kWhite,
@@ -27,23 +28,36 @@ class AdoptCard extends StatelessWidget {
             Stack(children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  'https://media.istockphoto.com/photos/ginger-cat-sitting-on-floor-in-living-room-and-looking-at-camera-pet-picture-id1149347768?b=1&k=20&m=1149347768&s=170667a&w=0&h=eYqyMdhTK02QUU0miN0-ka-Dk37hNU8uTpF4z1k-t3A=',
+                child: SizedBox(
                   height: 135,
-                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  child: adoptEntity.petPictureUrl != null &&
+                          adoptEntity.petPictureUrl != ''
+                      ? Image.network(
+                          adoptEntity.petPictureUrl!,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(
+                          color: kGrey,
+                          padding: const EdgeInsets.all(20),
+                          child: SvgPicture.asset(
+                            '${kPetTypeVector[adoptEntity.petType?.toLowerCase()]}',
+                            color: kGreyTransparant,
+                          ),
+                        ),
                 ),
               ),
               Positioned(
                 top: 5,
                 right: 5,
                 child: Container(
-                  decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: kWhite),
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: kWhite),
                   width: 25,
                   height: 25,
                   child: Center(
                     child: SvgPicture.asset(
-                      'assets/icons/cat_icon_outline.svg',
+                      '${kPetTypeVector[adoptEntity.petType?.toLowerCase()]}',
                       color: kPrimaryColor,
                       width: 15,
                       height: 15,
@@ -55,67 +69,102 @@ class AdoptCard extends StatelessWidget {
             ]),
             Container(
               width: 140,
-              margin: EdgeInsets.only(top: 5),
-              padding: EdgeInsets.symmetric(horizontal: 5),
+              margin: const EdgeInsets.only(top: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Pesu',
+                    adoptEntity.petName ?? 'Pet Name',
                     style: kTextTheme.subtitle1?.copyWith(color: kDarkBrown),
                   ),
-                  Text(
-                    'Ras: Persia',
-                    style: kTextTheme.overline
-                        ?.copyWith(color: kGreyTransparant, height: 1),
-                  ),
-                  SizedBox(
+                  adoptEntity.petBreed != ''
+                      ? Text(
+                          'Breed: ${adoptEntity.petBreed}',
+                          style: kTextTheme.overline
+                              ?.copyWith(color: kGreyTransparant, height: 1),
+                        )
+                      : const SizedBox(
+                          height: 10,
+                        ),
+                  const SizedBox(
                     height: 8,
                   ),
                   Row(
                     children: [
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Color(0xFFCDDDF6),
-                        ),
-                        child: Text(
-                          'Jantan',
-                          style: kTextTheme.overline?.copyWith(
-                            color: Color(0xFF578EE0),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
+                      adoptEntity.gender != null && adoptEntity.gender != ''
+                          ? Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 2),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: adoptEntity.gender == 'male'
+                                    ? Color(0xFFCDDDF6)
+                                    : Color(0xFFEAABAC),
+                              ),
+                              child: Text(
+                                adoptEntity.gender ?? '',
+                                style: kTextTheme.overline?.copyWith(
+                                  fontSize: 11,
+                                  color: adoptEntity.gender == 'male'
+                                      ? Color(0xFF578EE0)
+                                      : Color(0xFFCB1E2D),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(
                         width: 4,
                       ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Color(0xFFFFF5E3),
-                        ),
-                        child: Text(
-                          '10 Bulan',
-                          style: kTextTheme.overline?.copyWith(
-                            color: Color(0xFF85634D),
-                          ),
-                        ),
-                      )
+                      adoptEntity.dateOfBirth != null
+                          ? Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 2),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: const Color(0xFFFFF5E3),
+                              ),
+                              child: Text(
+                                getAge(),
+                                style: kTextTheme.overline?.copyWith(
+                                  fontSize: 11,
+                                  color: const Color(0xFF85634D),
+                                ),
+                              ),
+                            )
+                          : Container(),
                     ],
                   ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             )
           ],
         ),
       ),
     );
+  }
+
+  String getAge() {
+    DateTime? born = adoptEntity.dateOfBirth?.toDate();
+    DateTime today = DateTime.now();
+    int yearDiff = today.year - (born?.year ?? 0);
+    int monthDiff = today.month - (born?.month ?? 0);
+    int dayDiff = today.day - (born?.day ?? 0);
+
+    String age = '';
+    if (yearDiff > 0) {
+      age += yearDiff.toString();
+      int percentMonth = (monthDiff / 12).round();
+      age += percentMonth > 0 ? '.$percentMonth' : '';
+      age += ' Tahun';
+    } else if (monthDiff > 0) {
+      age += '$monthDiff Bulan';
+    } else {
+      age += '$dayDiff Hari';
+    }
+    return age;
   }
 }
