@@ -2,7 +2,9 @@
 import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
+
 import 'package:adopt/domain/entities/adopt_enitity.dart';
+import 'package:adopt/domain/usecases/get_all_pet_list_usecase.dart';
 import 'package:adopt/domain/usecases/create_new_adopt_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_adopt_photo_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_certificate_usecase.dart';
@@ -11,20 +13,23 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-part 'open_adopt_event.dart';
-part 'open_adopt_state.dart';
+part 'pet_adopt_event.dart';
+part 'pet_adopt_state.dart';
 
-class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
+class PetAdoptBloc extends Bloc<PetAdoptEvent, PetAdoptState> {
   final CreateNewAdoptUsecase createNewAdoptUsecase;
   final UploadPetAdoptPhotoUsecase uploadPetPhoto;
   final UploadPetCertificateUsecase uploadPetCertificateUsecase;
-  OpenAdoptBloc(
+  final GetAllPetListUsecase getAllPetListUsecase;
+
+  PetAdoptBloc(
       {required this.createNewAdoptUsecase,
       required this.uploadPetPhoto,
-      required this.uploadPetCertificateUsecase})
-      : super(OpenAdoptInitial()) {
+      required this.uploadPetCertificateUsecase,
+      required this.getAllPetListUsecase})
+      : super(PetAdoptInitial()) {
     on<SubmitOpenAdopt>((event, emit) async {
-      emit(OpenAdoptLoading());
+      emit(PetAdoptLoading());
       try {
         String petPhotoUrl = "";
         if (event.adoptEntity.petPictureUrl != null &&
@@ -53,7 +58,7 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
         await createNewAdoptUsecase.execute(adoptEntity);
         emit(OpenAdoptSuccess());
       } catch (e) {
-        emit(OpenAdoptError(message: 'error open adopt'));
+        emit(PetAdoptError(message: 'error open adopt'));
       }
     });
 
@@ -70,10 +75,10 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
             final path = image.path;
             emit(UploadPetPhotoSuccess(petPhotoPath: path));
           } else {
-            emit(OpenAdoptError(message: 'failed upload pet photo'));
+            emit(PetAdoptError(message: 'failed upload pet photo'));
           }
         } catch (_) {
-          emit(OpenAdoptError(message: 'failed upload pet photo'));
+          emit(PetAdoptError(message: 'failed upload pet photo'));
         }
       },
     );
@@ -91,10 +96,25 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
                 petCertificatePath: path,
                 petCertificateFileName: basename(path)));
           } else {
-            emit(OpenAdoptError(message: 'File Terlalu Besar'));
+            emit(PetAdoptError(message: 'File Terlalu Besar'));
           }
         } else {
-          emit(OpenAdoptError(message: 'failed upload pet certificate'));
+          emit(PetAdoptError(message: 'failed upload pet certificate'));
+        }
+      },
+    );
+    on<FetchListPetAdopt>((event, emit) {
+      emit(ListPetAdoptLoaded(listAdoptEntity: event.listPet));
+    });
+    on<GetListPetAdopt>(
+      (event, emit) async {
+        emit(PetAdoptLoading());
+        try {
+          getAllPetListUsecase.execute().listen((adopt) {
+            add(FetchListPetAdopt(listPet: adopt));
+          });
+        } catch (_) {
+          emit(PetAdoptError(message: "error load data"));
         }
       },
     );

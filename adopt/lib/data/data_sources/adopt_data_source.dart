@@ -13,6 +13,7 @@ abstract class AdoptDataSource {
   Future<void> createNewAdopt(AdoptEntity adoptEntity);
   Future<String> uploadPetAdoptPhoto(String? petPhotoUrl);
   Future<String> uploadPetCertificate(String petCertificatePath);
+  Stream<List<AdoptEntity>> getAllPetLists();
 }
 
 class AdoptDataSourceImpl implements AdoptDataSource {
@@ -78,8 +79,17 @@ class AdoptDataSourceImpl implements AdoptDataSource {
       await ref.putFile(File(petCertificatePath));
       return await ref.getDownloadURL();
     } on FirebaseException catch (e) {
-      print("Failed with error '${e.code}': ${e.message}");
       return "Failed with error '${e.code}': ${e.message}";
     }
+  }
+
+  @override
+  Stream<List<AdoptEntity>> getAllPetLists() {
+    final petCollectionRef = firebaseFirestore.collection("pet_adopts");
+    return petCollectionRef.snapshots().map((querySnap) {
+      return querySnap.docs
+          .map((docSnap) => AdoptModel.fromSnapshot(docSnap))
+          .toList();
+    });
   }
 }

@@ -20,4 +20,9 @@ class AdoptRepositoryImpl implements AdoptRepository {
   Future<String> uploadPetCertificate(String petCertificatePath) async {
     return adoptDataSource.uploadPetCertificate(petCertificatePath);
   }
+
+  @override
+  Stream<List<AdoptEntity>> getAllPetLists() {
+    return adoptDataSource.getAllPetLists();
+  }
 }
