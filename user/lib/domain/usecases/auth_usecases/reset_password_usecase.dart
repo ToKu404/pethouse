@@ -1,9 +1,7 @@
-
-
-import '../../repositories/user_firebase_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class ResetPasswordUsecase {
-  final FirebaseRepository firebaseRepository;
+  final UserRepository firebaseRepository;
 
   const ResetPasswordUsecase({required this.firebaseRepository});
 

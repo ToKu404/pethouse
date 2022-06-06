@@ -1,7 +1,7 @@
-import '../../repositories/user_firebase_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class VerifyEmailUsecase {
-  final FirebaseRepository firebaseRepository;
+  final UserRepository firebaseRepository;
   const VerifyEmailUsecase({required this.firebaseRepository});
 
   Future<void> execute() {

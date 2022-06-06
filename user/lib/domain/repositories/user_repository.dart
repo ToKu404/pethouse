@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../entities/user_entity.dart';
 
-abstract class FirebaseRepository {
+abstract class UserRepository {
   Future<UserCredential?> signIn(String email, String password);
   Future<UserCredential?> signInWithGoogle();
 
@@ -19,4 +19,6 @@ abstract class FirebaseRepository {
   Future<void> resetPassword(String email);
   Future<void> verifyEmail();
   Future<void> deleteUser(UserEntity user);
+  Future<void> saveUserIdToLocal(String userId);
+  Future<void> removeUserIdLocal();
 }

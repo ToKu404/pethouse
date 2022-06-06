@@ -1,7 +1,9 @@
 name: adopt
 description: A new Flutter package project.
 version: 0.0.1
+publish_to: none
 homepage:
+
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -10,6 +12,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^1.1.0
+  font_awesome_flutter: ^10.1.0
+  google_fonts: ^2.3.3
+  core:
+    path: ../core
+  cloud_firestore: ^3.1.17
+  flutter_bloc: ^8.0.1 
+  firebase_storage: ^10.2.17
+  firebase_auth: ^3.3.19
+  shared_preferences: ^2.0.15
+  image_picker: ^0.8.5+3
+  file_picker: ^4.6.1
+  equatable: ^2.0.3
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

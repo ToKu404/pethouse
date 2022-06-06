@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../repositories/user_firebase_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class SignInUsecase {
-  final FirebaseRepository firebaseRepository;
+  final UserRepository firebaseRepository;
 
   SignInUsecase({required this.firebaseRepository});
 

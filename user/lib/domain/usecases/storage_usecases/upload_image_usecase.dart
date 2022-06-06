@@ -1,9 +1,9 @@
 import 'package:image_picker/image_picker.dart';
 
-import '../../repositories/user_firebase_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class UploadImageUsecase {
-  final FirebaseRepository firebaseRepository;
+  final UserRepository firebaseRepository;
 
   UploadImageUsecase({required this.firebaseRepository});
 

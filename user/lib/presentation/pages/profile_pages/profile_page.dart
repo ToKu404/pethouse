@@ -13,7 +13,6 @@ class ProfilePage extends StatefulWidget {
   final String userId;
   const ProfilePage({Key? key, required this.userId}) : super(key: key);
 
-  static const ROUTE_NAME = "profile-page";
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -35,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
             listener: (context, state) {
               if (state is UnAuthenticated) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                    LoginPage.ROUTE_NAME, (route) => false);
+                    LOGIN_ROUTE_NAME, (route) => false);
               }
             },
           ),
@@ -136,7 +135,7 @@ class _BuildProfile extends StatelessWidget {
               width: 200,
               text: 'Edit Profile',
               onTap: () {
-                Navigator.pushNamed(context, EditProfilePage.ROUTE_NAME,
+                Navigator.pushNamed(context, EDIT_PROFILE_ROUTE_NAME,
                     arguments: user.uid);
               },
               isClicked: false,

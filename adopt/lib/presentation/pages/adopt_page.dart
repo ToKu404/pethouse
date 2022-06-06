@@ -1,15 +1,13 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:core/core.dart';
 
-import '../../widgets/adopt_card.dart';
+import '../widgets/adopt_card.dart';
 
 class AdoptPage extends StatelessWidget {
   const AdoptPage({Key? key}) : super(key: key);
-
-  static const ROUTE_NAME = "adopt-page";
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +19,9 @@ class AdoptPage extends StatelessWidget {
           child: InkWell(
             onTap: () => Navigator.pop(context),
             child: Container(
-              decoration: BoxDecoration(shape: BoxShape.circle, color: kGrey),
-              child: Icon(
+              decoration:
+                  const BoxDecoration(shape: BoxShape.circle, color: kGrey),
+              child: const Icon(
                 FontAwesomeIcons.arrowLeft,
                 size: 18,
                 color: kWhite,
@@ -39,6 +38,12 @@ class AdoptPage extends StatelessWidget {
         elevation: 1,
         shadowColor: kGrey,
       ),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(
+            Icons.add,
+            color: kWhite,
+          ),
+          onPressed: () => Navigator.pushNamed(context, OPEN_ADOPT_ROUTE_NAME)),
       body: SafeArea(
           child: ListView(
         children: [
@@ -71,17 +76,18 @@ class AdoptPage extends StatelessWidget {
                           color: Colors.grey[400],
                         ),
                         hintText: "Search for breed, race, or gender",
-                        fillColor: Color(0xFFF6F6F6)),
+                        fillColor: const Color(0xFFF6F6F6)),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 8,
                 ),
                 Container(
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                      borderRadius: kBorderRadius, color: Color(0xFFF6F6F6)),
+                      borderRadius: kBorderRadius,
+                      color: const Color(0xFFF6F6F6)),
                   child: MaterialButton(
                     onPressed: () {},
                     shape: RoundedRectangleBorder(
@@ -97,23 +103,23 @@ class AdoptPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           SizedBox(
             height: 90,
             child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: kPadding),
+              padding: const EdgeInsets.symmetric(horizontal: kPadding),
               scrollDirection: Axis.horizontal,
               children: [
                 Container(
-                  margin: EdgeInsets.only(right: 8),
-                  padding: EdgeInsets.all(5),
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.all(5),
                   width: 90,
                   height: 90,
                   decoration: BoxDecoration(
                     borderRadius: kBorderRadius,
-                    color: Color(0xFFF6F6F6),
+                    color: const Color(0xFFF6F6F6),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -122,7 +128,7 @@ class AdoptPage extends StatelessWidget {
                         'assets/icons/cat_icon_outline.svg',
                         color: Colors.grey[600],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Text(
@@ -136,10 +142,10 @@ class AdoptPage extends StatelessWidget {
                 Container(
                   width: 90,
                   height: 90,
-                  margin: EdgeInsets.only(right: 8),
+                  margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
                     borderRadius: kBorderRadius,
-                    color: Color(0xFFF6F6F6),
+                    color: const Color(0xFFF6F6F6),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -149,7 +155,7 @@ class AdoptPage extends StatelessWidget {
                         fit: BoxFit.cover,
                         color: Colors.grey[600],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Text(
@@ -163,10 +169,10 @@ class AdoptPage extends StatelessWidget {
                 Container(
                   width: 90,
                   height: 90,
-                  margin: EdgeInsets.only(right: 8),
+                  margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
                     borderRadius: kBorderRadius,
-                    color: Color(0xFFF6F6F6),
+                    color: const Color(0xFFF6F6F6),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -175,7 +181,7 @@ class AdoptPage extends StatelessWidget {
                         'assets/icons/fish_icon_outline.svg',
                         color: Colors.grey[600],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Text(
@@ -189,10 +195,10 @@ class AdoptPage extends StatelessWidget {
                 Container(
                   width: 90,
                   height: 90,
-                  margin: EdgeInsets.only(right: 8),
+                  margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
                     borderRadius: kBorderRadius,
-                    color: Color(0xFFF6F6F6),
+                    color: const Color(0xFFF6F6F6),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +207,7 @@ class AdoptPage extends StatelessWidget {
                         'assets/icons/hamster_icon_outline.svg',
                         color: Colors.grey[600],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Text(
@@ -215,10 +221,10 @@ class AdoptPage extends StatelessWidget {
                 Container(
                   width: 90,
                   height: 90,
-                  margin: EdgeInsets.only(right: 8),
+                  margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
                     borderRadius: kBorderRadius,
-                    color: Color(0xFFF6F6F6),
+                    color: const Color(0xFFF6F6F6),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -227,7 +233,7 @@ class AdoptPage extends StatelessWidget {
                         'assets/icons/bird_icon_outline.svg',
                         color: Colors.grey[600],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Text(
@@ -241,22 +247,22 @@ class AdoptPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: kPadding + 5),
+            padding: const EdgeInsets.symmetric(horizontal: kPadding + 5),
             child: Text(
               '120 Pet\'s Found',
               style: kTextTheme.subtitle1,
             ),
           ),
           GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            padding:
-                EdgeInsets.symmetric(horizontal: kPadding, vertical: kPadding),
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(
+                horizontal: kPadding, vertical: kPadding),
             shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: .72,
                 mainAxisSpacing: 10,

@@ -11,7 +11,6 @@ import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
-  static const ROUTE_NAME = "register";
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -37,7 +36,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ErrorDialog(errorMessage: state.errorMessage));
             } else if (state.isFormValid && !state.isLoading) {
               context.read<AuthCubit>().loggedIn();
-              // context.read<SignUpBloc>().add(FormSucceeded());
             } else if (state.isFormValidateFailed) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -149,7 +147,7 @@ class RegisterForm extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     Navigator.pushReplacementNamed(
-                        context, LoginPage.ROUTE_NAME);
+                        context, LOGIN_ROUTE_NAME);
                   },
                   child: const Text('Log In',
                       style: TextStyle(
