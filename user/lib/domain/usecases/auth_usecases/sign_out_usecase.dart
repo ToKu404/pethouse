@@ -1,9 +1,7 @@
-
-
-import '../../repositories/user_firebase_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class SignOutUsecase {
-  final FirebaseRepository firebaseRepository;
+  final UserRepository firebaseRepository;
 
   SignOutUsecase({required this.firebaseRepository});
 

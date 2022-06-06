@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../repositories/user_firebase_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class SignInWithGoogle {
-  final FirebaseRepository firebaseRepository;
+  final UserRepository firebaseRepository;
 
   SignInWithGoogle({required this.firebaseRepository});
 

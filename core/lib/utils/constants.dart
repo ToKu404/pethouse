@@ -93,3 +93,8 @@ const kColorScheme = ColorScheme(
   onError: kWhite,
   brightness: Brightness.light,
 );
+
+// TEXT CONSTANTS
+// Adopt
+const String kOpenAdoptTitle = 'Open Adopt';
+const String kOpenAdoptAddPicture = 'Add Picture';

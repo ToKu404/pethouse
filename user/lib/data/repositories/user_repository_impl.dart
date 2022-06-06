@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../domain/entities/user_entity.dart';
-import '../../domain/repositories/user_firebase_repository.dart';
-import '../data_sources/user_firebase_data_source.dart';
+import '../../domain/repositories/user_repository.dart';
+import '../data_sources/user_data_source.dart';
 
-class FirebaseRepositoryImpl implements FirebaseRepository {
-  final FirebaseDataSource firebaseDataSource;
+class UserRepositoryImpl implements UserRepository {
+  final UserDataSource firebaseDataSource;
 
-  FirebaseRepositoryImpl({required this.firebaseDataSource});
+  UserRepositoryImpl({required this.firebaseDataSource});
   @override
   Future<UserCredential?> signIn(String email, String password) async {
     return firebaseDataSource.signIn(email, password);
@@ -71,12 +71,22 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   }
 
   @override
-  Future<void> verifyEmail()async {
+  Future<void> verifyEmail() async {
     return await firebaseDataSource.sendEmailVerification();
   }
-  
+
   @override
   Future<void> deleteUser(UserEntity user) async {
     return await firebaseDataSource.deleteUser(user);
+  }
+
+  @override
+  Future<void> saveUserIdToLocal(String userId) async {
+    return await firebaseDataSource.saveUserIdToLocal(userId);
+  }
+  
+  @override
+  Future<void> removeUserIdLocal() async {
+    return await firebaseDataSource.removeUserIdLocal();
   }
 }

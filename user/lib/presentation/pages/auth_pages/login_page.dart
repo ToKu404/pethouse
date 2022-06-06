@@ -13,8 +13,6 @@ import '../../widgets/gradient_button.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
-  static const ROUTE_NAME = "login";
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -97,7 +95,7 @@ class LoginForm extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: InkWell(
                 onTap: () =>
-                    Navigator.pushNamed(context, ResetPasswordPage.ROUTE_NAME),
+                    Navigator.pushNamed(context, RESET_PASSWORD_ROUTE_NAME),
                 child: Text(
                   'Reset Password',
                   style: kTextTheme.subtitle2,
@@ -145,7 +143,7 @@ class LoginForm extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     Navigator.pushReplacementNamed(
-                        context, RegisterPage.ROUTE_NAME);
+                        context, REGISTER_ROUTE_NAME);
                   },
                   child: const Text(
                     'Register',

@@ -1,3 +1,7 @@
+import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
+import 'package:adopt/presentation/pages/adopt_page.dart';
+import 'package:adopt/presentation/pages/detail_adopt_page.dart';
+import 'package:adopt/presentation/pages/open_adopt_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,10 +12,8 @@ import 'package:schedule/activity/presentation/blocs/addmedical_bloc/medical_blo
 import 'package:schedule/activity/presentation/blocs/addtask_bloc/task_bloc.dart';
 import 'package:schedule/activity/presentation/pages/activity/add_medical_activity.dart';
 import 'package:schedule/activity/presentation/pages/activity/add_new_task.dart';
-import 'package:pethouse/presentation/pages/adopt/adopt_page.dart';
-import 'package:pethouse/presentation/pages/adopt/detail_adopt_page.dart';
 import 'package:pethouse/presentation/pages/main_page.dart';
-import 'package:pethouse/presentation/pages/other/check_internet_page.dart';
+import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:user/user.dart';
 import 'package:pethouse/presentation/pages/splash_page.dart';
 import 'package:pethouse/presentation/pages/petrivia/detail_petrivia.dart';
@@ -41,25 +43,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (_) => di.locator<SignInBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<SignUpBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<AuthCubit>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<UserDbBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<UserProfileBloc>(),
-          ),
+          BlocProvider(create: (_) => di.locator<SignInBloc>()),
+          BlocProvider(create: (_) => di.locator<SignUpBloc>()),
+          BlocProvider(create: (_) => di.locator<AuthCubit>()),
+          BlocProvider(create: (_) => di.locator<UserDbBloc>()),
+          BlocProvider(create: (_) => di.locator<UserProfileBloc>()),
           BlocProvider(create: (_) => di.locator<ResetPasswordBloc>()),
           BlocProvider(create: (_) => di.locator<MedicalBloc>()),
           BlocProvider(create: (_) => di.locator<TaskBloc>()),
-          BlocProvider(create: (_) => di.locator<AddPetBloc>())
+          BlocProvider(create: (_) => di.locator<AddPetBloc>()),
+          BlocProvider(create: (_) => di.locator<OpenAdoptBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -72,13 +65,13 @@ class MyApp extends StatelessWidget {
           navigatorObservers: [routeObserver],
           onGenerateRoute: (RouteSettings settings) {
             switch (settings.name) {
-              case SplashScreen.ROUTE_NAME:
+              case SPLASH_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const SplashScreen());
-              case RegisterPage.ROUTE_NAME:
+              case  REGISTER_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const RegisterPage());
-              case LoginPage.ROUTE_NAME:
+              case LOGIN_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const LoginPage());
               case MainPage.ROUTE_NAME:
@@ -87,13 +80,13 @@ class MyApp extends StatelessWidget {
                     builder: (_) => MainPage(
                           userId: uid,
                         ));
-              case ProfilePage.ROUTE_NAME:
+              case PROFILE_ROUTE_NAME:
                 final uid = settings.arguments as String;
                 return MaterialPageRoute(
                     builder: (context) => ProfilePage(
                           userId: uid,
                         ));
-              case EditProfilePage.ROUTE_NAME:
+              case EDIT_PROFILE_ROUTE_NAME:
                 final uid = settings.arguments as String;
                 return MaterialPageRoute(
                     builder: (context) => EditProfilePage(
@@ -102,15 +95,20 @@ class MyApp extends StatelessWidget {
               // case ChangePasswordPage.ROUTE_NAME:
               //   return MaterialPageRoute(
               //       builder: (context) => ChangePasswordPage());
-              case CheckInternetPage.ROUTE_NAME:
+              case OPEN_ADOPT_ROUTE_NAME:
+                return MaterialPageRoute(builder: (context) => OpenAdoptPage());
+              case ADOPT_ROUTE_NAME:
                 return MaterialPageRoute(
-                    builder: (context) => const CheckInternetPage());
+                    builder: (context) => const AdoptPage());
+              case DETAIL_ADOPT_ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const DetailAdoptPage());
+              case NoInternetPage.ROUTE_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const NoInternetPage());
               case PetDescriptionPage.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const PetDescriptionPage());
-              case AdoptPage.ROUTE_NAME:
-                return MaterialPageRoute(
-                    builder: (context) => const AdoptPage());
               case DetailPetrivia.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const DetailPetrivia());
@@ -123,9 +121,7 @@ class MyApp extends StatelessWidget {
               case AddNewTaskActivity.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const AddNewTaskActivity());
-              case DetailAdoptPage.ROUTE_NAME:
-                return MaterialPageRoute(
-                    builder: (context) => const DetailAdoptPage());
+
               case AddPet.ROUTE_NAME:
                 return MaterialPageRoute(builder: (context) => AddPet());
             }

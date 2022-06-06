@@ -1,10 +1,8 @@
-
-
 import '../../entities/user_entity.dart';
-import '../../repositories/user_firebase_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class SaveUserData {
-  final FirebaseRepository firebaseRepository;
+  final UserRepository firebaseRepository;
 
   SaveUserData({required this.firebaseRepository});
 

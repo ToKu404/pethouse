@@ -1,6 +1,7 @@
+import 'package:adopt/presentation/pages/adopt_page.dart';
+import 'package:core/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pethouse/presentation/pages/adopt/adopt_page.dart';
 import 'package:core/core.dart';
 
 class AdoptBannerCard extends StatelessWidget {
@@ -48,7 +49,7 @@ class AdoptBannerCard extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () =>
-                    Navigator.pushNamed(context, AdoptPage.ROUTE_NAME),
+                    Navigator.pushNamed(context, ADOPT_ROUTE_NAME),
                 child: const Text(
                   "Adopt Now",
                 ),
