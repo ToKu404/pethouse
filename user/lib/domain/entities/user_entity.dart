@@ -6,7 +6,7 @@ class UserEntity extends Equatable {
   final String? uid;
   final String? imageUrl;
 
-  UserEntity(
+  const UserEntity(
       {required this.name, required this.email, this.uid, this.imageUrl});
 
   @override

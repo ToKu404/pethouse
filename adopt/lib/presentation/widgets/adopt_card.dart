@@ -1,15 +1,15 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pethouse/presentation/pages/adopt/detail_adopt_page.dart';
-import 'package:core/core.dart';
 
+import '../pages/detail_adopt_page.dart';
 class AdoptCard extends StatelessWidget {
   const AdoptCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, DetailAdoptPage.ROUTE_NAME),
+      onTap: () => Navigator.pushNamed(context, DETAIL_ADOPT_ROUTE_NAME),
       child: Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(

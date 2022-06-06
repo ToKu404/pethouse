@@ -1,19 +1,14 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/carbon.dart';
-import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import 'package:core/core.dart';
-import '../../widgets/card_detail_pet.dart';
+import 'package:core/presentation/widgets/gradient_button.dart';
 
 class DetailAdoptPage extends StatelessWidget {
   const DetailAdoptPage({Key? key}) : super(key: key);
 
-  static const ROUTE_NAME = "detail-adopt-page";
-
   @override
   Widget build(BuildContext context) {
-    final String description =
+    const String description =
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Justo, tristique turpis mauris, nunc adipiscing. Placerat turpis leo tristique tempus, purus.';
 
     return Scaffold(
@@ -86,10 +81,7 @@ class DetailAdoptPage extends StatelessWidget {
                               ],
                             ),
                             padding: const EdgeInsets.all(3),
-                            child: const Iconify(
-                              Carbon.certificate,
-                              color: kWhite,
-                            ),
+                            child: Icon(FontAwesomeIcons.certificate, color: kWhite,),
                           ),
                         ),
                       ],
@@ -183,7 +175,7 @@ class DetailAdoptPage extends StatelessWidget {
                         height: 52,
                         width: double.infinity,
                         onTap: () {},
-                        text: 'Adopt')
+                        text: 'Adopt', isClicked: false,)
                   ],
                 ),
               ),
@@ -192,3 +184,43 @@ class DetailAdoptPage extends StatelessWidget {
         ));
   }
 }
+
+
+class CardDetailPet extends StatelessWidget {
+  final String type;
+
+  CardDetailPet({required this.type, required this.content});
+
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: kBorderRadius),
+        color: kOrange,
+        child: Container(
+          padding: EdgeInsets.all(kPadding),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+                colors: [kSecondaryColor, kPrimaryColor],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter),
+            borderRadius: kBorderRadius,
+          ),
+          height: 68,
+          child: Column(
+            children: [
+              Text(
+                type,
+                style: kTextTheme.bodyText2,
+              ),
+              Text(content, style: kTextTheme.headline6)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+

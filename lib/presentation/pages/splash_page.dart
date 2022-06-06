@@ -10,7 +10,6 @@ import 'main_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
-  static const ROUTE_NAME = "splash-screen";
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -36,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         } else {
           Timer(
             const Duration(seconds: 7),
-            () => Navigator.pushReplacementNamed(context, LoginPage.ROUTE_NAME),
+            () => Navigator.pushReplacementNamed(context, LOGIN_ROUTE_NAME),
           );
         }
       },

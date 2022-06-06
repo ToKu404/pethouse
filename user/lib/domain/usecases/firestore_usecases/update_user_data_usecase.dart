@@ -1,8 +1,8 @@
 import '../../entities/user_entity.dart';
-import '../../repositories/user_firebase_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class UpdateUserDataUsecase {
-  final FirebaseRepository firebaseRepository;
+  final UserRepository firebaseRepository;
 
   UpdateUserDataUsecase({required this.firebaseRepository});
 

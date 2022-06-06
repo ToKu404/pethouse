@@ -10,8 +10,6 @@ class EditProfilePage extends StatefulWidget {
   final String uid;
   const EditProfilePage({Key? key, required this.uid}) : super(key: key);
 
-  static const ROUTE_NAME = "edit-profile-page";
-
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
 }

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user/domain/usecases/auth_usecases/save_user_id_local_usecase.dart';
 
 import '../../../domain/usecases/auth_usecases/sign_in_usecase.dart';
 import '../../../domain/usecases/auth_usecases/sign_in_with_google_usecase.dart';
@@ -11,10 +12,12 @@ part 'sign_in_state.dart';
 class SignInBloc extends Bloc<SignInEvent, SignInValidate> {
   final SignInUsecase signInUsecase;
   final SignInWithGoogle signInWithGoogle;
-  SignInBloc({
-    required this.signInUsecase,
-    required this.signInWithGoogle,
-  }) : super(const SignInValidate(
+
+  SignInBloc(
+      {required this.signInUsecase,
+      required this.signInWithGoogle,
+      })
+      : super(const SignInValidate(
             email: 'sample@gmail.com',
             password: "",
             isEmailValid: true,
@@ -85,7 +88,9 @@ class SignInBloc extends Bloc<SignInEvent, SignInValidate> {
       try {
         UserCredential? authUser =
             await signInUsecase.execute(state.email, state.password);
+
         if (authUser != null) {
+
           emit(
             state.copyWith(isLoading: false, errorMessage: ""),
           );
@@ -118,6 +123,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInValidate> {
       SubmitSignInGoogle event, Emitter<SignInValidate> emit) async {
     UserCredential? userCredential = await signInWithGoogle.excute();
     if (userCredential != null) {
+      
       emit(state.copyWith(
           isFormValid: true, isLoading: false, errorMessage: ""));
     }

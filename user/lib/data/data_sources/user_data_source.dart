@@ -6,11 +6,12 @@ import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/user_entity.dart';
 import '../models/user_model.dart';
 
-abstract class FirebaseDataSource {
+abstract class UserDataSource {
   Future<UserCredential?> signIn(String email, String password);
   Future<UserCredential?> signInWithGoogle();
   Future<bool> isSignIn();
@@ -25,14 +26,16 @@ abstract class FirebaseDataSource {
   Future<void> resetPassword(String email);
   Future<void> sendEmailVerification();
   Future<void> deleteUser(UserEntity user);
+  Future<void> saveUserIdToLocal(String userId);
+  Future<void> removeUserIdLocal();
 }
 
-class FirebaseDataSourceImpl implements FirebaseDataSource {
+class UserDataSourceImpl implements UserDataSource {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
   final FirebaseStorage firebaseStorage;
 
-  FirebaseDataSourceImpl({
+  UserDataSourceImpl({
     required this.firebaseFirestore,
     required this.firebaseAuth,
     required this.firebaseStorage,
@@ -212,5 +215,19 @@ class FirebaseDataSourceImpl implements FirebaseDataSource {
     } catch (_) {}
     // delete from auth
     return await firebaseAuth.currentUser?.delete();
+  }
+
+  @override
+  Future<void> saveUserIdToLocal(String userId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', userId);
+    return;
+  }
+
+  @override
+  Future<void> removeUserIdLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userId');
+    return;
   }
 }
