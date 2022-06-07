@@ -1,5 +1,5 @@
 import 'package:adopt/domain/entities/adopt_enitity.dart';
-import 'package:adopt/presentation/blocs/pet_adopt_bloc/pet_adopt_bloc.dart';
+import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +20,7 @@ class _AdoptPageState extends State<AdoptPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<PetAdoptBloc>(context).add(GetListPetAdopt());
+    BlocProvider.of<ListAdoptBloc>(context).add(FetchListPetAdopt());
   }
 
   @override
@@ -59,13 +59,13 @@ class _AdoptPageState extends State<AdoptPage> {
           ),
           onPressed: () => Navigator.pushNamed(context, OPEN_ADOPT_ROUTE_NAME)),
       body: SafeArea(
-        child: BlocBuilder<PetAdoptBloc, PetAdoptState>(
+        child: BlocBuilder<ListAdoptBloc, ListAdoptState>(
           builder: (context, state) {
-            if (state is PetAdoptLoading) {
+            if (state is ListAdoptLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state is PetAdoptError) {
+            } else if (state is ListAdoptError) {
               return Center(
                 child: Text(state.message),
               );

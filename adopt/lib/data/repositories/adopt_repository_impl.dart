@@ -25,4 +25,14 @@ class AdoptRepositoryImpl implements AdoptRepository {
   Stream<List<AdoptEntity>> getAllPetLists() {
     return adoptDataSource.getAllPetLists();
   }
+
+  @override
+  Stream<AdoptEntity> getPetDescription(String petId) {
+    return adoptDataSource.getPetDescription(petId);
+  }
+
+  @override
+  Future<String> getUserIdLocal() {
+    return adoptDataSource.getUserIdLocal();
+  }
 }

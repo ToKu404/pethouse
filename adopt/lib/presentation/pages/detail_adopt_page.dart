@@ -1,16 +1,29 @@
+import 'package:adopt/domain/entities/adopt_enitity.dart';
+import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:core/presentation/widgets/gradient_button.dart';
 
-class DetailAdoptPage extends StatelessWidget {
-  const DetailAdoptPage({Key? key}) : super(key: key);
+class DetailAdoptPage extends StatefulWidget {
+  final String petAdoptId;
+  const DetailAdoptPage({Key? key, required this.petAdoptId}) : super(key: key);
+
+  @override
+  State<DetailAdoptPage> createState() => _DetailAdoptPageState();
+}
+
+class _DetailAdoptPageState extends State<DetailAdoptPage> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<DetailAdoptBloc>(context)
+        .add(FetchPetDescription(petId: widget.petAdoptId));
+  }
 
   @override
   Widget build(BuildContext context) {
-    const String description =
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Justo, tristique turpis mauris, nunc adipiscing. Placerat turpis leo tristique tempus, purus.';
-
     return Scaffold(
         appBar: AppBar(
           leading: Padding(
@@ -38,33 +51,89 @@ class DetailAdoptPage extends StatelessWidget {
           shadowColor: kGrey,
         ),
         body: SafeArea(
-          child: ListView(
+          child: BlocBuilder<DetailAdoptBloc, DetailAdoptState>(
+              builder: (context, state) {
+            if (state is DetailAdoptLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is PetDescriptionLoaded) {
+              return DetailAdoptData(
+                adoptEntity: state.adoptEntity,
+                isOwner: state.isOwner,
+              );
+            } else if (state is DetailAdoptError) {
+              return Center(
+                child: Text(state.message),
+              );
+            } else {
+              return const Center();
+            }
+          }),
+        ));
+  }
+}
+
+class DetailAdoptData extends StatelessWidget {
+  final AdoptEntity adoptEntity;
+  final bool isOwner;
+  const DetailAdoptData({
+    required this.adoptEntity,
+    required this.isOwner,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(kPadding * 2),
+            decoration: BoxDecoration(
+              color: kGrey,
+              borderRadius: BorderRadius.circular(10),
+              image: adoptEntity.petPictureUrl != "" &&
+                      adoptEntity.petPictureUrl != null
+                  ? DecorationImage(
+                      image: NetworkImage(adoptEntity.petPictureUrl ?? ''),
+                      fit: BoxFit.cover)
+                  : null,
+            ),
+            child: adoptEntity.petPictureUrl == "" ||
+                    adoptEntity.petPictureUrl == null
+                ? const Icon(Icons.image)
+                : null,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(kPadding * 2),
-                    bottomRight: Radius.circular(kPadding * 2)),
-                child: Image.network(
-                  'https://www.washingtonian.com/wp-content/uploads/2020/03/sandie-clarke-C8uGiOanMY4-unsplash-2048x1365.jpg',
-                  height: 280,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(kPadding * 2),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Neko',
+                          adoptEntity.petName ?? '-',
                           style: kTextTheme.headline4,
                         ),
-                        InkWell(
+                        Text(
+                          adoptEntity.petType ?? '-',
+                          style: kTextTheme.bodyText2?.copyWith(
+                              height: 1, fontSize: 14, color: kGreyTransparant),
+                        ),
+                      ],
+                    ),
+                  ),
+                  adoptEntity.certificateUrl != ""
+                      ? InkWell(
                           onTap: () => {},
                           child: Container(
                             height: 32,
@@ -72,155 +141,171 @@ class DetailAdoptPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: kOrange,
-                              boxShadow: [
-                                const BoxShadow(
-                                  color: kGreyTransparant,
-                                  offset: const Offset(0.0, 1.0), //(x,y)
-                                  blurRadius: 6.0,
-                                )
-                              ],
                             ),
                             padding: const EdgeInsets.all(3),
-                            child: Icon(FontAwesomeIcons.certificate, color: kWhite,),
+                            child: const Icon(
+                              FontAwesomeIcons.certificate,
+                              color: kWhite,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CardDetailPet(
-                          type: 'Gender',
-                          content: 'Male',
-                        ),
-                        CardDetailPet(
-                          type: 'Age',
-                          content: '2 Year',
-                        ),
-                        CardDetailPet(
-                          type: 'Breed',
-                          content: 'Scottish',
                         )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 24,
-                              backgroundImage: NetworkImage(
-                                  'https://renegadecinema.com/wp-content/uploads/2013/05/788A42CB-06F7-4EA2-9E1A-3EEA131084BC.jpg'),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Abdul',
-                                  style: kTextTheme.subtitle1,
-                                ),
-                                Text(
-                                  'Nekos Owner',
-                                  style: kTextTheme.caption?.copyWith(
-                                      height: 1, color: kGreyTransparant),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: Container(
-                            padding: EdgeInsets.all(kPadding),
-                            child: Icon(
-                              Icons.whatsapp,
-                              color: Colors.green[900],
-                            ),
+                      : const SizedBox(),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildCardDescPet(
+                    'Gender',
+                    adoptEntity.gender ?? '-',
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  _buildCardDescPet(
+                    'Age',
+                    adoptEntity.dateOfBirth != null ? _getAge() : '-',
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  _buildCardDescPet(
+                    'Breed',
+                    adoptEntity.petBreed != '' && adoptEntity.petBreed != null
+                        ? adoptEntity.petBreed!
+                        : '-',
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                adoptEntity.petDescription ?? '',
+                style: kTextTheme.bodyText1
+                    ?.copyWith(fontSize: 14, color: kGreyTransparant),
+              ),
+              !isOwner
+                  ? Container(
+                      height: 52,
+                      margin: const EdgeInsets.symmetric(vertical: kPadding),
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 52,
+                            height: 52,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.green[200]),
+                                border: Border.all(width: 1, color: kOrange)),
+                            child: const Icon(
+                              Icons.whatsapp,
+                              color: kOrange,
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Text(
-                      'Description',
-                      style: kTextTheme.subtitle1,
-                    ),
-                    Text(
-                      description,
-                      style: kTextTheme.bodyText2,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    GradientButton(
-                        height: 52,
-                        width: double.infinity,
-                        onTap: () {},
-                        text: 'Adopt', isClicked: false,)
-                  ],
-                ),
-              ),
+                          const SizedBox(
+                            width: kPadding,
+                          ),
+                          Expanded(
+                            child: GradientButton(
+                              height: 52,
+                              width: 100,
+                              onTap: () {},
+                              text: 'Adopt Now',
+                              isClicked: false,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : Container(
+                      height: 52,
+                      margin: const EdgeInsets.symmetric(vertical: kPadding),
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                                width: 100,
+                                height: 52,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border:
+                                        Border.all(width: 1, color: kOrange)),
+                                child: Center(
+                                  child: Text('Edit Data',
+                                      style: kTextTheme.subtitle1
+                                          ?.copyWith(color: kOrange)),
+                                )),
+                          ),
+                          const SizedBox(
+                            width: kPadding,
+                          ),
+                          Expanded(
+                            child: GradientButton(
+                              height: 52,
+                              width: 100,
+                              onTap: () {},
+                              text: 'Check Status',
+                              isClicked: false,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
             ],
           ),
-        ));
+        ),
+      ],
+    );
   }
-}
 
-
-class CardDetailPet extends StatelessWidget {
-  final String type;
-
-  CardDetailPet({required this.type, required this.content});
-
-  final String content;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildCardDescPet(String type, String content) {
     return Expanded(
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: kBorderRadius),
-        color: kOrange,
-        child: Container(
-          padding: EdgeInsets.all(kPadding),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-                colors: [kSecondaryColor, kPrimaryColor],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter),
+      child: Container(
+        padding: const EdgeInsets.all(kPadding),
+        decoration: BoxDecoration(
             borderRadius: kBorderRadius,
-          ),
-          height: 68,
-          child: Column(
-            children: [
-              Text(
-                type,
-                style: kTextTheme.bodyText2,
-              ),
-              Text(content, style: kTextTheme.headline6)
-            ],
-          ),
+            border: Border.all(width: 1, color: kGrey)),
+        height: 68,
+        child: Column(
+          children: [
+            Text(
+              type,
+              style: kTextTheme.bodyText2,
+            ),
+            Text(content,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: kTextTheme.subtitle1
+                    ?.copyWith(color: Colors.black54, fontSize: 14))
+          ],
         ),
       ),
     );
   }
-}
 
+  String _getAge() {
+    DateTime? born = adoptEntity.dateOfBirth?.toDate();
+    DateTime today = DateTime.now();
+    int yearDiff = today.year - (born?.year ?? 0);
+    int monthDiff = today.month - (born?.month ?? 0);
+    int dayDiff = today.day - (born?.day ?? 0);
+
+    String age = '';
+    if (yearDiff > 0) {
+      age += yearDiff.toString();
+      int percentMonth = (monthDiff / 12).round();
+      age += percentMonth > 0 ? '.$percentMonth' : '';
+      age += ' Year';
+    } else if (monthDiff > 0) {
+      age += '$monthDiff Month';
+    } else {
+      age += '$dayDiff Day';
+    }
+    return age;
+  }
+}
