@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pet/domain/entities/medical_entity.dart';
+import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/widgets/modal_medical_history.dart';
-
 class CardMedicalHistory extends StatelessWidget {
   const CardMedicalHistory({Key? key}) : super(key: key);
 
@@ -19,11 +21,11 @@ class CardMedicalHistory extends StatelessWidget {
           title: Text('Medical History',style: kTextTheme.headline6,),
           trailing: Icon(Icons.navigate_next,color: kWhite,),
           onTap: () => {showModalBottomSheet<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return BottomNavMedicalHistory();
-                }
-              )
+              context: context,
+              builder: (BuildContext context) {
+                return BottomNavMedicalHistory();
+              }
+          )
           },
         ),
       ),

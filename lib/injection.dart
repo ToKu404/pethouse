@@ -20,7 +20,9 @@ import 'package:pet/domain/repositories/pet_firebase_repository.dart';
 import 'package:pet/domain/usecases/add_certificate_usecase.dart';
 import 'package:pet/domain/usecases/add_pet_usecase.dart';
 import 'package:pet/domain/usecases/add_photo_usecase.dart';
+import 'package:pet/domain/usecases/get_medical_usecase.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
+import 'package:pet/presentation/bloc/get_medical/get_medical_bloc.dart';
 import 'package:schedule/activity/data/data_sources/task_firebase_data_source.dart';
 import 'package:schedule/activity/data/repositories/task_firebase_repository_impl.dart';
 import 'package:schedule/activity/domain/repositories/medicaladd_firebase_repository.dart';
@@ -143,6 +145,8 @@ void init() {
       () => GetPetDescriptionUsecase(adoptRepository: locator()));
   locator.registerLazySingleton(
       () => GetUserIdLocalUsecase(adoptRepository: locator()));
+  locator.registerLazySingleton(
+      () => GetAllMedicalUsecase(petFirebaseRepository: locator()));
 
   // bloc & cubit
   locator.registerFactory(
@@ -184,7 +188,7 @@ void init() {
         getUserIdLocalUsecase: locator(),
       ));
   locator.registerFactory(() => ListAdoptBloc(getAllPetListUsecase: locator()));
-
+  locator.registerFactory(() => GetMedicalBloc(getAllMedicalUsecase: locator()));
   //external
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;

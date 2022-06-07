@@ -102,7 +102,7 @@ class AdoptCard extends StatelessWidget {
                                   horizontal: 4, vertical: 2),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: adoptEntity.gender == 'male'
+                                color: adoptEntity.gender == 'Male'
                                     ? Color(0xFFCDDDF6)
                                     : Color(0xFFEAABAC),
                               ),

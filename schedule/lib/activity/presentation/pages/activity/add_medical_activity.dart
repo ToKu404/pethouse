@@ -202,7 +202,6 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                             initDate: DateTime.now().add(Duration(days: 1)),
                             onDateChanged: (selectedDate) {
                               dateTime = selectedDate;
-                              print(dateTime);
                             },
                           ),
                         ),
@@ -265,6 +264,7 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                         final location = _locationController.text;
                         BlocProvider.of<MedicalBloc>(context).add(CreateMedical(
                             medicalEntity: MedicalEntity(
+                              timeNow: Timestamp.fromDate(DateTime.now()) ,
                           activity: dropdownHint,
                           location: location,
                           description: description,

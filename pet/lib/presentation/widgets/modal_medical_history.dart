@@ -1,161 +1,105 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:core/core.dart';
+import 'package:pet/domain/entities/medical_entity.dart';
+import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
+import 'package:pet/presentation/bloc/get_medical/get_medical_bloc.dart';
+import 'package:pet/presentation/widgets/card_content_medical_history.dart';
 
-class BottomNavMedicalHistory extends StatelessWidget {
+class BottomNavMedicalHistory extends StatefulWidget {
   const BottomNavMedicalHistory({Key? key}) : super(key: key);
 
   @override
+  State<BottomNavMedicalHistory> createState() =>
+      _BottomNavMedicalHistoryState();
+}
+
+class _BottomNavMedicalHistoryState extends State<BottomNavMedicalHistory> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<GetMedicalBloc>(context).add(GetListMedical());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Center(
+    return BlocBuilder<GetMedicalBloc, GetMedicalState>(
+      builder: (context, state) {
+        if (state is GetMedicalLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is GetMedicalError) {
+          return Center(
+            child: Text(state.message),
+          );
+        } else if (state is ListMedicalLoaded) {
+          return _buildMedicalData(
+            state.listmedicalEntity,
+          );
+        } else {
+          return const Center();
+        }
+      },
+    );
+  }
+
+  Widget _buildMedicalData(List<MedicalEntity> listMedical) {
+    return SingleChildScrollView(
       child: Container(
-           height: 500,
+        decoration: BoxDecoration(
             color: kWhite,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 90,
-                        ),
-                        Text('Ikhsan’s Medical History',
-                          style: GoogleFonts.poppins(
-                            color: Color(0xFFAE531E),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 50,
-                        ),
-                        IconButton(
-                          icon: SvgPicture.asset('assets/close.svg'),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ],
-                    ),
-                    Divider(color: Colors.grey,),
-                    Container(
-                      margin: const EdgeInsets.only(
-                          left: kPadding, right: kPadding, bottom: kPadding),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Color(0xFFFFF6E9),
-                        border: Border.all(
-                          color: Color(0xFF784E2F),
-                          width: 1.0,
-                        ),
-                      ),
-                      height: 80.0,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: const Radius.circular(10),
-                              bottomLeft: const Radius.circular(10),
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only( left: 10,
-                                          top: 12,
-                                          ),
-                                        child: Icon(Icons.location_on, size: 7,),
-                                      ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 10,
-                                          right: 10,
-                                        ),
-                                        child: Text(
-                                          "Park East Animal Hospital",
-                                          style: GoogleFonts.poppins(
-                                            color: kDarkBrown,
-                                            fontSize: 7,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 10,
-                                        top: 10,
-                                      ),
-                                      child: Text(
-                                        "Posted on 17 May 2022 at 09.28",
-                                        style: GoogleFonts.poppins(
-                                          color: Color(0xFFA59387),
-                                          fontSize: 5,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 10,
-                                    right: 10,
-                                  ),
-                                  child: Text(
-                                    "Vaccinated",
-                                    style: GoogleFonts.poppins(
-                                      color: kDarkBrown,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                                  child: Text(
-                                    " For Bordatella ",
-                                    style: GoogleFonts.poppins(
-                                      color: kPrimaryColor,
-                                      fontSize: 6,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 15,
-                                    ),
-                                    child: Text(
-                                      "Expires on 17 May 2023",
-                                      style: GoogleFonts.poppins(
-                                        color: Color(0xFF982E20),
-                                        fontSize: 5,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+        height: 500,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: [
+                const SizedBox(
+                  width: 90,
                 ),
-              ),
-            );
+                Text(
+                  'Ikhsan’s Medical History',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFFAE531E),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(
+                  width: 50,
+                ),
+                IconButton(
+                  icon: CircleAvatar(
+                    backgroundColor: kGreyTransparant.withOpacity(0.1),
+                      child: const Icon(Icons.close,color: const Color(0xFFAE531E),)),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const Divider(
+              color: Colors.grey,
+            ),
+            listMedical.isEmpty
+                ? Center(
+                    child: Text('Empty Data'),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                        itemCount: listMedical.length,
+                        itemBuilder: (context, index) {
+                          return CardContentMedical(
+                            medicalEntity: listMedical[index],
+                          );
+                        }),
+                  )
+          ],
+        ),
+      ),
+    );
   }
 }
