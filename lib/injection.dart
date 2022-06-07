@@ -9,7 +9,7 @@ import 'package:adopt/domain/usecases/upload_pet_adopt_photo_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_certificate_usecase.dart';
 import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
-import 'package:adopt/presentation/blocs/pet_adopt_bloc/pet_adopt_bloc.dart';
+import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -173,7 +173,7 @@ void init() {
         addPhotoUsecase: locator(),
         addCertificateUsecase: locator(),
       ));
-  locator.registerFactory(() => PetAdoptBloc(
+  locator.registerFactory(() => OpenAdoptBloc(
         createNewAdoptUsecase: locator(),
         uploadPetPhoto: locator(),
         uploadPetCertificateUsecase: locator(),

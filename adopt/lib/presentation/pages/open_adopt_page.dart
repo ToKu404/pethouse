@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:adopt/domain/entities/adopt_enitity.dart';
+import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../blocs/pet_adopt_bloc/pet_adopt_bloc.dart';
 
 class OpenAdoptPage extends StatefulWidget {
   const OpenAdoptPage({Key? key}) : super(key: key);
@@ -76,7 +76,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       petDescription: petDescription,
       whatsappNumber: waNumber,
     );
-    context.read<PetAdoptBloc>().add(SubmitOpenAdopt(adoptEntity: adoptEntity));
+    context.read<OpenAdoptBloc>().add(SubmitOpenAdopt(adoptEntity: adoptEntity));
   }
 
   @override
@@ -91,9 +91,9 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
         backgroundColor: kWhite,
       ),
       body: SafeArea(
-          child: BlocConsumer<PetAdoptBloc, PetAdoptState>(
+          child: BlocConsumer<OpenAdoptBloc, OpenAdoptState>(
         listener: (context, state) {
-          if (state is PetAdoptError) {
+          if (state is OpenAdoptError) {
             print(state.message);
           } else if (state is OpenAdoptSuccess) {
             Future.delayed(Duration(seconds: 1), () {
@@ -109,7 +109,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           }
         },
         builder: (context, state) {
-          if (state is PetAdoptLoading) {
+          if (state is OpenAdoptLoading) {
             return Center(child: CircularProgressIndicator());
           } else {
             return Padding(
@@ -183,7 +183,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
 
   Widget _buildInputPetPicture() {
     return InkWell(
-      child: BlocBuilder<PetAdoptBloc, PetAdoptState>(
+      child: BlocBuilder<OpenAdoptBloc, OpenAdoptState>(
         builder: (context, state) {
           if (state is UploadPetPhotoSuccess) {
             return Container(
@@ -228,7 +228,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           }
         },
       ),
-      onTap: () => BlocProvider.of<PetAdoptBloc>(context).add(UploadPetPhoto()),
+      onTap: () => BlocProvider.of<OpenAdoptBloc>(context).add(UploadPetPhoto()),
     );
   }
 
@@ -415,7 +415,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       controller: _petCertificateController,
       readOnly: true,
       onTap: () {
-        BlocProvider.of<PetAdoptBloc>(context).add(UploadPetCertificate());
+        BlocProvider.of<OpenAdoptBloc>(context).add(UploadPetCertificate());
       },
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.upload),
