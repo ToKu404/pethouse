@@ -10,7 +10,8 @@ class AdoptCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, DETAIL_ADOPT_ROUTE_NAME),
+      onTap: () => Navigator.pushNamed(context, DETAIL_ADOPT_ROUTE_NAME,
+          arguments: adoptEntity.adoptId),
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -80,9 +81,12 @@ class AdoptCard extends StatelessWidget {
                   ),
                   adoptEntity.petBreed != ''
                       ? Text(
-                          'Breed: ${adoptEntity.petBreed}',
-                          style: kTextTheme.overline
-                              ?.copyWith(color: kGreyTransparant, height: 1),
+                          '${adoptEntity.petBreed}',
+                          maxLines: 1,
+                          style: kTextTheme.caption?.copyWith(
+                            color: kGreyTransparant,
+                            height: 1,
+                          ),
                         )
                       : const SizedBox(
                           height: 10,
@@ -98,7 +102,7 @@ class AdoptCard extends StatelessWidget {
                                   horizontal: 4, vertical: 2),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: adoptEntity.gender == 'male'
+                                color: adoptEntity.gender == 'Male'
                                     ? Color(0xFFCDDDF6)
                                     : Color(0xFFEAABAC),
                               ),
@@ -159,11 +163,11 @@ class AdoptCard extends StatelessWidget {
       age += yearDiff.toString();
       int percentMonth = (monthDiff / 12).round();
       age += percentMonth > 0 ? '.$percentMonth' : '';
-      age += ' Tahun';
+      age += ' Year';
     } else if (monthDiff > 0) {
-      age += '$monthDiff Bulan';
+      age += '$monthDiff Month';
     } else {
-      age += '$dayDiff Hari';
+      age += '$dayDiff Day';
     }
     return age;
   }
