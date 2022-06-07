@@ -1,4 +1,4 @@
-import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
+import 'package:adopt/presentation/blocs/pet_adopt_bloc/pet_adopt_bloc.dart';
 import 'package:adopt/presentation/pages/adopt_page.dart';
 import 'package:adopt/presentation/pages/detail_adopt_page.dart';
 import 'package:adopt/presentation/pages/open_adopt_page.dart';
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<MedicalBloc>()),
           BlocProvider(create: (_) => di.locator<TaskBloc>()),
           BlocProvider(create: (_) => di.locator<AddPetBloc>()),
-          BlocProvider(create: (_) => di.locator<OpenAdoptBloc>()),
+          BlocProvider(create: (_) => di.locator<PetAdoptBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
               case SPLASH_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const SplashScreen());
-              case  REGISTER_ROUTE_NAME:
+              case REGISTER_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const RegisterPage());
               case LOGIN_ROUTE_NAME:

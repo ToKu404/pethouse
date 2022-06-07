@@ -4,4 +4,5 @@ abstract class AdoptRepository {
   Future<void> createNewAdopt(AdoptEntity adoptEntity);
   Future<String> uploadPetAdoptPhoto(String? petPhotoUrl);
   Future<String> uploadPetCertificate(String petCertificatePath);
+  Stream<List<AdoptEntity>> getAllPetLists();
 }
