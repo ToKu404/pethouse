@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:io';
 // ignore: depend_on_referenced_packages
+import 'package:adopt/domain/usecases/get_user_id_local_usecase.dart';
 import 'package:path/path.dart';
 
 import 'package:adopt/domain/entities/adopt_enitity.dart';
@@ -8,6 +9,7 @@ import 'package:adopt/domain/usecases/get_all_pet_list_usecase.dart';
 import 'package:adopt/domain/usecases/create_new_adopt_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_adopt_photo_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_certificate_usecase.dart';
+import 'package:adopt/domain/usecases/get_pet_description_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,13 +22,12 @@ class PetAdoptBloc extends Bloc<PetAdoptEvent, PetAdoptState> {
   final CreateNewAdoptUsecase createNewAdoptUsecase;
   final UploadPetAdoptPhotoUsecase uploadPetPhoto;
   final UploadPetCertificateUsecase uploadPetCertificateUsecase;
-  final GetAllPetListUsecase getAllPetListUsecase;
 
   PetAdoptBloc(
       {required this.createNewAdoptUsecase,
       required this.uploadPetPhoto,
-      required this.uploadPetCertificateUsecase,
-      required this.getAllPetListUsecase})
+      required this.uploadPetCertificateUsecase
+      })
       : super(PetAdoptInitial()) {
     on<SubmitOpenAdopt>((event, emit) async {
       emit(PetAdoptLoading());
@@ -100,21 +101,6 @@ class PetAdoptBloc extends Bloc<PetAdoptEvent, PetAdoptState> {
           }
         } else {
           emit(PetAdoptError(message: 'failed upload pet certificate'));
-        }
-      },
-    );
-    on<FetchListPetAdopt>((event, emit) {
-      emit(ListPetAdoptLoaded(listAdoptEntity: event.listPet));
-    });
-    on<GetListPetAdopt>(
-      (event, emit) async {
-        emit(PetAdoptLoading());
-        try {
-          getAllPetListUsecase.execute().listen((adopt) {
-            add(FetchListPetAdopt(listPet: adopt));
-          });
-        } catch (_) {
-          emit(PetAdoptError(message: "error load data"));
         }
       },
     );

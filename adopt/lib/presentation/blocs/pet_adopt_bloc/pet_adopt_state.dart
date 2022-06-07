@@ -37,9 +37,3 @@ class UploadPetCertificateSuccess extends PetAdoptState {
   @override
   List<Object> get props => [petCertificatePath, petCertificateFileName];
 }
-
-class ListPetAdoptLoaded extends PetAdoptState {
-  final List<AdoptEntity> listAdoptEntity;
-
-  ListPetAdoptLoaded({required this.listAdoptEntity});
-}

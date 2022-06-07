@@ -16,13 +16,3 @@ class UploadPetPhoto extends PetAdoptEvent {}
 
 class UploadPetCertificate extends PetAdoptEvent {}
 
-class FetchListPetAdopt extends PetAdoptEvent {
-  final List<AdoptEntity> listPet;
-
-  FetchListPetAdopt({required this.listPet});
-
-    @override
-  List<Object> get props => [listPet];
-}
-
-class GetListPetAdopt extends PetAdoptEvent {}

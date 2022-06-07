@@ -14,6 +14,8 @@ abstract class AdoptDataSource {
   Future<String> uploadPetAdoptPhoto(String? petPhotoUrl);
   Future<String> uploadPetCertificate(String petCertificatePath);
   Stream<List<AdoptEntity>> getAllPetLists();
+  Stream<AdoptEntity> getPetDescription(String petId);
+  Future<String> getUserIdLocal();
 }
 
 class AdoptDataSourceImpl implements AdoptDataSource {
@@ -64,6 +66,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     }
   }
 
+  @override
   Future<String> getUserIdLocal() async {
     final prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString("userId");
@@ -90,6 +93,15 @@ class AdoptDataSourceImpl implements AdoptDataSource {
       return querySnap.docs
           .map((docSnap) => AdoptModel.fromSnapshot(docSnap))
           .toList();
+    });
+  }
+
+  @override
+  Stream<AdoptEntity> getPetDescription(String petId) {
+    final petCollectionRef =
+        firebaseFirestore.collection('pet_adopts').doc(petId).snapshots();
+    return petCollectionRef.map((querySnap) {
+      return AdoptModel.fromSnapshot(querySnap);
     });
   }
 }

@@ -1,3 +1,5 @@
+import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
+import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/pet_adopt_bloc/pet_adopt_bloc.dart';
 import 'package:adopt/presentation/pages/adopt_page.dart';
 import 'package:adopt/presentation/pages/detail_adopt_page.dart';
@@ -53,6 +55,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<TaskBloc>()),
           BlocProvider(create: (_) => di.locator<AddPetBloc>()),
           BlocProvider(create: (_) => di.locator<PetAdoptBloc>()),
+          BlocProvider(create: (_) => di.locator<DetailAdoptBloc>()),
+          BlocProvider(create: (_) => di.locator<ListAdoptBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -96,13 +100,18 @@ class MyApp extends StatelessWidget {
               //   return MaterialPageRoute(
               //       builder: (context) => ChangePasswordPage());
               case OPEN_ADOPT_ROUTE_NAME:
-                return MaterialPageRoute(builder: (context) => OpenAdoptPage());
+                return MaterialPageRoute(
+                    builder: (context) => const OpenAdoptPage());
               case ADOPT_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const AdoptPage());
               case DETAIL_ADOPT_ROUTE_NAME:
+                final petId = settings.arguments as String;
                 return MaterialPageRoute(
-                    builder: (context) => const DetailAdoptPage());
+                  builder: (context) => DetailAdoptPage(
+                    petAdoptId: petId,
+                  ),
+                );
               case NoInternetPage.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const NoInternetPage());

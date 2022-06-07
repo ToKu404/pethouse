@@ -53,7 +53,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
     String petType = _petType ?? '';
     String petGender = "";
     if (_petGender != null) {
-      petGender = _petGender == Gender.female ? "female" : "male";
+      petGender = _petGender == Gender.female ? "Female" : "Male";
     }
     String petBreed = _petBreedController.text;
 
@@ -76,9 +76,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       petDescription: petDescription,
       whatsappNumber: waNumber,
     );
-    context
-        .read<PetAdoptBloc>()
-        .add(SubmitOpenAdopt(adoptEntity: adoptEntity));
+    context.read<PetAdoptBloc>().add(SubmitOpenAdopt(adoptEntity: adoptEntity));
   }
 
   @override
@@ -230,8 +228,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           }
         },
       ),
-      onTap: () =>
-          BlocProvider.of<PetAdoptBloc>(context).add(UploadPetPhoto()),
+      onTap: () => BlocProvider.of<PetAdoptBloc>(context).add(UploadPetPhoto()),
     );
   }
 

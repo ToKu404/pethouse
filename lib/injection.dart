@@ -3,8 +3,12 @@ import 'package:adopt/data/repositories/adopt_repository_impl.dart';
 import 'package:adopt/domain/repositories/adopt_repository.dart';
 import 'package:adopt/domain/usecases/create_new_adopt_usecase.dart';
 import 'package:adopt/domain/usecases/get_all_pet_list_usecase.dart';
+import 'package:adopt/domain/usecases/get_pet_description_usecase.dart';
+import 'package:adopt/domain/usecases/get_user_id_local_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_adopt_photo_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_certificate_usecase.dart';
+import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
+import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/pet_adopt_bloc/pet_adopt_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -135,6 +139,10 @@ void init() {
       () => UploadPetCertificateUsecase(adoptRepository: locator()));
   locator.registerLazySingleton(
       () => GetAllPetListUsecase(adoptRepository: locator()));
+  locator.registerLazySingleton(
+      () => GetPetDescriptionUsecase(adoptRepository: locator()));
+  locator.registerLazySingleton(
+      () => GetUserIdLocalUsecase(adoptRepository: locator()));
 
   // bloc & cubit
   locator.registerFactory(
@@ -168,8 +176,14 @@ void init() {
   locator.registerFactory(() => PetAdoptBloc(
         createNewAdoptUsecase: locator(),
         uploadPetPhoto: locator(),
-        uploadPetCertificateUsecase: locator(), getAllPetListUsecase: locator(),
+        uploadPetCertificateUsecase: locator(),
       ));
+
+  locator.registerFactory(() => DetailAdoptBloc(
+        getPetDescriptionUsecase: locator(),
+        getUserIdLocalUsecase: locator(),
+      ));
+  locator.registerFactory(() => ListAdoptBloc(getAllPetListUsecase: locator()));
 
   //external
   final auth = FirebaseAuth.instance;

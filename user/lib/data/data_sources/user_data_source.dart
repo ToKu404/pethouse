@@ -74,6 +74,7 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Future<void> signOut() async {
+    
     final statusGoogle = await GoogleSignIn().isSignedIn();
     if (statusGoogle) {
       await GoogleSignIn().signOut();
