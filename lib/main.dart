@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
+import 'package:pet/presentation/bloc/get_medical/get_medical_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
 import 'package:pethouse/presentation/pages/main_page.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<OpenAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<DetailAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<ListAdoptBloc>()),
+          BlocProvider(create: (_) => di.locator<GetMedicalBloc>())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

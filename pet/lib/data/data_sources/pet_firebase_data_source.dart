@@ -2,14 +2,16 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pet/data/models/medical_model.dart';
 import 'package:pet/data/models/pet_model.dart';
+import 'package:pet/domain/entities/medical_entity.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
-import 'package:pet/presentation/pages/add_pet.dart';
 
 abstract class PetFirebaseDataSource {
   Future<void> addPet(PetEntity petEntity);
   Future<String> addPhoto(File imgUrl);
   Future<String> addCertificate(File ctfUrl);
+  Stream<List<MedicalEntity>> getAllPetLists();
 }
 
 class PetFirebaseDataSourceImpl implements PetFirebaseDataSource {
@@ -64,4 +66,16 @@ class PetFirebaseDataSourceImpl implements PetFirebaseDataSource {
 
     return await ref.getDownloadURL();
   }
+
+  @override
+  Stream<List<MedicalEntity>> getAllPetLists() {
+    final medicalCollectionRef = petFireStore.collection('medical');
+    return medicalCollectionRef.snapshots().map((querySnap) {
+      return querySnap.docs
+          .map((docSnap) => MedicalModel.fromSnapshot(docSnap))
+          .toList();
+    });
+  }
+
+
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:pet/data/data_sources/pet_firebase_data_source.dart';
+import 'package:pet/domain/entities/medical_entity.dart';
 
 import '../../domain/entities/pet_entity.dart';
 import '../../domain/repositories/pet_firebase_repository.dart';
@@ -25,5 +26,9 @@ class PetFirebaseRepositoryImpl implements PetFirebaseRepository {
   Future<String> addCertificate(File ctfUrl) {
     // TODO: implement addCertificate
     return petFirebaseDataSource.addCertificate(ctfUrl);
+  }
+
+  Stream<List<MedicalEntity>> getAllMedicalLists() {
+    return petFirebaseDataSource.getAllPetLists();
   }
 }
