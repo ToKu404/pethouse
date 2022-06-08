@@ -1,24 +1,24 @@
 import 'dart:io';
 
 import 'package:adopt/domain/entities/adopt_enitity.dart';
-import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
+import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:core/presentation/widgets/appbar_back_button.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import '../blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
 
-class OpenAdoptPage extends StatefulWidget {
-  const OpenAdoptPage({Key? key}) : super(key: key);
-
+class EditAdoptPage extends StatefulWidget {
+  final AdoptEntity adoptPet;
+  const EditAdoptPage({Key? key, required this.adoptPet}) : super(key: key);
   @override
-  State<OpenAdoptPage> createState() => _OpenAdoptPageState();
+  State<EditAdoptPage> createState() => _EditAdoptPageState();
 }
 
-class _OpenAdoptPageState extends State<OpenAdoptPage> {
+class _EditAdoptPageState extends State<EditAdoptPage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController _petNameController = TextEditingController();
   final TextEditingController _petBreedController = TextEditingController();
@@ -30,9 +30,9 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   final TextEditingController _petCertificateController =
       TextEditingController();
   Gender? _petGender;
-  String? _petType;
-  String? _petPhotoPath;
-  String? _petCertificatePath;
+  String _petType = '';
+  String _petPhotoPath = '';
+  String _petCertificatePath = '';
   Timestamp? _petDateOfBirth;
 
   @override
@@ -50,12 +50,51 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<OpenAdoptBloc>(context).add(OpenAdoptInit());
+    _petNameController.text = widget.adoptPet.petName ?? '';
+    if (widget.adoptPet.petBreed != null && widget.adoptPet.petBreed != '') {
+      _petBreedController.text = widget.adoptPet.petBreed ?? '';
+    }
+    if (widget.adoptPet.dateOfBirth != null) {
+      final format = DateFormat.yMMMEd(); // <- use skeleton here
+      _petDateBirthController.text =
+          format.format(widget.adoptPet.dateOfBirth!.toDate());
+      _petDateOfBirth = widget.adoptPet.dateOfBirth;
+    }
+    if (widget.adoptPet.petDescription != null &&
+        widget.adoptPet.petDescription != '') {
+      _petDescriptionController.text = widget.adoptPet.petDescription ?? '';
+    }
+    if (widget.adoptPet.whatsappNumber != null &&
+        widget.adoptPet.whatsappNumber != '') {
+      _whatsappNumberController.text = widget.adoptPet.whatsappNumber ?? '';
+    }
+    if (widget.adoptPet.certificateUrl != null &&
+        widget.adoptPet.certificateUrl != '') {
+      _petCertificateController.text = widget.adoptPet.certificateUrl ?? '';
+    }
+    if (widget.adoptPet.gender != null && widget.adoptPet.gender != '') {
+      _petGender =
+          widget.adoptPet.gender == 'Male' ? Gender.male : Gender.female;
+    }
+    if (widget.adoptPet.petType != null && widget.adoptPet.petType != '') {
+      _petType = widget.adoptPet.petType ?? '';
+    }
+
+    final firebaseRegex = RegExp(r'%2F([\d\D]*\.[\D]+)\?',
+        multiLine: false, caseSensitive: false);
+
+    if (widget.adoptPet.certificateUrl != null &&
+        widget.adoptPet.certificateUrl != '') {
+      String url = widget.adoptPet.certificateUrl!;
+      final result =
+          firebaseRegex.allMatches(url).map((e) => e.group(1)).toList();
+      _petCertificateController.text = result[0] ?? '';
+    }
   }
 
   void _submitOpenAdopt() {
     String petName = _petNameController.text;
-    String petType = _petType ?? '';
+    String petType = _petType;
     String petGender = "";
     if (_petGender != null) {
       petGender = _petGender == Gender.female ? "Female" : "Male";
@@ -64,7 +103,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
 
     String petDescription = _petDescriptionController.text;
     String waNumber = _whatsappNumberController.text;
-     if (waNumber != '') {
+    if (waNumber != '') {
       if (waNumber.startsWith('0')) {
         waNumber = waNumber.replaceFirst(RegExp(r'0'), '');
       }
@@ -72,6 +111,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
         waNumber = '62$waNumber';
       }
     }
+
     AdoptEntity adoptEntity = AdoptEntity(
       petName: petName,
       petType: petType,
@@ -83,9 +123,9 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       petDescription: petDescription,
       whatsappNumber: waNumber,
     );
-    context
-        .read<OpenAdoptBloc>()
-        .add(SubmitOpenAdopt(adoptEntity: adoptEntity));
+
+    context.read<EditAdoptBloc>().add(SubmitUpdateAdopt(
+        adoptEntityNew: adoptEntity, adoptEntityOld: widget.adoptPet));
   }
 
   @override
@@ -93,153 +133,178 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
     return Scaffold(
       appBar: AppBar(
         title:
-            const Text(kOpenAdoptTitle, style: TextStyle(color: Colors.black)),
+            const Text(kEditAdoptTitle, style: TextStyle(color: Colors.black)),
         leading: const AppBarBackButton(),
         centerTitle: true,
         elevation: 1,
         backgroundColor: kWhite,
       ),
       body: SafeArea(
-          child: BlocConsumer<OpenAdoptBloc, OpenAdoptState>(
-        listener: (context, state) {
-          if (state is OpenAdoptError) {
-            print(state.message);
-          } else if (state is OpenAdoptSuccess) {
-            Future.delayed(Duration(seconds: 1), () {
-              Navigator.pop(context);
-            });
-          }
-          if (state is UploadPetPhotoSuccess) {
-            _petPhotoPath = state.petPhotoPath;
-          }
-          if (state is UploadPetCertificateSuccess) {
-            _petCertificateController.text = state.petCertificateFileName;
-            _petCertificatePath = state.petCertificatePath;
-          }
-        },
-        builder: (context, state) {
-          if (state is OpenAdoptLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputPetPicture(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputPetName(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputPetType(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputPetGender(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputDateOfBirth(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputPetBreed(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputCertificate(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputPetDescription(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputWhatsappNumber(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      GradientButton(
-                        height: 55,
-                        width: double.infinity,
-                        onTap: () {
-                          if (formKey.currentState!.validate()) {
-                            _submitOpenAdopt();
-                          }
-                        },
-                        text: 'Save Pet',
-                        isClicked: false,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }
-        },
-      )),
-    );
-  }
-
-  Widget _buildInputPetPicture() {
-    return InkWell(
-      child: BlocBuilder<OpenAdoptBloc, OpenAdoptState>(
-        builder: (context, state) {
-          if (state is UploadPetPhotoSuccess) {
-            return Container(
-              width: double.infinity,
-              height: 250,
-              decoration: BoxDecoration(
-                  color: const Color(0XFFF3F3F3),
-                  borderRadius: BorderRadius.circular(7),
-                  image: DecorationImage(
-                      image: FileImage(File(state.petPhotoPath)),
-                      fit: BoxFit.cover)),
-            );
-          } else {
-            return Container(
-              width: double.infinity,
-              height: 250,
-              decoration: BoxDecoration(
-                color: const Color(0XFFF3F3F3),
-                borderRadius: BorderRadius.circular(7),
-              ),
+          child: BlocConsumer<EditAdoptBloc, EditAdoptState>(
+              listener: (context, state) {
+        if (state is EditAdoptError) {
+          print(state.message);
+        } else if (state is EditAdoptSuccess) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.pop(context);
+          });
+        }
+        if (state is EditPetPhotoSuccess) {
+          _petPhotoPath = state.petPhotoPath;
+        }
+        if (state is EditPetCertificateSuccess) {
+          _petCertificateController.text = state.petCertificateFileName;
+          _petCertificatePath = state.petCertificatePath;
+        }
+      }, builder: (context, state) {
+        if (state is EditAdoptLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
+            child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.add_photo_alternate_outlined,
-                    color: kDarkBrown,
-                    size: 40,
+                  const SizedBox(
+                    height: 20,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Text(
-                      kOpenAdoptAddPicture,
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 14,
-                      ),
+                  _buildInputPetPicture(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInputPetName(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputPetType(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputPetGender(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputDateOfBirth(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputPetBreed(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputCertificate(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputPetDescription(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputWhatsappNumber(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        GradientButton(
+                          height: 55,
+                          width: double.infinity,
+                          onTap: () {
+                            if (formKey.currentState!.validate()) {
+                              _submitOpenAdopt();
+                            }
+                          },
+                          text: 'Update Pet',
+                          isClicked: false,
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            );
-          }
-        },
-      ),
-      onTap: () =>
-          BlocProvider.of<OpenAdoptBloc>(context).add(UploadPetPhoto()),
+            ),
+          );
+        }
+      })),
     );
+  }
+
+  Widget _buildInputPetPicture() {
+    if (_petPhotoPath != '') {
+      return InkWell(
+        child: Container(
+          width: double.infinity,
+          height: 250,
+          decoration: BoxDecoration(
+            color: const Color(0XFFF3F3F3),
+            borderRadius: BorderRadius.circular(7),
+            image: DecorationImage(
+                image: FileImage(File(_petPhotoPath)), fit: BoxFit.cover),
+          ),
+        ),
+        onTap: () {
+          BlocProvider.of<EditAdoptBloc>(context).add(EditPetPhoto());
+        },
+      );
+    } else {
+      if (widget.adoptPet.petPictureUrl == '' ||
+          widget.adoptPet.petPictureUrl == null) {
+        return InkWell(
+          child: Container(
+            width: double.infinity,
+            height: 250,
+            decoration: BoxDecoration(
+              color: const Color(0XFFF3F3F3),
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.add_photo_alternate_outlined,
+                  color: kDarkBrown,
+                  size: 40,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    kOpenAdoptAddPicture,
+                    style: GoogleFonts.poppins(
+                      color: kDarkBrown,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          onTap: () =>
+              BlocProvider.of<EditAdoptBloc>(context).add(EditPetPhoto()),
+        );
+      } else {
+        return InkWell(
+          child: Container(
+            width: double.infinity,
+            height: 250,
+            decoration: BoxDecoration(
+              color: const Color(0XFFF3F3F3),
+              borderRadius: BorderRadius.circular(7),
+              image: DecorationImage(
+                  image: NetworkImage(widget.adoptPet.petPictureUrl ?? ''),
+                  fit: BoxFit.cover),
+            ),
+          ),
+          onTap: () =>
+              BlocProvider.of<EditAdoptBloc>(context).add(EditPetPhoto()),
+        );
+      }
+    }
   }
 
   Widget _buildInputPetName() {
@@ -296,7 +361,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Icon(
                   icon,
                   color: color,
@@ -324,7 +389,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   }
 
   Widget _buildInputDateOfBirth() {
-    final DateFormat _dateFormat = DateFormat.yMMMEd();
+    final DateFormat dateFormat = DateFormat.yMMMEd();
     return TextFormField(
       readOnly: true,
       controller: _petDateBirthController,
@@ -341,7 +406,9 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       onTap: () {
         showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
+                initialDate: _petDateOfBirth != null
+                    ? _petDateOfBirth!.toDate()
+                    : DateTime.now(),
                 firstDate: DateTime(1900),
                 lastDate: DateTime.now())
             .then((pickedDate) {
@@ -351,7 +418,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           }
           setState(() {
             _petDateOfBirth = Timestamp.fromDate(pickedDate);
-            _petDateBirthController.text = _dateFormat.format(pickedDate);
+            _petDateBirthController.text = dateFormat.format(pickedDate);
           });
         });
       },
@@ -425,7 +492,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       controller: _petCertificateController,
       readOnly: true,
       onTap: () {
-        BlocProvider.of<OpenAdoptBloc>(context).add(UploadPetCertificate());
+        BlocProvider.of<EditAdoptBloc>(context).add(EditPetCertificate());
       },
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.upload),

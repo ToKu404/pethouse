@@ -5,9 +5,11 @@ import 'package:adopt/domain/usecases/create_new_adopt_usecase.dart';
 import 'package:adopt/domain/usecases/get_all_pet_list_usecase.dart';
 import 'package:adopt/domain/usecases/get_pet_description_usecase.dart';
 import 'package:adopt/domain/usecases/get_user_id_local_usecase.dart';
+import 'package:adopt/domain/usecases/update_adopt_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_adopt_photo_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_certificate_usecase.dart';
 import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
+import 'package:adopt/presentation/blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,9 +22,7 @@ import 'package:pet/domain/repositories/pet_firebase_repository.dart';
 import 'package:pet/domain/usecases/add_certificate_usecase.dart';
 import 'package:pet/domain/usecases/add_pet_usecase.dart';
 import 'package:pet/domain/usecases/add_photo_usecase.dart';
-import 'package:pet/domain/usecases/get_medical_usecase.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
-import 'package:pet/presentation/bloc/get_medical/get_medical_bloc.dart';
 import 'package:schedule/activity/data/data_sources/task_firebase_data_source.dart';
 import 'package:schedule/activity/data/repositories/task_firebase_repository_impl.dart';
 import 'package:schedule/activity/domain/repositories/medicaladd_firebase_repository.dart';
@@ -146,7 +146,7 @@ void init() {
   locator.registerLazySingleton(
       () => GetUserIdLocalUsecase(adoptRepository: locator()));
   locator.registerLazySingleton(
-      () => GetAllMedicalUsecase(petFirebaseRepository: locator()));
+      () => UpdateAdoptUsecase(adoptRepository: locator()));
 
   // bloc & cubit
   locator.registerFactory(
@@ -188,7 +188,11 @@ void init() {
         getUserIdLocalUsecase: locator(),
       ));
   locator.registerFactory(() => ListAdoptBloc(getAllPetListUsecase: locator()));
-  locator.registerFactory(() => GetMedicalBloc(getAllMedicalUsecase: locator()));
+  locator.registerFactory(() => EditAdoptBloc(
+      updateAdoptUsecase: locator(),
+      uploadPetCertificateUsecase: locator(),
+      uploadPetPhoto: locator()));
+
   //external
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;

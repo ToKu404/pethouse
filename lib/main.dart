@@ -1,16 +1,19 @@
+import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
+import 'package:adopt/presentation/blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
 import 'package:adopt/presentation/pages/adopt_page.dart';
 import 'package:adopt/presentation/pages/detail_adopt_page.dart';
+import 'package:adopt/presentation/pages/edit_adopt_page.dart';
 import 'package:adopt/presentation/pages/open_adopt_page.dart';
+
 import 'package:core/core.dart';
 import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
-import 'package:pet/presentation/bloc/get_medical/get_medical_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
 import 'package:pethouse/presentation/pages/main_page.dart';
@@ -59,7 +62,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<OpenAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<DetailAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<ListAdoptBloc>()),
-          BlocProvider(create: (_) => di.locator<GetMedicalBloc>())
+          BlocProvider(create: (_) => di.locator<EditAdoptBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -115,6 +118,10 @@ class MyApp extends StatelessWidget {
                     petAdoptId: petId,
                   ),
                 );
+              case EDIT_ADOPT_ROUTE_NAME:
+                final adopt = settings.arguments as AdoptEntity;
+                return MaterialPageRoute(
+                    builder: (context) => EditAdoptPage(adoptPet: adopt));
               case NoInternetPage.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const NoInternetPage());

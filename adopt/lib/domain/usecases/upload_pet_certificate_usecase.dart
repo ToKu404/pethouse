@@ -5,7 +5,9 @@ class UploadPetCertificateUsecase {
 
   const UploadPetCertificateUsecase({required this.adoptRepository});
 
-  Future<String> execute(String petCertificatePath) async {
-    return await adoptRepository.uploadPetCertificate(petCertificatePath);
+  Future<String> execute(
+      String petCertificatePath, String oldCertificateUrl) async {
+    return await adoptRepository.uploadPetCertificate(
+        petCertificatePath, oldCertificateUrl);
   }
 }

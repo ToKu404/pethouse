@@ -51,7 +51,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> updateUserDate(UserEntity user) async {
+  Future<void> updateUserData(UserEntity user) async {
     return firebaseDataSource.updateUserData(user);
   }
 
@@ -84,7 +84,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<void> saveUserIdToLocal(String userId) async {
     return await firebaseDataSource.saveUserIdToLocal(userId);
   }
-  
+
   @override
   Future<void> removeUserIdLocal() async {
     return await firebaseDataSource.removeUserIdLocal();

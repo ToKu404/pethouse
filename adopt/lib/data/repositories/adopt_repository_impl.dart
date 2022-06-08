@@ -12,13 +12,16 @@ class AdoptRepositoryImpl implements AdoptRepository {
   }
 
   @override
-  Future<String> uploadPetAdoptPhoto(String? petPhotoUrl) async {
-    return adoptDataSource.uploadPetAdoptPhoto(petPhotoUrl);
+  Future<String> uploadPetAdoptPhoto(
+      String? petPhotoUrl, String oldPhotoUrl) async {
+    return adoptDataSource.uploadPetAdoptPhoto(petPhotoUrl, oldPhotoUrl);
   }
 
   @override
-  Future<String> uploadPetCertificate(String petCertificatePath) async {
-    return adoptDataSource.uploadPetCertificate(petCertificatePath);
+  Future<String> uploadPetCertificate(
+      String petCertificatePath, String oldCertificateUrl) async {
+    return adoptDataSource.uploadPetCertificate(
+        petCertificatePath, oldCertificateUrl);
   }
 
   @override
@@ -35,4 +38,10 @@ class AdoptRepositoryImpl implements AdoptRepository {
   Future<String> getUserIdLocal() {
     return adoptDataSource.getUserIdLocal();
   }
+
+  @override
+  Future<void> updateAdopt(AdoptEntity adoptEntity) {
+    return adoptDataSource.updateAdopt(adoptEntity);
+  }
+
 }

@@ -12,7 +12,7 @@ abstract class UserRepository {
   Future<String> retrieveUid();
   Future<void> signOut();
   Future<void> saveUserData(UserEntity user);
-  Future<void> updateUserDate(UserEntity user);
+  Future<void> updateUserData(UserEntity user);
   Stream<UserEntity> getCurrentUser(String uid);
   Future<String> uploadImage(XFile imageFile);
   Future<void> deleteOldImage(String oldImageUrl);

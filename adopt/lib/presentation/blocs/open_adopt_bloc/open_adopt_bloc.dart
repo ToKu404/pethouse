@@ -1,5 +1,3 @@
-// ignore: unused_import
-import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:adopt/domain/entities/adopt_enitity.dart';
@@ -23,6 +21,11 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
       required this.uploadPetPhoto,
       required this.uploadPetCertificateUsecase})
       : super(OpenAdoptInitial()) {
+    on<OpenAdoptInit>(
+      (event, emit) {
+        emit(OpenAdoptInitial());
+      },
+    );
     on<SubmitOpenAdopt>((event, emit) async {
       emit(OpenAdoptLoading());
       try {
@@ -30,13 +33,13 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
         if (event.adoptEntity.petPictureUrl != null &&
             event.adoptEntity.petPictureUrl != '') {
           petPhotoUrl =
-              await uploadPetPhoto.execute(event.adoptEntity.petPictureUrl);
+              await uploadPetPhoto.execute(event.adoptEntity.petPictureUrl, '');
         }
         String petCertificateUrl = "";
         if (event.adoptEntity.certificateUrl != null &&
             event.adoptEntity.certificateUrl != '') {
           petCertificateUrl = await uploadPetCertificateUsecase
-              .execute(event.adoptEntity.certificateUrl!);
+              .execute(event.adoptEntity.certificateUrl!, '');
         }
         AdoptEntity adoptEntity = AdoptEntity(
           petName: event.adoptEntity.petName,

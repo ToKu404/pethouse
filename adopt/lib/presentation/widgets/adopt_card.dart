@@ -44,6 +44,7 @@ class AdoptCard extends StatelessWidget {
                           child: SvgPicture.asset(
                             '${kPetTypeVector[adoptEntity.petType?.toLowerCase()]}',
                             color: kGreyTransparant,
+                            height: 80,
                           ),
                         ),
                 ),
@@ -99,21 +100,17 @@ class AdoptCard extends StatelessWidget {
                       adoptEntity.gender != null && adoptEntity.gender != ''
                           ? Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 2),
+                                  horizontal: 5, vertical: 2),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: adoptEntity.gender == 'Male'
-                                    ? Color(0xFFCDDDF6)
-                                    : Color(0xFFEAABAC),
+                                    ? const Color(0xFF4663C9)
+                                    : const Color(0xFFF94A93),
                               ),
                               child: Text(
                                 adoptEntity.gender ?? '',
-                                style: kTextTheme.overline?.copyWith(
-                                  fontSize: 11,
-                                  color: adoptEntity.gender == 'male'
-                                      ? Color(0xFF578EE0)
-                                      : Color(0xFFCB1E2D),
-                                ),
+                                style: kTextTheme.overline
+                                    ?.copyWith(fontSize: 11, color: kWhite),
                               ),
                             )
                           : Container(),
@@ -123,16 +120,16 @@ class AdoptCard extends StatelessWidget {
                       adoptEntity.dateOfBirth != null
                           ? Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 2),
+                                  horizontal: 5, vertical: 2),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: const Color(0xFFFFF5E3),
+                                color: const Color(0xFFFFEAD1),
                               ),
                               child: Text(
                                 getAge(),
                                 style: kTextTheme.overline?.copyWith(
                                   fontSize: 11,
-                                  color: const Color(0xFF85634D),
+                                  color: const Color(0xFF747474),
                                 ),
                               ),
                             )

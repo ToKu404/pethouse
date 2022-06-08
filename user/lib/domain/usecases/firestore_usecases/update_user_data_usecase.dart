@@ -7,6 +7,6 @@ class UpdateUserDataUsecase {
   UpdateUserDataUsecase({required this.firebaseRepository});
 
   Future<void> execute(UserEntity user) async {
-    return firebaseRepository.updateUserDate(user);
+    return firebaseRepository.updateUserData(user);
   }
 }

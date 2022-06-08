@@ -3,8 +3,11 @@ import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dar
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:core/presentation/widgets/gradient_button.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailAdoptPage extends StatefulWidget {
   final String petAdoptId;
@@ -132,9 +135,17 @@ class DetailAdoptData extends StatelessWidget {
                       ],
                     ),
                   ),
-                  adoptEntity.certificateUrl != ""
+                  adoptEntity.certificateUrl != "" &&
+                          adoptEntity.certificateUrl != null
                       ? InkWell(
-                          onTap: () => {},
+                          onTap: () async {
+                            if (!await launchUrlString(
+                              adoptEntity.certificateUrl!,
+                              mode: LaunchMode.externalApplication,
+                            )) {
+                              throw 'Could not launch ${adoptEntity.certificateUrl!}';
+                            }
+                          },
                           child: Container(
                             height: 32,
                             width: 41,
@@ -143,10 +154,8 @@ class DetailAdoptData extends StatelessWidget {
                               color: kOrange,
                             ),
                             padding: const EdgeInsets.all(3),
-                            child: const Icon(
-                              FontAwesomeIcons.certificate,
-                              color: kWhite,
-                            ),
+                            child: SvgPicture.asset(
+                                'assets/icons/certificate_icon.svg'),
                           ),
                         )
                       : const SizedBox(),
@@ -228,7 +237,8 @@ class DetailAdoptData extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Container(
+                            child: InkWell(
+                              child: Container(
                                 width: 100,
                                 height: 52,
                                 decoration: BoxDecoration(
@@ -239,7 +249,12 @@ class DetailAdoptData extends StatelessWidget {
                                   child: Text('Edit Data',
                                       style: kTextTheme.subtitle1
                                           ?.copyWith(color: kOrange)),
-                                )),
+                                ),
+                              ),
+                              onTap: () => Navigator.pushNamed(
+                                  context, EDIT_ADOPT_ROUTE_NAME,
+                                  arguments: adoptEntity),
+                            ),
                           ),
                           const SizedBox(
                             width: kPadding,

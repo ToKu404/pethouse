@@ -1,3 +1,4 @@
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,7 +15,8 @@ class DetailAdoptBloc extends Bloc<DetailAdoptEvent, DetailAdoptState> {
 
   DetailAdoptBloc(
       {required this.getUserIdLocalUsecase,
-      required this.getPetDescriptionUsecase})
+      required this.getPetDescriptionUsecase,
+  })
       : super(DetailAdoptInitial()) {
     on<GetPetDescription>(
       (event, emit) async {
@@ -39,5 +41,6 @@ class DetailAdoptBloc extends Bloc<DetailAdoptEvent, DetailAdoptState> {
         }
       },
     );
+  
   }
 }

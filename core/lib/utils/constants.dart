@@ -97,6 +97,8 @@ const kColorScheme = ColorScheme(
 // TEXT CONSTANTS
 // Adopt
 const String kOpenAdoptTitle = 'Open Adopt';
+const String kEditAdoptTitle = 'Edit Open Adopt';
+
 const String kOpenAdoptAddPicture = 'Add Picture';
 
 const Map<String, String> kPetTypeVector = {
@@ -104,5 +106,7 @@ const Map<String, String> kPetTypeVector = {
   'cat': 'assets/icons/cat_icon_outline.svg',
   'bird': 'assets/icons/bird_icon_outline.svg',
   'dog': 'assets/icons/dog_icon_outline.svg',
+  'rabbit': 'assets/icons/rabbit_icon_outline.svg',
   'hamster': 'assets/icons/hamster_icon_outline.svg',
+  'other': 'assets/icons/other_icon_outline.svg',
 };

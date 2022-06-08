@@ -6,7 +6,7 @@ class UploadPetAdoptPhotoUsecase {
 
   const UploadPetAdoptPhotoUsecase({required this.adoptRepository});
 
-  Future<String> execute(String? petPhotoUrl) async{
-    return await adoptRepository.uploadPetAdoptPhoto(petPhotoUrl);
+  Future<String> execute(String? petPhotoUrl, String oldPhotoUrl) async{
+    return await adoptRepository.uploadPetAdoptPhoto(petPhotoUrl, oldPhotoUrl);
   }
 }
