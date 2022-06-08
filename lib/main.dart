@@ -7,20 +7,18 @@ import 'package:adopt/presentation/pages/adopt_page.dart';
 import 'package:adopt/presentation/pages/detail_adopt_page.dart';
 import 'package:adopt/presentation/pages/edit_adopt_page.dart';
 import 'package:adopt/presentation/pages/open_adopt_page.dart';
+import 'package:adopt/presentation/pages/activity_status_page.dart';
 
 import 'package:core/core.dart';
 import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
+import 'package:notification/presentation/pages/notification_page.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
-import 'package:pethouse/presentation/pages/main_page.dart';
-import 'package:pethouse/presentation/pages/notification_page.dart';
-import 'package:pethouse/presentation/pages/petrivia/detail_petrivia.dart';
-import 'package:pethouse/presentation/pages/schedule/schedule_calendar_page.dart';
-import 'package:pethouse/presentation/pages/splash_page.dart';
 import 'package:schedule/activity/presentation/blocs/addmedical_bloc/medical_bloc.dart';
 import 'package:schedule/activity/presentation/blocs/addtask_bloc/task_bloc.dart';
 import 'package:schedule/activity/presentation/pages/activity/add_medical_activity.dart';
@@ -34,6 +32,10 @@ import 'package:user/user.dart';
 
 import 'firebase_options.dart';
 import 'injection.dart' as di;
+import 'presentation/pages/main_page.dart';
+import 'presentation/pages/petrivia/detail_petrivia.dart';
+import 'presentation/pages/schedule/schedule_calendar_page.dart';
+import 'presentation/pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +66,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<DetailAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<ListAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<EditAdoptBloc>()),
+          BlocProvider(create: (_) => di.locator<NotificationBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -112,6 +115,9 @@ class MyApp extends StatelessWidget {
               case ADOPT_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const AdoptPage());
+              case ACTIVITY_STATUS_ROUT_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => ActivityStatusPage());
               case DETAIL_ADOPT_ROUTE_NAME:
                 final petId = settings.arguments as String;
                 return MaterialPageRoute(

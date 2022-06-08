@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pethouse/presentation/pages/petrivia/detail_petrivia.dart';
+import '../pages/petrivia/detail_petrivia.dart';
 import 'package:core/core.dart';
 
 class CardPetrivia extends StatelessWidget {

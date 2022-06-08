@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pethouse/presentation/widgets/btnback_decoration.dart';
-import 'package:pethouse/presentation/widgets/gredient_button.dart';
+
+import '../../widgets/btnback_decoration.dart';
+import '../../widgets/gredient_button.dart';
 
 class DetailPetrivia extends StatelessWidget {
   const DetailPetrivia({Key? key}) : super(key: key);

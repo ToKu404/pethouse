@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:pethouse/presentation/widgets/modal_medical_history.dart';
 import 'package:core/core.dart';
+import 'package:flutter/material.dart';
+
+import 'modal_medical_history.dart';
 
 class CardMedicalHistory extends StatelessWidget {
   const CardMedicalHistory({Key? key}) : super(key: key);

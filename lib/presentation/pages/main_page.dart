@@ -2,8 +2,8 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pethouse/presentation/pages/dashboard_page.dart';
-import 'package:pethouse/presentation/pages/schedule/schedule_page.dart';
+import 'dashboard_page.dart';
+import 'schedule/schedule_page.dart';
 import 'package:core/core.dart';
 import 'package:user/user.dart';
 

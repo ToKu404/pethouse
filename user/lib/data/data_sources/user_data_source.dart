@@ -74,7 +74,6 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Future<void> signOut() async {
-    
     final statusGoogle = await GoogleSignIn().isSignedIn();
     if (statusGoogle) {
       await GoogleSignIn().signOut();
@@ -98,7 +97,12 @@ class UserDataSourceImpl implements UserDataSource {
   Future<void> saveUserData(UserEntity user) async {
     final userCollectionRef = firebaseFirestore.collection("users");
     final uid = firebaseAuth.currentUser?.uid;
-    userCollectionRef.doc(uid).get().then((value) {
+    final notifCollection = firebaseFirestore.collection('notifications');
+    Map<String, dynamic> notif = {};
+    notif['all_notif'] = [];
+    notif['notif_id'] = uid;
+    await notifCollection.doc(uid).set(notif);
+    await userCollectionRef.doc(uid).get().then((value) {
       final newUser = UserModel(
               uid: uid,
               email: user.email,
@@ -140,7 +144,7 @@ class UserDataSourceImpl implements UserDataSource {
       userMap['email'] = user.email;
       await firebaseAuth.currentUser?.updateEmail(user.email ?? '');
     }
-    
+
     if (user.name != null) userMap['name'] = user.name;
     userCollectionRef.doc(user.uid).update(userMap);
   }
@@ -171,6 +175,11 @@ class UserDataSourceImpl implements UserDataSource {
 
     if (user != null) {
       final userCollectionRef = firebaseFirestore.collection("users");
+      final notifCollection = firebaseFirestore.collection("notifications");
+      Map<String, dynamic> notif = {};
+      notif['all_notif'] = [];
+      notif['notif_id'] = user.uid;
+      await notifCollection.doc(user.uid).set(notif);
       userCollectionRef.doc(user.uid).get().then((value) {
         final newUser = UserModel(
                 uid: user.uid,

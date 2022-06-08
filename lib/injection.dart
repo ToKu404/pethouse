@@ -16,6 +16,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:notification/data/data_sources/notification_data_source.dart';
+import 'package:notification/domain/repositories/notification_repository.dart';
+import 'package:notification/domain/usecases/get_list_notification_usecase.dart';
+import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:pet/data/data_sources/pet_firebase_data_source.dart';
 import 'package:pet/data/repositories/pet_firebase_repository_impl.dart';
 import 'package:pet/domain/repositories/pet_firebase_repository.dart';
@@ -58,6 +62,7 @@ import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
 import 'package:user/presentation/blocs/user_profile_bloc/user_profile_bloc.dart';
 import 'package:schedule/activity/data/repositories/medical_firebase_repository_impl.dart';
 import 'package:schedule/activity/data/data_sources/medical_firebase_data_source.dart';
+import 'package:notification/data/repositories/notification_repository_impl.dart';
 
 final locator = GetIt.instance;
 
@@ -73,6 +78,8 @@ void init() {
       () => PetFirebaseRepositoryImpl(petFirebaseDataSource: locator()));
   locator.registerLazySingleton<AdoptRepository>(
       () => AdoptRepositoryImpl(adoptDataSource: locator()));
+  locator.registerLazySingleton<NotificationRepository>(
+      () => NotificationRepositoryImpl(notificationDataSource: locator()));
 
   // datasource
   locator.registerLazySingleton<UserDataSource>(() => UserDataSourceImpl(
@@ -91,6 +98,8 @@ void init() {
         firebaseStorage: locator(),
         firebaseAuth: locator(),
       ));
+    locator.registerLazySingleton<NotificationDataSource>(
+      () => NotificationDataSourceImpl(firebaseFirestore: locator()));
 
   // usecases
   locator.registerLazySingleton(
@@ -147,6 +156,8 @@ void init() {
       () => GetUserIdLocalUsecase(adoptRepository: locator()));
   locator.registerLazySingleton(
       () => UpdateAdoptUsecase(adoptRepository: locator()));
+    locator.registerLazySingleton(
+      () => GetListNotificationUsecase(notificationRepository: locator()));
 
   // bloc & cubit
   locator.registerFactory(
@@ -192,6 +203,8 @@ void init() {
       updateAdoptUsecase: locator(),
       uploadPetCertificateUsecase: locator(),
       uploadPetPhoto: locator()));
+  locator.registerFactory(() => NotificationBloc(getListNotificationUsecase: locator()));
+  
 
   //external
   final auth = FirebaseAuth.instance;

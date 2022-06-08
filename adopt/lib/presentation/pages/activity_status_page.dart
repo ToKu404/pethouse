@@ -1,9 +1,21 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class NotificationPage extends StatelessWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+class ActivityStatusPage extends StatefulWidget {
+  const ActivityStatusPage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<ActivityStatusPage> createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<ActivityStatusPage> {
+  @override
+  void initState() {
+    super.initState();
+    // BlocProvider.of<ListAdoptBloc>(context).add(FetchListOpenAdopt());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +29,24 @@ class NotificationPage extends StatelessWidget {
               decoration:
                   const BoxDecoration(shape: BoxShape.circle, color: kGrey),
               child: const Icon(
-                FontAwesomeIcons.arrowLeft,
+                Icons.arrow_back_ios_new_rounded,
                 size: 18,
                 color: kWhite,
               ),
             ),
           ),
         ),
-        title: Text(
-          'Notification',
-          style: kTextTheme.headline5,
-        ),
         centerTitle: true,
         backgroundColor: Colors.white,
+        title: Text(
+          'Activity Status',
+          style: kTextTheme.headline5,
+        ),
         elevation: 1,
         shadowColor: kGrey,
+      ),
+      body: SafeArea(
+        child: Container(),
       ),
     );
   }

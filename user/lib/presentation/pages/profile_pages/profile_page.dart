@@ -6,13 +6,10 @@ import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth_cubit/auth_cubit.dart';
 import '../../blocs/user_db_bloc/user_db_bloc.dart';
 import '../../widgets/gradient_button.dart';
-import '../auth_pages/login_page.dart';
-import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final String userId;
   const ProfilePage({Key? key, required this.userId}) : super(key: key);
-
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -49,12 +46,11 @@ class _ProfilePageState extends State<ProfilePage> {
         child: BlocBuilder<UserDbBloc, UserDbState>(
           builder: (context, state) {
             if (state is UserDbLoading) {
-              return const Expanded(
-                  child: Center(child: CircularProgressIndicator()));
+              return Center(child: CircularProgressIndicator());
             } else if (state is SuccessGetData) {
-              return Expanded(child: _BuildProfile(user: state.user));
+              return _BuildProfile(user: state.user);
             } else if (state is UserDbFailure) {
-              return Expanded(child: Center(child: Text(state.message)));
+              return Center(child: Text(state.message));
             } else {
               return Container();
             }
@@ -130,6 +126,9 @@ class _BuildProfile extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
+            const SizedBox(
+              height: 20,
+            ),
             GradientButton(
               height: 34,
               width: 200,
@@ -143,6 +142,16 @@ class _BuildProfile extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
+            CardProfile(
+                title: 'Activity Status',
+                trailingAction: const Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  size: 16,
+                ),
+                leadingAction: const Icon(Icons.timelapse, color: kDarkBrown),
+                onTap: () {
+                  Navigator.pushNamed(context, ACTIVITY_STATUS_ROUT_NAME);
+                }),
             CardProfile(
                 title: 'Account',
                 trailingAction: const Icon(
