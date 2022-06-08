@@ -6,6 +6,8 @@ abstract class OpenAdoptEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class OpenAdoptInit extends OpenAdoptEvent {}
+
 class SubmitOpenAdopt extends OpenAdoptEvent {
   final AdoptEntity adoptEntity;
 

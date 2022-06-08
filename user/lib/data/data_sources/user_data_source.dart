@@ -140,7 +140,7 @@ class UserDataSourceImpl implements UserDataSource {
       userMap['email'] = user.email;
       await firebaseAuth.currentUser?.updateEmail(user.email ?? '');
     }
-    ;
+    
     if (user.name != null) userMap['name'] = user.name;
     userCollectionRef.doc(user.uid).update(userMap);
   }

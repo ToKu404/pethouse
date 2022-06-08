@@ -11,11 +11,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AdoptDataSource {
   Future<void> createNewAdopt(AdoptEntity adoptEntity);
-  Future<String> uploadPetAdoptPhoto(String? petPhotoUrl);
-  Future<String> uploadPetCertificate(String petCertificatePath);
+  Future<String> uploadPetAdoptPhoto(String? petPhotoUrl, String oldPhotoUrl);
+  Future<String> uploadPetCertificate(
+      String petCertificatePath, String oldPath);
   Stream<List<AdoptEntity>> getAllPetLists();
   Stream<AdoptEntity> getPetDescription(String petId);
   Future<String> getUserIdLocal();
+  Future<void> updateAdopt(AdoptEntity adoptEntity);
 }
 
 class AdoptDataSourceImpl implements AdoptDataSource {
@@ -55,9 +57,17 @@ class AdoptDataSourceImpl implements AdoptDataSource {
   }
 
   @override
-  Future<String> uploadPetAdoptPhoto(String? petPhotoUrl) async {
+  Future<String> uploadPetAdoptPhoto(
+      String? petPhotoUrl, String oldPhotoUrl) async {
     if (petPhotoUrl != null) {
       String filename = basename(petPhotoUrl);
+      if (oldPhotoUrl != '') {
+        await firebaseStorage
+            .ref()
+            .child('pet_photos')
+            .child(oldPhotoUrl)
+            .delete();
+      }
       final ref = firebaseStorage.ref().child('pet_photos').child(filename);
       await ref.putFile(File(petPhotoUrl));
       return await ref.getDownloadURL();
@@ -74,9 +84,16 @@ class AdoptDataSourceImpl implements AdoptDataSource {
   }
 
   @override
-  Future<String> uploadPetCertificate(String petCertificatePath) async {
+  Future<String> uploadPetCertificate(
+      String petCertificatePath, String oldPath) async {
     try {
+      if (oldPath != '') {
+        final certRef =
+            firebaseStorage.ref().child("pet_certificates/$oldPath");
+        await certRef.delete();
+      }
       String filename = basename(petCertificatePath);
+
       final ref =
           firebaseStorage.ref().child('pet_certificates').child(filename);
       await ref.putFile(File(petCertificatePath));
@@ -103,5 +120,30 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     return petCollectionRef.map((querySnap) {
       return AdoptModel.fromSnapshot(querySnap);
     });
+  }
+
+  @override
+  Future<void> updateAdopt(AdoptEntity adoptEntity) async {
+    Map<String, dynamic> adoptMap = {};
+    onUpdate('pet_picture_url', adoptEntity.petPictureUrl, adoptMap);
+    onUpdate('pet_name', adoptEntity.petName, adoptMap);
+    onUpdate('pet_type', adoptEntity.petType, adoptMap);
+    onUpdate('gender', adoptEntity.gender, adoptMap);
+    onUpdate('pet_breed', adoptEntity.petBreed, adoptMap);
+    onUpdate('date_of_birth', adoptEntity.dateOfBirth, adoptMap);
+    onUpdate('certificate_url', adoptEntity.certificateUrl, adoptMap);
+    onUpdate('pet_decription', adoptEntity.petDescription, adoptMap);
+    onUpdate('whatsapp_number', adoptEntity.whatsappNumber, adoptMap);
+
+    await firebaseFirestore
+        .collection('pet_adopts')
+        .doc(adoptEntity.adoptId)
+        .update(adoptMap);
+  }
+
+  void onUpdate(String key, dynamic value, Map<String, dynamic> adoptMap) {
+    if (value != null && value != '') {
+      adoptMap[key] = value;
+    }
   }
 }

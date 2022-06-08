@@ -27,3 +27,4 @@ class PetDescriptionLoaded extends DetailAdoptState {
   @override
   List<Object> get props => [adoptEntity, isOwner];
 }
+

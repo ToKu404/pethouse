@@ -2,6 +2,7 @@
 const ADOPT_ROUTE_NAME = "adopt";
 const DETAIL_ADOPT_ROUTE_NAME = "detail-adopt";
 const OPEN_ADOPT_ROUTE_NAME = "open-adopt";
+const EDIT_ADOPT_ROUTE_NAME = "edit-adopt";
 
 const LOGIN_ROUTE_NAME = "login";
 const REGISTER_ROUTE_NAME = "register";

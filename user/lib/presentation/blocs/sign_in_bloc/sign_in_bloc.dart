@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:user/domain/usecases/auth_usecases/save_user_id_local_usecase.dart';
 
 import '../../../domain/usecases/auth_usecases/sign_in_usecase.dart';
 import '../../../domain/usecases/auth_usecases/sign_in_with_google_usecase.dart';
@@ -13,11 +12,10 @@ class SignInBloc extends Bloc<SignInEvent, SignInValidate> {
   final SignInUsecase signInUsecase;
   final SignInWithGoogle signInWithGoogle;
 
-  SignInBloc(
-      {required this.signInUsecase,
-      required this.signInWithGoogle,
-      })
-      : super(const SignInValidate(
+  SignInBloc({
+    required this.signInUsecase,
+    required this.signInWithGoogle,
+  }) : super(const SignInValidate(
             email: 'sample@gmail.com',
             password: "",
             isEmailValid: true,
@@ -70,12 +68,14 @@ class SignInBloc extends Bloc<SignInEvent, SignInValidate> {
   }
 
   _onPasswordChanged(PasswordChanged event, Emitter<SignInValidate> emit) {
-    emit(state.copyWith(
-      isFormValidateFailed: false,
-      errorMessage: "",
-      password: event.password,
-      isPasswordValid: _isPasswordValid(event.password),
-    ));
+    emit(
+      state.copyWith(
+        isFormValidateFailed: false,
+        errorMessage: "",
+        password: event.password,
+        isPasswordValid: _isPasswordValid(event.password),
+      ),
+    );
   }
 
   _onSubmitSignIn(SubmitSignIn event, Emitter<SignInValidate> emit) async {
@@ -90,7 +90,6 @@ class SignInBloc extends Bloc<SignInEvent, SignInValidate> {
             await signInUsecase.execute(state.email, state.password);
 
         if (authUser != null) {
-
           emit(
             state.copyWith(isLoading: false, errorMessage: ""),
           );
@@ -123,7 +122,6 @@ class SignInBloc extends Bloc<SignInEvent, SignInValidate> {
       SubmitSignInGoogle event, Emitter<SignInValidate> emit) async {
     UserCredential? userCredential = await signInWithGoogle.excute();
     if (userCredential != null) {
-      
       emit(state.copyWith(
           isFormValid: true, isLoading: false, errorMessage: ""));
     }
