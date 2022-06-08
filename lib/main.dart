@@ -17,6 +17,7 @@ import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
 import 'package:pethouse/presentation/pages/main_page.dart';
+import 'package:pethouse/presentation/pages/notification_page.dart';
 import 'package:pethouse/presentation/pages/petrivia/detail_petrivia.dart';
 import 'package:pethouse/presentation/pages/schedule/schedule_calendar_page.dart';
 import 'package:pethouse/presentation/pages/splash_page.dart';
@@ -118,6 +119,9 @@ class MyApp extends StatelessWidget {
                     petAdoptId: petId,
                   ),
                 );
+              case NOTIFICATION_ROUT_NAME:
+                return MaterialPageRoute(
+                    builder: (context) => const NotificationPage());
               case EDIT_ADOPT_ROUTE_NAME:
                 final adopt = settings.arguments as AdoptEntity;
                 return MaterialPageRoute(

@@ -57,7 +57,9 @@ class _MainPageState extends State<MainPage> {
           backgroundColor: kWhite,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, NOTIFICATION_ROUT_NAME);
+              },
               icon: SvgPicture.asset(
                 'assets/icons/notif_icon.svg',
                 color: kDarkBrown,
