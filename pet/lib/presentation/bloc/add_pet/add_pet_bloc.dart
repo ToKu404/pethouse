@@ -4,8 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
+import 'package:pet/domain/entities/medical_entity.dart';
 import 'package:pet/domain/usecases/add_pet_usecase.dart';
 import 'package:pet/domain/usecases/add_photo_usecase.dart';
+import 'package:pet/domain/usecases/get_medical_usecase.dart';
 
 import '../../../domain/entities/pet_entity.dart';
 import '../../../domain/usecases/add_certificate_usecase.dart';
@@ -18,7 +20,10 @@ class AddPetBloc extends Bloc<AddPetEvent, AddPetState> {
   final AddPhotoUseCase addPhotoUsecase;
   final AddCertificateUseCase addCertificateUsecase;
 
-  AddPetBloc({required this.addPetUsecase, required this.addPhotoUsecase, required this.addCertificateUsecase})
+  AddPetBloc({required this.addPetUsecase,
+    required this.addPhotoUsecase,
+    required this.addCertificateUsecase,
+  })
       : super(AddPetInitial()) {
     on<CreatePet>((event, emit) async {
       // TODO: implement event handler
