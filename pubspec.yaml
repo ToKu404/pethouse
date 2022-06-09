@@ -34,6 +34,8 @@ dependencies:
     path: schedule
   pet:
     path: pet
+  notification:
+    path: notification
   adopt:  
     path: adopt
   firebase_auth: ^3.3.19

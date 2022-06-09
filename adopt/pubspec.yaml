@@ -17,6 +17,8 @@ dependencies:
   google_fonts: ^2.3.3
   core:
     path: ../core
+  notification:
+    path: ../notification
   cloud_firestore: ^3.1.17
   flutter_bloc: ^8.0.1 
   firebase_storage: ^10.2.17

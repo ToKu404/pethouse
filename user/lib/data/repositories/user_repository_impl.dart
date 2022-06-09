@@ -89,4 +89,14 @@ class UserRepositoryImpl implements UserRepository {
   Future<void> removeUserIdLocal() async {
     return await firebaseDataSource.removeUserIdLocal();
   }
+
+  @override
+  Future<void> saveUserDataLocal(UserEntity user) async {
+    return await firebaseDataSource.saveDataToLocal(user);
+  }
+  
+  @override
+  Future<UserEntity> getUserDataLocal() async {
+    return await firebaseDataSource.getUserDataLocal();
+  }
 }

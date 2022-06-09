@@ -122,6 +122,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
       gender: petGender,
       petDescription: petDescription,
       whatsappNumber: waNumber,
+      status: 'open'
     );
 
     context.read<EditAdoptBloc>().add(SubmitUpdateAdopt(

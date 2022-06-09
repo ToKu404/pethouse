@@ -1,6 +1,6 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:core/core.dart';
 
 class CardPeriodicSummary extends StatelessWidget {
   final Iconify iconfy;

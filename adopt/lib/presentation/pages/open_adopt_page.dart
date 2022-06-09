@@ -82,6 +82,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       gender: petGender,
       petDescription: petDescription,
       whatsappNumber: waNumber,
+      status: 'open'
     );
     context
         .read<OpenAdoptBloc>()

@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:core/core.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:core/core.dart';
 
 class HomeScheduleNoTask extends StatefulWidget {
   const HomeScheduleNoTask({Key? key}) : super(key: key);

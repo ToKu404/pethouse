@@ -44,4 +44,23 @@ class AdoptRepositoryImpl implements AdoptRepository {
     return adoptDataSource.updateAdopt(adoptEntity);
   }
 
+  @override
+  Stream<List<AdoptEntity>> getOpenAdoptList(String userId) {
+    return adoptDataSource.getOpenAdoptList(userId);
+  }
+
+  @override
+  Future<void> requestAdopt(AdoptEntity adopt) {
+    return adoptDataSource.requestAdopt(adopt);
+  }
+
+  @override
+  Future<void> removeOpenAdopt(String adoptId) {
+    return adoptDataSource.removeOpenAdopt(adoptId);
+  }
+
+  @override
+  Stream<List<AdoptEntity>> getRequestAdoptList(String userId) {
+    return adoptDataSource.getRequestAdoptList(userId);
+  }
 }

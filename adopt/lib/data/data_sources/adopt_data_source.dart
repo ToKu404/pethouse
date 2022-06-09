@@ -18,6 +18,10 @@ abstract class AdoptDataSource {
   Stream<AdoptEntity> getPetDescription(String petId);
   Future<String> getUserIdLocal();
   Future<void> updateAdopt(AdoptEntity adoptEntity);
+  Stream<List<AdoptEntity>> getOpenAdoptList(String userId);
+  Future<void> requestAdopt(AdoptEntity adoptd);
+  Future<void> removeOpenAdopt(String adoptId);
+  Stream<List<AdoptEntity>> getRequestAdoptList(String userId);
 }
 
 class AdoptDataSourceImpl implements AdoptDataSource {
@@ -47,7 +51,10 @@ class AdoptDataSourceImpl implements AdoptDataSource {
               petPictureUrl: adoptEntity.petPictureUrl,
               certificateUrl: adoptEntity.certificateUrl,
               petDecription: adoptEntity.petDescription,
-              whatsappNumber: adoptEntity.whatsappNumber)
+              whatsappNumber: adoptEntity.whatsappNumber,
+              status: adoptEntity.status,
+              adopterId: adoptEntity.adopterId,
+              adopterName: adoptEntity.adopterName)
           .toDocument();
       if (!value.exists) {
         adoptCollectionRef.doc(adoptId).set(newAdopt);
@@ -105,7 +112,21 @@ class AdoptDataSourceImpl implements AdoptDataSource {
 
   @override
   Stream<List<AdoptEntity>> getAllPetLists() {
-    final petCollectionRef = firebaseFirestore.collection("pet_adopts");
+    final petCollectionRef = firebaseFirestore
+        .collection("pet_adopts")
+        .where('status', isEqualTo: 'open');
+    return petCollectionRef.snapshots().map((querySnap) {
+      return querySnap.docs
+          .map((docSnap) => AdoptModel.fromSnapshot(docSnap))
+          .toList();
+    });
+  }
+
+  @override
+  Stream<List<AdoptEntity>> getOpenAdoptList(String userId) {
+    final petCollectionRef = firebaseFirestore
+        .collection("pet_adopts")
+        .where('user_id', isEqualTo: userId);
     return petCollectionRef.snapshots().map((querySnap) {
       return querySnap.docs
           .map((docSnap) => AdoptModel.fromSnapshot(docSnap))
@@ -145,5 +166,32 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     if (value != null && value != '') {
       adoptMap[key] = value;
     }
+  }
+
+  @override
+  Future<void> requestAdopt(AdoptEntity adopt) async {
+    Map<String, dynamic> adoptMap = {};
+    adoptMap['status'] = adopt.status;
+    adoptMap['adopter_id'] = adopt.adopterId;
+    adoptMap['adopter_name'] = adopt.adopterName;
+    await firebaseFirestore.collection('pet_adopts').doc(adopt.adoptId).update(
+        adoptMap); // await firebaseFirestore.collection('notifications').doc(adopt.userId)
+  }
+
+  @override
+  Future<void> removeOpenAdopt(String adoptId) async {
+    await firebaseFirestore.collection('pet_adopts').doc(adoptId).delete();
+  }
+
+  @override
+  Stream<List<AdoptEntity>> getRequestAdoptList(String adopterId) {
+    final petCollectionRef = firebaseFirestore
+        .collection("pet_adopts")
+        .where('user_id', isEqualTo: adopterId);
+    return petCollectionRef.snapshots().map((querySnap) {
+      return querySnap.docs
+          .map((docSnap) => AdoptModel.fromSnapshot(docSnap))
+          .toList();
+    });
   }
 }

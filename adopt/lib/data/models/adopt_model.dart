@@ -15,19 +15,25 @@ class AdoptModel extends AdoptEntity {
     final String? certificateUrl,
     final String? whatsappNumber,
     final String? petDecription,
+    final String? status,
+    final String? adopterId,
+    final String? adopterName,
   }) : super(
-          adoptId: adoptId,
-          userId: userId,
-          petName: petName,
-          petType: petType,
-          petPictureUrl: petPictureUrl,
-          gender: gender,
-          petBreed: petBreed,
-          dateOfBirth: dateOfBirth,
-          certificateUrl: certificateUrl,
-          whatsappNumber: whatsappNumber,
-          petDescription: petDecription
-        );
+            adoptId: adoptId,
+            userId: userId,
+            petName: petName,
+            petType: petType,
+            petPictureUrl: petPictureUrl,
+            gender: gender,
+            petBreed: petBreed,
+            dateOfBirth: dateOfBirth,
+            certificateUrl: certificateUrl,
+            whatsappNumber: whatsappNumber,
+            petDescription: petDecription,
+            status: status,
+            adopterId: adopterId,
+            adopterName: adopterName
+            );
 
   Map<String, dynamic> toDocument() {
     return {
@@ -40,8 +46,11 @@ class AdoptModel extends AdoptEntity {
       "pet_breed": petBreed,
       "date_of_birth": dateOfBirth,
       "certificate_url": certificateUrl,
-      "pet_decription":petDescription,
+      "pet_decription": petDescription,
       "whatsapp_number": whatsappNumber,
+      "status": status,
+      "adopter_id": adopterId,
+      "adopter_name":adopterName,
     };
   }
 
@@ -58,6 +67,9 @@ class AdoptModel extends AdoptEntity {
       certificateUrl: documentSnapshot.get("certificate_url"),
       petDecription: documentSnapshot.get("pet_decription"),
       whatsappNumber: documentSnapshot.get("whatsapp_number"),
+      status: documentSnapshot.get('status'),
+      adopterId: documentSnapshot.get('adopter_id'),
+      adopterName: documentSnapshot.get('adopter_name'),
     );
   }
 
@@ -73,6 +85,9 @@ class AdoptModel extends AdoptEntity {
         dateOfBirth,
         certificateUrl,
         whatsappNumber,
-        petDescription
+        petDescription,
+        status,
+        adopterId,
+        adopterName,
       ];
 }
