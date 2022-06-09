@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,6 +29,8 @@ abstract class UserDataSource {
   Future<void> deleteUser(UserEntity user);
   Future<void> saveUserIdToLocal(String userId);
   Future<void> removeUserIdLocal();
+  Future<void> saveDataToLocal(UserEntity userEntity);
+  Future<UserEntity> getUserDataLocal();
 }
 
 class UserDataSourceImpl implements UserDataSource {
@@ -74,7 +77,6 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Future<void> signOut() async {
-    
     final statusGoogle = await GoogleSignIn().isSignedIn();
     if (statusGoogle) {
       await GoogleSignIn().signOut();
@@ -98,7 +100,18 @@ class UserDataSourceImpl implements UserDataSource {
   Future<void> saveUserData(UserEntity user) async {
     final userCollectionRef = firebaseFirestore.collection("users");
     final uid = firebaseAuth.currentUser?.uid;
-    userCollectionRef.doc(uid).get().then((value) {
+    final notifCollection = firebaseFirestore.collection('notifications');
+
+    Map<String, dynamic> notif = {};
+    notif['all_notif'] = [];
+    notif['notif_id'] = uid;
+    await notifCollection.doc(uid).get().then((value) {
+      if (!value.exists) {
+        print('ada');
+        notifCollection.doc(uid).set(notif);
+      }
+    });
+    await userCollectionRef.doc(uid).get().then((value) {
       final newUser = UserModel(
               uid: uid,
               email: user.email,
@@ -140,9 +153,12 @@ class UserDataSourceImpl implements UserDataSource {
       userMap['email'] = user.email;
       await firebaseAuth.currentUser?.updateEmail(user.email ?? '');
     }
-    
+
     if (user.name != null) userMap['name'] = user.name;
     userCollectionRef.doc(user.uid).update(userMap);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await updateLocalUserData(user);
   }
 
   @override
@@ -171,6 +187,15 @@ class UserDataSourceImpl implements UserDataSource {
 
     if (user != null) {
       final userCollectionRef = firebaseFirestore.collection("users");
+      final notifCollection = firebaseFirestore.collection("notifications");
+      Map<String, dynamic> notif = {};
+      notif['all_notif'] = [];
+      notif['notif_id'] = user.uid;
+      notifCollection.doc(user.uid).get().then((value) {
+        if (!value.exists) {
+          notifCollection.doc(user.uid).set(notif);
+        }
+      });
       userCollectionRef.doc(user.uid).get().then((value) {
         final newUser = UserModel(
                 uid: user.uid,
@@ -229,6 +254,52 @@ class UserDataSourceImpl implements UserDataSource {
   Future<void> removeUserIdLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('userId');
+    await prefs.remove('userData');
     return;
+  }
+
+  @override
+  Future<void> saveDataToLocal(UserEntity userEntity) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('userData')) {
+      return;
+    }
+    String user = jsonEncode(UserModel(
+            name: userEntity.name,
+            email: userEntity.email,
+            imgUrl: userEntity.imageUrl,
+            uid: userEntity.uid)
+        .toJson());
+    await prefs.setString('userData', user);
+
+    return;
+  }
+
+  @override
+  Future<UserEntity> getUserDataLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? user = prefs.getString('userData');
+    if (user != null) {
+      Map<String, dynamic> jsonString = json.decode(user);
+      UserEntity userEntity = UserModel.fromJson(jsonString);
+      return userEntity;
+    }
+    return const UserEntity(name: '', email: '');
+  }
+
+  Future<void> updateLocalUserData(UserEntity user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonUser = prefs.getString('userData');
+    Map<String, dynamic> userMap = json.decode(jsonUser!);
+    if (user.imageUrl != null && user.imageUrl != '') {
+      userMap['img_url'] = user.imageUrl;
+    }
+    if (user.email != null) {
+      userMap['email'] = user.email;
+      await firebaseAuth.currentUser?.updateEmail(user.email ?? '');
+    }
+    if (user.name != null) userMap['name'] = user.name;
+    await prefs.remove('userData');
+    await prefs.setString('userData', jsonEncode(userMap));
   }
 }

@@ -25,4 +25,8 @@ class SuccessGetData extends UserDbState {
   List<Object> get props => [user];
 }
 
+
+
 class SuccessDeleteUser extends UserDbState {}
+
+

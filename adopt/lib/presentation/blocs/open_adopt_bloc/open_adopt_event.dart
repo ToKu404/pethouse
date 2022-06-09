@@ -12,8 +12,20 @@ class SubmitOpenAdopt extends OpenAdoptEvent {
   final AdoptEntity adoptEntity;
 
   const SubmitOpenAdopt({required this.adoptEntity});
+
+    @override
+  List<Object> get props => [adoptEntity];
 }
 
 class UploadPetPhoto extends OpenAdoptEvent {}
 
 class UploadPetCertificate extends OpenAdoptEvent {}
+
+class RemoveOpenAdoptEvent extends OpenAdoptEvent {
+  final String adoptId;
+
+  const RemoveOpenAdoptEvent({required this.adoptId});
+
+    @override
+  List<Object> get props => [adoptId];
+}

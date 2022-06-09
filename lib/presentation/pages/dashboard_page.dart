@@ -2,9 +2,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
-import 'package:pethouse/presentation/widgets/adopt_banner_card.dart';
-import 'package:pethouse/presentation/widgets/card_petrivia.dart';
-import 'package:pethouse/presentation/widgets/dashboard_pet_card.dart';
+import '../widgets/adopt_banner_card.dart';
+import '../widgets/card_petrivia.dart';
+import '../widgets/dashboard_pet_card.dart';
 import 'package:core/core.dart';
 
 class DashboardPage extends StatelessWidget {

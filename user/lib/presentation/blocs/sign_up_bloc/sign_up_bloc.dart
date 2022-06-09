@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user/domain/usecases/auth_usecases/save_username_local_usecase.dart';
 
 import '../../../domain/entities/user_entity.dart';
 import '../../../domain/usecases/auth_usecases/sign_up_usecase.dart';
@@ -14,11 +15,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpValidate> {
   final SignUpUsecase signUpUsecase;
   final SaveUserData saveUserData;
   final VerifyEmailUsecase verifyEmailUsecase;
-  SignUpBloc(
-      {required this.signUpUsecase,
-      required this.saveUserData,
-      required this.verifyEmailUsecase})
-      : super(
+  SignUpBloc({
+    required this.signUpUsecase,
+    required this.saveUserData,
+    required this.verifyEmailUsecase,
+  }) : super(
           const SignUpValidate(
             email: 'sample@gmail.com',
             password: '',

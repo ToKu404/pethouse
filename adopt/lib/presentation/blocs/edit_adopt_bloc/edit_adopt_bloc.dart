@@ -100,6 +100,7 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
             petPictureUrl: petPhotoUrl,
             certificateUrl: petCertificateUrl,
             adoptId: event.adoptEntityOld.adoptId,
+            status: event.adoptEntityOld.status
           );
 
           await updateAdoptUsecase.execute(adoptEntity);

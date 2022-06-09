@@ -6,13 +6,10 @@ import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth_cubit/auth_cubit.dart';
 import '../../blocs/user_db_bloc/user_db_bloc.dart';
 import '../../widgets/gradient_button.dart';
-import '../auth_pages/login_page.dart';
-import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  final String userId;
-  const ProfilePage({Key? key, required this.userId}) : super(key: key);
-
+  final UserEntity userEntity;
+  const ProfilePage({Key? key, required this.userEntity}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -20,47 +17,25 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<UserDbBloc>(context).add(GetUserFromDb(widget.userId));
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<AuthCubit, AuthState>(
-            listener: (context, state) {
-              if (state is UnAuthenticated) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    LOGIN_ROUTE_NAME, (route) => false);
-              }
-            },
-          ),
-          BlocListener<UserDbBloc, UserDbState>(
-            listener: (context, state) {
-              if (state is SuccessDeleteUser) {
-                context.read<AuthCubit>().loggedOut();
-              }
-            },
-          ),
-        ],
-        child: BlocBuilder<UserDbBloc, UserDbState>(
-          builder: (context, state) {
-            if (state is UserDbLoading) {
-              return const Expanded(
-                  child: Center(child: CircularProgressIndicator()));
-            } else if (state is SuccessGetData) {
-              return Expanded(child: _BuildProfile(user: state.user));
-            } else if (state is UserDbFailure) {
-              return Expanded(child: Center(child: Text(state.message)));
-            } else {
-              return Container();
+      child: MultiBlocListener(listeners: [
+        BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is UnAuthenticated) {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(LOGIN_ROUTE_NAME, (route) => false);
             }
           },
         ),
-      ),
+        BlocListener<UserDbBloc, UserDbState>(
+          listener: (context, state) {
+            if (state is SuccessDeleteUser) {
+              context.read<AuthCubit>().loggedOut();
+            }
+          },
+        ),
+      ], child: _BuildProfile(user: widget.userEntity)),
     );
   }
 }
@@ -130,6 +105,9 @@ class _BuildProfile extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
+            const SizedBox(
+              height: 20,
+            ),
             GradientButton(
               height: 34,
               width: 200,
@@ -143,6 +121,16 @@ class _BuildProfile extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
+            CardProfile(
+                title: 'Activity Status',
+                trailingAction: const Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  size: 16,
+                ),
+                leadingAction: const Icon(Icons.timelapse, color: kDarkBrown),
+                onTap: () {
+                  Navigator.pushNamed(context, ACTIVITY_STATUS_ROUT_NAME);
+                }),
             CardProfile(
                 title: 'Account',
                 trailingAction: const Icon(

@@ -28,3 +28,4 @@ class PetDescriptionLoaded extends DetailAdoptState {
   List<Object> get props => [adoptEntity, isOwner];
 }
 
+class SuccessRequestAdopt extends DetailAdoptState {}

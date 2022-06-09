@@ -3,8 +3,11 @@ import 'package:adopt/data/repositories/adopt_repository_impl.dart';
 import 'package:adopt/domain/repositories/adopt_repository.dart';
 import 'package:adopt/domain/usecases/create_new_adopt_usecase.dart';
 import 'package:adopt/domain/usecases/get_all_pet_list_usecase.dart';
+import 'package:adopt/domain/usecases/get_open_adopt_list_usecase.dart';
 import 'package:adopt/domain/usecases/get_pet_description_usecase.dart';
 import 'package:adopt/domain/usecases/get_user_id_local_usecase.dart';
+import 'package:adopt/domain/usecases/remove_open_adopt_usecase.dart';
+import 'package:adopt/domain/usecases/request_adopt_usecase.dart';
 import 'package:adopt/domain/usecases/update_adopt_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_adopt_photo_usecase.dart';
 import 'package:adopt/domain/usecases/upload_pet_certificate_usecase.dart';
@@ -12,10 +15,17 @@ import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dar
 import 'package:adopt/presentation/blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
+import 'package:adopt/presentation/blocs/open_adopt_status_bloc/open_adopt_status_bloc.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:notification/data/data_sources/notification_data_source.dart';
+import 'package:notification/domain/repositories/notification_repository.dart';
+import 'package:notification/domain/usecases/get_list_notification_usecase.dart';
+import 'package:notification/domain/usecases/send_adopt_notif_usecase.dart';
+import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:pet/data/data_sources/pet_firebase_data_source.dart';
 import 'package:pet/data/repositories/pet_firebase_repository_impl.dart';
 import 'package:pet/domain/repositories/pet_firebase_repository.dart';
@@ -35,11 +45,13 @@ import 'package:user/data/data_sources/user_data_source.dart';
 import 'package:user/data/repositories/user_repository_impl.dart';
 import 'package:user/domain/repositories/user_repository.dart';
 import 'package:user/domain/usecases/auth_usecases/delete_user_usecase.dart';
+import 'package:user/domain/usecases/auth_usecases/get_user_data_local_usecase.dart';
 import 'package:user/domain/usecases/auth_usecases/get_user_id_usecase.dart';
 import 'package:user/domain/usecases/auth_usecases/is_sign_in_usecase.dart';
 import 'package:user/domain/usecases/auth_usecases/remove_user_id_local_usecase.dart';
 import 'package:user/domain/usecases/auth_usecases/reset_password_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/save_user_id_local_usecase.dart';
+import 'package:user/domain/usecases/auth_usecases/save_user_data_local_usecase.dart';
+import 'package:user/domain/usecases/auth_usecases/save_username_local_usecase.dart';
 import 'package:user/domain/usecases/auth_usecases/sign_in_usecase.dart';
 import 'package:user/domain/usecases/auth_usecases/sign_in_with_google_usecase.dart';
 import 'package:user/domain/usecases/auth_usecases/sign_out_usecase.dart';
@@ -55,9 +67,12 @@ import 'package:user/presentation/blocs/reset_password_bloc/reset_password_bloc.
 import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:user/presentation/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
+import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
+
 import 'package:user/presentation/blocs/user_profile_bloc/user_profile_bloc.dart';
 import 'package:schedule/activity/data/repositories/medical_firebase_repository_impl.dart';
 import 'package:schedule/activity/data/data_sources/medical_firebase_data_source.dart';
+import 'package:notification/data/repositories/notification_repository_impl.dart';
 
 final locator = GetIt.instance;
 
@@ -73,6 +88,8 @@ void init() {
       () => PetFirebaseRepositoryImpl(petFirebaseDataSource: locator()));
   locator.registerLazySingleton<AdoptRepository>(
       () => AdoptRepositoryImpl(adoptDataSource: locator()));
+  locator.registerLazySingleton<NotificationRepository>(
+      () => NotificationRepositoryImpl(notificationDataSource: locator()));
 
   // datasource
   locator.registerLazySingleton<UserDataSource>(() => UserDataSourceImpl(
@@ -91,6 +108,8 @@ void init() {
         firebaseStorage: locator(),
         firebaseAuth: locator(),
       ));
+  locator.registerLazySingleton<NotificationDataSource>(
+      () => NotificationDataSourceImpl(firebaseFirestore: locator()));
 
   // usecases
   locator.registerLazySingleton(
@@ -147,6 +166,15 @@ void init() {
       () => GetUserIdLocalUsecase(adoptRepository: locator()));
   locator.registerLazySingleton(
       () => UpdateAdoptUsecase(adoptRepository: locator()));
+  locator.registerLazySingleton(
+      () => GetListNotificationUsecase(notificationRepository: locator()));
+  locator.registerLazySingleton(() => GetOpenAdoptListUsecase(locator()));
+  locator.registerLazySingleton(() => SaveDataLocalUsecase(locator()));
+  locator.registerLazySingleton(() => GetUserDataLocalUsecase(locator()));
+  locator.registerLazySingleton(() => RequestAdoptUsecase(locator()));
+  locator.registerLazySingleton(() => RemoveOpenAdoptUsecase(locator()));
+
+  locator.registerLazySingleton(() => SendAdoptNotifUsecase(locator()));
 
   // bloc & cubit
   locator.registerFactory(
@@ -163,8 +191,10 @@ void init() {
       signOutUsecase: locator(),
       removeUserIdLocalUsecase: locator(),
       saveUserIdLocal: locator()));
-  locator.registerFactory(
-      () => UserDbBloc(getUserFromDb: locator(), deleteUserUsecase: locator()));
+  locator.registerFactory(() => UserDbBloc(
+      getUserFromDb: locator(),
+      deleteUserUsecase: locator(),
+      saveUserDataLocalUsecase: locator()));
   locator.registerFactory(() => UserProfileBloc(
       uploadImageUsecase: locator(),
       updateUserDataUsecase: locator(),
@@ -172,26 +202,33 @@ void init() {
 
   locator.registerFactory(() => MedicalBloc(addMedicalUsecase: locator()));
   locator.registerFactory(() => TaskBloc(addTaskUsecase: locator()));
+
   locator.registerFactory(() => AddPetBloc(
         addPetUsecase: locator(),
         addPhotoUsecase: locator(),
         addCertificateUsecase: locator(),
       ));
   locator.registerFactory(() => OpenAdoptBloc(
-        createNewAdoptUsecase: locator(),
-        uploadPetPhoto: locator(),
-        uploadPetCertificateUsecase: locator(),
-      ));
+      createNewAdoptUsecase: locator(),
+      uploadPetPhoto: locator(),
+      uploadPetCertificateUsecase: locator(),
+      removeOpenAdoptUsecase: locator()));
 
   locator.registerFactory(() => DetailAdoptBloc(
         getPetDescriptionUsecase: locator(),
         getUserIdLocalUsecase: locator(),
+        requestAdoptUsecase: locator(),
       ));
   locator.registerFactory(() => ListAdoptBloc(getAllPetListUsecase: locator()));
   locator.registerFactory(() => EditAdoptBloc(
       updateAdoptUsecase: locator(),
       uploadPetCertificateUsecase: locator(),
       uploadPetPhoto: locator()));
+  locator.registerFactory(
+      () => NotificationBloc(getListNotificationUsecase: locator()));
+  locator
+      .registerFactory(() => OpenAdoptStatusBloc(getOpenAdoptList: locator()));
+  locator.registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
 
   //external
   final auth = FirebaseAuth.instance;

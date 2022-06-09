@@ -104,6 +104,7 @@ class _FormEditProfile extends StatelessWidget {
                             .read<UserProfileBloc>()
                             .add(SubmitUpdate(state.user.uid ?? 'uid'));
                         Future.delayed(const Duration(seconds: 1), () {
+                       
                           Navigator.pop(context);
                         });
                       },

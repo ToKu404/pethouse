@@ -1,7 +1,8 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pethouse/presentation/widgets/gredient_button.dart';
-import 'package:core/core.dart';
+
+import 'gredient_button.dart';
 
 class RemovePetConfirmation extends StatelessWidget {
   const RemovePetConfirmation({Key? key}) : super(key: key);

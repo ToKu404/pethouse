@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
 import 'package:user/presentation/pages/auth_pages/register_page.dart';
 import 'package:user/presentation/pages/auth_pages/reset_password_page.dart';
 

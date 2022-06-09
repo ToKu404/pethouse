@@ -1,4 +1,5 @@
 // ignore: depend_on_referenced_packages
+import 'package:adopt/domain/usecases/remove_open_adopt_usecase.dart';
 import 'package:path/path.dart';
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:adopt/domain/usecases/create_new_adopt_usecase.dart';
@@ -16,10 +17,12 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
   final CreateNewAdoptUsecase createNewAdoptUsecase;
   final UploadPetAdoptPhotoUsecase uploadPetPhoto;
   final UploadPetCertificateUsecase uploadPetCertificateUsecase;
+  final RemoveOpenAdoptUsecase removeOpenAdoptUsecase;
   OpenAdoptBloc(
       {required this.createNewAdoptUsecase,
       required this.uploadPetPhoto,
-      required this.uploadPetCertificateUsecase})
+      required this.uploadPetCertificateUsecase,
+      required this.removeOpenAdoptUsecase})
       : super(OpenAdoptInitial()) {
     on<OpenAdoptInit>(
       (event, emit) {
@@ -38,20 +41,22 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
         String petCertificateUrl = "";
         if (event.adoptEntity.certificateUrl != null &&
             event.adoptEntity.certificateUrl != '') {
-          petCertificateUrl = await uploadPetCertificateUsecase
-              .execute(event.adoptEntity.certificateUrl!, '');
+          petCertificateUrl = await uploadPetCertificateUsecase.execute(
+              event.adoptEntity.certificateUrl!, '');
         }
         AdoptEntity adoptEntity = AdoptEntity(
-          petName: event.adoptEntity.petName,
-          petType: event.adoptEntity.petType,
-          gender: event.adoptEntity.gender,
-          dateOfBirth: event.adoptEntity.dateOfBirth,
-          petDescription: event.adoptEntity.petDescription,
-          whatsappNumber: event.adoptEntity.whatsappNumber,
-          petBreed: event.adoptEntity.petBreed,
-          petPictureUrl: petPhotoUrl,
-          certificateUrl: petCertificateUrl,
-        );
+            petName: event.adoptEntity.petName,
+            petType: event.adoptEntity.petType,
+            gender: event.adoptEntity.gender,
+            dateOfBirth: event.adoptEntity.dateOfBirth,
+            petDescription: event.adoptEntity.petDescription,
+            whatsappNumber: event.adoptEntity.whatsappNumber,
+            petBreed: event.adoptEntity.petBreed,
+            petPictureUrl: petPhotoUrl,
+            certificateUrl: petCertificateUrl,
+            status: event.adoptEntity.status,
+            adopterId: null,
+            adopterName: null);
 
         await createNewAdoptUsecase.execute(adoptEntity);
         emit(OpenAdoptSuccess());
@@ -99,6 +104,12 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
         } else {
           emit(OpenAdoptError(message: 'failed upload pet certificate'));
         }
+      },
+    );
+    on<RemoveOpenAdoptEvent>(
+      (event, emit) async {
+        await removeOpenAdoptUsecase.execute(event.adoptId);
+        emit(RemoveAdoptSuccess());
       },
     );
   }

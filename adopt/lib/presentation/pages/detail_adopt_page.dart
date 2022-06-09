@@ -1,12 +1,15 @@
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
+import 'package:adopt/presentation/widgets/custom_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:core/presentation/widgets/gradient_button.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:notification/domain/entities/nofitication_entity.dart';
+import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailAdoptPage extends StatefulWidget {
@@ -54,8 +57,13 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
           shadowColor: kGrey,
         ),
         body: SafeArea(
-          child: BlocBuilder<DetailAdoptBloc, DetailAdoptState>(
-              builder: (context, state) {
+          child: BlocConsumer<DetailAdoptBloc, DetailAdoptState>(
+              listener: (context, state) {
+            if (state is SuccessRequestAdopt) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
+          }, builder: (context, state) {
             if (state is DetailAdoptLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -204,25 +212,87 @@ class DetailAdoptData extends StatelessWidget {
                       width: double.infinity,
                       child: Row(
                         children: [
-                          Container(
-                            width: 52,
-                            height: 52,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(width: 1, color: kOrange)),
-                            child: const Icon(
-                              Icons.whatsapp,
-                              color: kOrange,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: kPadding,
-                          ),
+                          (adoptEntity.whatsappNumber != null &&
+                                  adoptEntity.whatsappNumber != '')
+                              ? InkWell(
+                                  onTap: () async {
+                                    if (!await launchUrlString(
+                                      'https://wa.me/${adoptEntity.whatsappNumber!}',
+                                      mode: LaunchMode.externalApplication,
+                                    )) {
+                                      throw 'Could not launch ${adoptEntity.whatsappNumber!}';
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 52,
+                                    height: 52,
+                                    margin:
+                                        const EdgeInsets.only(right: kPadding),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            width: 1, color: kOrange)),
+                                    child: const Icon(
+                                      Icons.whatsapp,
+                                      color: kOrange,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                           Expanded(
                             child: GradientButton(
                               height: 52,
                               width: 100,
-                              onTap: () {},
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: kBorderRadius,
+                                        ),
+                                        elevation: 0,
+                                        backgroundColor: Colors.transparent,
+                                        child: CustomDialog(
+                                            desc:
+                                                'Adopt request sent to pet owner',
+                                            title: 'Success',
+                                            buttons: [
+                                              DialogButton(
+                                                  text: 'OK',
+                                                  func: () {
+                                                    final notif =
+                                                        NotificationEntity(
+                                                      title:
+                                                          'Request For Adopt',
+                                                      value:
+                                                          'some people want to adopt your pet',
+                                                      type: 'adopt',
+                                                      readStatus: false,
+                                                      sendTime:
+                                                          Timestamp.fromDate(
+                                                              DateTime.now()),
+                                                    );
+                                                    BlocProvider.of<
+                                                                DetailAdoptBloc>(
+                                                            context)
+                                                        .add(RequestAdopt(
+                                                            adoptEntity:
+                                                                adoptEntity));
+                                                    BlocProvider.of<
+                                                                SendNotifBloc>(
+                                                            context)
+                                                        .add(SendAdoptNotification(
+                                                            ownerId: adoptEntity
+                                                                .userId!,
+                                                            notificationEntity:
+                                                                notif));
+                                                  },
+                                                  type: 'submit'),
+                                            ]),
+                                      );
+                                    });
+                              },
                               text: 'Adopt Now',
                               isClicked: false,
                             ),
@@ -263,7 +333,10 @@ class DetailAdoptData extends StatelessWidget {
                             child: GradientButton(
                               height: 52,
                               width: 100,
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, ACTIVITY_STATUS_ROUT_NAME);
+                              },
                               text: 'Check Status',
                               isClicked: false,
                             ),

@@ -23,3 +23,12 @@ class GetPetDescription extends DetailAdoptEvent {
   @override
   List<Object> get props => [adoptEntity];
 }
+
+class RequestAdopt extends DetailAdoptEvent {
+  final AdoptEntity adoptEntity;
+
+  const RequestAdopt({required this.adoptEntity});
+
+  @override
+  List<Object> get props => [adoptEntity];
+}

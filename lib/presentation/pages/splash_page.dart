@@ -1,9 +1,9 @@
 import 'dart:async';
+
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:core/core.dart';
-import 'package:user/presentation/pages/auth_pages/login_page.dart';
 import 'package:user/presentation/blocs/auth_cubit/auth_cubit.dart';
 
 import 'main_page.dart';
