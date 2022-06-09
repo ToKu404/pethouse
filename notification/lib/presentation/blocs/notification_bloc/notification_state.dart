@@ -23,6 +23,8 @@ class NotificationSuccess extends NotificationState {
 
   NotificationSuccess({required this.listNotification});
 
-    @override
+  @override
   List<Object> get props => [listNotification];
 }
+
+

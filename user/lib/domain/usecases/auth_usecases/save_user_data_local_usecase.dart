@@ -5,7 +5,7 @@ class SaveUserIdLocal {
 
   const SaveUserIdLocal({required this.repository});
 
-  Future<void> execute(String userId) async{
+  Future<void> execute(String userId) async {
     repository.saveUserIdToLocal(userId);
   }
 }

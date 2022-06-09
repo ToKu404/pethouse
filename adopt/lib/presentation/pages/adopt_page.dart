@@ -95,50 +95,24 @@ class _AdoptPageState extends State<AdoptPage> {
                 fontSize: 18),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kPadding),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none),
-                      filled: true,
-                      prefixIcon: Icon(
-                        Icons.search_sharp,
-                        color: Colors.grey[400],
-                      ),
-                      hintStyle: TextStyle(
-                        color: Colors.grey[400],
-                      ),
-                      hintText: "Search for breed, race, or gender",
-                      fillColor: const Color(0xFFF6F6F6)),
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                    borderRadius: kBorderRadius,
-                    color: const Color(0xFFF6F6F6)),
-                child: MaterialButton(
-                  onPressed: () {},
-                  shape: RoundedRectangleBorder(
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: kPadding),
+          width: double.infinity,
+          child: TextField(
+            decoration: InputDecoration(
+                border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(
-                    FontAwesomeIcons.sliders,
-                    color: Colors.grey[400],
-                    size: 20,
-                  ),
+                    borderSide: BorderSide.none),
+                filled: true,
+                prefixIcon: Icon(
+                  Icons.search_sharp,
+                  color: Colors.grey[400],
                 ),
-              )
-            ],
+                hintStyle: TextStyle(
+                  color: Colors.grey[400],
+                ),
+                hintText: "Search for breed, race, or gender",
+                fillColor: const Color(0xFFF6F6F6)),
           ),
         ),
         const SizedBox(

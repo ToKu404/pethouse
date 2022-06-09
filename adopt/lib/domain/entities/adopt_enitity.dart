@@ -13,19 +13,26 @@ class AdoptEntity extends Equatable {
   final String? certificateUrl;
   final String? whatsappNumber;
   final String? petDescription;
+  final String? status;
+  final String? adopterId;
+  final String? adopterName;
 
-  const AdoptEntity(
-      {this.adoptId,
-      this.userId,
-      required this.petName,
-      required this.petType,
-      this.petPictureUrl,
-      required this.gender,
-      this.petBreed,
-      this.dateOfBirth,
-      this.certificateUrl,
-      this.whatsappNumber,
-      this.petDescription, });
+  const AdoptEntity({
+    this.adoptId,
+    this.userId,
+    required this.petName,
+    required this.petType,
+    this.petPictureUrl,
+    required this.gender,
+    this.petBreed,
+    this.dateOfBirth,
+    this.certificateUrl,
+    this.whatsappNumber,
+    this.petDescription,
+    required this.status,
+    this.adopterId,
+    this.adopterName,
+  });
 
   @override
   List<Object?> get props => [
@@ -39,7 +46,10 @@ class AdoptEntity extends Equatable {
         whatsappNumber,
         adoptId,
         userId,
-        petDescription
+        petDescription,
+        status,
+        adopterId,
+        adopterName,
       ];
 }
 

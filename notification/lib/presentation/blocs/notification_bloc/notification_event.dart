@@ -16,6 +16,5 @@ class GetListNotification extends NotificationEvent {
   List<Object> get props => [listNotification];
 }
 
-class FetchListNotification extends NotificationEvent {
+class FetchListNotification extends NotificationEvent {}
 
-}

@@ -1,7 +1,9 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
 import 'dashboard_page.dart';
 import 'schedule/schedule_page.dart';
 import 'package:core/core.dart';
@@ -25,17 +27,17 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<UserDbBloc>(context).add(GetUserFromDb(widget.userId));
+  }
+
   final PageStorageBucket bucket = PageStorageBucket();
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> screens = [
-      DashboardPage(),
-      const SchedulePage(),
-      ProfilePage(
-        userId: widget.userId,
-      ),
-    ];
     return Scaffold(
       appBar: AppBar(
           elevation: .7,
@@ -66,7 +68,28 @@ class _MainPageState extends State<MainPage> {
               ),
             )
           ]),
-      body: screens[currentTab],
+      body: BlocBuilder<UserDbBloc, UserDbState>(
+        builder: (context, state) {
+          if (state is UserDbLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is SuccessGetData) {
+            final List<Widget> screens = [
+              DashboardPage(),
+              const SchedulePage(),
+              ProfilePage(
+                userEntity: state.user,
+              ),
+            ];
+            return screens[currentTab];
+          } else {
+            return const Center(
+              child: Text('Error'),
+            );
+          }
+        },
+      ),
       bottomNavigationBar: ConvexAppBar(
         style: TabStyle.reactCircle,
         items: const [

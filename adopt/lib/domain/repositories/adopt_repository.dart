@@ -9,4 +9,10 @@ abstract class AdoptRepository {
   Stream<List<AdoptEntity>> getAllPetLists();
   Stream<AdoptEntity> getPetDescription(String petId);
   Future<void> updateAdopt(AdoptEntity adoptEntity);
+  Stream<List<AdoptEntity>> getOpenAdoptList(String userId);
+  Stream<List<AdoptEntity>> getRequestAdoptList(String userId);
+
+  Future<void> requestAdopt(AdoptEntity adopt);
+  Future<void> removeOpenAdopt(String adoptId);
+  
 }

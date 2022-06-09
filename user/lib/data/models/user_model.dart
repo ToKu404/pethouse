@@ -28,6 +28,18 @@ class UserModel extends UserEntity {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {"imgUrl": imageUrl, "uid": uid, "email": email, "name": name};
+  }
+
+  factory UserModel.fromJson(Map<String, dynamic> parsedJson) {
+    return UserModel(
+        imgUrl: parsedJson['imgUrl'] ?? '',
+        name: parsedJson['name'] ?? '',
+        uid: parsedJson['uid'] ?? '',
+        email: parsedJson['email'] ?? '');
+  }
+
   @override
   List<Object?> get props => [name, email, imageUrl, uid];
 }

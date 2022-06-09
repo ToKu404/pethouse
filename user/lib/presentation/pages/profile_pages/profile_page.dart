@@ -8,8 +8,8 @@ import '../../blocs/user_db_bloc/user_db_bloc.dart';
 import '../../widgets/gradient_button.dart';
 
 class ProfilePage extends StatefulWidget {
-  final String userId;
-  const ProfilePage({Key? key, required this.userId}) : super(key: key);
+  final UserEntity userEntity;
+  const ProfilePage({Key? key, required this.userEntity}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -17,46 +17,25 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<UserDbBloc>(context).add(GetUserFromDb(widget.userId));
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<AuthCubit, AuthState>(
-            listener: (context, state) {
-              if (state is UnAuthenticated) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    LOGIN_ROUTE_NAME, (route) => false);
-              }
-            },
-          ),
-          BlocListener<UserDbBloc, UserDbState>(
-            listener: (context, state) {
-              if (state is SuccessDeleteUser) {
-                context.read<AuthCubit>().loggedOut();
-              }
-            },
-          ),
-        ],
-        child: BlocBuilder<UserDbBloc, UserDbState>(
-          builder: (context, state) {
-            if (state is UserDbLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state is SuccessGetData) {
-              return _BuildProfile(user: state.user);
-            } else if (state is UserDbFailure) {
-              return Center(child: Text(state.message));
-            } else {
-              return Container();
+      child: MultiBlocListener(listeners: [
+        BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is UnAuthenticated) {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(LOGIN_ROUTE_NAME, (route) => false);
             }
           },
         ),
-      ),
+        BlocListener<UserDbBloc, UserDbState>(
+          listener: (context, state) {
+            if (state is SuccessDeleteUser) {
+              context.read<AuthCubit>().loggedOut();
+            }
+          },
+        ),
+      ], child: _BuildProfile(user: widget.userEntity)),
     );
   }
 }

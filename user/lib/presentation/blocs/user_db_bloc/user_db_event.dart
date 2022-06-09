@@ -25,6 +25,10 @@ class GetUserData extends UserDbEvent {
   List<Object> get props => [userEntity];
 }
 
+class GetUserFromLocal extends UserDbEvent {
+  
+}
+
 class DeleteUserData extends UserDbEvent {
   final UserEntity userEntity;
 
@@ -32,4 +36,12 @@ class DeleteUserData extends UserDbEvent {
 
   @override
   List<Object> get props => [userEntity];
+}
+
+class SaveUsernameLocal extends UserDbEvent {
+  final String username;
+  SaveUsernameLocal({required this.username});
+
+    @override
+  List<Object> get props => [username];
 }

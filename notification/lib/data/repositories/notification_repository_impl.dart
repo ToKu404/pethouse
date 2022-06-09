@@ -10,4 +10,11 @@ class NotificationRepositoryImpl implements NotificationRepository {
   Stream<List<NotificationEntity>> getAllNotification(String uid) {
     return notificationDataSource.getAllNotification(uid);
   }
+
+  @override
+  Future<void> sendAdoptNotif(
+      String idReceiver, NotificationEntity notificationEntity) {
+    return notificationDataSource.sendAdoptNotif(
+        idReceiver, notificationEntity);
+  }
 }

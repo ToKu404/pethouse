@@ -1,4 +1,5 @@
 import 'package:adopt/domain/entities/adopt_enitity.dart';
+import 'package:adopt/presentation/blocs/open_adopt_status_bloc/open_adopt_status_bloc.dart';
 import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
+import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
 import 'package:notification/presentation/pages/notification_page.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
@@ -23,6 +25,7 @@ import 'package:schedule/activity/presentation/blocs/addmedical_bloc/medical_blo
 import 'package:schedule/activity/presentation/blocs/addtask_bloc/task_bloc.dart';
 import 'package:schedule/activity/presentation/pages/activity/add_medical_activity.dart';
 import 'package:schedule/activity/presentation/pages/activity/add_new_task.dart';
+import 'package:user/domain/entities/user_entity.dart';
 import 'package:user/presentation/blocs/reset_password_bloc/reset_password_bloc.dart';
 import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:user/presentation/blocs/sign_up_bloc/sign_up_bloc.dart';
@@ -67,6 +70,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<ListAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<EditAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<NotificationBloc>()),
+          BlocProvider(create: (_) => di.locator<OpenAdoptStatusBloc>()),
+          BlocProvider(create: (_) => di.locator<SendNotifBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -95,10 +100,10 @@ class MyApp extends StatelessWidget {
                           userId: uid,
                         ));
               case PROFILE_ROUTE_NAME:
-                final uid = settings.arguments as String;
+                final userEntity = settings.arguments as UserEntity;
                 return MaterialPageRoute(
                     builder: (context) => ProfilePage(
-                          userId: uid,
+                          userEntity: userEntity,
                         ));
               case EDIT_PROFILE_ROUTE_NAME:
                 final uid = settings.arguments as String;

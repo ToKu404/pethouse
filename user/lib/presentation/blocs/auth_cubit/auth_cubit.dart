@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user/domain/usecases/auth_usecases/remove_user_id_local_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/save_user_id_local_usecase.dart';
+import 'package:user/domain/usecases/auth_usecases/save_user_data_local_usecase.dart';
 
 import '../../../domain/usecases/auth_usecases/get_user_id_usecase.dart';
 import '../../../domain/usecases/auth_usecases/is_sign_in_usecase.dart';
@@ -40,7 +40,9 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> loggedIn() async {
     final uid = await getUserIdUsecase.execute();
-    await saveUserIdLocal.execute(uid);
+    await saveUserIdLocal.execute(
+      uid,
+    );
     emit(Authenticated(uid: uid));
   }
 

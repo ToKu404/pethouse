@@ -1,3 +1,4 @@
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notification/domain/entities/nofitication_entity.dart';
@@ -9,8 +10,10 @@ part 'notification_state.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final GetListNotificationUsecase getListNotificationUsecase;
-  NotificationBloc({required this.getListNotificationUsecase})
-      : super(NotificationInitial()) {
+
+  NotificationBloc({
+    required this.getListNotificationUsecase,
+  }) : super(NotificationInitial()) {
     on<GetListNotification>((event, emit) {
       emit(NotificationSuccess(listNotification: event.listNotification));
     });
