@@ -2,27 +2,42 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class PetEntity extends Equatable {
-  final String? petId;
-  final String? imgUrl;
+  final String? id;
+  final String? userId;
+  final String? petName;
   final String? petType;
-  final String? name;
+  final String? petPictureUrl;
   final String? gender;
-  final DateTime? dateOfBirth;
-  final String? breed;
-  final String fileUrl;
-  final String description;
+  final String? petBreed;
+  final Timestamp? dateOfBirth;
+  final String? certificateUrl;
+  final String? petDescription;
 
-  PetEntity(
-      { this.petId,
-        required this.imgUrl,
-        required this.petType,
-        required this.name,
-        required this.gender,
-        required this.dateOfBirth,
-        required this.breed,
-        required this.fileUrl,
-        required this.description});
+  const PetEntity({
+    this.id,
+    this.userId,
+    required this.petName,
+    required this.petType,
+    this.petPictureUrl,
+    required this.gender,
+    this.petBreed,
+    this.dateOfBirth,
+    this.certificateUrl,
+    this.petDescription,
+  });
 
   @override
-  List<Object?> get props => [imgUrl, petType, name, gender, dateOfBirth, breed, fileUrl, description];
+  List<Object?> get props => [
+        petName,
+        petPictureUrl,
+        gender,
+        petType,
+        petBreed,
+        dateOfBirth,
+        certificateUrl,
+        id,
+        userId,
+        petDescription,
+      ];
 }
+enum Gender { male, female }

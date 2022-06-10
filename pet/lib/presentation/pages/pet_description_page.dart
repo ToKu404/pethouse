@@ -48,24 +48,25 @@ class PetDescriptionPage extends StatelessWidget {
                         child: Container(
                           width: 32,
                           height: 32,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Color(0x30000000)),
-                          child: Icon(
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: const Color(0x30000000)),
+                          child: const Icon(
                             FontAwesomeIcons.arrowLeft,
                             size: 24,
                             color: kWhite,
                           ),
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       InkWell(
                         onTap: () => {},
                         child: Container(
                           width: 32,
                           height: 32,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               shape: BoxShape.circle, color: Color(0x30000000)),
-                          child: Icon(
+                          child: const Icon(
                             Icons.more_vert,
                             size: 24,
                             color: kWhite,
@@ -93,7 +94,7 @@ class PetDescriptionPage extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.cake,
                                 color: kOrange,
                                 size: 18,
@@ -106,7 +107,7 @@ class PetDescriptionPage extends StatelessWidget {
                           )
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       InkWell(
                         onTap: () => {},
                         child: Container(
@@ -115,16 +116,16 @@ class PetDescriptionPage extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: kOrange,
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 color: kGreyTransparant,
-                                offset: Offset(0.0, 1.0), //(x,y)
+                                offset: const Offset(0.0, 1.0), //(x,y)
                                 blurRadius: 6.0,
                               )
                             ],
                           ),
-                          padding: EdgeInsets.all(3),
-                          child: Iconify(
+                          padding: const EdgeInsets.all(3),
+                          child: const Iconify(
                             Carbon.certificate,
                             color: kWhite,
                           ),
@@ -132,7 +133,7 @@ class PetDescriptionPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -152,51 +153,51 @@ class PetDescriptionPage extends StatelessWidget {
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
                     description,
                     style: kTextTheme.bodyText2,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 19,
                   ),
-                  CardMedicalHistory(),
-                  SizedBox(
+                  // const CardMedicalHistory(),
+                  const SizedBox(
                     height: 19,
                   ),
                   Text(
                     'Daily Summary',
                     style: kTextTheme.headline4,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 7 / 8,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: _dailySummary.length,
                     itemBuilder: (BuildContext context, int index) {
                       final ds = _dailySummary[index];
-                      return DailySummaryCard(
-                          dailySummary : ds);
+                      return DailySummaryCard(dailySummary: ds);
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 19,
                   ),
                   Text(
                     'Periodic Summary',
                     style: kTextTheme.headline4,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(
@@ -207,7 +208,7 @@ class PetDescriptionPage extends StatelessWidget {
                       child: Column(
                         children: [
                           CardPeriodicSummary(
-                              iconfy: Iconify(
+                              iconfy: const Iconify(
                                 Noto.shower,
                                 size: 36,
                               ),
@@ -215,7 +216,7 @@ class PetDescriptionPage extends StatelessWidget {
                               typePeriodic: 'Activity',
                               datePeriodic: '20 Agustus 2022'),
                           CardPeriodicWeight(
-                            iconfy: Iconify(
+                            iconfy: const Iconify(
                               Twemoji.man_lifting_weights,
                               size: 36,
                             ),
@@ -225,7 +226,7 @@ class PetDescriptionPage extends StatelessWidget {
                             weightValue: 4.3,
                           ),
                           CardPeriodicSummary(
-                              iconfy: Iconify(
+                              iconfy: const Iconify(
                                 Twemoji.drop_of_blood,
                                 size: 34,
                               ),
@@ -233,7 +234,7 @@ class PetDescriptionPage extends StatelessWidget {
                               typePeriodic: 'Measured',
                               datePeriodic: '18 Januari 2022'),
                           CardPeriodicSummary(
-                              iconfy: Iconify(
+                              iconfy: const Iconify(
                                 Noto.toothbrush,
                                 size: 34,
                               ),

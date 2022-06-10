@@ -42,7 +42,7 @@ class AdoptCard extends StatelessWidget {
                           color: kGrey,
                           padding: const EdgeInsets.all(20),
                           child: SvgPicture.asset(
-                            '${kPetTypeVector[adoptEntity.petType?.toLowerCase()]}',
+                            '${kPetTypeIcon[adoptEntity.petType?.toLowerCase()]}',
                             color: kGreyTransparant,
                             height: 80,
                           ),
@@ -59,7 +59,7 @@ class AdoptCard extends StatelessWidget {
                   height: 25,
                   child: Center(
                     child: SvgPicture.asset(
-                      '${kPetTypeVector[adoptEntity.petType?.toLowerCase()]}',
+                      '${kPetTypeIcon[adoptEntity.petType?.toLowerCase()]}',
                       color: kPrimaryColor,
                       width: 15,
                       height: 15,

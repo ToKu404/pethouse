@@ -19,12 +19,14 @@ import 'package:notification/presentation/blocs/notification_bloc/notification_b
 import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
 import 'package:notification/presentation/pages/notification_page.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
+import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
+import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
-import 'package:schedule/activity/presentation/blocs/addmedical_bloc/medical_bloc.dart';
-import 'package:schedule/activity/presentation/blocs/addtask_bloc/task_bloc.dart';
-import 'package:schedule/activity/presentation/pages/activity/add_medical_activity.dart';
-import 'package:schedule/activity/presentation/pages/activity/add_new_task.dart';
+import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
+import 'package:schedule/presentation/blocs/addtask_bloc/task_bloc.dart';
+import 'package:schedule/presentation/pages/add_medical_activity.dart';
+import 'package:schedule/presentation/pages/add_new_task.dart';
 import 'package:user/domain/entities/user_entity.dart';
 import 'package:user/presentation/blocs/reset_password_bloc/reset_password_bloc.dart';
 import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
@@ -72,6 +74,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<NotificationBloc>()),
           BlocProvider(create: (_) => di.locator<OpenAdoptStatusBloc>()),
           BlocProvider(create: (_) => di.locator<SendNotifBloc>()),
+          BlocProvider(create: (_) => di.locator<GetPetBloc>()),
+          BlocProvider(create: (_) => di.locator<GetSchedulePetBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -156,8 +160,8 @@ class MyApp extends StatelessWidget {
                 return MaterialPageRoute(
                     builder: (context) => const AddNewTaskActivity());
 
-              case AddPet.ROUTE_NAME:
-                return MaterialPageRoute(builder: (context) => AddPet());
+              case ADD_PET_ROUTE_NAME:
+                return MaterialPageRoute(builder: (context) => AddPetPage());
             }
           },
         ));
