@@ -4,11 +4,13 @@ import 'package:schedule/domain/entities/task_entity.dart';
 class TaskModel extends TaskEntity {
   final String? petId;
   final String? activity;
+  final String? date;
   final Timestamp? startTime;
   final Timestamp? endTime;
   final String repeat;
   final String description;
   final String status;
+  final String id;
 
   TaskModel({
     this.petId,
@@ -16,16 +18,21 @@ class TaskModel extends TaskEntity {
     required this.startTime,
     required this.endTime,
     required this.repeat,
+    required this.date,
     required this.description,
     required this.status,
+    required this.id,
   }) : super(
-            activity: activity,
-            startTime: startTime,
-            endTime: endTime,
-            repeat: repeat,
-            description: description,
-            petId: petId,
-            status: status);
+          activity: activity,
+          startTime: startTime,
+          endTime: endTime,
+          repeat: repeat,
+          date: date,
+          description: description,
+          petId: petId,
+          status: status,
+          id: id,
+        );
 
   Map<String, dynamic> toJson() {
     return {
@@ -35,7 +42,22 @@ class TaskModel extends TaskEntity {
       'repeat': repeat,
       'description': description,
       'pet_id': petId,
-      'status': status
+      'status': status,
+      'date': date,
+      'id': id,
     };
+  }
+
+  factory TaskModel.fromSnapshot(DocumentSnapshot documentSnapshot) {
+    return TaskModel(
+        activity: documentSnapshot.get('activity'),
+        startTime: documentSnapshot.get('start_time'),
+        endTime: documentSnapshot.get('end_time'),
+        repeat: documentSnapshot.get('repeat'),
+        description: documentSnapshot.get('description'),
+        petId: documentSnapshot.get('pet_id'),
+        status: documentSnapshot.get('status'),
+        date: documentSnapshot.get('date'),
+        id: documentSnapshot.get('id'));
   }
 }

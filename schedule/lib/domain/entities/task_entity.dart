@@ -9,18 +9,22 @@ class TaskEntity extends Equatable {
   final String repeat;
   final String description;
   final String status;
+  final String? date;
+  final String? id;
 
-  TaskEntity({
-    this.petId,
-    required this.activity,
-    required this.startTime,
-    required this.endTime,
-    required this.repeat,
-    required this.description,
-    required this.status
-  });
+  TaskEntity(
+      {this.petId,
+      required this.activity,
+      required this.startTime,
+      required this.endTime,
+      required this.repeat,
+      required this.description,
+      required this.status,
+      required this.date,
+      this.id,
+      });
 
   @override
   List<Object?> get props =>
-      [petId, activity, repeat, description, startTime, endTime, status];
+      [petId, activity, repeat, description, startTime, endTime, status, date, id];
 }

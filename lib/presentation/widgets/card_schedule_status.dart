@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class CardScheduleStatus extends StatelessWidget {
-  const CardScheduleStatus({Key? key}) : super(key: key);
+  final int taskFinish;
+  final int taskAll;
+  const CardScheduleStatus(
+      {Key? key, required this.taskFinish, required this.taskAll})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,7 @@ class CardScheduleStatus extends StatelessWidget {
                   ),
                   RichText(
                     text: TextSpan(
-                        text: '4/6',
+                        text: '${taskFinish}/${taskAll}',
                         style: kTextTheme.headline3,
                         children: [
                           const TextSpan(
@@ -63,14 +67,15 @@ class CardScheduleStatus extends StatelessWidget {
               radius: 60.0,
               lineWidth: 10.0,
               circularStrokeCap: CircularStrokeCap.round,
-              percent: 0.62,
+              percent: (taskFinish.toDouble() / taskAll.toDouble()),
               progressColor: kSecondaryColor,
               backgroundColor: kGrey,
               center: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "62%",
+                    // "${(taskFinish.toDouble() / taskAll.toDouble()) * 100}%",
+                    "50%",
                     style: kTextTheme.headline5,
                   ),
                   Text(

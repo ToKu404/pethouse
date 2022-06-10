@@ -26,6 +26,7 @@ import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
 import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
 import 'package:schedule/presentation/blocs/addtask_bloc/task_bloc.dart';
+import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
 import 'package:schedule/presentation/pages/add_medical_activity.dart';
 import 'package:schedule/presentation/pages/add_new_task.dart';
 import 'package:user/domain/entities/user_entity.dart';
@@ -77,6 +78,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<SendNotifBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetBloc>()),
           BlocProvider(create: (_) => di.locator<GetSchedulePetBloc>()),
+          BlocProvider(create: (_) => di.locator<GetTodayTaskBloc>()),
+
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

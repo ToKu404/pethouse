@@ -27,7 +27,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController _endTimeController = TextEditingController();
   Timestamp? _taskDate;
   TimeOfDay _startTime = TimeOfDay.now();
-  TimeOfDay _endTime = TimeOfDay.now();
+  TimeOfDay? _endTime;
   String? _taskType;
   String _taskRepeat = 'No Repeat';
 
@@ -41,17 +41,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   void _submitAddNewTask() {
-    final DateTime date = _taskDate!.toDate();
+    final date = _taskDate!.toDate();
     TaskEntity taskEntity = TaskEntity(
       activity: _taskType,
       startTime: Timestamp.fromDate(DateTime(
           date.year, date.month, date.day, _startTime.hour, _startTime.minute)),
-      endTime: Timestamp.fromDate(DateTime(
-          date.year, date.month, date.day, _endTime.hour, _endTime.minute)),
+      endTime: _endTime != null
+          ? Timestamp.fromDate(DateTime(date.year, date.month, date.day,
+              _endTime!.hour, _endTime!.minute))
+          : null,
       repeat: _taskRepeat,
       description: _descriptionController.text,
       status: 'wating',
       petId: widget.petEntity.id,
+      date: DateFormat("yyyy-MM-dd").format(date),
     );
     context.read<TaskBloc>().add(CreateTask(taskEntity: taskEntity));
   }
@@ -271,7 +274,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             onTap: () {
               showTimePicker(
                 context: context,
-                initialTime: _endTime,
+                initialTime: TimeOfDay.now(),
                 initialEntryMode: TimePickerEntryMode.dial,
               ).then((pickTime) {
                 setState(() {

@@ -1,9 +1,11 @@
+import 'package:intl/intl.dart';
 import 'package:schedule/domain/entities/task_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:schedule/data/models/task_model.dart';
 
 abstract class TaskFirebaseDataSource {
   Future<void> addTask(TaskEntity taskEntity);
+  Stream<List<TaskEntity>> getTodayTask(String petId);
 }
 
 class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
@@ -14,24 +16,41 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
   @override
   Future<void> addTask(TaskEntity taskEntity) async {
     // TODO: implement addPet
-    final collectionRef = taskFireStore.collection('task');
-    final petId = collectionRef.doc().id;
+    final collectionRef = taskFireStore.collection('tasks');
+    final taskId = collectionRef.doc().id;
 
     //mengubah menjadi JSON
-    collectionRef.doc(petId).get().then((value) {
+    collectionRef.doc(taskId).get().then((value) {
       final newTask = TaskModel(
-              petId: petId,
+              id: taskId,
+              petId: taskEntity.petId,
               activity: taskEntity.activity,
               startTime: taskEntity.startTime,
               endTime: taskEntity.endTime,
               description: taskEntity.description,
               repeat: taskEntity.repeat,
-              status: taskEntity.status)
+              status: taskEntity.status,
+              date: taskEntity.date)
           .toJson();
       if (!value.exists) {
-        collectionRef.doc(petId).set(newTask);
+        collectionRef.doc(taskId).set(newTask);
       }
       return;
+    });
+  }
+
+  @override
+  Stream<List<TaskEntity>> getTodayTask(String petId) {
+    final taskCollection = taskFireStore
+        .collection('tasks')
+        .where('pet_id', isEqualTo: petId)
+        .where('date',
+            isEqualTo: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+
+    return taskCollection.snapshots().map((querySnapshot) {
+      return querySnapshot.docs
+          .map((docSnap) => TaskModel.fromSnapshot(docSnap))
+          .toList();
     });
   }
 }
