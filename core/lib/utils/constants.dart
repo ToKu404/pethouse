@@ -101,7 +101,7 @@ const String kEditAdoptTitle = 'Edit Open Adopt';
 
 const String kOpenAdoptAddPicture = 'Add Picture';
 
-const Map<String, String> kPetTypeVector = {
+const Map<String, String> kPetTypeIcon = {
   'fish': 'assets/icons/fish_icon_outline.svg',
   'cat': 'assets/icons/cat_icon_outline.svg',
   'bird': 'assets/icons/bird_icon_outline.svg',
@@ -109,4 +109,10 @@ const Map<String, String> kPetTypeVector = {
   'rabbit': 'assets/icons/rabbit_icon_outline.svg',
   'hamster': 'assets/icons/hamster_icon_outline.svg',
   'other': 'assets/icons/other_icon_outline.svg',
+};
+
+const Map<String, String> kPetTypeVector = {
+  'fish': 'assets/vectors/fish_vector.svg',
+  'cat': 'assets/vectors/cat_vector.svg',
+  'dog': 'assets/vectors/dog_vector.svg',
 };

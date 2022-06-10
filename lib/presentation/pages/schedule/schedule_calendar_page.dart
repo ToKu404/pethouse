@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:schedule/activity/presentation/pages/activity/add_medical_activity.dart';
-import 'package:schedule/activity/presentation/pages/activity/add_new_task.dart';
+import 'package:schedule/presentation/pages/add_medical_activity.dart';
+import 'package:schedule/presentation/pages/add_new_task.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 

@@ -10,32 +10,30 @@ abstract class AddPetState extends Equatable {
 class AddPetInitial extends AddPetState {}
 
 class AddPetLoading extends AddPetState {}
-
 class AddPetError extends AddPetState {
   final String message;
-  AddPetError(this.message);
+
+  AddPetError({required this.message});
 
   @override
   List<Object> get props => [message];
 }
 
-class AddPetSucces extends AddPetState {}
+class AddPetSuccess extends AddPetState {}
 
-class UpPhotoSucces extends AddPetState {
-  final String imgUrl;
+class AddPetPhotoSuccess extends AddPetState {
+  final String petPhotoPath;
+  AddPetPhotoSuccess({required this.petPhotoPath});
 
-  UpPhotoSucces(this.imgUrl);
   @override
-  List<Object> get props => [imgUrl];
+  List<Object> get props => [petPhotoPath];
 }
 
-class UpCertificateSucces extends AddPetState {
-  final String ctfUrl;
+class AddPetCertificateSuccess extends AddPetState {
+  final String petCertificatePath;
+  final String petCertificateFileName;
+  AddPetCertificateSuccess({required this.petCertificatePath, required this.petCertificateFileName});
 
-  UpCertificateSucces(this.ctfUrl);
   @override
-  List<Object> get props => [ctfUrl];
+  List<Object> get props => [petCertificatePath, petCertificateFileName];
 }
-
-
-

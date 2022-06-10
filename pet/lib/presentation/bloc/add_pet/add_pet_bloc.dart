@@ -1,65 +1,106 @@
-import 'dart:io';
-
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meta/meta.dart';
-import 'package:pet/domain/entities/medical_entity.dart';
-import 'package:pet/domain/usecases/add_pet_usecase.dart';
-import 'package:pet/domain/usecases/add_photo_usecase.dart';
-import 'package:pet/domain/usecases/get_medical_usecase.dart';
+import 'package:pet/domain/usecases/add_pet_certificate_usecase.dart';
+import 'package:pet/domain/usecases/add_pet_photo_usecase.dart';
 
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart';
+import 'package:file_picker/file_picker.dart';
 import '../../../domain/entities/pet_entity.dart';
-import '../../../domain/usecases/add_certificate_usecase.dart';
+import '../../../domain/usecases/add_pet_usecase.dart';
 
 part 'add_pet_event.dart';
 part 'add_pet_state.dart';
 
 class AddPetBloc extends Bloc<AddPetEvent, AddPetState> {
-  final AddPetUseCase addPetUsecase;
-  final AddPhotoUseCase addPhotoUsecase;
-  final AddCertificateUseCase addCertificateUsecase;
+  final AddPetUsecase addPetUsecase;
+  final AddPetPhotoUsecase addPetPhotoUsecase;
+  final AddPetCertificateUsecase addPetCertificateUsecase;
 
-  AddPetBloc({required this.addPetUsecase,
-    required this.addPhotoUsecase,
-    required this.addCertificateUsecase,
-  })
+  AddPetBloc(
+      {required this.addPetUsecase,
+      required this.addPetPhotoUsecase,
+      required this.addPetCertificateUsecase})
       : super(AddPetInitial()) {
-    on<CreatePet>((event, emit) async {
-      // TODO: implement event handler
+    on<AddPetInitEvent>(
+      (event, emit) {
+        emit(AddPetInitial());
+      },
+    );
+    on<SubmitAddPetEvent>((event, emit) async {
       emit(AddPetLoading());
-      await addPetUsecase.execute(event.petEntity);
-      emit(AddPetSucces());
-    });
-    on<SetPhoto>((event, emit) async {
-      // TODO: implement event handler
+      try {
+        String petPhotoUrl = "";
+        if (event.petEntity.petPictureUrl != null &&
+            event.petEntity.petPictureUrl != '') {
+          petPhotoUrl = await addPetPhotoUsecase.execute(
+              event.petEntity.petPictureUrl, '');
+        }
+        String petCertificateUrl = "";
+        if (event.petEntity.certificateUrl != null &&
+            event.petEntity.certificateUrl != '') {
+          petCertificateUrl = await addPetCertificateUsecase.execute(
+              event.petEntity.certificateUrl!, '');
+        }
+        PetEntity petEntity = PetEntity(
+          petName: event.petEntity.petName,
+          petType: event.petEntity.petType,
+          gender: event.petEntity.gender,
+          dateOfBirth: event.petEntity.dateOfBirth,
+          petDescription: event.petEntity.petDescription,
+          petBreed: event.petEntity.petBreed,
+          petPictureUrl: petPhotoUrl,
+          certificateUrl: petCertificateUrl,
+        );
 
-      final ImagePicker imgUrl = ImagePicker();
-      final XFile? imgFile =
-          await imgUrl.pickImage(source: ImageSource.gallery);
-      String result = '';
-
-      if (imgFile != null) {
-        File imgPicker = File(imgFile.path);
-        result = await addPhotoUsecase.execute(imgPicker);
+        await addPetUsecase.execute(petEntity);
+        emit(AddPetSuccess());
+      } catch (e) {
+        emit(AddPetError(message: 'error'));
       }
-
-      emit(UpPhotoSucces(result));
     });
-    on<SetCertificate>((event, emit) async {
-      // TODO: implement event handler
 
-      final ImagePicker ctfUrl = ImagePicker();
-      final XFile? ctfFile =
-          await ctfUrl.pickImage(source: ImageSource.gallery);
-      String result = '';
+    on<AddPetPhotoEvent>(
+      (event, emit) async {
+        try {
+          final ImagePicker picker = ImagePicker();
+          final XFile? image = await picker.pickImage(
+            source: ImageSource.gallery,
+            maxWidth: 360,
+            imageQuality: 80,
+          );
+          if (image != null) {
+            final path = image.path;
+            emit(AddPetPhotoSuccess(petPhotoPath: path));
+          } else {
+            emit(AddPetError(message: 'failed upload pet photo'));
+          }
+        } catch (_) {
+          emit(AddPetError(message: 'failed upload pet photo'));
+        }
+      },
+    );
+    on<AddPetCertificateEvent>(
+      (event, emit) async {
+        final FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['jpg', 'pdf', 'png'],
+        );
 
-      if (ctfFile != null) {
-        File ctfPicker = File(ctfFile.path);
-        result = await addPhotoUsecase.execute(ctfPicker);
-      }
-
-      emit(UpCertificateSucces(result));
-    });
+        if (result != null) {
+          if (result.files.first.size < 2000000) {
+            String path = result.files.single.path ?? '';
+            emit(AddPetCertificateSuccess(
+                petCertificatePath: path,
+                petCertificateFileName: basename(path)));
+          } else {
+            emit(AddPetError(message: 'File Terlalu Besar'));
+          }
+        } else {
+          emit(AddPetError(message: 'failed upload pet certificate'));
+        }
+      },
+    );
   }
 }
