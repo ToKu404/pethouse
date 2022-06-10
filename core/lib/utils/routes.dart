@@ -13,3 +13,6 @@ const RESET_PASSWORD_ROUTE_NAME = "reset-password";
 const EDIT_PROFILE_ROUTE_NAME = "edit-profile";
 const PROFILE_ROUTE_NAME = "profile";
 const SPLASH_ROUTE_NAME = "splash";
+
+const ADD_PET_ROUTE_NAME = "add-pet";
+

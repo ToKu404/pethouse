@@ -93,7 +93,7 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
         );
 
         if (result != null) {
-          if (result.files.first.size < 3000000) {
+          if (result.files.first.size < 2000000) {
             String path = result.files.single.path ?? '';
             emit(UploadPetCertificateSuccess(
                 petCertificatePath: path,

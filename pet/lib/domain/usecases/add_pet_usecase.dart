@@ -1,11 +1,12 @@
 import 'package:pet/domain/entities/pet_entity.dart';
-import 'package:pet/domain/repositories/pet_firebase_repository.dart';
+import 'package:pet/domain/repositories/pet_repository.dart';
 
-class AddPetUseCase{
-  final PetFirebaseRepository firebaseRepository;
-  AddPetUseCase({required this.firebaseRepository});
+class AddPetUsecase {
+  final PetRepository petRepository;
 
-  Future<void> execute(PetEntity petEntity) async{
-    return firebaseRepository.addPet(petEntity);
+  AddPetUsecase(this.petRepository);
+
+  Future<void> execute(PetEntity petEntity) {
+    return petRepository.addPet(petEntity);
   }
 }

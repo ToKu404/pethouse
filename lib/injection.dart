@@ -26,21 +26,21 @@ import 'package:notification/domain/repositories/notification_repository.dart';
 import 'package:notification/domain/usecases/get_list_notification_usecase.dart';
 import 'package:notification/domain/usecases/send_adopt_notif_usecase.dart';
 import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
-import 'package:pet/data/data_sources/pet_firebase_data_source.dart';
-import 'package:pet/data/repositories/pet_firebase_repository_impl.dart';
-import 'package:pet/domain/repositories/pet_firebase_repository.dart';
-import 'package:pet/domain/usecases/add_certificate_usecase.dart';
-import 'package:pet/domain/usecases/add_pet_usecase.dart';
-import 'package:pet/domain/usecases/add_photo_usecase.dart';
+import 'package:pet/domain/repositories/pet_repository.dart';
+import 'package:pet/data/repositories/pet_repository_impl.dart';
+import 'package:pet/domain/usecases/get_pets_usecase.dart';
+
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
-import 'package:schedule/activity/data/data_sources/task_firebase_data_source.dart';
-import 'package:schedule/activity/data/repositories/task_firebase_repository_impl.dart';
-import 'package:schedule/activity/domain/repositories/medicaladd_firebase_repository.dart';
-import 'package:schedule/activity/domain/repositories/taskadd_firebase_repository.dart';
-import 'package:schedule/activity/domain/use_cases/medicaladd_usecase.dart';
-import 'package:schedule/activity/domain/use_cases/task_add_usecase.dart';
-import 'package:schedule/activity/presentation/blocs/addmedical_bloc/medical_bloc.dart';
-import 'package:schedule/activity/presentation/blocs/addtask_bloc/task_bloc.dart';
+import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
+import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
+import 'package:schedule/data/data_sources/task_firebase_data_source.dart';
+import 'package:schedule/data/repositories/task_firebase_repository_impl.dart';
+import 'package:schedule/domain/repositories/medicaladd_firebase_repository.dart';
+import 'package:schedule/domain/repositories/taskadd_firebase_repository.dart';
+import 'package:schedule/domain/use_cases/medicaladd_usecase.dart';
+import 'package:schedule/domain/use_cases/task_add_usecase.dart';
+import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
+import 'package:schedule/presentation/blocs/addtask_bloc/task_bloc.dart';
 import 'package:user/data/data_sources/user_data_source.dart';
 import 'package:user/data/repositories/user_repository_impl.dart';
 import 'package:user/domain/repositories/user_repository.dart';
@@ -68,10 +68,14 @@ import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:user/presentation/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
 import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
+import 'package:pet/data/data_sources/pet_data_source.dart';
+import 'package:pet/domain/usecases/add_pet_certificate_usecase.dart';
+import 'package:pet/domain/usecases/add_pet_photo_usecase.dart';
+import 'package:pet/domain/usecases/add_pet_usecase.dart';
 
 import 'package:user/presentation/blocs/user_profile_bloc/user_profile_bloc.dart';
-import 'package:schedule/activity/data/repositories/medical_firebase_repository_impl.dart';
-import 'package:schedule/activity/data/data_sources/medical_firebase_data_source.dart';
+import 'package:schedule/data/repositories/medical_firebase_repository_impl.dart';
+import 'package:schedule/data/data_sources/medical_firebase_data_source.dart';
 import 'package:notification/data/repositories/notification_repository_impl.dart';
 
 final locator = GetIt.instance;
@@ -84,8 +88,8 @@ void init() {
       MedicalFirebaseRepositoryImpl(medicalFirebaseDataSource: locator()));
   locator.registerLazySingleton<TaskFirebaseRepository>(
       () => TaskFirebaseRepositoryImpl(taskFirebaseDataSource: locator()));
-  locator.registerLazySingleton<PetFirebaseRepository>(
-      () => PetFirebaseRepositoryImpl(petFirebaseDataSource: locator()));
+  locator.registerLazySingleton<PetRepository>(
+      () => PetRepositoryImpl(petFirebaseDataSource: locator()));
   locator.registerLazySingleton<AdoptRepository>(
       () => AdoptRepositoryImpl(adoptDataSource: locator()));
   locator.registerLazySingleton<NotificationRepository>(
@@ -100,9 +104,8 @@ void init() {
       () => MedicalFirebaseDataSourceImpl(medicalFireStore: locator()));
   locator.registerLazySingleton<TaskFirebaseDataSource>(
       () => TaskFirebaseDataSourceImpl(taskFireStore: locator()));
-  locator.registerLazySingleton<PetFirebaseDataSource>(() =>
-      PetFirebaseDataSourceImpl(
-          petFireStore: locator(), firebaseStorage: locator()));
+  locator.registerLazySingleton<PetDataSource>(() => PetDataSourceImpl(
+      firebaseFirestore: locator(), firebaseStorage: locator()));
   locator.registerLazySingleton<AdoptDataSource>(() => AdoptDataSourceImpl(
         firebaseFirestore: locator(),
         firebaseStorage: locator(),
@@ -143,12 +146,11 @@ void init() {
       () => AddMedicalUseCase(firebaseRepository: locator()));
   locator.registerLazySingleton(
       () => AddTaskUseCase(firebaseRepository: locator()));
+  locator.registerLazySingleton(() => AddPetUsecase(locator()));
   locator.registerLazySingleton(
-      () => AddPetUseCase(firebaseRepository: locator()));
+      () => AddPetPhotoUsecase(petRepository: locator()));
   locator.registerLazySingleton(
-      () => AddPhotoUseCase(firebaseRepository: locator()));
-  locator.registerLazySingleton(
-      () => AddCertificateUseCase(firebaseRepository: locator()));
+      () => AddPetCertificateUsecase(petRepository: locator()));
   locator.registerLazySingleton(
       () => CreateNewAdoptUsecase(adoptRepository: locator()));
   locator.registerLazySingleton(() => SaveUserIdLocal(repository: locator()));
@@ -175,6 +177,8 @@ void init() {
   locator.registerLazySingleton(() => RemoveOpenAdoptUsecase(locator()));
 
   locator.registerLazySingleton(() => SendAdoptNotifUsecase(locator()));
+  locator.registerLazySingleton(() => GetPetsUsecase(locator()));
+
 
   // bloc & cubit
   locator.registerFactory(
@@ -205,8 +209,8 @@ void init() {
 
   locator.registerFactory(() => AddPetBloc(
         addPetUsecase: locator(),
-        addPhotoUsecase: locator(),
-        addCertificateUsecase: locator(),
+        addPetCertificateUsecase: locator(),
+        addPetPhotoUsecase: locator(),
       ));
   locator.registerFactory(() => OpenAdoptBloc(
       createNewAdoptUsecase: locator(),
@@ -228,7 +232,11 @@ void init() {
       () => NotificationBloc(getListNotificationUsecase: locator()));
   locator
       .registerFactory(() => OpenAdoptStatusBloc(getOpenAdoptList: locator()));
-  locator.registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
+  locator
+      .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
+  locator.registerFactory(() => GetPetBloc(getPetUsecase: locator()));
+  locator.registerFactory(() => GetSchedulePetBloc(getPetUsecase: locator()));
+
 
   //external
   final auth = FirebaseAuth.instance;

@@ -5,18 +5,19 @@ abstract class AddPetEvent extends Equatable {
 
   @override
   List<Object> get props => [];
-
 }
 
-class CreatePet extends AddPetEvent{
+class AddPetInitEvent extends AddPetEvent {}
+
+class SubmitAddPetEvent extends AddPetEvent {
   final PetEntity petEntity;
-  CreatePet({required this.petEntity});
+
+  const SubmitAddPetEvent({required this.petEntity});
+
   @override
   List<Object> get props => [petEntity];
 }
 
-class SetPhoto extends AddPetEvent{
-}
+class AddPetPhotoEvent extends AddPetEvent {}
 
-class SetCertificate extends AddPetEvent{
-}
+class AddPetCertificateEvent extends AddPetEvent {}

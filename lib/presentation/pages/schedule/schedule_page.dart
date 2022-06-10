@@ -1,7 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pet/domain/entities/pet_entity.dart';
+import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
+import 'package:pethouse/presentation/widgets/no_pet_card.dart';
 
 import '../../widgets/card_schedule_status.dart';
 import 'schedule_calendar_page.dart';
@@ -16,14 +20,8 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  int activePage = 1;
+  int activePage = 0;
   late PageController _pageController;
-  List<String> images = [
-    "https://media.istockphoto.com/photos/calico-cat-with-green-eyes-lying-on-cardboard-scratch-board-picture-id1326411219?b=1&k=20&m=1326411219&s=170667a&w=0&h=TNQTmK1E0vIZk5eF9tLrJGfy1dzNlj-Yc_UutJDYcAs=",
-    "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fGNhdCUyMGphcGFufGVufDB8fDB8fA%3D%3D&w=1000&q=80",
-    "https://media.istockphoto.com/photos/cat-with-blue-eyes-looks-at-camera-picture-id1067347086?b=1&k=20&m=1067347086&s=170667a&w=0&h=kLUll2ujZmQo8JjMQYuxyVCtCtdd6W6ylzu6fJqu8PI="
-  ];
-  List pets = ["Neko", "Bobo", "Lopa"];
 
   final List _schedule = [
     Schedule(
@@ -52,17 +50,36 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<GetSchedulePetBloc>(context).add(FetchListSchedulePet());
     _pageController = PageController(viewportFraction: 0.8, initialPage: 1);
   }
 
   @override
   Widget build(BuildContext context) {
+    return SafeArea(
+      child: BlocBuilder<GetSchedulePetBloc, GetSchedulePetState>(
+          builder: ((context, state) {
+        if (state is GetSchedulePetLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is GetSchedulePetSuccess) {
+          if (state.listPet.isNotEmpty) {
+            return _buildListPet(state.listPet);
+          } else {
+            return const Center(child: NoPetCard());
+          }
+        } else {
+          return const Text('Error');
+        }
+      })),
+    );
+  }
+
+  _buildListPet(List<PetEntity> listPet) {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CarouselSlider.builder(
-            itemCount: images.length,
+            itemCount: listPet.length,
             itemBuilder: (ctx, index, _) {
               return Transform.scale(
                   scale: index == activePage ? 1 : .7,
@@ -74,12 +91,18 @@ class _SchedulePageState extends State<SchedulePage> {
                           border: index == activePage
                               ? Border.all(
                                   width: 7,
-                                  color: Color(0xFFFFC46A),
+                                  color: const Color(0xFFFFC46A),
                                 )
                               : Border.all(width: 5, color: kGrey),
-                          image: DecorationImage(
-                              image: NetworkImage(images[index]),
-                              fit: BoxFit.cover),
+                          image: listPet[index].petPictureUrl != '' &&
+                                  listPet[index].petPictureUrl != null
+                              ? DecorationImage(
+                                  image: NetworkImage(
+                                      listPet[index].petPictureUrl!),
+                                  fit: BoxFit.cover)
+                              : const DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/image_user.png')),
                         ),
                       ),
                       index == activePage
@@ -95,7 +118,7 @@ class _SchedulePageState extends State<SchedulePage> {
             },
             options: CarouselOptions(
               autoPlay: false,
-              enableInfiniteScroll: true,
+              enableInfiniteScroll: listPet.length > 2 ? true : false,
               viewportFraction: .5,
               initialPage: activePage,
               onPageChanged: (index, reason) {
@@ -115,7 +138,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${pets[activePage]}',
+                    '${listPet[activePage].petName}',
                     style: kTextTheme.headline5,
                   ),
                   const Icon(
@@ -130,39 +153,45 @@ class _SchedulePageState extends State<SchedulePage> {
           const SizedBox(
             height: 5,
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: kPadding),
-            child: CardScheduleStatus(),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kPadding),
-            child: Text(
-              'Today Task',
-              style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kPadding),
-            child: Column(
-              children: _schedule
-                  .map(
-                    (schedule) => TaskCard(schedule: schedule),
-                  )
-                  .toList(),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
+          _buildSchedule(),
         ],
       ),
     );
+  }
+
+  _buildSchedule() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: kPadding),
+        child: CardScheduleStatus(),
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kPadding),
+        child: Text(
+          'Today Task',
+          style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
+        ),
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kPadding),
+        child: Column(
+          children: _schedule
+              .map(
+                (schedule) => TaskCard(schedule: schedule),
+              )
+              .toList(),
+        ),
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+    ]);
   }
 }
 
@@ -196,8 +225,8 @@ class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.all(2),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
@@ -215,7 +244,7 @@ class _TaskCardState extends State<TaskCard> {
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Color(0xFFFFE7C3),
+            color: const Color(0xFFFFE7C3),
           ),
           child: Center(
             child: Icon(

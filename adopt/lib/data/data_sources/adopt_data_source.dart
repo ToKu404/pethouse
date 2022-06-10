@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class AdoptDataSource {
   Future<void> createNewAdopt(AdoptEntity adoptEntity);
@@ -100,7 +101,9 @@ class AdoptDataSourceImpl implements AdoptDataSource {
         await certRef.delete();
       }
       String filename = basename(petCertificatePath);
-
+      const uuid = Uuid();
+      final ext = filename.split('.');
+      filename = uuid.v1() + ext[1];
       final ref =
           firebaseStorage.ref().child('pet_certificates').child(filename);
       await ref.putFile(File(petCertificatePath));

@@ -1,48 +1,72 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 
 class PetModel extends PetEntity {
-  final String? petId;
-  final String? imgUrl;
-  final String? petType;
-  final String? name;
-  final String? gender;
-  final DateTime? dateOfBirth;
-  final String? breed;
-  final String fileUrl;
-  final String description;
-
-  PetModel(
-      {this.petId,
-      required this.imgUrl,
-      required this.petType,
-      required this.name,
-      required this.gender,
-      required this.dateOfBirth,
-      required this.breed,
-      required this.fileUrl,
-      required this.description})
-      : super(
-          petId: petId,
-          imgUrl: imgUrl,
+  const PetModel({
+    final String? id,
+    final String? userId,
+    final String? petName,
+    final String? petType,
+    final String? petPictureUrl,
+    final String? gender,
+    final String? petBreed,
+    final Timestamp? dateOfBirth,
+    final String? certificateUrl,
+    final String? petDecription,
+  }) : super(
+          id: id,
+          userId: userId,
+          petName: petName,
           petType: petType,
-          name: name,
+          petPictureUrl: petPictureUrl,
           gender: gender,
+          petBreed: petBreed,
           dateOfBirth: dateOfBirth,
-          breed: breed,
-          fileUrl: fileUrl,
-          description: description,
+          certificateUrl: certificateUrl,
+          petDescription: petDecription,
         );
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toDocument() {
     return {
-      'Img Url': imgUrl,
-      'Pet Type': petType,
-      'Name': name,
-      'Gender': gender,
-      'Date Of Birth': dateOfBirth,
-      'Breed': breed,
-      'File Url': fileUrl,
-      'Description': description
+      "id": id,
+      "user_id": userId,
+      "pet_name": petName,
+      "pet_type": petType,
+      "pet_picture_url": petPictureUrl,
+      "gender": gender,
+      "pet_breed": petBreed,
+      "date_of_birth": dateOfBirth,
+      "certificate_url": certificateUrl,
+      "pet_decription": petDescription,
     };
   }
+
+  factory PetModel.fromSnapshot(DocumentSnapshot documentSnapshot) {
+    return PetModel(
+      id: documentSnapshot.get("id"),
+      userId: documentSnapshot.get("user_id"),
+      petName: documentSnapshot.get("pet_name"),
+      petType: documentSnapshot.get("pet_type"),
+      petPictureUrl: documentSnapshot.get("pet_picture_url"),
+      gender: documentSnapshot.get("gender"),
+      petBreed: documentSnapshot.get("pet_breed"),
+      dateOfBirth: documentSnapshot.get("date_of_birth"),
+      certificateUrl: documentSnapshot.get("certificate_url"),
+      petDecription: documentSnapshot.get("pet_decription"),
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        id,
+        userId,
+        petName,
+        petType,
+        petPictureUrl,
+        gender,
+        petBreed,
+        dateOfBirth,
+        certificateUrl,
+        petDescription,
+      ];
 }
