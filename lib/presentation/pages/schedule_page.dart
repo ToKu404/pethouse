@@ -7,13 +7,11 @@ import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 import 'package:pethouse/presentation/widgets/no_pet_card.dart';
 
-import '../../widgets/card_schedule_status.dart';
-import 'schedule_calendar_page.dart';
+import '../widgets/card_schedule_status.dart';
+import 'schedule/schedule_calendar_page.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({Key? key}) : super(key: key);
-
-  static const ROUTE_NAME = "schedule-page";
 
   @override
   State<SchedulePage> createState() => _SchedulePageState();
@@ -130,7 +128,8 @@ class _SchedulePageState extends State<SchedulePage> {
           ),
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, ScheduleCalendarPage.ROUTE_NAME);
+              Navigator.pushNamed(context, ADD_TASK_ROUTE_NAME,
+                  arguments: listPet[activePage]);
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding),

@@ -1,365 +1,344 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
+import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:core/core.dart';
+import 'package:pet/domain/entities/pet_entity.dart';
+import 'package:intl/intl.dart';
 import 'package:schedule/presentation/widgets/btnback_decoration.dart';
-import 'package:schedule/presentation/widgets/date_picker.dart';
-import 'package:schedule/presentation/widgets/gredient_button.dart';
-import 'package:schedule/presentation/widgets/time_picker.dart';
+
 import '../../domain/entities/task_entity.dart';
 import '../blocs/addtask_bloc/task_bloc.dart';
 
-class AddNewTaskActivity extends StatefulWidget {
-  static const ROUTE_NAME = "add_newTask_activity";
-  const AddNewTaskActivity({Key? key}) : super(key: key);
+class AddTaskPage extends StatefulWidget {
+  final PetEntity petEntity;
+  const AddTaskPage({Key? key, required this.petEntity}) : super(key: key);
   @override
-  State<AddNewTaskActivity> createState() => _AddNewTaskActivityState();
+  State<AddTaskPage> createState() => _AddTaskPageState();
 }
 
-class _AddNewTaskActivityState extends State<AddNewTaskActivity> {
-  final TextEditingController _descriptionController = TextEditingController();
-  DateTime dateTime = DateTime.now();
-  TimeOfDay timeOfDayStart = TimeOfDay.now();
-  TimeOfDay timeOfDayEnd = TimeOfDay.now();
-  final List<String> dropdownList = [
-    'Select Activity',
-    'Feed',
-    'Walk',
-    'Pee',
-    'Vitamin',
-    'Shower',
-    'Grooming',
-    'Weight Scale',
-    'Period',
-  ];
-  String dropdownHint = 'Select Activity';
-  final List<String> dropdownList1 = [
-  'Select One',
-  'Everyday',
-  'Every Week',
-  'Every Month',
-  ];
-  String dropdownHint1 = 'Select One';
+class _AddTaskPageState extends State<AddTaskPage> {
+  final formKey = GlobalKey<FormState>();
 
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _taskDateController = TextEditingController();
+  final TextEditingController _startTimeController = TextEditingController();
+  final TextEditingController _endTimeController = TextEditingController();
+  Timestamp? _taskDate;
+  TimeOfDay _startTime = TimeOfDay.now();
+  TimeOfDay _endTime = TimeOfDay.now();
+  String? _taskType;
+  String _taskRepeat = 'No Repeat';
 
   @override
   void dispose() {
     super.dispose();
     _descriptionController.dispose();
+    _taskDateController.dispose();
+    _startTimeController.dispose();
+    _endTimeController.dispose();
   }
 
-@override
+  void _submitAddNewTask() {
+    final DateTime date = _taskDate!.toDate();
+    TaskEntity taskEntity = TaskEntity(
+      activity: _taskType,
+      startTime: Timestamp.fromDate(DateTime(
+          date.year, date.month, date.day, _startTime.hour, _startTime.minute)),
+      endTime: Timestamp.fromDate(DateTime(
+          date.year, date.month, date.day, _endTime.hour, _endTime.minute)),
+      repeat: _taskRepeat,
+      description: _descriptionController.text,
+      status: 'wating',
+      petId: widget.petEntity.id,
+    );
+    context.read<TaskBloc>().add(CreateTask(taskEntity: taskEntity));
+  }
+
+  final List<String> taskStatus = ['passed', 'complete', 'waiting'];
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('New Task', style: TextStyle(color: Colors.black)),
-        leading: btnBack_decoration(),
-        centerTitle: true,
-        elevation: 5,
-        backgroundColor: kWhite,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Ikhsan',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      'Your best animal  Activity Medical ',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        color: const Color(0XFFCCA88A),
-                        fontSize: 10,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: kDarkBrown,
-                          width: 1.0,
-                        ),
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            'https://asset.kompas.com/crops/MzG1rdeLzUk4jJ6KSn-6Sd20igg=/0x0:1920x1280/750x500/data/photo/2021/03/15/604edf099bac9.jpg',
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
+    return BlocListener<TaskBloc, TaskState>(
+      listener: (context, state) {
+        if (state is TaskSuccess) {
+          Future.delayed(Duration(seconds: 1), () {
+            Navigator.pop(context);
+          });
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('${widget.petEntity.petName} Task',
+              style: const TextStyle(color: Colors.black)),
+          leading: const btnBack_decoration(),
+          centerTitle: true,
+          elevation: 5,
+          backgroundColor: kWhite,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
-                    Text(
-                      'Activity',
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 12,
-                      ),
-                    ),
+                    _inputTypeTask(),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
-                    Container(
+                    _inputTaskDate(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _inputTaskTime(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _inputTaskRepeat(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _inputDescription(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GradientButton(
+                      height: 55,
                       width: double.infinity,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child:  DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                              value: dropdownHint,
-                              icon: const Icon(Icons.arrow_drop_down_rounded),
-                              style: GoogleFonts.poppins(
-                                color: Color.fromARGB(255, 109, 109, 109),
-                                fontSize: 16,
-                              ),
-                              items:
-                              dropdownList.map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownHint = newValue!;
-                                });
-                              }),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Text(
-                      'Date',
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    CustomDatePicker(
-                      icon: Icon(Icons.date_range_rounded),
-                      tanggalAkhir:
-                          DateTime.now().add(Duration(days: 366)),
-                      tanggalAwal: DateTime.now(),
-                      initDate: DateTime.now().add(Duration(days: 1)),
-                      onDateChanged: (selectedDate) {
-                        dateTime = selectedDate;
-                        print(dateTime);
-                        // Aksi yang diperlukan saat mengganti kalender
+                      onTap: () {
+                        if (formKey.currentState!.validate()) {
+                          _submitAddNewTask();
+                        }
                       },
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Start Time',
-                              style: GoogleFonts.poppins(
-                                color: kDarkBrown,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: kBorderRadius,
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                              ),
-                              width: 136,
-                              height: 50,
-                              child: Center(
-                                child: CustomTimePicker(
-                                  hintText: 'Start',
-                                  onTimeChanged: (selectedTime) {
-                                    timeOfDayStart = selectedTime;
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'End Time',
-                              style: GoogleFonts.poppins(
-                                color: kDarkBrown,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: kBorderRadius,
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                              ),
-                              width: 136,
-                              height: 50,
-                              child: Center(
-                                child: CustomTimePicker(
-                                  hintText: 'End',
-                                  onTimeChanged: (selectedTime) {
-                                    timeOfDayEnd = selectedTime;
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Text(
-                      'Repeat',
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                              value: dropdownHint1,
-                              icon: const Icon(Icons.arrow_drop_down_rounded),
-                              style: GoogleFonts.poppins(
-                                color: Color.fromARGB(255, 109, 109, 109),
-                                fontSize: 16,
-                              ),
-                              items:
-                              dropdownList1.map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownHint1 = newValue!;
-                                });
-                              }),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Text(
-                      'Description',
-                      style: TextStyle(
-                        color: kDarkBrown,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: _descriptionController,
-                      decoration: InputDecoration(
-                        fillColor: const Color(0xFF929292),
-                        hintText: 'Add Activity Description',
-                        border: OutlineInputBorder(borderRadius: kBorderRadius),
-                      ),
-                      maxLines: 3,
+                      text: 'Save Pet',
+                      isClicked: false,
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20,
-                  ),
-                  child: GradientButton(
-                      height: 50,
-                      width: double.infinity,
-                      onTap: () {
-                        final description = _descriptionController.text;
-                        BlocProvider.of<TaskBloc>(context).add(CreateTask(
-                            taskEntity: TaskEntity(
-                              activity: dropdownHint,
-                              repeat: dropdownHint1,
-                              description: description,
-                              date: Timestamp.fromDate(dateTime),
-                              startTime: Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDayStart.hour, timeOfDayStart.minute)),
-                              endTime: Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDayEnd.hour, timeOfDayEnd.minute))
-                            )));
-                      },
-                      text: 'Schedule'),
-                )
-              ],
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _inputTypeTask() {
+    final List<String> _typeActivityList = [
+      'Feed',
+      'Walk',
+      'Pee',
+      'Vitamin',
+      'Shower',
+      'Grooming',
+      'Weight Scale',
+      'Period',
+    ];
+    return DropdownButtonFormField(
+      decoration: InputDecoration(
+        labelText: 'Task Type',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: kPrimaryColor, width: 1.0),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+      value: _taskType,
+      icon: const Icon(Icons.arrow_drop_down_rounded),
+      style: GoogleFonts.poppins(
+        color: kDarkBrown,
+        fontSize: 16,
+      ),
+      validator: (value) {
+        if (value == null) {
+          return "Choice Pet Type";
+        } else {
+          return null;
+        }
+      },
+      items: _typeActivityList
+          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+          .toList(),
+      onChanged: (String? value) {
+        setState(() {
+          _taskType = value ?? '';
+        });
+      },
+    );
+  }
+
+  _inputTaskDate() {
+    final DateFormat _dateFormat = DateFormat.yMMMEd();
+    return TextFormField(
+        readOnly: true,
+        validator: (value) {
+          if (value == null || _taskDate == null) {
+            return 'Task Date Cannot Empty';
+          } else {
+            return null;
+          }
+        },
+        controller: _taskDateController,
+        decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: kPrimaryColor, width: 1.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            suffixIcon: const Icon(Icons.calendar_month),
+            labelText: 'Task Date'),
+        onTap: () {
+          showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime.now(),
+            lastDate: DateTime.now().add(const Duration(days: 366)),
+          ).then((pickedDate) {
+            // Check if no date is selected
+            if (pickedDate == null) {
+              return;
+            }
+            setState(() {
+              _taskDate = Timestamp.fromDate(pickedDate);
+              _taskDateController.text = _dateFormat.format(pickedDate);
+            });
+          });
+        });
+  }
+
+  _inputTaskTime() {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            readOnly: true,
+            controller: _startTimeController,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: kPrimaryColor, width: 1.0),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                suffixIcon: const Icon(Icons.access_time),
+                labelText: 'Start Time'),
+            onTap: () {
+              showTimePicker(
+                context: context,
+                initialTime: _startTime,
+                initialEntryMode: TimePickerEntryMode.dial,
+              ).then((pickTime) {
+                setState(() {
+                  _startTime = pickTime!;
+                  _startTimeController.text =
+                      "${pickTime.hour}:${pickTime.minute}";
+                });
+              });
+            },
+          ),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          child: TextFormField(
+            readOnly: true,
+            controller: _endTimeController,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: kPrimaryColor, width: 1.0),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                suffixIcon: const Icon(Icons.access_time),
+                labelText: 'End Time'),
+            onTap: () {
+              showTimePicker(
+                context: context,
+                initialTime: _endTime,
+                initialEntryMode: TimePickerEntryMode.dial,
+              ).then((pickTime) {
+                setState(() {
+                  _endTime = pickTime!;
+                  _endTimeController.text =
+                      "${pickTime.hour}:${pickTime.minute}";
+                });
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  _inputTaskRepeat() {
+    final List<String> _repeatList = [
+      'No Repeat',
+      'Everyday',
+      'Every Week',
+      'Every Month',
+    ];
+    return DropdownButtonFormField(
+      decoration: InputDecoration(
+        labelText: 'Task Repeat',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: kPrimaryColor, width: 1.0),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+      value: _taskRepeat,
+      icon: const Icon(Icons.arrow_drop_down_rounded),
+      style: GoogleFonts.poppins(
+        color: kDarkBrown,
+        fontSize: 16,
+      ),
+      validator: (value) {
+        if (value == null) {
+          return "Task Repeat";
+        } else {
+          return null;
+        }
+      },
+      items: _repeatList
+          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+          .toList(),
+      onChanged: (String? value) {
+        setState(() {
+          _taskRepeat = value ?? '';
+        });
+      },
+    );
+  }
+
+  _inputDescription() {
+    return TextFormField(
+      controller: _descriptionController,
+      decoration: InputDecoration(
+        fillColor: const Color(0xFF929292),
+        alignLabelWithHint: true,
+        labelText: 'Task Description',
+        border: OutlineInputBorder(borderRadius: kBorderRadius),
+      ),
+      maxLines: 5,
     );
   }
 }

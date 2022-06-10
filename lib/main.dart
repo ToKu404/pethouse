@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
 import 'package:notification/presentation/pages/notification_page.dart';
+import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
@@ -150,15 +151,16 @@ class MyApp extends StatelessWidget {
               case DetailPetrivia.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const DetailPetrivia());
-              case ScheduleCalendarPage.ROUTE_NAME:
+              case SCHEDULE_CALENDAR_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => ScheduleCalendarPage());
               case AddMedicalActivity.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const AddMedicalActivity());
-              case AddNewTaskActivity.ROUTE_NAME:
+              case ADD_TASK_ROUTE_NAME:
+              final petEntity = settings.arguments as PetEntity;
                 return MaterialPageRoute(
-                    builder: (context) => const AddNewTaskActivity());
+                    builder: (context) => AddTaskPage(petEntity: petEntity,));
 
               case ADD_PET_ROUTE_NAME:
                 return MaterialPageRoute(builder: (context) => AddPetPage());

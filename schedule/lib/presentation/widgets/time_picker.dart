@@ -36,7 +36,7 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
       textAlign: TextAlign.center,
       focusNode: widget.focusNode,
       controller: _controllerTime,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(),
       ),
       onTap: () => _selectTime(context),
