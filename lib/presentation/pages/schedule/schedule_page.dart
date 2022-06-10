@@ -13,8 +13,6 @@ import 'schedule_calendar_page.dart';
 class SchedulePage extends StatefulWidget {
   const SchedulePage({Key? key}) : super(key: key);
 
-  static const ROUTE_NAME = "schedule-page";
-
   @override
   State<SchedulePage> createState() => _SchedulePageState();
 }
