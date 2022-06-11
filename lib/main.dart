@@ -163,7 +163,7 @@ class MyApp extends StatelessWidget {
                     builder: (context) => const CalendarPage());
               case AddMedicalActivity.ROUTE_NAME:
                 return MaterialPageRoute(
-                    builder: (context) => const AddMedicalActivity());
+                    builder: (context) => AddMedicalActivity());
               case ADD_TASK_ROUTE_NAME:
                 final petEntity = settings.arguments as PetEntity;
                 return MaterialPageRoute(
