@@ -23,8 +23,13 @@ dependencies:
   flutter_svg: ^1.0.3
   image_picker: ^0.8.5+3
   google_sign_in: ^5.3.2
+  flutter_spinkit: ^5.1.0
   core:
     path: ../core
+  pet:
+    path: ../pet  
+  google_fonts: ^2.3.3
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

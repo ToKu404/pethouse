@@ -14,10 +14,12 @@ import 'package:core/core.dart';
 import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
 import 'package:notification/presentation/pages/notification_page.dart';
+import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
@@ -25,6 +27,7 @@ import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
 import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
 import 'package:schedule/presentation/blocs/addtask_bloc/task_bloc.dart';
+import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
 import 'package:schedule/presentation/pages/add_medical_activity.dart';
 import 'package:schedule/presentation/pages/add_new_task.dart';
 import 'package:user/domain/entities/user_entity.dart';
@@ -39,7 +42,7 @@ import 'firebase_options.dart';
 import 'injection.dart' as di;
 import 'presentation/pages/main_page.dart';
 import 'presentation/pages/petrivia/detail_petrivia.dart';
-import 'presentation/pages/schedule/schedule_calendar_page.dart';
+import 'presentation/pages/calendar_page.dart';
 import 'presentation/pages/splash_page.dart';
 
 Future<void> main() async {
@@ -56,6 +59,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: kWhite, // navigation bar color
+      statusBarColor: kMainOrangeColor, // status bar color
+    ));
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => di.locator<SignInBloc>()),
@@ -76,6 +83,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<SendNotifBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetBloc>()),
           BlocProvider(create: (_) => di.locator<GetSchedulePetBloc>()),
+          BlocProvider(create: (_) => di.locator<GetTodayTaskBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -126,7 +134,7 @@ class MyApp extends StatelessWidget {
                     builder: (context) => const AdoptPage());
               case ACTIVITY_STATUS_ROUT_NAME:
                 return MaterialPageRoute(
-                    builder: (context) => ActivityStatusPage());
+                    builder: (context) => const ActivityStatusPage());
               case DETAIL_ADOPT_ROUTE_NAME:
                 final petId = settings.arguments as String;
                 return MaterialPageRoute(
@@ -150,18 +158,22 @@ class MyApp extends StatelessWidget {
               case DetailPetrivia.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const DetailPetrivia());
-              case ScheduleCalendarPage.ROUTE_NAME:
+              case SCHEDULE_CALENDAR_ROUTE_NAME:
                 return MaterialPageRoute(
-                    builder: (context) => ScheduleCalendarPage());
+                    builder: (context) => const CalendarPage());
               case AddMedicalActivity.ROUTE_NAME:
                 return MaterialPageRoute(
-                    builder: (context) => const AddMedicalActivity());
-              case AddNewTaskActivity.ROUTE_NAME:
+                    builder: (context) => AddMedicalActivity());
+              case ADD_TASK_ROUTE_NAME:
+                final petEntity = settings.arguments as PetEntity;
                 return MaterialPageRoute(
-                    builder: (context) => const AddNewTaskActivity());
+                    builder: (context) => AddTaskPage(
+                          petEntity: petEntity,
+                        ));
 
               case ADD_PET_ROUTE_NAME:
-                return MaterialPageRoute(builder: (context) => AddPetPage());
+                return MaterialPageRoute(
+                    builder: (context) => const AddPetPage());
             }
           },
         ));

@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class CardScheduleStatus extends StatelessWidget {
-  const CardScheduleStatus({Key? key}) : super(key: key);
+  final int taskFinish;
+  final int taskAll;
+  const CardScheduleStatus(
+      {Key? key, required this.taskFinish, required this.taskAll})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,19 +43,19 @@ class CardScheduleStatus extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.check_circle,
-                    color: kSecondaryColor,
+                    color: kMainOrangeColor,
                   ),
                   const SizedBox(
                     width: 4,
                   ),
                   RichText(
                     text: TextSpan(
-                        text: '4/6',
+                        text: '$taskFinish/$taskAll',
                         style: kTextTheme.headline3,
-                        children: [
-                          const TextSpan(
+                        children: const [
+                          TextSpan(
                             text: ' Task',
-                            style: const TextStyle(color: kGreyTransparant),
+                            style: TextStyle(color: kGreyTransparant),
                           )
                         ]),
                   )
@@ -63,14 +67,14 @@ class CardScheduleStatus extends StatelessWidget {
               radius: 60.0,
               lineWidth: 10.0,
               circularStrokeCap: CircularStrokeCap.round,
-              percent: 0.62,
-              progressColor: kSecondaryColor,
+              percent: (taskFinish / taskAll),
+              progressColor: kMainOrangeColor,
               backgroundColor: kGrey,
               center: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "62%",
+                    "${((taskFinish / taskAll) * 100).toInt()}%",
                     style: kTextTheme.headline5,
                   ),
                   Text(

@@ -17,21 +17,22 @@ class MedicalFirebaseDataSourceImpl implements MedicalFirebaseDataSource{
   Future<void> addMedical(MedicalEntity medicalEntity) async {
     // TODO: implement addPet
     final collectionRef = medicalFireStore.collection('medical');
-    final medicalId = collectionRef.doc().id;
+    final medical_id = collectionRef.doc().id;
 
 
     //mengubah menjadi JSON
-    collectionRef.doc(medicalId).get().then((value) {
+    collectionRef.doc(medical_id).get().then((value) {
       final newMedical = MedicalModel(
-          timeNow: medicalEntity.timeNow,
-          medicalId: medicalId,
+          time_publish: medicalEntity.time_publish,
+          medical_id: medical_id,
           activity: medicalEntity.activity,
-          expiredDate: medicalEntity.expiredDate,
+          expired_date: medicalEntity.expired_date,
           description: medicalEntity.description,
-          location: medicalEntity.location
+          location: medicalEntity.location,
+          pet_id: medicalEntity.pet_id
       ).toJson();
       if (!value.exists) {
-        collectionRef.doc(medicalId).set(newMedical);
+        collectionRef.doc(medical_id).set(newMedical);
       }
       return;
     });

@@ -50,47 +50,57 @@ class _BuildSplashLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 195, 142),
-      body: Center(
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              colors: [kMainOrangeColor, kMainPinkColor],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // logo here
-            SvgPicture.asset(
-              'assets/vectors/splash.svg',
-              height: 240,
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Column(
+            Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "PETHOUSE",
-                  style: kTextTheme.headline1?.copyWith(color: kDarkBrown),
+                // logo here
+                SvgPicture.asset(
+                  'assets/vectors/splash_vector.svg',
+                  height: 200,
                 ),
-                Text(
-                  "Join and Discover The Best Habit Tracker for Your Pet",
-                  style: kTextTheme.bodyText2,
+                const SizedBox(
+                  height: 40,
+                ),
+                Column(
+                  children: [
+                    Text(
+                      kAppTitle,
+                      style: kTextTheme.headline1
+                          ?.copyWith(color: kTitleColor, height: 1),
+                    ),
+                    SizedBox(
+                      width: 200,
+                      child: Text(
+                        kAppDesc,
+                        textAlign: TextAlign.center,
+                        style: kTextTheme.bodyText1
+                            ?.copyWith(color: kTitleColor, fontSize: 14),
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-            const Padding(
-              padding: EdgeInsets.only(
-                top: 75,
-                right: 30,
-                left: 30,
-              ),
-              child: LinearProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(kDarkBrown),
-              ),
-            ),
-            Padding(
+            )),
+            Container(
+              height: 60,
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "version 1.0",
-                style: kTextTheme.overline,
+                kAppVersion,
+                style: kTextTheme.overline?.copyWith(color: kTitleColor),
               ),
             ),
           ],
