@@ -16,7 +16,7 @@ const double kMargin = 20.0;
 const double kPadding = 10.0;
 
 final TextTheme kTextTheme = TextTheme(
-  headline1: GoogleFonts.poppins(fontSize: 41, fontWeight: FontWeight.w700),
+  headline1: GoogleFonts.poppins(fontSize: 42, fontWeight: FontWeight.w800),
   headline2: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.w600),
   headline3: GoogleFonts.poppins(
       fontSize: 21, fontWeight: FontWeight.w600, color: kSecondaryColor),
@@ -128,3 +128,7 @@ const Map<String, IconData> kTaskType = {
   'Weight Scale': FontAwesomeIcons.weightScale,
   'Period': FontAwesomeIcons.timeline,
 };
+
+const kTitleColor = Color(0xFF300303);
+const kMainOrangeColor = Color(0xFFFFC42E);
+const kMainPinkColor = Color(0xFFEE4E64);
