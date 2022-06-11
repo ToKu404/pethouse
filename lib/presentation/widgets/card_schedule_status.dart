@@ -43,19 +43,19 @@ class CardScheduleStatus extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.check_circle,
-                    color: kSecondaryColor,
+                    color: kMainOrangeColor,
                   ),
                   const SizedBox(
                     width: 4,
                   ),
                   RichText(
                     text: TextSpan(
-                        text: '${taskFinish}/${taskAll}',
+                        text: '$taskFinish/$taskAll',
                         style: kTextTheme.headline3,
-                        children: [
-                          const TextSpan(
+                        children: const [
+                          TextSpan(
                             text: ' Task',
-                            style: const TextStyle(color: kGreyTransparant),
+                            style: TextStyle(color: kGreyTransparant),
                           )
                         ]),
                   )
@@ -67,15 +67,14 @@ class CardScheduleStatus extends StatelessWidget {
               radius: 60.0,
               lineWidth: 10.0,
               circularStrokeCap: CircularStrokeCap.round,
-              percent: (taskFinish.toDouble() / taskAll.toDouble()),
-              progressColor: kSecondaryColor,
+              percent: (taskFinish / taskAll),
+              progressColor: kMainOrangeColor,
               backgroundColor: kGrey,
               center: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    // "${(taskFinish.toDouble() / taskAll.toDouble()) * 100}%",
-                    "50%",
+                    "${((taskFinish / taskAll) * 100).toInt()}%",
                     style: kTextTheme.headline5,
                   ),
                   Text(

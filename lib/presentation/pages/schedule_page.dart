@@ -7,12 +7,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
+import 'package:pethouse/presentation/widgets/gredient_button.dart';
 import 'package:pethouse/presentation/widgets/no_pet_card.dart';
 import 'package:schedule/domain/entities/task_entity.dart';
 import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
+import 'package:schedule/presentation/pages/add_medical_activity.dart';
 
 import '../widgets/card_schedule_status.dart';
-import 'schedule/schedule_calendar_page.dart';
+import 'calendar_page.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({Key? key}) : super(key: key);
@@ -36,20 +38,41 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: BlocBuilder<GetSchedulePetBloc, GetSchedulePetState>(
-          builder: ((context, state) {
-        if (state is GetSchedulePetLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is GetSchedulePetSuccess) {
-          if (state.listPet.isNotEmpty) {
-            return _buildListPet(state.listPet);
-          } else {
-            return const Center(child: NoPetCard());
-          }
-        } else {
-          return const Text('Error');
-        }
-      })),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: kPadding),
+            height: 60,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+                color: kWhite,
+                border: Border(bottom: BorderSide(width: 1, color: kGrey))),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Schedule',
+                style: kTextTheme.headline4?.copyWith(color: kDarkBrown),
+              ),
+            ),
+          ),
+          Expanded(
+            child: BlocBuilder<GetSchedulePetBloc, GetSchedulePetState>(
+                builder: ((context, state) {
+              if (state is GetSchedulePetLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is GetSchedulePetSuccess) {
+                if (state.listPet.isNotEmpty) {
+                  return _buildListPet(state.listPet);
+                } else {
+                  return const Center(child: NoPetCard());
+                }
+              } else {
+                return const Text('Error');
+              }
+            })),
+          ),
+        ],
+      ),
     );
   }
 
@@ -66,6 +89,15 @@ class _SchedulePageState extends State<SchedulePage> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 13,
+                                color:
+                                    const Color(0xFF000000).withOpacity(.07)),
+                            BoxShadow(
+                                blurRadius: 5,
+                                color: const Color(0xFF000000).withOpacity(.05))
+                          ],
                           shape: BoxShape.circle,
                           border: index == activePage
                               ? Border.all(
@@ -111,10 +143,74 @@ class _SchedulePageState extends State<SchedulePage> {
           ),
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, ADD_TASK_ROUTE_NAME,
-                  arguments: listPet[activePage]);
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: kBorderRadius,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: kWhite),
+                        width: 200,
+                        height: 180,
+                        child: Column(
+                          children: [
+                            Text(
+                              'ADD',
+                              style: kTextTheme.headline5
+                                  ?.copyWith(color: kDarkBrown),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            GradientButton(
+                                height: 50,
+                                width: double.infinity,
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Navigator.pushNamed(
+                                      context, ADD_TASK_ROUTE_NAME,
+                                      arguments: listPet[activePage]);
+                                },
+                                text: 'New Task'),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            GradientButton(
+                                height: 50,
+                                width: double.infinity,
+                                onTap: () {
+                                  Navigator.pop(context);
+
+                                  Navigator.pushNamed(
+                                      context, AddMedicalActivity.ROUTE_NAME);
+                                },
+                                text: 'Medical Activity')
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+              // Navigator.pushNamed(context, ADD_TASK_ROUTE_NAME,
+              //     arguments: listPet[activePage]);
             },
-            child: Padding(
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: kWhite,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 13,
+                        color: const Color(0xFF000000).withOpacity(.07)),
+                    BoxShadow(
+                        blurRadius: 5,
+                        color: const Color(0xFF000000).withOpacity(.05))
+                  ]),
               padding: const EdgeInsets.symmetric(horizontal: kPadding),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,11 +219,12 @@ class _SchedulePageState extends State<SchedulePage> {
                     '${listPet[activePage].petName}',
                     style: kTextTheme.headline5,
                   ),
-                  const Icon(
-                    FontAwesomeIcons.angleRight,
-                    size: 18,
-                    color: kDarkBrown,
-                  ),
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                    child: const Icon(Icons.add),
+                  )
                 ],
               ),
             ),
@@ -169,58 +266,11 @@ class __BuildScheduleState extends State<_BuildSchedule> {
           );
         } else if (state is GetTodayTaskSuccess) {
           if (state.listTask.isEmpty) {
-            return InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, ADD_TASK_ROUTE_NAME,
-                    arguments: widget.petEntity);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5, right: 10, bottom: .4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DottedBorder(
-                      borderType: BorderType.RRect,
-                      radius: const Radius.circular(10),
-                      color: kGrey,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          height: 40,
-                          width: 160,
-                          color: kWhite,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(
-                                  left: 8,
-                                ),
-                                child: Icon(
-                                  FontAwesomeIcons.plus,
-                                  size: 20,
-                                  color: kGrey,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 30,
-                              ),
-                              const Text(
-                                "Add Task",
-                                style: TextStyle(
-                                  color: kGrey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return Center(
+                child: Text(
+              'No Task Today',
+              style: kTextTheme.headline6?.copyWith(color: kGrey),
+            ));
           } else {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,16 +284,6 @@ class __BuildScheduleState extends State<_BuildSchedule> {
                 ),
                 const SizedBox(
                   height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: kPadding),
-                  child: Text(
-                    'Today Task',
-                    style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: kPadding),
@@ -303,18 +343,18 @@ class _TaskCardState extends State<TaskCard> {
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: const Color(0xFFFFE7C3),
+            color: kMainOrangeColor,
           ),
           child: Center(
             child: Icon(
               kTaskType[widget.task.activity],
-              color: kSecondaryColor,
+              color: kWhite,
             ),
           ),
         ),
         title: Text(widget.task.activity ?? '-',
-            style: kTextTheme.subtitle1
-                ?.copyWith(color: kPrimaryColor, fontWeight: FontWeight.w500)),
+            style: kTextTheme.subtitle1?.copyWith(
+                color: kMainOrangeColor, fontWeight: FontWeight.w500)),
         subtitle: Text(
           DateFormat.jm().format(widget.task.startTime!.toDate()),
         ),

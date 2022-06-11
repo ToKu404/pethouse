@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth_cubit/auth_cubit.dart';
@@ -18,24 +19,40 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: MultiBlocListener(listeners: [
-        BlocListener<AuthCubit, AuthState>(
-          listener: (context, state) {
-            if (state is UnAuthenticated) {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(LOGIN_ROUTE_NAME, (route) => false);
-            }
-          },
+    return Scaffold(
+      backgroundColor: kWhite,
+      appBar: AppBar(
+        backgroundColor: kWhite,
+        elevation: 1,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(FontAwesomeIcons.arrowLeft),
+          color: kDarkBrown,
         ),
-        BlocListener<UserDbBloc, UserDbState>(
-          listener: (context, state) {
-            if (state is SuccessDeleteUser) {
-              context.read<AuthCubit>().loggedOut();
-            }
-          },
+        title: Text(
+          'My Profile',
+          style: kTextTheme.headline5,
         ),
-      ], child: _BuildProfile(user: widget.userEntity)),
+      ),
+      body: SafeArea(
+        child: MultiBlocListener(listeners: [
+          BlocListener<AuthCubit, AuthState>(
+            listener: (context, state) {
+              if (state is UnAuthenticated) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    LOGIN_ROUTE_NAME, (route) => false);
+              }
+            },
+          ),
+          BlocListener<UserDbBloc, UserDbState>(
+            listener: (context, state) {
+              if (state is SuccessDeleteUser) {
+                context.read<AuthCubit>().loggedOut();
+              }
+            },
+          ),
+        ], child: _BuildProfile(user: widget.userEntity)),
+      ),
     );
   }
 }

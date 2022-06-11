@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const Color kPrimaryColor = Color(0xFFFF8500);
-const Color kSecondaryColor = Color(0xFFECA540);
-const Color kDarkBrown = Color(0xFF4B2710);
+const Color kPrimaryColor = Color(0xFFEE4E64);
+const Color kSecondaryColor = Color(0xFFFFC42E);
+const Color kDarkBrown = Color(0xFF300303);
 const Color kWhite = Colors.white;
-const Color kGrey = Color(0xFFD4D4D4);
+const Color kGrey = Color(0xFFE5E9F2);
 const Color kGreyTransparant = Color(0xFF878787);
 const Color kOrange = Color(0xFFEF9F21);
 
@@ -19,7 +19,7 @@ final TextTheme kTextTheme = TextTheme(
   headline1: GoogleFonts.poppins(fontSize: 42, fontWeight: FontWeight.w800),
   headline2: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.w600),
   headline3: GoogleFonts.poppins(
-      fontSize: 21, fontWeight: FontWeight.w600, color: kSecondaryColor),
+      fontSize: 21, fontWeight: FontWeight.w600, color: kMainOrangeColor),
   headline4: GoogleFonts.poppins(
       fontSize: 21, fontWeight: FontWeight.w700, color: kDarkBrown),
   headline5: GoogleFonts.poppins(
@@ -80,10 +80,10 @@ final kTimePickerTheme = TimePickerThemeData(
 );
 
 const kColorScheme = ColorScheme(
-  primary: kPrimaryColor,
-  primaryContainer: kPrimaryColor,
-  secondary: kSecondaryColor,
-  secondaryContainer: kSecondaryColor,
+  primary: kMainOrangeColor,
+  primaryContainer: kMainOrangeColor,
+  secondary: kMainPinkColor,
+  secondaryContainer: kMainPinkColor,
   surface: kDarkBrown,
   background: kWhite,
   error: Colors.red,

@@ -77,7 +77,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               style: const TextStyle(color: Colors.black)),
           leading: const btnBack_decoration(),
           centerTitle: true,
-          elevation: 5,
+          elevation: 1,
           backgroundColor: kWhite,
         ),
         body: SafeArea(
