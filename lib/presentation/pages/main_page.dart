@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
-import 'package:pethouse/presentation/pages/schedule/schedule_no_pet_page.dart';
 import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
 import 'dashboard_page.dart';
-import 'schedule/schedule_page.dart';
+import 'schedule_page.dart';
 import 'package:core/core.dart';
 import 'package:user/user.dart';
 

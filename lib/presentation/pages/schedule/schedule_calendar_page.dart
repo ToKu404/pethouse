@@ -10,7 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:core/core.dart';
 
 class ScheduleCalendarPage extends StatefulWidget {
-  static const ROUTE_NAME = 'schedule-calander-page';
+  const ScheduleCalendarPage({Key? key}) : super(key: key);
+
   @override
   State<ScheduleCalendarPage> createState() => _ScheduleCalendarPageState();
 }
@@ -69,9 +70,9 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
+                    margin: const EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
-                      color: Color(0xFFF9EFE2),
+                      color: const Color(0xFFF9EFE2),
                       boxShadow: [
                         BoxShadow(
                             blurRadius: 13,
@@ -161,7 +162,7 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
                     ),
                   ),
                   _getEventsfromDay(selectedDay).isEmpty
-                      ? Center()
+                      ? const Center()
                       : Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
@@ -169,15 +170,15 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
                             style: kTextTheme.headline6,
                           ),
                         ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     shrinkWrap: true,
                     itemCount: _getEventsfromDay(selectedDay).length,
                     scrollDirection: Axis.vertical,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: ((context, index) {
                       final event = _getEventsfromDay(selectedDay);
                       return ScheduleTaskCard(
@@ -210,60 +211,60 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
           overlayOpacity: .7,
           children: [
             SpeedDialChild(
-                child: Icon(
-                  Icons.task,
-                  color: kSecondaryColor,
-                ),
-                onTap: () => Navigator.pushNamed(context, AddNewTaskActivity.ROUTE_NAME),
-                    // showDialog(
-                    //   context: context,
-                    //   builder: (context) => AlertDialog(
-                    //     title: Text("Add Event"),
-                    //     content: TextFormField(
-                    //       controller: _eventController,
-                    //     ),
-                    //     actions: [
-                    //       TextButton(
-                    //         child: Text("Cancel"),
-                    //         onPressed: () => Navigator.pop(context),
-                    //       ),
-                    //       TextButton(
-                    //         child: Text("Ok"),
-                    //         onPressed: () {
-                    //           if (_eventController.text.isEmpty) {
-                    //           } else {
-                    //             if (selectedEvents[selectedDay] != null) {
-                    //               selectedEvents[selectedDay]?.add(
-                    //                 Event(title: _eventController.text),
-                    //               );
-                    //             } else {
-                    //               selectedEvents[selectedDay] = [
-                    //                 Event(title: _eventController.text)
-                    //               ];
-                    //             }
-                    //           }
-                    //           Navigator.pop(context);
-                    //           _eventController.clear();
-                    //           setState(() {});
-                    //           return;
-                    //         },
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
-                foregroundColor: kSecondaryColor,
-                label: 'Task',
-            ),
-            SpeedDialChild(
-              child: Icon(
-                Icons.medical_services,
+              child: const Icon(
+                Icons.task,
                 color: kSecondaryColor,
               ),
+              // onTap: () => Navigator.pushNamed(context, ADD_TASK_ROUTE_NAME),
+              // showDialog(
+              //   context: context,
+              //   builder: (context) => AlertDialog(
+              //     title: Text("Add Event"),
+              //     content: TextFormField(
+              //       controller: _eventController,
+              //     ),
+              //     actions: [
+              //       TextButton(
+              //         child: Text("Cancel"),
+              //         onPressed: () => Navigator.pop(context),
+              //       ),
+              //       TextButton(
+              //         child: Text("Ok"),
+              //         onPressed: () {
+              //           if (_eventController.text.isEmpty) {
+              //           } else {
+              //             if (selectedEvents[selectedDay] != null) {
+              //               selectedEvents[selectedDay]?.add(
+              //                 Event(title: _eventController.text),
+              //               );
+              //             } else {
+              //               selectedEvents[selectedDay] = [
+              //                 Event(title: _eventController.text)
+              //               ];
+              //             }
+              //           }
+              //           Navigator.pop(context);
+              //           _eventController.clear();
+              //           setState(() {});
+              //           return;
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
               foregroundColor: kSecondaryColor,
-              label: 'Medical',
-              onTap: () => Navigator.pushNamed(context, AddMedicalActivity.ROUTE_NAME)
+              label: 'Task',
             ),
+            SpeedDialChild(
+                child: const Icon(
+                  Icons.medical_services,
+                  color: kSecondaryColor,
+                ),
+                foregroundColor: kSecondaryColor,
+                label: 'Medical',
+                onTap: () => Navigator.pushNamed(
+                    context, AddMedicalActivity.ROUTE_NAME)),
           ],
         ));
   }
@@ -298,7 +299,7 @@ class ScheduleTaskCard extends StatelessWidget {
       },
       child: Container(
         height: 40,
-        margin: EdgeInsets.only(left: 10, right: 10),
+        margin: const EdgeInsets.only(left: 10, right: 10),
         width: double.infinity,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -307,7 +308,7 @@ class ScheduleTaskCard extends StatelessWidget {
               '09:00',
               style: kTextTheme.subtitle1,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Stack(
@@ -318,12 +319,12 @@ class ScheduleTaskCard extends StatelessWidget {
                   child: Container(
                     height: 8,
                     width: 8,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         shape: BoxShape.circle, color: kPrimaryColor),
                   ),
                 ),
                 (isSingle)
-                    ? Center()
+                    ? const Center()
                     : (!isFirst && !isLast)
                         ? Positioned(
                             left: 3,
@@ -354,7 +355,7 @@ class ScheduleTaskCard extends StatelessWidget {
                               ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Expanded(

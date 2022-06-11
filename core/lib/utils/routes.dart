@@ -15,4 +15,8 @@ const PROFILE_ROUTE_NAME = "profile";
 const SPLASH_ROUTE_NAME = "splash";
 
 const ADD_PET_ROUTE_NAME = "add-pet";
+const ADD_TASK_ROUTE_NAME = "add-task";
+const SCHEDULE_CALENDAR_ROUTE_NAME = "schedule-calender";
+
+
 

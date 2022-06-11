@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const Color kPrimaryColor = Color(0xFFFF8500);
@@ -115,4 +116,15 @@ const Map<String, String> kPetTypeVector = {
   'fish': 'assets/vectors/fish_vector.svg',
   'cat': 'assets/vectors/cat_vector.svg',
   'dog': 'assets/vectors/dog_vector.svg',
+};
+
+const Map<String, IconData> kTaskType = {
+  'Feed': FontAwesomeIcons.utensils,
+  'Walk': FontAwesomeIcons.personWalking,
+  'Pee': FontAwesomeIcons.toilet,
+  'Vitamin': FontAwesomeIcons.pills,
+  'Shower': FontAwesomeIcons.shower,
+  'Grooming': FontAwesomeIcons.faceSmile,
+  'Weight Scale': FontAwesomeIcons.weightScale,
+  'Period': FontAwesomeIcons.timeline,
 };

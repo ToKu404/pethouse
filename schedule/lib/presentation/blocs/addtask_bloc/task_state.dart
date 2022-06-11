@@ -23,6 +23,6 @@ class TaskError extends TaskState{
 
 }
 
-class TaskSucces extends TaskState{
+class TaskSuccess extends TaskState{
 
 }
