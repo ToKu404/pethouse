@@ -155,7 +155,7 @@ class MyApp extends StatelessWidget {
                     builder: (context) => ScheduleCalendarPage());
               case AddMedicalActivity.ROUTE_NAME:
                 return MaterialPageRoute(
-                    builder: (context) => const AddMedicalActivity());
+                    builder: (context) => AddMedicalActivity());
               case AddNewTaskActivity.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const AddNewTaskActivity());

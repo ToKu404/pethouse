@@ -2,35 +2,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:schedule/domain/entities/medical_entity.dart';
 
 class MedicalModel extends MedicalEntity {
-  final String? medicalId;
+  final String? medical_id;
   final String? activity;
-  final Timestamp? expiredDate;
+  final Timestamp? expired_date;
   final String location;
   final String description;
-  final Timestamp timeNow;
+  final Timestamp time_publish;
+  final String? pet_id;
 
   MedicalModel(
-      { this.medicalId,
+      { this.medical_id,
+        this.pet_id,
       required this.activity,
-      required this.expiredDate,
+      required this.expired_date,
       required this.location,
       required this.description,
-      required this.timeNow})
+      required this.time_publish})
       : super(
-            timeNow: timeNow,
+            time_publish: time_publish,
+            pet_id: pet_id,
             activity: activity,
-            expiredDate: expiredDate,
+            expired_date: expired_date,
             location: location,
             description: description,
-            medicalId: medicalId);
+            medical_id: medical_id);
 
   Map<String, dynamic> toJson() {
     return {
+      'pet_id':pet_id,
       'activity': activity,
-      'expiredDate': expiredDate,
+      'expired_date': expired_date,
       'location': location,
       'description': description,
-      'timeNow': timeNow
+      'time_publish': time_publish
     };
   }
 }

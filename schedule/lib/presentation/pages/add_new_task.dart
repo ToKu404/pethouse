@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:core/core.dart';
 import 'package:schedule/presentation/widgets/btnback_decoration.dart';
@@ -18,12 +19,12 @@ class AddNewTaskActivity extends StatefulWidget {
 }
 
 class _AddNewTaskActivityState extends State<AddNewTaskActivity> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _descriptionController = TextEditingController();
   DateTime dateTime = DateTime.now();
   TimeOfDay timeOfDayStart = TimeOfDay.now();
   TimeOfDay timeOfDayEnd = TimeOfDay.now();
   final List<String> dropdownList = [
-    'Select Activity',
     'Feed',
     'Walk',
     'Pee',
@@ -35,7 +36,6 @@ class _AddNewTaskActivityState extends State<AddNewTaskActivity> {
   ];
   String dropdownHint = 'Select Activity';
   final List<String> dropdownList1 = [
-  'Select One',
   'Everyday',
   'Every Week',
   'Every Month',
@@ -51,7 +51,8 @@ class _AddNewTaskActivityState extends State<AddNewTaskActivity> {
 
 @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  final description = _descriptionController.text;
+  return Scaffold(
       appBar: AppBar(
         title: Text('New Task', style: TextStyle(color: Colors.black)),
         leading: btnBack_decoration(),
@@ -108,188 +109,189 @@ class _AddNewTaskActivityState extends State<AddNewTaskActivity> {
                     ),
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Activity',
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 12,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 10,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1.0,
+                      Text(
+                        'Activity',
+                        style: GoogleFonts.poppins(
+                          color: kDarkBrown,
+                          fontSize: 12,
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child:  DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                              value: dropdownHint,
-                              icon: const Icon(Icons.arrow_drop_down_rounded),
-                              style: GoogleFonts.poppins(
-                                color: Color.fromARGB(255, 109, 109, 109),
-                                fontSize: 16,
-                              ),
-                              items:
-                              dropdownList.map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownHint = newValue!;
-                                });
-                              }),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: DropdownButtonFormField<String>(
+                            hint: Text(dropdownHint),
+                            icon: const Icon(Icons.arrow_drop_down_rounded),
+                            style: GoogleFonts.poppins(
+                              color: Color.fromARGB(255, 109, 109, 109),
+                              fontSize: 16,
+                            ),
+                            items: dropdownList.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownHint = newValue!;
+                              });
+                            },
+                            validator: (value) =>
+                            value == null ? 'Please select activity' : null,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Text(
-                      'Date',
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 12,
+                      const SizedBox(
+                        height: 19,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    CustomDatePicker(
-                      icon: Icon(Icons.date_range_rounded),
-                      tanggalAkhir:
-                          DateTime.now().add(Duration(days: 366)),
-                      tanggalAwal: DateTime.now(),
-                      initDate: DateTime.now().add(Duration(days: 1)),
-                      onDateChanged: (selectedDate) {
-                        dateTime = selectedDate;
-                        print(dateTime);
-                        // Aksi yang diperlukan saat mengganti kalender
-                      },
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Start Time',
-                              style: GoogleFonts.poppins(
-                                color: kDarkBrown,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: kBorderRadius,
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
+                      Text(
+                        'Date',
+                        style: GoogleFonts.poppins(
+                          color: kDarkBrown,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomDatePicker(
+                        icon: Icon(Icons.date_range_rounded),
+                        tanggalAkhir:
+                            DateTime.now().add(Duration(days: 366)),
+                        tanggalAwal: DateTime.now(),
+                        initDate: DateTime.now().add(Duration(days: 1)),
+                        onDateChanged: (selectedDate) {
+                          dateTime = selectedDate;
+                          // Aksi yang diperlukan saat mengganti kalender
+                        },
+                      ),
+                      const SizedBox(
+                        height: 19,
+                      ),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Start Time',
+                                style: GoogleFonts.poppins(
+                                  color: kDarkBrown,
+                                  fontSize: 12,
                                 ),
                               ),
-                              width: 136,
-                              height: 50,
-                              child: Center(
-                                child: CustomTimePicker(
-                                  hintText: 'Start',
-                                  onTimeChanged: (selectedTime) {
-                                    timeOfDayStart = selectedTime;
-                                  },
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: kBorderRadius,
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                ),
+                                width: 136,
+                                height: 50,
+                                child: Center(
+                                  child: CustomTimePicker(
+                                    hintText: 'Start',
+                                    onTimeChanged: (selectedTime) {
+                                      timeOfDayStart = selectedTime;
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'End Time',
-                              style: GoogleFonts.poppins(
-                                color: kDarkBrown,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: kBorderRadius,
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
+                            ],
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'End Time',
+                                style: GoogleFonts.poppins(
+                                  color: kDarkBrown,
+                                  fontSize: 12,
                                 ),
                               ),
-                              width: 136,
-                              height: 50,
-                              child: Center(
-                                child: CustomTimePicker(
-                                  hintText: 'End',
-                                  onTimeChanged: (selectedTime) {
-                                    timeOfDayEnd = selectedTime;
-                                  },
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: kBorderRadius,
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                ),
+                                width: 136,
+                                height: 50,
+                                child: Center(
+                                  child: CustomTimePicker(
+                                    hintText: 'End',
+                                    onTimeChanged: (selectedTime) {
+                                      timeOfDayEnd = selectedTime;
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Text(
-                      'Repeat',
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 12,
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1.0,
+                      const SizedBox(
+                        height: 19,
+                      ),
+                      Text(
+                        'Repeat',
+                        style: GoogleFonts.poppins(
+                          color: kDarkBrown,
+                          fontSize: 12,
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                              value: dropdownHint1,
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: DropdownButtonFormField<String>(
+                            hint: Text(dropdownHint1),
                               icon: const Icon(Icons.arrow_drop_down_rounded),
                               style: GoogleFonts.poppins(
                                 color: Color.fromARGB(255, 109, 109, 109),
@@ -306,33 +308,43 @@ class _AddNewTaskActivityState extends State<AddNewTaskActivity> {
                                 setState(() {
                                   dropdownHint1 = newValue!;
                                 });
-                              }),
+                              },
+                              validator: (value) =>
+                          value == null ? 'Please select schedule' : null,
+                              ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Text(
-                      'Description',
-                      style: TextStyle(
-                        color: kDarkBrown,
-                        fontSize: 12,
+                      const SizedBox(
+                        height: 19,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: _descriptionController,
-                      decoration: InputDecoration(
-                        fillColor: const Color(0xFF929292),
-                        hintText: 'Add Activity Description',
-                        border: OutlineInputBorder(borderRadius: kBorderRadius),
+                      Text(
+                        'Description',
+                        style: TextStyle(
+                          color: kDarkBrown,
+                          fontSize: 12,
+                        ),
                       ),
-                      maxLines: 3,
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: _descriptionController,
+                        decoration: InputDecoration(
+                          fillColor: const Color(0xFF929292),
+                          hintText: 'Add Activity Description',
+                          border: OutlineInputBorder(borderRadius: kBorderRadius),
+                        ),
+                        maxLines: 3,
+                        validator: (_descriptionController) {
+                          if (_descriptionController!.isNotEmpty) {
+                            return null;
+                          } else {
+                            return 'Plase enter your description';
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -342,16 +354,45 @@ class _AddNewTaskActivityState extends State<AddNewTaskActivity> {
                       height: 50,
                       width: double.infinity,
                       onTap: () {
-                        final description = _descriptionController.text;
-                        BlocProvider.of<TaskBloc>(context).add(CreateTask(
-                            taskEntity: TaskEntity(
-                              activity: dropdownHint,
-                              repeat: dropdownHint1,
-                              description: description,
-                              date: Timestamp.fromDate(dateTime),
-                              startTime: Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDayStart.hour, timeOfDayStart.minute)),
-                              endTime: Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDayEnd.hour, timeOfDayEnd.minute))
-                            )));
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }else{
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SpinKitCircle(
+                                size: 120,
+                                duration: Duration(seconds: 1),
+                                itemBuilder: (context, index){
+                                  final colors = [kPrimaryColor,kWhite];
+                                  final color = colors[index%colors.length];
+                                  return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: color,
+                                          shape: BoxShape.circle
+                                      )
+                                  );
+                                },
+                              );
+                            },
+                          );
+                          Future.delayed(Duration(seconds: 1),(){
+                            BlocProvider.of<TaskBloc>(context).add(CreateTask(
+                                taskEntity: TaskEntity(
+                                    activity: dropdownHint,
+                                    repeat: dropdownHint1,
+                                    description: description,
+                                    date: Timestamp.fromDate(dateTime),
+                                    startTime: Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDayStart.hour, timeOfDayStart.minute)),
+                                    endTime: Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDayEnd.hour, timeOfDayEnd.minute))
+                                )));
+                            Navigator.pop(context);
+                            Future.delayed(Duration(seconds: 0),(){
+                              Navigator.pop(context);
+                            });
+                          });
+
+                        }
                       },
                       text: 'Schedule'),
                 )
