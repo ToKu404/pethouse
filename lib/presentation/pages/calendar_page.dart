@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
+import 'package:schedule/domain/entities/task_entity.dart';
+import 'package:schedule/presentation/blocs/day_calendar_task_bloc/day_calendar_task_bloc.dart';
 import 'package:schedule/presentation/pages/add_medical_activity.dart';
 import 'package:schedule/presentation/pages/add_new_task.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -19,21 +22,23 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  Map<DateTime, List<Event>> selectedEvents = {};
+  // Map<DateTime, List<Event>> selectedEvents = {
+  //   DateTime.now(): [Event(title: 'Jancko')]
+  // };
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
 
-  TextEditingController _eventController = TextEditingController();
-
-  List<Event> _getEventsfromDay(DateTime date) {
-    return selectedEvents[date] ?? [];
-  }
+  // List<Event> _getEventsfromDay(DateTime date) {
+  //   return selectedEvents[date] ?? [];
+  // }
 
   @override
-  void dispose() {
-    _eventController.dispose();
-    super.dispose();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<DayCalendarTaskBloc>(context).add(FetchChoiceDayTask(
+        petId: widget.petEntity.id!, choiceDate: selectedDay));
   }
 
   @override
@@ -84,14 +89,17 @@ class _CalendarPageState extends State<CalendarPage> {
                       onDaySelected: (DateTime selectDay, DateTime focusDay) {
                         setState(() {
                           selectedDay = selectDay;
+                          BlocProvider.of<DayCalendarTaskBloc>(context).add(
+                              FetchChoiceDayTask(
+                                  petId: widget.petEntity.id!,
+                                  choiceDate: selectedDay));
                           focusedDay = focusDay;
                         });
-                        print(focusedDay);
                       },
                       selectedDayPredicate: (DateTime date) {
                         return isSameDay(selectedDay, date);
                       },
-                      eventLoader: _getEventsfromDay,
+                      // eventLoader: ,
                       // Style
                       calendarStyle: CalendarStyle(
                         isTodayHighlighted: true,
@@ -143,42 +151,49 @@ class _CalendarPageState extends State<CalendarPage> {
                       ),
                     ),
                   ),
-                  _getEventsfromDay(selectedDay).isEmpty
-                      ? const Center()
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text(
-                            '${DateFormat('MMMM dd, yyyy').format(selectedDay)}',
-                            style: kTextTheme.headline6,
-                          ),
-                        ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    shrinkWrap: true,
-                    itemCount: _getEventsfromDay(selectedDay).length,
-                    scrollDirection: Axis.vertical,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: ((context, index) {
-                      final event = _getEventsfromDay(selectedDay);
-                      return ScheduleTaskCard(
-                        event: event[index],
-                        isFirst: index == 0 ? true : false,
-                        isLast:
-                            index == _getEventsfromDay(selectedDay).length - 1
-                                ? true
-                                : false,
-                        isSingle: _getEventsfromDay(selectedDay).length == 1
-                            ? true
-                            : false,
-                      );
-                    }),
-                  ),
-                  // ..._getEventsfromDay(selectedDay).map(
-                  //   (Event event) =>
-                  // ),
+                  BlocBuilder<DayCalendarTaskBloc, DayCalendarTaskState>(
+                    builder: (context, state) {
+                      if (state is DayCalendarTaskLoading) {
+                        return CircularProgressIndicator();
+                      } else if (state is DayCalendarTaskSuccess) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Text(
+                                '${DateFormat('MMMM dd, yyyy').format(selectedDay)}',
+                                style: kTextTheme.headline6
+                                    ?.copyWith(color: kDarkBrown),
+                              ),
+                            ),
+                            ListView.builder(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              shrinkWrap: true,
+                              itemCount: state.listTask.length,
+                              scrollDirection: Axis.vertical,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: ((context, index) {
+                                return ScheduleTaskCard(
+                                  event: state.listTask[index],
+                                  isFirst: index == 0 ? true : false,
+                                  isLast: index == state.listTask.length - 1
+                                      ? true
+                                      : false,
+                                  isSingle:
+                                      state.listTask.length == 1 ? true : false,
+                                );
+                              }),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Text('');
+                      }
+                    },
+                  )
                 ],
               ),
             ),
@@ -218,16 +233,8 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 }
 
-class Event {
-  final String title;
-
-  Event({required this.title});
-
-  String toString() => this.title;
-}
-
 class ScheduleTaskCard extends StatelessWidget {
-  final Event event;
+  final TaskEntity event;
   final bool isFirst;
   final bool isLast;
   final bool isSingle;
@@ -253,7 +260,7 @@ class ScheduleTaskCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              '09:00',
+              DateFormat.jm().format(event.startTime!.toDate()),
               style: kTextTheme.subtitle1,
             ),
             const SizedBox(
@@ -312,12 +319,12 @@ class ScheduleTaskCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  event.title,
+                  event.activity!,
                   style:
                       kTextTheme.subtitle2?.copyWith(color: kMainOrangeColor),
                 ),
                 Text(
-                  'Gereja',
+                  event.description,
                   style: kTextTheme.bodyText2?.copyWith(height: 1.2),
                 )
               ],

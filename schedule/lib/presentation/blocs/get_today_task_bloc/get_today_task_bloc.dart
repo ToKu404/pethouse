@@ -24,7 +24,7 @@ class GetTodayTaskBloc extends Bloc<GetTodayTaskEvent, GetTodayTaskState> {
       (event, emit) async {
         emit(GetTodayTaskLoading());
         try {
-          getTodayTaskUsecase.execute(event.petId).listen((task) {
+          getTodayTaskUsecase.execute(event.petId, DateTime.now()).listen((task) {
             add(GetTodayTasks(listPet: task));
           });
         } catch (_) {

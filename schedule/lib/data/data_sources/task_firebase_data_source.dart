@@ -5,7 +5,7 @@ import 'package:schedule/data/models/task_model.dart';
 
 abstract class TaskFirebaseDataSource {
   Future<void> addTask(TaskEntity taskEntity);
-  Stream<List<TaskEntity>> getTodayTask(String petId);
+  Stream<List<TaskEntity>> getTodayTask(String petId, DateTime date);
   Future<void> changeTaskStatus(String taskId);
 }
 
@@ -41,12 +41,12 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
   }
 
   @override
-  Stream<List<TaskEntity>> getTodayTask(String petId) {
+  Stream<List<TaskEntity>> getTodayTask(String petId, DateTime date) {
     final taskCollection = taskFireStore
         .collection('tasks')
         .where('pet_id', isEqualTo: petId)
         .where('date',
-            isEqualTo: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+            isEqualTo: DateFormat("yyyy-MM-dd").format(date));
 
     return taskCollection.snapshots().map((querySnapshot) {
       return querySnapshot.docs

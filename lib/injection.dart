@@ -45,6 +45,8 @@ import 'package:schedule/domain/use_cases/task_add_usecase.dart';
 import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
 import 'package:schedule/presentation/blocs/addtask_bloc/task_bloc.dart';
 import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
+import 'package:schedule/presentation/blocs/day_calendar_task_bloc/day_calendar_task_bloc.dart';
+
 
 import 'package:user/data/data_sources/user_data_source.dart';
 import 'package:user/data/repositories/user_repository_impl.dart';
@@ -244,6 +246,8 @@ void init() {
   locator.registerFactory(() => GetSchedulePetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetTodayTaskBloc(
       getTodayTaskUsecase: locator(), changeTaskStatusUsecase: locator()));
+    locator.registerFactory(() => DayCalendarTaskBloc(
+      getTodayTaskUsecase: locator()));
 
   //external
   final auth = FirebaseAuth.instance;
