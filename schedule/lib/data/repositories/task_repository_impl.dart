@@ -21,4 +21,9 @@ class TaskFirebaseRepositoryImpl implements TaskFirebaseRepository {
   Future<void> changeTaskStatus(String taskId) {
     return taskFirebaseDataSource.changeTaskStatus(taskId);
   }
+
+  @override
+  Future<void> changeTaskStatus(String taskId) {
+    return taskFirebaseDataSource.changeTaskStatus(taskId);
+  }
 }
