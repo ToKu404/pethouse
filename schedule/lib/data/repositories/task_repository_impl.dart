@@ -16,4 +16,9 @@ class TaskFirebaseRepositoryImpl implements TaskFirebaseRepository {
   Stream<List<TaskEntity>> getTodayTask(String petId) {
     return taskFirebaseDataSource.getTodayTask(petId);
   }
+
+  @override
+  Future<void> changeTaskStatus(String taskId) {
+    return taskFirebaseDataSource.changeTaskStatus(taskId);
+  }
 }

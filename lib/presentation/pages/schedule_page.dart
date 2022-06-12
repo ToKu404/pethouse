@@ -275,11 +275,11 @@ class __BuildScheduleState extends State<_BuildSchedule> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: kPadding),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: kPadding),
                   child: CardScheduleStatus(
-                    taskFinish: 2,
-                    taskAll: 3,
+                    taskFinish: getCompleteTask(state.listTask),
+                    taskAll: state.listTask.length,
                   ),
                 ),
                 const SizedBox(
@@ -308,6 +308,10 @@ class __BuildScheduleState extends State<_BuildSchedule> {
         }
       },
     );
+  }
+
+  getCompleteTask(List<TaskEntity> tasks) {
+    return tasks.where((e) => e.status == 'complete').toList().length;
   }
 }
 
@@ -359,11 +363,10 @@ class _TaskCardState extends State<TaskCard> {
           DateFormat.jm().format(widget.task.startTime!.toDate()),
         ),
         trailing: Checkbox(
-          value: widget.task.status == 'finish',
+          value: widget.task.status == 'complete',
           onChanged: (value) {
-            setState(() {
-              // widget.task.status = value;
-            });
+            BlocProvider.of<GetTodayTaskBloc>(context).add(ChangeTaskStatus(
+                taskId: widget.task.id!, petId: widget.task.petId!));
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),

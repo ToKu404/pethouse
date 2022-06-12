@@ -6,6 +6,7 @@ import 'package:schedule/data/models/task_model.dart';
 abstract class TaskFirebaseDataSource {
   Future<void> addTask(TaskEntity taskEntity);
   Stream<List<TaskEntity>> getTodayTask(String petId);
+  Future<void> changeTaskStatus(String taskId);
 }
 
 class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
@@ -52,5 +53,15 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
           .map((docSnap) => TaskModel.fromSnapshot(docSnap))
           .toList();
     });
+  }
+
+  @override
+  Future<void> changeTaskStatus(String taskId) async {
+    final collectionRef = taskFireStore.collection('tasks');
+    Map<String, dynamic>? doc =
+        await collectionRef.doc(taskId).get().then((value) => value.data());
+    String status = doc!['status'] == 'complete' ? 'waiting' : 'complete';
+    final statusMap = {"status": status};
+    await collectionRef.doc(taskId).update(statusMap);
   }
 }

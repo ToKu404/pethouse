@@ -20,6 +20,16 @@ class FetchTodayTask extends GetTodayTaskEvent {
 
   FetchTodayTask({required this.petId});
 
-    @override
+  @override
   List<Object> get props => [petId];
+}
+
+class ChangeTaskStatus extends GetTodayTaskEvent {
+  final String taskId;
+  final String petId;
+
+  ChangeTaskStatus({required this.taskId, required this.petId});
+
+  @override
+  List<Object> get props => [taskId, petId];
 }

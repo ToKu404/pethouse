@@ -10,22 +10,6 @@ import 'package:schedule/presentation/widgets/date_picker.dart';
 import 'package:schedule/presentation/widgets/gredient_button.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Medical Activity',
-      theme: ThemeData(colorScheme: kColorScheme),
-      home: AddMedicalActivity(),
-    );
-  }
-}
-
 class AddMedicalActivity extends StatefulWidget {
   static const ROUTE_NAME = "medical_activity";
 

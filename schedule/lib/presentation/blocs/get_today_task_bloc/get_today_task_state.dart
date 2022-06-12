@@ -27,3 +27,6 @@ class GetTodayTaskSuccess extends GetTodayTaskState {
   @override
   List<Object> get props => [listTask];
 }
+
+class ChangeTaskStatusSuccess extends GetTodayTaskState{
+}
