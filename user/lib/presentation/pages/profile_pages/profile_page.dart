@@ -19,39 +19,44 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kWhite,
-      appBar: AppBar(
-        backgroundColor: kWhite,
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kDarkBrown,
-        ),
-        title: Text(
-          'My Profile',
-          style: kTextTheme.headline5,
-        ),
-      ),
-      body: SafeArea(
-        child: MultiBlocListener(listeners: [
-          BlocListener<AuthCubit, AuthState>(
-            listener: (context, state) {
-              if (state is UnAuthenticated) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    LOGIN_ROUTE_NAME, (route) => false);
-              }
-            },
+    return SafeArea(
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: kPadding),
+            height: 60,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+                color: kWhite,
+                border: Border(bottom: BorderSide(width: 1, color: kGrey))),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Profile',
+                style: kTextTheme.headline4?.copyWith(color: kDarkBrown),
+              ),
+            ),
           ),
-          BlocListener<UserDbBloc, UserDbState>(
-            listener: (context, state) {
-              if (state is SuccessDeleteUser) {
-                context.read<AuthCubit>().loggedOut();
-              }
-            },
+          Expanded(
+            child: MultiBlocListener(listeners: [
+              BlocListener<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is UnAuthenticated) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        LOGIN_ROUTE_NAME, (route) => false);
+                  }
+                },
+              ),
+              BlocListener<UserDbBloc, UserDbState>(
+                listener: (context, state) {
+                  if (state is SuccessDeleteUser) {
+                    context.read<AuthCubit>().loggedOut();
+                  }
+                },
+              ),
+            ], child: _BuildProfile(user: widget.userEntity)),
           ),
-        ], child: _BuildProfile(user: widget.userEntity)),
+        ],
       ),
     );
   }

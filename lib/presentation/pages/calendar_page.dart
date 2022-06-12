@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:schedule/presentation/pages/add_medical_activity.dart';
 import 'package:schedule/presentation/pages/add_new_task.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -10,7 +11,8 @@ import 'package:intl/intl.dart';
 import 'package:core/core.dart';
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({Key? key}) : super(key: key);
+  final PetEntity petEntity;
+  const CalendarPage({Key? key, required this.petEntity}) : super(key: key);
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -36,158 +38,183 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: kPadding),
-            height: 60,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-                color: kWhite,
-                border: Border(bottom: BorderSide(width: 1, color: kGrey))),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Calendar',
-                style: kTextTheme.headline4?.copyWith(color: kDarkBrown),
-              ),
-            ),
+    return Scaffold(
+        appBar: AppBar(
+          elevation: 1,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(FontAwesomeIcons.arrowLeft),
+            color: kDarkBrown,
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFEAB6),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TableCalendar(
-                        firstDay: DateTime.utc(2010, 10, 16),
-                        lastDay: DateTime.utc(2100, 3, 14),
-                        focusedDay: selectedDay,
-                        calendarFormat: format,
+          backgroundColor: Colors.white,
+          title: Text(
+            '${widget.petEntity.petName} Schedule',
+            style: kTextTheme.headline5,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFEAB6),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TableCalendar(
+                      firstDay: DateTime.utc(2010, 10, 16),
+                      lastDay: DateTime.utc(2100, 3, 14),
+                      focusedDay: selectedDay,
+                      calendarFormat: format,
 
-                        onFormatChanged: (CalendarFormat _format) {
-                          setState(() {
-                            format = _format;
-                          });
-                        },
-                        startingDayOfWeek: StartingDayOfWeek.sunday,
-                        daysOfWeekVisible: true,
-                        //Day Changed
-                        onDaySelected: (DateTime selectDay, DateTime focusDay) {
-                          setState(() {
-                            selectedDay = selectDay;
-                            focusedDay = focusDay;
-                          });
-                          print(focusedDay);
-                        },
-                        selectedDayPredicate: (DateTime date) {
-                          return isSameDay(selectedDay, date);
-                        },
-                        eventLoader: _getEventsfromDay,
-                        // Style
-                        calendarStyle: CalendarStyle(
-                          isTodayHighlighted: true,
-                          markersMaxCount: 3,
-                          markerSizeScale: .15,
-                          selectedDecoration: BoxDecoration(
-                              color: kMainOrangeColor,
-                              borderRadius: BorderRadius.circular(10),
-                              shape: BoxShape.rectangle),
-                          todayDecoration: BoxDecoration(
-                              color: kMainPinkColor,
-                              borderRadius: BorderRadius.circular(10),
-                              shape: BoxShape.rectangle),
-                          defaultDecoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              shape: BoxShape.rectangle),
-                          weekendDecoration: BoxDecoration(
+                      onFormatChanged: (CalendarFormat _format) {
+                        setState(() {
+                          format = _format;
+                        });
+                      },
+                      startingDayOfWeek: StartingDayOfWeek.sunday,
+                      daysOfWeekVisible: true,
+                      //Day Changed
+                      onDaySelected: (DateTime selectDay, DateTime focusDay) {
+                        setState(() {
+                          selectedDay = selectDay;
+                          focusedDay = focusDay;
+                        });
+                        print(focusedDay);
+                      },
+                      selectedDayPredicate: (DateTime date) {
+                        return isSameDay(selectedDay, date);
+                      },
+                      eventLoader: _getEventsfromDay,
+                      // Style
+                      calendarStyle: CalendarStyle(
+                        isTodayHighlighted: true,
+                        markersMaxCount: 3,
+                        markerSizeScale: .15,
+                        selectedDecoration: BoxDecoration(
+                            color: kMainOrangeColor,
                             borderRadius: BorderRadius.circular(10),
-                            shape: BoxShape.rectangle,
-                          ),
+                            shape: BoxShape.rectangle),
+                        todayDecoration: BoxDecoration(
+                            color: kMainPinkColor,
+                            borderRadius: BorderRadius.circular(10),
+                            shape: BoxShape.rectangle),
+                        defaultDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            shape: BoxShape.rectangle),
+                        weekendDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          shape: BoxShape.rectangle,
                         ),
+                      ),
 
-                        headerStyle: HeaderStyle(
-                          headerMargin: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
-                          titleCentered: true,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                                colors: [kMainPinkColor, kMainOrangeColor],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          titleTextStyle: GoogleFonts.poppins(
-                            color: kWhite,
-                            fontSize: 16,
-                          ),
-                          formatButtonVisible: false,
-                          leftChevronIcon: const Icon(
-                            FontAwesomeIcons.angleLeft,
-                            color: kWhite,
-                            size: 16,
-                          ),
-                          rightChevronIcon: const Icon(
-                            FontAwesomeIcons.angleRight,
-                            color: kWhite,
-                            size: 16,
-                          ),
+                      headerStyle: HeaderStyle(
+                        headerMargin: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 20),
+                        titleCentered: true,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                              colors: [kMainPinkColor, kMainOrangeColor],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        titleTextStyle: GoogleFonts.poppins(
+                          color: kWhite,
+                          fontSize: 16,
+                        ),
+                        formatButtonVisible: false,
+                        leftChevronIcon: const Icon(
+                          FontAwesomeIcons.angleLeft,
+                          color: kWhite,
+                          size: 16,
+                        ),
+                        rightChevronIcon: const Icon(
+                          FontAwesomeIcons.angleRight,
+                          color: kWhite,
+                          size: 16,
                         ),
                       ),
                     ),
-                    _getEventsfromDay(selectedDay).isEmpty
-                        ? const Center()
-                        : Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(
-                              '${DateFormat('MMMM dd, yyyy').format(selectedDay)}',
-                              style: kTextTheme.headline6,
-                            ),
+                  ),
+                  _getEventsfromDay(selectedDay).isEmpty
+                      ? const Center()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            '${DateFormat('MMMM dd, yyyy').format(selectedDay)}',
+                            style: kTextTheme.headline6,
                           ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      shrinkWrap: true,
-                      itemCount: _getEventsfromDay(selectedDay).length,
-                      scrollDirection: Axis.vertical,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: ((context, index) {
-                        final event = _getEventsfromDay(selectedDay);
-                        return ScheduleTaskCard(
-                          event: event[index],
-                          isFirst: index == 0 ? true : false,
-                          isLast:
-                              index == _getEventsfromDay(selectedDay).length - 1
-                                  ? true
-                                  : false,
-                          isSingle: _getEventsfromDay(selectedDay).length == 1
-                              ? true
-                              : false,
-                        );
-                      }),
-                    ),
-                    // ..._getEventsfromDay(selectedDay).map(
-                    //   (Event event) =>
-                    // ),
-                  ],
-                ),
+                        ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    shrinkWrap: true,
+                    itemCount: _getEventsfromDay(selectedDay).length,
+                    scrollDirection: Axis.vertical,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: ((context, index) {
+                      final event = _getEventsfromDay(selectedDay);
+                      return ScheduleTaskCard(
+                        event: event[index],
+                        isFirst: index == 0 ? true : false,
+                        isLast:
+                            index == _getEventsfromDay(selectedDay).length - 1
+                                ? true
+                                : false,
+                        isSingle: _getEventsfromDay(selectedDay).length == 1
+                            ? true
+                            : false,
+                      );
+                    }),
+                  ),
+                  // ..._getEventsfromDay(selectedDay).map(
+                  //   (Event event) =>
+                  // ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
-    );
+        ),
+        floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.add_event,
+          foregroundColor: kWhite,
+          backgroundColor: kSecondaryColor,
+          overlayColor: Colors.black,
+          spacing: 10,
+          overlayOpacity: .7,
+          children: [
+            SpeedDialChild(
+              child: const Icon(
+                Icons.task,
+                color: kSecondaryColor,
+              ),
+              onTap: () => Navigator.pushNamed(context, ADD_TASK_ROUTE_NAME,
+                  arguments: widget.petEntity),
+              foregroundColor: kSecondaryColor,
+              label: 'Task',
+            ),
+            SpeedDialChild(
+              onTap: () => Navigator.pushNamed(
+                  context, AddMedicalActivity.ROUTE_NAME,
+                  arguments: widget.petEntity),
+              child: const Icon(
+                Icons.medical_services,
+                color: kSecondaryColor,
+              ),
+              foregroundColor: kSecondaryColor,
+              label: 'Medical',
+            ),
+          ],
+        ));
   }
 }
 

@@ -159,8 +159,11 @@ class MyApp extends StatelessWidget {
                 return MaterialPageRoute(
                     builder: (context) => const DetailPetrivia());
               case SCHEDULE_CALENDAR_ROUTE_NAME:
+                final pet = settings.arguments as PetEntity;
                 return MaterialPageRoute(
-                    builder: (context) => const CalendarPage());
+                    builder: (context) => CalendarPage(
+                          petEntity: pet,
+                        ));
               case AddMedicalActivity.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => AddMedicalActivity());

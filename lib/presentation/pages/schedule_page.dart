@@ -38,203 +38,223 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: kPadding),
-            height: 60,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-                color: kWhite,
-                border: Border(bottom: BorderSide(width: 1, color: kGrey))),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Schedule',
-                style: kTextTheme.headline4?.copyWith(color: kDarkBrown),
-              ),
-            ),
-          ),
-          Expanded(
-            child: BlocBuilder<GetSchedulePetBloc, GetSchedulePetState>(
-                builder: ((context, state) {
-              if (state is GetSchedulePetLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is GetSchedulePetSuccess) {
-                if (state.listPet.isNotEmpty) {
-                  return _buildListPet(state.listPet);
-                } else {
-                  return const Center(child: NoPetCard());
-                }
-              } else {
-                return const Text('Error');
-              }
-            })),
-          ),
-        ],
-      ),
+      child: BlocBuilder<GetSchedulePetBloc, GetSchedulePetState>(
+          builder: ((context, state) {
+        if (state is GetSchedulePetLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is GetSchedulePetSuccess) {
+          if (state.listPet.isNotEmpty) {
+            return _buildListPet(state.listPet);
+          } else {
+            return const Center(child: NoPetCard());
+          }
+        } else {
+          return const Text('Error');
+        }
+      })),
     );
   }
 
   _buildListPet(List<PetEntity> listPet) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          CarouselSlider.builder(
-            itemCount: listPet.length,
-            itemBuilder: (ctx, index, _) {
-              return Transform.scale(
-                  scale: index == activePage ? 1 : .7,
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 13,
-                                color:
-                                    const Color(0xFF000000).withOpacity(.07)),
-                            BoxShadow(
-                                blurRadius: 5,
-                                color: const Color(0xFF000000).withOpacity(.05))
-                          ],
-                          shape: BoxShape.circle,
-                          border: index == activePage
-                              ? Border.all(
-                                  width: 7,
-                                  color: const Color(0xFFFFC46A),
-                                )
-                              : Border.all(width: 5, color: kGrey),
-                          image: listPet[index].petPictureUrl != '' &&
-                                  listPet[index].petPictureUrl != null
-                              ? DecorationImage(
-                                  image: NetworkImage(
-                                      listPet[index].petPictureUrl!),
-                                  fit: BoxFit.cover)
-                              : const DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/image_user.png')),
-                        ),
-                      ),
-                      index == activePage
-                          ? Container()
-                          : Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: kWhite.withOpacity(.8),
-                              ),
-                            )
-                    ],
-                  ));
-            },
-            options: CarouselOptions(
-              autoPlay: false,
-              enableInfiniteScroll: listPet.length > 2 ? true : false,
-              viewportFraction: .5,
-              initialPage: activePage,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  activePage = index;
-                  BlocProvider.of<GetTodayTaskBloc>(context)
-                      .add(FetchTodayTask(petId: listPet[activePage].id!));
-                });
-              },
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: kBorderRadius,
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: kWhite),
-                        width: 200,
-                        height: 180,
-                        child: Column(
-                          children: [
-                            Text(
-                              'ADD',
-                              style: kTextTheme.headline5
-                                  ?.copyWith(color: kDarkBrown),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            GradientButton(
-                                height: 50,
-                                width: double.infinity,
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  Navigator.pushNamed(
-                                      context, ADD_TASK_ROUTE_NAME,
-                                      arguments: listPet[activePage]);
-                                },
-                                text: 'New Task'),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            GradientButton(
-                                height: 50,
-                                width: double.infinity,
-                                onTap: () {
-                                  Navigator.pop(context);
-
-                                  Navigator.pushNamed(
-                                      context, AddMedicalActivity.ROUTE_NAME);
-                                },
-                                text: 'Medical Activity')
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-              // Navigator.pushNamed(context, ADD_TASK_ROUTE_NAME,
-              //     arguments: listPet[activePage]);
-            },
-            child: Container(
-              margin: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: kWhite,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 13,
-                        color: const Color(0xFF000000).withOpacity(.07)),
-                    BoxShadow(
-                        blurRadius: 5,
-                        color: const Color(0xFF000000).withOpacity(.05))
-                  ]),
-              padding: const EdgeInsets.symmetric(horizontal: kPadding),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '${listPet[activePage].petName}',
-                    style: kTextTheme.headline5,
-                  ),
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: const Icon(Icons.add),
-                  )
-                ],
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: kPadding),
+          height: 60,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+              color: kWhite,
+              border: Border(bottom: BorderSide(width: 1, color: kGrey))),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Schedule',
+                  style: kTextTheme.headline4,
+                ),
               ),
+              InkWell(
+                onTap: () => Navigator.pushNamed(
+                    context, SCHEDULE_CALENDAR_ROUTE_NAME,
+                    arguments: listPet[activePage]),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: kWhite),
+                  child: const Icon(
+                    Icons.calendar_month,
+                    color: kDarkBrown,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                CarouselSlider.builder(
+                  itemCount: listPet.length,
+                  itemBuilder: (ctx, index, _) {
+                    return Transform.scale(
+                        scale: index == activePage ? 1 : .7,
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      blurRadius: 13,
+                                      color: const Color(0xFF000000)
+                                          .withOpacity(.07)),
+                                  BoxShadow(
+                                      blurRadius: 5,
+                                      color: const Color(0xFF000000)
+                                          .withOpacity(.05))
+                                ],
+                                shape: BoxShape.circle,
+                                border: index == activePage
+                                    ? Border.all(
+                                        width: 7,
+                                        color: const Color(0xFFFFC46A),
+                                      )
+                                    : Border.all(width: 5, color: kGrey),
+                                image: listPet[index].petPictureUrl != '' &&
+                                        listPet[index].petPictureUrl != null
+                                    ? DecorationImage(
+                                        image: NetworkImage(
+                                            listPet[index].petPictureUrl!),
+                                        fit: BoxFit.cover)
+                                    : const DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/image_user.png')),
+                              ),
+                            ),
+                            index == activePage
+                                ? Container()
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: kWhite.withOpacity(.8),
+                                    ),
+                                  )
+                          ],
+                        ));
+                  },
+                  options: CarouselOptions(
+                    autoPlay: false,
+                    enableInfiniteScroll: listPet.length > 2 ? true : false,
+                    viewportFraction: .5,
+                    initialPage: activePage,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        activePage = index;
+                        BlocProvider.of<GetTodayTaskBloc>(context).add(
+                            FetchTodayTask(petId: listPet[activePage].id!));
+                      });
+                    },
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: kBorderRadius,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: kWhite),
+                              width: 200,
+                              height: 180,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'ADD',
+                                    style: kTextTheme.headline5
+                                        ?.copyWith(color: kDarkBrown),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GradientButton(
+                                      height: 50,
+                                      width: double.infinity,
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Navigator.pushNamed(
+                                            context, ADD_TASK_ROUTE_NAME,
+                                            arguments: listPet[activePage]);
+                                      },
+                                      text: 'New Task'),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GradientButton(
+                                      height: 50,
+                                      width: double.infinity,
+                                      onTap: () {
+                                        Navigator.pop(context);
+
+                                        Navigator.pushNamed(context,
+                                            AddMedicalActivity.ROUTE_NAME);
+                                      },
+                                      text: 'Medical Activity')
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                    // Navigator.pushNamed(context, ADD_TASK_ROUTE_NAME,
+                    //     arguments: listPet[activePage]);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: kWhite,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 13,
+                              color: const Color(0xFF000000).withOpacity(.07)),
+                          BoxShadow(
+                              blurRadius: 5,
+                              color: const Color(0xFF000000).withOpacity(.05))
+                        ]),
+                    padding: const EdgeInsets.symmetric(horizontal: kPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${listPet[activePage].petName}',
+                          style: kTextTheme.headline5,
+                        ),
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
+                          child: const Icon(Icons.add),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                _BuildSchedule(petEntity: listPet[activePage]),
+              ],
             ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          _BuildSchedule(petEntity: listPet[activePage]),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

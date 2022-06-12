@@ -59,23 +59,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE_NAME,
-                      arguments: widget.user),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: kWhite),
-                    child: const Icon(
-                      Icons.person,
-                      color: kMainOrangeColor,
-                    ),
-                  ),
-                ),
+               
               ],
             ),
           ),
