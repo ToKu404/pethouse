@@ -36,6 +36,8 @@ import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:user/presentation/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
 import 'package:user/presentation/blocs/user_profile_bloc/user_profile_bloc.dart';
+import 'package:schedule/presentation/blocs/day_calendar_task_bloc/day_calendar_task_bloc.dart';
+
 import 'package:user/user.dart';
 
 import 'firebase_options.dart';
@@ -84,6 +86,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<GetPetBloc>()),
           BlocProvider(create: (_) => di.locator<GetSchedulePetBloc>()),
           BlocProvider(create: (_) => di.locator<GetTodayTaskBloc>()),
+          BlocProvider(create: (_) => di.locator<DayCalendarTaskBloc>()),
+
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -159,8 +163,11 @@ class MyApp extends StatelessWidget {
                 return MaterialPageRoute(
                     builder: (context) => const DetailPetrivia());
               case SCHEDULE_CALENDAR_ROUTE_NAME:
+                final pet = settings.arguments as PetEntity;
                 return MaterialPageRoute(
-                    builder: (context) => const CalendarPage());
+                    builder: (context) => CalendarPage(
+                          petEntity: pet,
+                        ));
               case AddMedicalActivity.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => AddMedicalActivity());

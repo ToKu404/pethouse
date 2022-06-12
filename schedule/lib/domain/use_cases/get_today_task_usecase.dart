@@ -6,7 +6,7 @@ class GetTodayTaskUsecase {
 
   GetTodayTaskUsecase(this.taskFirebaseRepository);
 
-  Stream<List<TaskEntity>> execute(String petId) {
-    return taskFirebaseRepository.getTodayTask(petId);
+  Stream<List<TaskEntity>> execute(String petId, DateTime date) {
+    return taskFirebaseRepository.getTodayTask(petId, date);
   }
 }

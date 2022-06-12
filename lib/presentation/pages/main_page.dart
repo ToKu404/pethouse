@@ -53,7 +53,8 @@ class _MainPageState extends State<MainPage> {
                 user: state.user,
               ),
               SchedulePage(),
-              CalendarPage(),
+              ProfilePage(userEntity: state.user)
+              // CalendarPage(),
             ];
             return screens[currentTab];
           } else {
@@ -71,7 +72,7 @@ class _MainPageState extends State<MainPage> {
           TabItem(
             icon: FontAwesomeIcons.paw,
           ),
-          TabItem(icon: FontAwesomeIcons.calendar),
+          TabItem(icon: Icons.person),
           // TabItem(icon: Icons.person),
         ],
         initialActiveIndex: currentTab,

@@ -13,8 +13,13 @@ class TaskFirebaseRepositoryImpl implements TaskFirebaseRepository {
   }
 
   @override
-  Stream<List<TaskEntity>> getTodayTask(String petId) {
-    return taskFirebaseDataSource.getTodayTask(petId);
+  Stream<List<TaskEntity>> getTodayTask(String petId, DateTime date) {
+    return taskFirebaseDataSource.getTodayTask(petId, date);
+  }
+
+  @override
+  Future<void> changeTaskStatus(String taskId) {
+    return taskFirebaseDataSource.changeTaskStatus(taskId);
   }
 
   @override
