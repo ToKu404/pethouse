@@ -54,9 +54,6 @@ class _MainPageState extends State<MainPage> {
               ),
               SchedulePage(),
               CalendarPage(),
-              // ProfilePage(
-              //   userEntity: state.user,
-              // ),
             ];
             return screens[currentTab];
           } else {
@@ -79,7 +76,7 @@ class _MainPageState extends State<MainPage> {
         ],
         initialActiveIndex: currentTab,
         backgroundColor: kWhite,
-        color: kGrey,
+        color: kGreyTransparant,
         activeColor: kMainOrangeColor,
         elevation: 0,
         onTap: setBottomBarIndex,

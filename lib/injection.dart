@@ -37,6 +37,7 @@ import 'package:schedule/data/data_sources/task_firebase_data_source.dart';
 import 'package:schedule/data/repositories/task_repository_impl.dart';
 import 'package:schedule/domain/repositories/medicaladd_firebase_repository.dart';
 import 'package:schedule/domain/repositories/task_repository.dart';
+import 'package:schedule/domain/use_cases/change_task_status_usecase.dart';
 import 'package:schedule/domain/use_cases/get_today_task_usecase.dart';
 
 import 'package:schedule/domain/use_cases/medicaladd_usecase.dart';
@@ -183,6 +184,7 @@ void init() {
 
   locator.registerLazySingleton(() => SendAdoptNotifUsecase(locator()));
   locator.registerLazySingleton(() => GetPetsUsecase(locator()));
+  locator.registerLazySingleton(() => ChangeTaskStatusUsecase(locator()));
 
   // bloc & cubit
   locator.registerFactory(
@@ -240,8 +242,8 @@ void init() {
       .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
   locator.registerFactory(() => GetPetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetSchedulePetBloc(getPetUsecase: locator()));
-  locator
-      .registerFactory(() => GetTodayTaskBloc(getTodayTaskUsecase: locator()));
+  locator.registerFactory(() => GetTodayTaskBloc(
+      getTodayTaskUsecase: locator(), changeTaskStatusUsecase: locator()));
 
   //external
   final auth = FirebaseAuth.instance;
