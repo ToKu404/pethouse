@@ -66,7 +66,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return BlocListener<TaskBloc, TaskState>(
       listener: (context, state) {
         if (state is TaskSuccess) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return LoadingScreen();
+            },
+          );
           Future.delayed(Duration(seconds: 1), () {
+            Navigator.pop(context);
             Navigator.pop(context);
           });
         }

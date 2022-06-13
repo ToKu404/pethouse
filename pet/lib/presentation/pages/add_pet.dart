@@ -89,7 +89,14 @@ class _AddPetPageState extends State<AddPetPage> {
           if (state is AddPetError) {
             print(state.message);
           } else if (state is AddPetSuccess) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return LoadingScreen();
+              },
+            );
             Future.delayed(Duration(seconds: 1), () {
+              Navigator.pop(context);
               Navigator.pop(context);
             });
           }
