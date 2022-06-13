@@ -210,6 +210,84 @@ class _SchedulePageState extends State<SchedulePage> {
                                 ],
                               ),
                             ),
+                            ),
+                            index == activePage
+                                ? Container()
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: kWhite.withOpacity(.8),
+                                    ),
+                                  )
+                          ],
+                        ));
+                  },
+                  options: CarouselOptions(
+                    autoPlay: false,
+                    enableInfiniteScroll: listPet.length > 2 ? true : false,
+                    viewportFraction: .5,
+                    initialPage: activePage,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        activePage = index;
+                        BlocProvider.of<GetTodayTaskBloc>(context).add(
+                            FetchTodayTask(petId: listPet[activePage].id!));
+                      });
+                    },
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: kBorderRadius,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: kWhite),
+                              width: 200,
+                              height: 180,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'ADD',
+                                    style: kTextTheme.headline5
+                                        ?.copyWith(color: kDarkBrown),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GradientButton(
+                                      height: 50,
+                                      width: double.infinity,
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Navigator.pushNamed(
+                                            context, ADD_TASK_ROUTE_NAME,
+                                            arguments: listPet[activePage]);
+                                      },
+                                      text: 'New Task'),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GradientButton(
+                                      height: 50,
+                                      width: double.infinity,
+                                      onTap: () {
+                                        Navigator.pop(context);
+
+                                        Navigator.pushNamed(context,
+                                            AddMedicalActivity.ROUTE_NAME);
+                                      },
+                                      text: 'Medical Activity')
+                                ],
+                              ),
+                            ),
                           );
                         });
                     // Navigator.pushNamed(context, ADD_TASK_ROUTE_NAME,
