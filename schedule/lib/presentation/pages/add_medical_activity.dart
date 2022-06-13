@@ -45,7 +45,8 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Medical Activity', style: const TextStyle(color: Colors.black)),
+        title: const Text('Medical Activity',
+            style: const TextStyle(color: Colors.black)),
         leading: const btnBack_decoration(),
         centerTitle: true,
         elevation: 1,
@@ -156,7 +157,8 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                               tanggalAkhir:
                                   DateTime.now().add(const Duration(days: 366)),
                               tanggalAwal: DateTime.now(),
-                              initDate: DateTime.now().add(const Duration(days: 1)),
+                              initDate:
+                                  DateTime.now().add(const Duration(days: 1)),
                               onDateChanged: (selectedDate) {
                                 dateTime = selectedDate;
                               },
@@ -229,8 +231,8 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                               BlocProvider.of<MedicalBloc>(context)
                                   .add(CreateMedical(
                                       medicalEntity: MedicalEntity(
-                                time_publish:
-                                    Timestamp.fromDate(DateTime.now()),
+                                pet_id: widget.petEntity.id,
+                                time_publish: Timestamp.fromDate(DateTime.now()),
                                 activity: dropdownHint,
                                 location: location,
                                 description: description,
