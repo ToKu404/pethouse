@@ -6,7 +6,7 @@ const Color kPrimaryColor = Color(0xFFEE4E64);
 const Color kSecondaryColor = Color(0xFFFFC42E);
 const Color kDarkBrown = Color(0xFF300303);
 const Color kWhite = Colors.white;
-const Color kGrey = Color(0xFFE5E9F2);
+const Color kGrey = Color(0xFFCCCDCC);
 const Color kGreyTransparant = Color(0xFF878787);
 const Color kOrange = Color(0xFFEF9F21);
 

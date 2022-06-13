@@ -62,7 +62,9 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       focusNode: widget.focusNode,
       controller: _controllerDate,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0)
+        ),
         suffixIcon: widget.icon,
       ),
       onTap: () => _selectDate(context),

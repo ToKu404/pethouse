@@ -173,8 +173,9 @@ class MyApp extends StatelessWidget {
                           petEntity: pet,
                         ));
               case AddMedicalActivity.ROUTE_NAME:
+                final pet = settings.arguments as PetEntity;
                 return MaterialPageRoute(
-                    builder: (context) => AddMedicalActivity());
+                    builder: (context) => AddMedicalActivity(petEntity: pet));
               case ADD_TASK_ROUTE_NAME:
                 final petEntity = settings.arguments as PetEntity;
                 return MaterialPageRoute(

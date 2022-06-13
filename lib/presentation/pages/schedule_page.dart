@@ -203,7 +203,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                         Navigator.pop(context);
 
                                         Navigator.pushNamed(context,
-                                            AddMedicalActivity.ROUTE_NAME);
+                                            AddMedicalActivity.ROUTE_NAME,arguments: listPet[activePage]);
                                       },
                                       text: 'Medical Activity')
                                 ],
