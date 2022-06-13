@@ -44,10 +44,10 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Medical Activity', style: TextStyle(color: Colors.black)),
-        leading: btnBack_decoration(),
+        title: const Text('Medical Activity', style: const TextStyle(color: Colors.black)),
+        leading: const btnBack_decoration(),
+        elevation: 1,
         centerTitle: true,
-        elevation: 5,
         backgroundColor: kWhite,
       ),
       body: SafeArea(
@@ -59,53 +59,39 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
               child: Column(
                 children: [
                   Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Hanan',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                color: kDarkBrown,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        '${widget.petEntity.petName}',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          color: kDarkBrown,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Your best animal  Activity Medical ',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                color: const Color(0XFFCCA88A),
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        'Your Lovely Animal Medical Activity',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          color: const Color(0XFFCCA88A),
+                          fontSize: 10,
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       Container(
-                        width: 80,
-                        height: 80,
+                        width: 100,
+                        height: 100,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: kDarkBrown,
-                            width: 1.0,
+                            color: const Color(0xFFFFC46A),
+                            width: 1.8,
                           ),
-                          image: const DecorationImage(
+                          image:  DecorationImage(
                             image: NetworkImage(
-                              'https://asset.kompas.com/crops/MzG1rdeLzUk4jJ6KSn-6Sd20igg=/0x0:1920x1280/750x500/data/photo/2021/03/15/604edf099bac9.jpg',
+                              '${widget.petEntity.petPictureUrl}',
                             ),
                             fit: BoxFit.cover,
                           ),
@@ -113,150 +99,97 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: 'Select Activity',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: kPrimaryColor,width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0)
+                      )
+                    ),
+                    icon: const Icon(Icons.arrow_drop_down_rounded),
+                    style: GoogleFonts.poppins(
+                      color: const Color.fromARGB(255, 109, 109, 109),
+                      fontSize: 16,
+                    ),
+                    items: dropdownList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownHint = newValue!;
+                      });
+                    },
+                    validator: (value) =>
+                        value == null ? 'Please select activity' : null,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
                     children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Text(
-                          'Activity',
-                          style: GoogleFonts.poppins(
-                            color: kDarkBrown,
-                            fontSize: 12,
-                          ),
+                      Flexible(
+                        child: CustomDatePicker(
+                          icon: const Icon(Icons.date_range_rounded),
+                          tanggalAkhir:
+                              DateTime.now().add(const Duration(days: 366)),
+                          tanggalAwal: DateTime.now(),
+                          initDate: DateTime.now().add(const Duration(days: 1)),
+                          onDateChanged: (selectedDate) {
+                            dateTime = selectedDate;
+                          },
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: DropdownButtonFormField<String>(
-                            hint: Text(dropdownHint),
-                            icon: const Icon(Icons.arrow_drop_down_rounded),
-                            style: GoogleFonts.poppins(
-                              color: Color.fromARGB(255, 109, 109, 109),
-                              fontSize: 16,
-                            ),
-                            items: dropdownList
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                dropdownHint = newValue!;
-                              });
-                            },
-                            validator: (value) =>
-                                value == null ? 'Please select activity' : null,
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          bottom: 10,
-                          top: 10,
-                        ),
-                        child: Text(
-                          'Expired Date',
-                          style: TextStyle(
-                            color: kDarkBrown,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: CustomDatePicker(
-                              icon: Icon(Icons.date_range_rounded),
-                              tanggalAkhir:
-                                  DateTime.now().add(Duration(days: 366)),
-                              tanggalAwal: DateTime.now(),
-                              initDate: DateTime.now().add(Duration(days: 1)),
-                              onDateChanged: (selectedDate) {
-                                dateTime = selectedDate;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          bottom: 10,
-                          top: 10,
-                        ),
-                        child: Text(
-                          'Location',
-                          style: TextStyle(
-                            color: kDarkBrown,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _locationController,
-                        decoration: InputDecoration(
-                          fillColor: const Color(0xFF929292),
-                          hintText: 'Add Activity Location',
-                          border:
-                              OutlineInputBorder(borderRadius: kBorderRadius),
-                        ),
-                        validator: (_locationController) {
-                          if (_locationController!.isNotEmpty) {
-                            return null;
-                          } else {
-                            return 'Plase enter your location';
-                          }
-                        },
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          bottom: 10,
-                          top: 10,
-                        ),
-                        child: Text(
-                          'Description',
-                          style: TextStyle(
-                            color: kDarkBrown,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _descriptionController,
-                        decoration: InputDecoration(
-                          fillColor: const Color(0xFF929292),
-                          hintText: 'Add Activity Description',
-                          border:
-                              OutlineInputBorder(borderRadius: kBorderRadius),
-                        ),
-                        validator: (_descriptionController) {
-                          if (_descriptionController!.isNotEmpty) {
-                            return null;
-                          } else {
-                            return 'Plase enter your description';
-                          }
-                        },
-                        maxLines: 3,
                       ),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: _locationController,
+                    decoration: InputDecoration(
+                      labelText: 'Location',
+                      fillColor: const Color(0xFF929292),
+                      border:
+                          OutlineInputBorder(borderRadius: kBorderRadius),
+                    ),
+                    validator: (_locationController) {
+                      if (_locationController!.isNotEmpty) {
+                        return null;
+                      } else {
+                        return 'Plase enter your location';
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                      labelText: 'Description',
+                      fillColor: const Color(0xFF929292),
+                      border:
+                          OutlineInputBorder(borderRadius: kBorderRadius),
+                    ),
+                    validator: (_descriptionController) {
+                      if (_descriptionController!.isNotEmpty) {
+                        return null;
+                      } else {
+                        return 'Plase enter your description';
+                      }
+                    },
+                    maxLines: 3,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -266,23 +199,26 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                         height: 50,
                         width: double.infinity,
                         onTap: () {
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          } else {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                               return LoadingScreen();
-                              },
-                            );
-                            Future.delayed(Duration(seconds: 1), (){
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return LoadingScreen();
+                            },
+                          );
+                          Future.delayed(const Duration(seconds: 1),() {
+                            if (!_formKey.currentState!.validate()) {
+                              Navigator.pop(context);
+                              return;
+                            }
+                            else {
                               final description = _descriptionController.text;
                               final location = _locationController.text;
                               BlocProvider.of<MedicalBloc>(context)
                                   .add(CreateMedical(
                                   medicalEntity: MedicalEntity(
                                     pet_id: widget.petEntity.id,
-                                    time_publish: Timestamp.fromDate(DateTime.now()),
+                                    time_publish: Timestamp.fromDate(
+                                        DateTime.now()),
                                     activity: dropdownHint,
                                     location: location,
                                     description: description,
@@ -290,9 +226,8 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                                   )));
                               Navigator.pop(context);
                               Navigator.pop(context);
-                            });
-                            // Navigator.pop(context);
-                          }
+                            }
+                          });
                         },
                         text: 'Save Medical Activity'),
                   )
