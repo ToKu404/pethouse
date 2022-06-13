@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:pet/data/data_sources/pet_data_source.dart';
 
 import '../../domain/entities/pet_entity.dart';
@@ -31,5 +29,9 @@ class PetRepositoryImpl implements PetRepository {
   Stream<List<PetEntity>> getPets(String userId) {
     return petFirebaseDataSource.getPets(userId);
   }
-  
+
+  @override
+  Stream<PetEntity> getPetDesc(String petId) {
+    return petFirebaseDataSource.getPetDesc(petId);
+  }
 }

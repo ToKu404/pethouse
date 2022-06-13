@@ -6,4 +6,5 @@ abstract class PetRepository {
   Future<String> addPetCertificate(
       String petCertificatePath, String oldCertificateUrl);
   Stream<List<PetEntity>> getPets(String userId);
+  Stream<PetEntity> getPetDesc(String petId);
 }
