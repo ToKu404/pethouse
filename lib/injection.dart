@@ -28,10 +28,12 @@ import 'package:notification/domain/usecases/send_adopt_notif_usecase.dart';
 import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:pet/domain/repositories/pet_repository.dart';
 import 'package:pet/data/repositories/pet_repository_impl.dart';
+import 'package:pet/domain/usecases/get_pet_desc_usecase.dart';
 import 'package:pet/domain/usecases/get_pets_usecase.dart';
 
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
+import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 import 'package:schedule/data/data_sources/task_firebase_data_source.dart';
 import 'package:schedule/data/repositories/task_repository_impl.dart';
@@ -46,7 +48,6 @@ import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
 import 'package:schedule/presentation/blocs/addtask_bloc/task_bloc.dart';
 import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
 import 'package:schedule/presentation/blocs/day_calendar_task_bloc/day_calendar_task_bloc.dart';
-
 
 import 'package:user/data/data_sources/user_data_source.dart';
 import 'package:user/data/repositories/user_repository_impl.dart';
@@ -187,6 +188,8 @@ void init() {
   locator.registerLazySingleton(() => SendAdoptNotifUsecase(locator()));
   locator.registerLazySingleton(() => GetPetsUsecase(locator()));
   locator.registerLazySingleton(() => ChangeTaskStatusUsecase(locator()));
+  locator
+      .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
 
   // bloc & cubit
   locator.registerFactory(
@@ -244,10 +247,12 @@ void init() {
       .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
   locator.registerFactory(() => GetPetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetSchedulePetBloc(getPetUsecase: locator()));
+  locator.registerFactory(() => GetPetDescBloc(getPetDescUsecase: locator(), getTodayTaskUsecase: locator()));
+
   locator.registerFactory(() => GetTodayTaskBloc(
       getTodayTaskUsecase: locator(), changeTaskStatusUsecase: locator()));
-    locator.registerFactory(() => DayCalendarTaskBloc(
-      getTodayTaskUsecase: locator()));
+  locator.registerFactory(
+      () => DayCalendarTaskBloc(getTodayTaskUsecase: locator()));
 
   //external
   final auth = FirebaseAuth.instance;

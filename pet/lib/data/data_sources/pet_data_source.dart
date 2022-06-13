@@ -111,7 +111,7 @@ class PetDataSourceImpl implements PetDataSource {
 
   @override
   Stream<PetEntity> getPetDesc(String petId) {
-    final petCollection = firebaseFirestore.collection('pets').doc('pet_id');
+    final petCollection = firebaseFirestore.collection('pets').doc(petId);
     return petCollection
         .snapshots()
         .map((event) => PetModel.fromSnapshot(event));

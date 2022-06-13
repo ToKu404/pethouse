@@ -23,3 +23,15 @@ class GetPetDesc extends GetPetDescEvent {
   @override
   List<Object> get props => [petEntity];
 }
+
+
+class GetPetTodayTask extends GetPetDescEvent {
+  final PetEntity petEntity;
+  final List<TaskEntity> listTask;
+
+
+  const GetPetTodayTask({required this.petEntity, required this.listTask});
+
+  @override
+  List<Object> get props => [petEntity, listTask];
+}

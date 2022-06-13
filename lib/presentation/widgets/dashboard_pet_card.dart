@@ -13,7 +13,7 @@ class DashboardPetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, PetDescriptionPage.ROUTE_NAME),
+      onTap: () => Navigator.pushNamed(context, PET_DESC_ROUTE_NAME, arguments: pet.id),
       child: Stack(
         children: [
           Container(
