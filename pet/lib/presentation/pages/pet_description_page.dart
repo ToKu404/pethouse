@@ -1,166 +1,168 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:core/core.dart';
 import 'package:colorful_iconify_flutter/icons/twemoji.dart';
 import 'package:colorful_iconify_flutter/icons/noto.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
+import 'package:intl/intl.dart';
+import 'package:pet/domain/entities/pet_entity.dart';
+import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
+import 'package:schedule/domain/entities/task_entity.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/card_detail_pet.dart';
 import '../widgets/card_periodic_summary.dart';
 import '../widgets/daily_summary_card.dart';
 
-class PetDescriptionPage extends StatelessWidget {
-  final String description =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Justo, tristique turpis mauris, nunc adipiscing. Placerat turpis leo tristique tempus, purus.';
-  static const ROUTE_NAME = "pet_description";
+class PetDescriptionPage extends StatefulWidget {
+  final String petId;
 
-  const PetDescriptionPage({Key? key}) : super(key: key);
+  const PetDescriptionPage({Key? key, required this.petId}) : super(key: key);
+
+  @override
+  State<PetDescriptionPage> createState() => _PetDescriptionPageState();
+}
+
+class _PetDescriptionPageState extends State<PetDescriptionPage> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<GetPetDescBloc>(context)
+        .add(FetchPetDesc(petId: widget.petId));
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<DailySummary> _dailySummary = [
-      DailySummary('Feeds', '09:00', 'assets/icons/icon_feeds.svg', .9),
-      DailySummary('Walks', '10:00', 'assets/icons/icon_walks.svg', .8),
-      DailySummary('Pee', '11:00', 'assets/icons/icon_pee.svg', .65),
-      DailySummary('Vitamin', '12:00', 'assets/icons/icon_vitamin.svg', .4),
-    ];
     return Scaffold(
       appBar: AppBar(
-          elevation: 1,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(FontAwesomeIcons.arrowLeft),
-            color: kDarkBrown,
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            'Description',
-            style: kTextTheme.headline5,
-          ),
+        elevation: 1,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(FontAwesomeIcons.arrowLeft),
+          color: kDarkBrown,
         ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Description',
+          style: kTextTheme.headline5,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.more_vert,
+              size: 24,
+              color: kDarkBrown,
+            ),
+          )
+        ],
+      ),
       body: SafeArea(
-        child: _PetDescLayout(description: description, dailySummary: _dailySummary),
+        child: BlocBuilder<GetPetDescBloc, GetPetDescState>(
+            builder: (context, state) {
+          if (state is PetDescLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is PetDescSuccess) {
+            return _PetDescLayout(
+              pet: state.petEntity,
+              listTask: state.listTask,
+            );
+          } else {
+            return const Center();
+          }
+        }),
       ),
     );
   }
 }
 
 class _PetDescLayout extends StatelessWidget {
-  const _PetDescLayout({
-    Key? key,
-    required this.description,
-    required List<DailySummary> dailySummary,
-  }) : _dailySummary = dailySummary, super(key: key);
+  final PetEntity pet;
+  final List<TaskEntity> listTask;
+  _PetDescLayout({Key? key, required this.pet, required this.listTask})
+      : super(key: key);
 
-  final String description;
-  final List<DailySummary> _dailySummary;
+  final taskType = [
+    'Feed',
+    'Walk',
+    'Pee',
+    'Vitamin',
+  ];
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        Stack(
-          children: [
-            SizedBox(
-              height: 362,
-              child: Image.asset(
-                'assets/images/image_cat.png',
-                fit: BoxFit.fill,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0x30000000)),
-                      child: const Icon(
-                        FontAwesomeIcons.arrowLeft,
-                        size: 24,
-                        color: kWhite,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () => {},
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: Color(0x30000000)),
-                      child: const Icon(
-                        Icons.more_vert,
-                        size: 24,
-                        color: kWhite,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
+        Container(
+          height: 300,
+          width: double.infinity,
+          margin: const EdgeInsets.all(kPadding * 2),
+          decoration: BoxDecoration(
+            color: kGrey,
+            borderRadius: BorderRadius.circular(10),
+            image: pet.petPictureUrl != "" && pet.petPictureUrl != null
+                ? DecorationImage(
+                    image: NetworkImage(pet.petPictureUrl ?? ''),
+                    fit: BoxFit.cover)
+                : null,
+          ),
+          child: pet.petPictureUrl == "" || pet.petPictureUrl == null
+              ? const Icon(Icons.image)
+              : null,
         ),
         Padding(
-          padding: const EdgeInsets.only(
-              top: 4, left: 16, right: 16, bottom: 16),
+          padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    children: [
-                      Text(
-                        'Ikhsan',
-                        style: kTextTheme.headline4,
-                      ),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.cake,
-                            color: kOrange,
-                            size: 18,
-                          ),
-                          Text(
-                            '17 May 2020',
-                            style: kTextTheme.overline,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () => {},
-                    child: Container(
-                      height: 32,
-                      width: 41,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: kOrange,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: kGreyTransparant,
-                            offset: const Offset(0.0, 1.0), //(x,y)
-                            blurRadius: 6.0,
-                          )
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(3),
-                      child: const Iconify(
-                        Carbon.certificate,
-                        color: kWhite,
-                      ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          pet.petName ?? '-',
+                          style: kTextTheme.headline4,
+                        ),
+                        Text(
+                          pet.petType ?? '-',
+                          style: kTextTheme.bodyText2?.copyWith(
+                              height: 1, fontSize: 14, color: kGreyTransparant),
+                        ),
+                      ],
                     ),
                   ),
+                  pet.certificateUrl != "" && pet.certificateUrl != null
+                      ? InkWell(
+                          onTap: () async {
+                            if (!await launchUrlString(
+                              pet.certificateUrl!,
+                              mode: LaunchMode.externalApplication,
+                            )) {
+                              throw 'Could not launch ${pet.certificateUrl!}';
+                            }
+                          },
+                          child: Container(
+                            height: 32,
+                            width: 41,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: kOrange,
+                            ),
+                            padding: const EdgeInsets.all(3),
+                            child: SvgPicture.asset(
+                              'assets/icons/certificate_icon.svg',
+                              color: kWhite,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               const SizedBox(
@@ -171,15 +173,17 @@ class _PetDescLayout extends StatelessWidget {
                 children: [
                   CardDetailPet(
                     type: 'Gender',
-                    content: 'Male',
+                    content: pet.gender ?? '-',
                   ),
                   CardDetailPet(
                     type: 'Age',
-                    content: '2 Year',
+                    content: pet.dateOfBirth != null ? _getAge() : '-',
                   ),
                   CardDetailPet(
                     type: 'Breed',
-                    content: 'Scottish',
+                    content: pet.petBreed != '' && pet.petBreed != null
+                        ? pet.petBreed!
+                        : '-',
                   )
                 ],
               ),
@@ -187,7 +191,7 @@ class _PetDescLayout extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                description,
+                pet.petDescription!,
                 style: kTextTheme.bodyText2,
               ),
               const SizedBox(
@@ -199,14 +203,13 @@ class _PetDescLayout extends StatelessWidget {
               ),
               Text(
                 'Daily Summary',
-                style: kTextTheme.headline4,
+                style: kTextTheme.headline5,
               ),
               const SizedBox(
                 height: 10,
               ),
               GridView.builder(
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 7 / 8,
                   mainAxisSpacing: 10,
@@ -214,10 +217,10 @@ class _PetDescLayout extends StatelessWidget {
                 ),
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: _dailySummary.length,
+                itemCount: taskType.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final ds = _dailySummary[index];
-                  return DailySummaryCard(dailySummary: ds);
+                  return DailySummaryCard(
+                      dailySummary: _buildDailySummary(taskType[index]));
                 },
               ),
               const SizedBox(
@@ -225,14 +228,14 @@ class _PetDescLayout extends StatelessWidget {
               ),
               Text(
                 'Periodic Summary',
-                style: kTextTheme.headline4,
+                style: kTextTheme.headline5,
               ),
               const SizedBox(
                 height: 10,
               ),
               Container(
                 decoration: BoxDecoration(
-                    color: kOrange, borderRadius: kBorderRadius),
+                    color: kMainOrangeColor, borderRadius: kBorderRadius),
                 child: Padding(
                   padding: const EdgeInsets.all(kPadding),
                   child: Column(
@@ -283,13 +286,50 @@ class _PetDescLayout extends StatelessWidget {
       ],
     );
   }
-}
 
-class DailySummary {
-  final String title;
-  final String time;
-  final String icon;
-  final double progress;
+  _getAge() {
+    DateTime? born = pet.dateOfBirth?.toDate();
+    DateTime today = DateTime.now();
+    int yearDiff = today.year - (born?.year ?? 0);
+    int monthDiff = today.month - (born?.month ?? 0);
+    int dayDiff = today.day - (born?.day ?? 0);
 
-  DailySummary(this.title, this.time, this.icon, this.progress);
+    String age = '';
+    if (yearDiff > 0) {
+      age += yearDiff.toString();
+      int percentMonth = (monthDiff / 12).round();
+      age += percentMonth > 0 ? '.$percentMonth' : '';
+      age += ' Year';
+    } else if (monthDiff > 0) {
+      age += '$monthDiff Month';
+    } else {
+      age += '$dayDiff Day';
+    }
+    return age;
+  }
+
+  _buildDailySummary(String taskType) {
+    Map<String, dynamic> dailySummary = {};
+    dailySummary['title'] = taskType;
+    dailySummary['icon'] = kTaskVector[taskType];
+    final choiceTask =
+        listTask.where((element) => element.activity == taskType);
+    if (choiceTask.isEmpty) {
+      dailySummary['progress'] = 0.0;
+      dailySummary['time'] = 'No Task Today';
+    } else {
+      int completeTask =
+          choiceTask.where((element) => element.status == 'complete').length;
+      dailySummary['progress'] = (completeTask / choiceTask.length).toDouble();
+      DateTime now = DateTime.now();
+      for (var task in listTask) {
+        if (now.isBefore(task.startTime!.toDate())) {
+          now = task.startTime!.toDate();
+          break;
+        }
+      }
+      dailySummary['time'] = DateFormat.jm().format(now);
+    }
+    return dailySummary;
+  }
 }
