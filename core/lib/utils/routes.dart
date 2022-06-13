@@ -17,6 +17,8 @@ const SPLASH_ROUTE_NAME = "splash";
 const ADD_PET_ROUTE_NAME = "add-pet";
 const ADD_TASK_ROUTE_NAME = "add-task";
 const SCHEDULE_CALENDAR_ROUTE_NAME = "schedule-calender";
+const PET_DESC_ROUTE_NAME = "pet-desc";
+
 
 
 

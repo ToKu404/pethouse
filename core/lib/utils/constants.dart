@@ -129,6 +129,13 @@ const Map<String, IconData> kTaskType = {
   'Period': FontAwesomeIcons.timeline,
 };
 
+const Map<String, String> kTaskVector = {
+  'Feed': 'assets/icons/icon_feeds.svg',
+  'Walk': 'assets/icons/icon_walks.svg',
+  'Pee': 'assets/icons/icon_pee.svg',
+  'Vitamin': 'assets/icons/icon_vitamin.svg',
+};
+
 const kTitleColor = Color(0xFF300303);
 const kMainOrangeColor = Color(0xFFFFC42E);
 const kMainPinkColor = Color(0xFFEE4E64);

@@ -20,9 +20,10 @@ class PetDescError extends GetPetDescState {
 
 class PetDescSuccess extends GetPetDescState {
   final PetEntity petEntity;
+  final List<TaskEntity> listTask;
 
-  PetDescSuccess({required this.petEntity});
+  PetDescSuccess({required this.petEntity, required this.listTask});
 
   @override
-  List<Object> get props => [petEntity];
+  List<Object> get props => [petEntity, listTask];
 }

@@ -30,7 +30,12 @@ class CardDetailPet extends StatelessWidget {
                 type,
                 style: kTextTheme.bodyText2,
               ),
-              Text(content, style: kTextTheme.headline6)
+              Text(
+                content,
+                style: kTextTheme.headline6,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              )
             ],
           ),
         ),

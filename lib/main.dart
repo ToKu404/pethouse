@@ -22,6 +22,7 @@ import 'package:notification/presentation/pages/notification_page.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
+import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
@@ -87,6 +88,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<GetSchedulePetBloc>()),
           BlocProvider(create: (_) => di.locator<GetTodayTaskBloc>()),
           BlocProvider(create: (_) => di.locator<DayCalendarTaskBloc>()),
+          BlocProvider(create: (_) => di.locator<GetPetDescBloc>()),
+
 
         ],
         child: MaterialApp(
@@ -156,9 +159,10 @@ class MyApp extends StatelessWidget {
               case NoInternetPage.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const NoInternetPage());
-              case PetDescriptionPage.ROUTE_NAME:
+              case PET_DESC_ROUTE_NAME:
+                final petId = settings.arguments as String;
                 return MaterialPageRoute(
-                    builder: (context) => const PetDescriptionPage());
+                    builder: (context) => PetDescriptionPage(petId: petId,));
               case DetailPetrivia.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const DetailPetrivia());
