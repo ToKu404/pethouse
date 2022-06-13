@@ -25,7 +25,6 @@ import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
-import 'package:schedule/domain/entities/medical_entity.dart';
 import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
 import 'package:schedule/presentation/blocs/addtask_bloc/task_bloc.dart';
 import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
@@ -170,11 +169,8 @@ class MyApp extends StatelessWidget {
                           petEntity: pet,
                         ));
               case AddMedicalActivity.ROUTE_NAME:
-                final pet = settings.arguments as PetEntity;
                 return MaterialPageRoute(
-                    builder: (context) => AddMedicalActivity(
-                        petEntity: pet)
-                );
+                    builder: (context) => AddMedicalActivity());
               case ADD_TASK_ROUTE_NAME:
                 final petEntity = settings.arguments as PetEntity;
                 return MaterialPageRoute(

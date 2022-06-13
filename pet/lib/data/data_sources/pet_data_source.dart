@@ -13,6 +13,7 @@ abstract class PetDataSource {
   Future<String> uploadPetCertificate(
       String petCertificatePath, String oldPath);
   Stream<List<PetEntity>> getPets(String userId);
+  Stream<PetEntity> getPetDesc(String petId);
 }
 
 class PetDataSourceImpl implements PetDataSource {
@@ -106,5 +107,13 @@ class PetDataSourceImpl implements PetDataSource {
           .map((docSnap) => PetModel.fromSnapshot(docSnap))
           .toList();
     });
+  }
+
+  @override
+  Stream<PetEntity> getPetDesc(String petId) {
+    final petCollection = firebaseFirestore.collection('pets').doc('pet_id');
+    return petCollection
+        .snapshots()
+        .map((event) => PetModel.fromSnapshot(event));
   }
 }
