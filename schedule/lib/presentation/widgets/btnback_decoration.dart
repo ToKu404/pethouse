@@ -12,8 +12,8 @@ class btnBack_decoration extends StatelessWidget {
       child: InkWell(
         onTap: () => Navigator.pop(context),
         child: Container(
-          decoration: BoxDecoration(shape: BoxShape.circle, color: kGrey),
-          child: Icon(
+          decoration: const BoxDecoration(shape: BoxShape.circle, color: kGrey),
+          child: const Icon(
             FontAwesomeIcons.arrowLeft,
             size: 18,
             color: kWhite,
