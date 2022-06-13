@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:core/core.dart';
+import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:schedule/domain/entities/medical_entity.dart';
 import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
 import 'package:schedule/presentation/widgets/btnback_decoration.dart';
@@ -11,6 +12,8 @@ import 'package:schedule/presentation/widgets/gredient_button.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AddMedicalActivity extends StatefulWidget {
+  final PetEntity petEntity;
+  AddMedicalActivity({required this.petEntity});
   static const ROUTE_NAME = "medical_activity";
 
   @override
@@ -269,20 +272,7 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return SpinKitCircle(
-                                  size: 120,
-                                  duration: Duration(seconds: 1),
-                                  itemBuilder: (context, index){
-                                    final colors = [kPrimaryColor,kWhite];
-                                    final color = colors[index%colors.length];
-                                    return DecoratedBox(
-                                        decoration: BoxDecoration(
-                                            color: color,
-                                        shape: BoxShape.circle
-                                        )
-                                    );
-                                  },
-                                );
+                               return LoadingScreen();
                               },
                             );
                             Future.delayed(Duration(seconds: 1), (){
@@ -291,6 +281,7 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                               BlocProvider.of<MedicalBloc>(context)
                                   .add(CreateMedical(
                                   medicalEntity: MedicalEntity(
+                                    pet_id: widget.petEntity.id,
                                     time_publish: Timestamp.fromDate(DateTime.now()),
                                     activity: dropdownHint,
                                     location: location,
@@ -298,9 +289,7 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                                     expired_date: Timestamp.fromDate(dateTime),
                                   )));
                               Navigator.pop(context);
-                              Future.delayed(Duration(seconds: 0),(){
-                                Navigator.pop(context);
-                              });
+                              Navigator.pop(context);
                             });
                             // Navigator.pop(context);
                           }

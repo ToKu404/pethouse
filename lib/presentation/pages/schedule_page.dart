@@ -201,9 +201,10 @@ class _SchedulePageState extends State<SchedulePage> {
                                       width: double.infinity,
                                       onTap: () {
                                         Navigator.pop(context);
-
-                                        Navigator.pushNamed(context,
-                                            AddMedicalActivity.ROUTE_NAME);
+                                        Navigator.pushNamed(
+                                            context, AddMedicalActivity.ROUTE_NAME,
+                                        arguments: listPet[activePage]
+                                        );
                                       },
                                       text: 'Medical Activity')
                                 ],
