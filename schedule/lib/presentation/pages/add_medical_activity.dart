@@ -229,8 +229,8 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                               BlocProvider.of<MedicalBloc>(context)
                                   .add(CreateMedical(
                                       medicalEntity: MedicalEntity(
-                                time_publish:
-                                    Timestamp.fromDate(DateTime.now()),
+                                pet_id: widget.petEntity.id,
+                                time_publish: Timestamp.fromDate(DateTime.now()),
                                 activity: dropdownHint,
                                 location: location,
                                 description: description,
