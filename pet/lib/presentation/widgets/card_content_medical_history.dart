@@ -1,20 +1,22 @@
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:core/core.dart';
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:core/core.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:pet/domain/entities/medical_entity.dart';
 // import 'package:pet/domain/entities/medical_entity.dart';
 
-// class CardContentMedical extends StatelessWidget {
-//   final MedicalEntity medicalEntity;
-//   CardContentMedical({Key? key, required this.medicalEntity}) : super(key: key);
+class CardContentMedical extends StatelessWidget {
+  final GetPetMedicalEntity medicalEntity;
+  CardContentMedical({Key? key, required this.medicalEntity}) : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
 //     DateTime dateTimeNow = medicalEntity.timeNow.toDate();
 //     DateTime dateTimeExpired = medicalEntity.expiredDate.toDate();
-
+//
 //     return Container(
 //       margin: const EdgeInsets.only(
 //           left: kPadding, right: kPadding, bottom: kPadding),
@@ -132,5 +134,5 @@
 //         ],
 //       ),
 //     );
-//   }
-// }
+  }
+}

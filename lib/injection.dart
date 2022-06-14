@@ -30,6 +30,8 @@ import 'package:pet/domain/repositories/pet_repository.dart';
 import 'package:pet/data/repositories/pet_repository_impl.dart';
 import 'package:pet/domain/usecases/get_pet_desc_usecase.dart';
 import 'package:pet/domain/usecases/get_pets_usecase.dart';
+import 'package:pet/domain/usecases/get_pet_medical_usecase.dart';
+import 'package:pet/presentation/bloc/get_pet_medical/get_pet_medical_bloc.dart';
 
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
@@ -80,6 +82,9 @@ import 'package:pet/data/data_sources/pet_data_source.dart';
 import 'package:pet/domain/usecases/add_pet_certificate_usecase.dart';
 import 'package:pet/domain/usecases/add_pet_photo_usecase.dart';
 import 'package:pet/domain/usecases/add_pet_usecase.dart';
+import 'package:pet/data/data_sources/pet_medical_data_source.dart';
+import 'package:pet/data/repositories/pet_medical_repository_impl.dart';
+import 'package:pet/domain/repositories/pet_medical_repository.dart';
 
 import 'package:user/presentation/blocs/user_profile_bloc/user_profile_bloc.dart';
 import 'package:schedule/data/repositories/medical_firebase_repository_impl.dart';
@@ -102,6 +107,8 @@ void init() {
       () => AdoptRepositoryImpl(adoptDataSource: locator()));
   locator.registerLazySingleton<NotificationRepository>(
       () => NotificationRepositoryImpl(notificationDataSource: locator()));
+  locator.registerLazySingleton<PetMedicalRepository>(
+      () => PetMedicalRepositoryImpl(petMedicalDataSource: locator()));
 
   // datasource
   locator.registerLazySingleton<UserDataSource>(() => UserDataSourceImpl(
@@ -121,6 +128,8 @@ void init() {
       ));
   locator.registerLazySingleton<NotificationDataSource>(
       () => NotificationDataSourceImpl(firebaseFirestore: locator()));
+  locator.registerLazySingleton<PetMedicalDataSource>(
+          () => PetMedicalDataSourceImpl(firebaseFirestore: locator(),firebaseStorage: locator()));
 
   // usecases
   locator.registerLazySingleton(
@@ -190,6 +199,8 @@ void init() {
   locator.registerLazySingleton(() => ChangeTaskStatusUsecase(locator()));
   locator
       .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
+  locator
+      .registerLazySingleton(() => GetPetMedicalUsecase(petMedicalRepository: locator()));
 
   // bloc & cubit
   locator.registerFactory(
@@ -248,7 +259,7 @@ void init() {
   locator.registerFactory(() => GetPetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetSchedulePetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetPetDescBloc(getPetDescUsecase: locator(), getTodayTaskUsecase: locator()));
-
+  locator.registerFactory(() => GetPetMedicalBloc(getPetMedicalUsecase: locator()));
   locator.registerFactory(() => GetTodayTaskBloc(
       getTodayTaskUsecase: locator(), changeTaskStatusUsecase: locator()));
   locator.registerFactory(

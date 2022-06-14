@@ -10,6 +10,7 @@ import 'package:iconify_flutter/icons/carbon.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
+import 'package:pet/presentation/widgets/card_medical_history.dart';
 import 'package:schedule/domain/entities/task_entity.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -197,7 +198,7 @@ class _PetDescLayout extends StatelessWidget {
               const SizedBox(
                 height: 19,
               ),
-              // const CardMedicalHistory(),
+              CardMedicalHistory(petName: pet.petName),
               const SizedBox(
                 height: 19,
               ),

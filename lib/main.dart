@@ -23,6 +23,7 @@ import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
+import 'package:pet/presentation/bloc/get_pet_medical/get_pet_medical_bloc.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
@@ -89,7 +90,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<GetTodayTaskBloc>()),
           BlocProvider(create: (_) => di.locator<DayCalendarTaskBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetDescBloc>()),
-
+          BlocProvider(create: (_) => di.locator<GetPetMedicalBloc>()),
 
         ],
         child: MaterialApp(
