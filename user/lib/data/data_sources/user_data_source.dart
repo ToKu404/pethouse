@@ -63,11 +63,14 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Future<bool> isSignIn() async {
-    return firebaseAuth.currentUser?.uid == null ? false : true;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey('userId') ? true : false;
   }
 
   @override
   Future<String> getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? user = prefs.getString('userId');
     if (firebaseAuth.currentUser?.uid != null) {
       return firebaseAuth.currentUser!.uid;
     } else {

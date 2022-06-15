@@ -1,14 +1,16 @@
+import 'dart:io';
+
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:adopt/presentation/blocs/open_adopt_status_bloc/open_adopt_status_bloc.dart';
 import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
 import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
-import 'package:adopt/presentation/pages/adopt_page.dart';
 import 'package:adopt/presentation/pages/detail_adopt_page.dart';
 import 'package:adopt/presentation/pages/edit_adopt_page.dart';
 import 'package:adopt/presentation/pages/open_adopt_page.dart';
 import 'package:adopt/presentation/pages/activity_status_page.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 import 'package:core/core.dart';
 import 'package:core/presentation/pages/no_internet_page.dart';
@@ -18,7 +20,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
-import 'package:notification/presentation/pages/notification_page.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
@@ -26,11 +27,15 @@ import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
-import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
-import 'package:schedule/presentation/blocs/addtask_bloc/task_bloc.dart';
+import 'package:schedule/presentation/blocs/get_pet_medical_bloc/get_pet_medical_bloc.dart';
+import 'package:schedule/presentation/blocs/medical_bloc/medical_bloc.dart';
+import 'package:schedule/presentation/blocs/task_bloc/task_bloc.dart';
+import 'package:schedule/presentation/blocs/get_monthly_task_bloc/get_monthly_task_bloc.dart';
 import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
+import 'package:schedule/presentation/blocs/schedule_task_bloc/schedule_task_bloc.dart';
 import 'package:schedule/presentation/pages/add_medical_activity.dart';
 import 'package:schedule/presentation/pages/add_new_task.dart';
+import 'package:schedule/presentation/pages/calendar_page.dart';
 import 'package:user/domain/entities/user_entity.dart';
 import 'package:user/presentation/blocs/reset_password_bloc/reset_password_bloc.dart';
 import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
@@ -44,15 +49,24 @@ import 'package:user/user.dart';
 import 'firebase_options.dart';
 import 'injection.dart' as di;
 import 'presentation/pages/main_page.dart';
-import 'presentation/pages/petrivia/detail_petrivia.dart';
-import 'presentation/pages/calendar_page.dart';
 import 'presentation/pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final NotificationHelper _notificationHelper = NotificationHelper();
+  final BackgroundService _service = BackgroundService();
+
+  _service.initializeIsolate();
+
+  if (Platform.isAndroid) {
+    await AndroidAlarmManager.initialize();
+  }
+  await _notificationHelper.initNotifications(flutterLocalNotificationsPlugin);
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   di.init();
   runApp(const MyApp());
 }
@@ -64,7 +78,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: kWhite, // navigation bar color
-      statusBarColor: kMainOrangeColor, // status bar color
+      statusBarColor: kPrimaryColor, // status bar color
     ));
     return MultiBlocProvider(
         providers: [
@@ -89,8 +103,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<GetTodayTaskBloc>()),
           BlocProvider(create: (_) => di.locator<DayCalendarTaskBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetDescBloc>()),
-
-
+          BlocProvider(create: (_) => di.locator<ScheduleTaskBloc>()),
+          BlocProvider(create: (_) => di.locator<GetMonthlyTaskBloc>()),
+          BlocProvider(create: (_) => di.locator<GetPetMedicalBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -130,15 +145,9 @@ class MyApp extends StatelessWidget {
                     builder: (context) => EditProfilePage(
                           uid: uid,
                         ));
-              // case ChangePasswordPage.ROUTE_NAME:
-              //   return MaterialPageRoute(
-              //       builder: (context) => ChangePasswordPage());
               case OPEN_ADOPT_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const OpenAdoptPage());
-              case ADOPT_ROUTE_NAME:
-                return MaterialPageRoute(
-                    builder: (context) => const AdoptPage());
               case ACTIVITY_STATUS_ROUT_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const ActivityStatusPage());
@@ -149,9 +158,6 @@ class MyApp extends StatelessWidget {
                     petAdoptId: petId,
                   ),
                 );
-              case NOTIFICATION_ROUT_NAME:
-                return MaterialPageRoute(
-                    builder: (context) => const NotificationPage());
               case EDIT_ADOPT_ROUTE_NAME:
                 final adopt = settings.arguments as AdoptEntity;
                 return MaterialPageRoute(
@@ -162,20 +168,20 @@ class MyApp extends StatelessWidget {
               case PET_DESC_ROUTE_NAME:
                 final petId = settings.arguments as String;
                 return MaterialPageRoute(
-                    builder: (context) => PetDescriptionPage(petId: petId,));
-              case DetailPetrivia.ROUTE_NAME:
-                return MaterialPageRoute(
-                    builder: (context) => const DetailPetrivia());
+                    builder: (context) => PetDescriptionPage(
+                          petId: petId,
+                        ));
               case SCHEDULE_CALENDAR_ROUTE_NAME:
                 final pet = settings.arguments as PetEntity;
                 return MaterialPageRoute(
                     builder: (context) => CalendarPage(
                           petEntity: pet,
                         ));
-              case AddMedicalActivity.ROUTE_NAME:
+              case ADD_MEDICAL_ACTIVITY_ROUTE_NAME:
                 final pet = settings.arguments as PetEntity;
                 return MaterialPageRoute(
-                    builder: (context) => AddMedicalActivity(petEntity: pet));
+                    builder: (context) =>
+                        AddMedicalActivityPage(petEntity: pet));
               case ADD_TASK_ROUTE_NAME:
                 final petEntity = settings.arguments as PetEntity;
                 return MaterialPageRoute(

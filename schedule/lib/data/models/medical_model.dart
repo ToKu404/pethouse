@@ -11,8 +11,8 @@ class MedicalModel extends MedicalEntity {
   final String? pet_id;
 
   MedicalModel(
-      { this.medical_id,
-        this.pet_id,
+      {this.medical_id,
+      this.pet_id,
       required this.activity,
       required this.expired_date,
       required this.location,
@@ -29,7 +29,8 @@ class MedicalModel extends MedicalEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'pet_id':pet_id,
+      "medical_id": medical_id,
+      'pet_id': pet_id,
       'activity': activity,
       'expired_date': expired_date,
       'location': location,
@@ -37,4 +38,26 @@ class MedicalModel extends MedicalEntity {
       'time_publish': time_publish
     };
   }
+
+  factory MedicalModel.fromSnapshot(DocumentSnapshot documentSnapshot) {
+    return MedicalModel(
+      medical_id: documentSnapshot.get("medical_id"),
+      activity: documentSnapshot.get("activity"),
+      description: documentSnapshot.get("description"),
+      expired_date: documentSnapshot.get("expired_date"),
+      location: documentSnapshot.get("location"),
+      pet_id: documentSnapshot.get("pet_id"),
+      time_publish: documentSnapshot.get("time_publish"),
+    );
+  }
+  @override
+  List<Object?> get props => [
+        medical_id,
+        activity,
+        description,
+        expired_date,
+        location,
+        pet_id,
+        time_publish
+      ];
 }

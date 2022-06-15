@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:user/presentation/widgets/gradient_button.dart';
 
 import '../../blocs/user_db_bloc/user_db_bloc.dart';
@@ -25,29 +26,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              decoration:
-                  const BoxDecoration(shape: BoxShape.circle, color: kGrey),
-              child: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 18,
-                color: kWhite,
-              ),
-            ),
-          ),
+        elevation: 1,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(FontAwesomeIcons.arrowLeft),
+          color: kPrimaryColor,
         ),
-        centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(
           'Edit Profile',
           style: kTextTheme.headline5,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
-        elevation: 1,
-        shadowColor: kGrey,
       ),
       body: const SafeArea(child: _FormEditProfile()),
     );
@@ -104,7 +95,6 @@ class _FormEditProfile extends StatelessWidget {
                             .read<UserProfileBloc>()
                             .add(SubmitUpdate(state.user.uid ?? 'uid'));
                         Future.delayed(const Duration(seconds: 1), () {
-                       
                           Navigator.pop(context);
                         });
                       },
@@ -147,7 +137,7 @@ class _ImageSection extends StatelessWidget {
                   height: 120,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(width: 2, color: Colors.grey),
+                    border: Border.all(width: 2, color: kGrey),
                     image: DecorationImage(
                         image: NetworkImage(
                             state.imageIsUpload ? state.imageUrl : imageUrl),

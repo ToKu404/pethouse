@@ -66,7 +66,7 @@ class CustomDialog extends StatelessWidget {
                         elevation: 0,
                         primary: button.type == 'close'
                             ? const Color(0xFFD6E4F8)
-                            : const Color(0xFF4DD46B),
+                            : kPrimaryColor,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20))),
                     onPressed: button.func,
@@ -91,7 +91,7 @@ class CustomDialog extends StatelessWidget {
           left: kPadding,
           right: kPadding,
           child: CircleAvatar(
-            backgroundColor: Color(0xFF4DD46B),
+            backgroundColor: kPrimaryColor,
             radius: 40,
             child: Icon(
               Icons.check,

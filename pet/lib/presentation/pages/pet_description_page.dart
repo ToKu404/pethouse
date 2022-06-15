@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:core/core.dart';
-import 'package:colorful_iconify_flutter/icons/twemoji.dart';
-import 'package:colorful_iconify_flutter/icons/noto.dart';
-import 'package:iconify_flutter/icons/carbon.dart';
 import 'package:intl/intl.dart';
+import 'package:schedule/domain/entities/task_entity.dart';
+import 'package:schedule/presentation/blocs/get_monthly_task_bloc/get_monthly_task_bloc.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
-import 'package:schedule/domain/entities/task_entity.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/card_detail_pet.dart';
-import '../widgets/card_periodic_summary.dart';
-import '../widgets/daily_summary_card.dart';
+import '../widgets/card_medical_history.dart';
 
 class PetDescriptionPage extends StatefulWidget {
   final String petId;
@@ -32,6 +29,8 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
     super.initState();
     BlocProvider.of<GetPetDescBloc>(context)
         .add(FetchPetDesc(petId: widget.petId));
+    BlocProvider.of<GetMonthlyTaskBloc>(context)
+        .add(FetchMonthlyTask(petId: widget.petId));
   }
 
   @override
@@ -42,22 +41,37 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kDarkBrown,
+          color: kPrimaryColor,
         ),
         backgroundColor: Colors.white,
         title: Text(
-          'Description',
+          'Pet Profile',
           style: kTextTheme.headline5,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.more_vert,
-              size: 24,
-              color: kDarkBrown,
+          PopupMenuButton(
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+              child: Icon(
+                Icons.more_vert,
+                color: kPrimaryColor,
+              ),
             ),
-          )
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  child: const Text('Edit Pet'),
+                  onTap: () {},
+                ),
+                PopupMenuItem(
+                  child: const Text('Remove Pet'),
+                  onTap: () {},
+                )
+              ];
+            },
+          ),
         ],
       ),
       body: SafeArea(
@@ -68,7 +82,6 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
           } else if (state is PetDescSuccess) {
             return _PetDescLayout(
               pet: state.petEntity,
-              listTask: state.listTask,
             );
           } else {
             return const Center();
@@ -81,17 +94,7 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
 
 class _PetDescLayout extends StatelessWidget {
   final PetEntity pet;
-  final List<TaskEntity> listTask;
-  _PetDescLayout({Key? key, required this.pet, required this.listTask})
-      : super(key: key);
-
-  final taskType = [
-    'Feed',
-    'Walk',
-    'Pee',
-    'Vitamin',
-  ];
-
+  const _PetDescLayout({Key? key, required this.pet}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -175,9 +178,15 @@ class _PetDescLayout extends StatelessWidget {
                     type: 'Gender',
                     content: pet.gender ?? '-',
                   ),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   CardDetailPet(
                     type: 'Age',
                     content: pet.dateOfBirth != null ? _getAge() : '-',
+                  ),
+                  const SizedBox(
+                    width: 10,
                   ),
                   CardDetailPet(
                     type: 'Breed',
@@ -190,96 +199,130 @@ class _PetDescLayout extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+              const Divider(),
+              Text(
+                'Description',
+                style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
+              ),
               Text(
                 pet.petDescription!,
-                style: kTextTheme.bodyText2,
+                style: kTextTheme.bodyText2?.copyWith(fontSize: 14),
               ),
+              const Divider(),
               const SizedBox(
-                height: 19,
+                height: 10,
               ),
-              // const CardMedicalHistory(),
-              const SizedBox(
-                height: 19,
-              ),
-              Text(
-                'Daily Summary',
-                style: kTextTheme.headline5,
+              CardMedicalHistory(
+                petId: pet.id!,
               ),
               const SizedBox(
                 height: 10,
               ),
-              GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 7 / 8,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: taskType.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return DailySummaryCard(
-                      dailySummary: _buildDailySummary(taskType[index]));
-                },
-              ),
-              const SizedBox(
-                height: 19,
-              ),
-              Text(
-                'Periodic Summary',
-                style: kTextTheme.headline5,
-              ),
+              const Divider(),
               const SizedBox(
                 height: 10,
               ),
               Container(
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: kMainOrangeColor, borderRadius: kBorderRadius),
-                child: Padding(
-                  padding: const EdgeInsets.all(kPadding),
-                  child: Column(
-                    children: [
-                      CardPeriodicSummary(
-                          iconfy: const Iconify(
-                            Noto.shower,
-                            size: 36,
-                          ),
-                          titlePeriodic: 'Shower',
-                          typePeriodic: 'Activity',
-                          datePeriodic: '20 Agustus 2022'),
-                      CardPeriodicWeight(
-                        iconfy: const Iconify(
-                          Twemoji.man_lifting_weights,
-                          size: 36,
-                        ),
-                        titlePeriodic: 'Weight',
-                        typePeriodic: 'Measured',
-                        datePeriodic: '20 September 2022',
-                        weightValue: 4.3,
-                      ),
-                      CardPeriodicSummary(
-                          iconfy: const Iconify(
-                            Twemoji.drop_of_blood,
-                            size: 34,
-                          ),
-                          titlePeriodic: 'Weight',
-                          typePeriodic: 'Measured',
-                          datePeriodic: '18 Januari 2022'),
-                      CardPeriodicSummary(
-                          iconfy: const Iconify(
-                            Noto.toothbrush,
-                            size: 34,
-                          ),
-                          titlePeriodic: 'Weight',
-                          typePeriodic: 'Measured',
-                          datePeriodic: '3 Februari 2023'),
-                    ],
-                  ),
+                  borderRadius: BorderRadius.circular(10),
+                  color: kWhite,
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 13,
+                        color: const Color(0xFF000000).withOpacity(.07)),
+                    BoxShadow(
+                        blurRadius: 5,
+                        color: const Color(0xFF000000).withOpacity(.05))
+                  ],
                 ),
-              )
-
-              // CardDetailPet(type: 'Feeds',content: 'Thanks',),
+                child: Column(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Daily Task History',
+                        style:
+                            kTextTheme.subtitle1?.copyWith(color: kDarkBrown),
+                      ),
+                      Text(
+                        DateFormat.MMMM().format(DateTime.now()),
+                        style:
+                            kTextTheme.bodyText1?.copyWith(color: kDarkBrown),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.pink)),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Incomplete',
+                            style: kTextTheme.caption,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.indigo)),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Complete',
+                            style: kTextTheme.caption,
+                          )
+                        ],
+                      ),
+                      BlocBuilder<GetMonthlyTaskBloc, GetMonthlyTaskState>(
+                        builder: (context, state) {
+                          if (state is GetMonthlyTaskLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is GetMonthlyTaskSuccess) {
+                            DateTime firstDayCurrentMonth = DateTime.utc(
+                                DateTime.now().year, DateTime.now().month, 1);
+                            DateTime lastDayCurrentMonth = DateTime.utc(
+                              DateTime.now().year,
+                              DateTime.now().month + 1,
+                            ).subtract(const Duration(days: 1));
+                            return SizedBox(
+                              width: double.infinity,
+                              height: 200,
+                              child: charts.TimeSeriesChart(
+                                _getSeriesData(state.listTask),
+                                animate: true,
+                                defaultRenderer: charts.LineRendererConfig(
+                                    includePoints: true),
+                                behaviors: [
+                                  charts.RangeAnnotation([
+                                    charts.RangeAnnotationSegment(
+                                        firstDayCurrentMonth,
+                                        lastDayCurrentMonth,
+                                        charts.RangeAnnotationAxisType.domain)
+                                  ])
+                                ],
+                              ),
+                            );
+                          } else {
+                            return const Center();
+                          }
+                        },
+                      )
+                    ]),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         )
@@ -308,28 +351,59 @@ class _PetDescLayout extends StatelessWidget {
     return age;
   }
 
-  _buildDailySummary(String taskType) {
-    Map<String, dynamic> dailySummary = {};
-    dailySummary['title'] = taskType;
-    dailySummary['icon'] = kTaskVector[taskType];
-    final choiceTask =
-        listTask.where((element) => element.activity == taskType);
-    if (choiceTask.isEmpty) {
-      dailySummary['progress'] = 0.0;
-      dailySummary['time'] = 'No Task Today';
-    } else {
-      int completeTask =
-          choiceTask.where((element) => element.status == 'complete').length;
-      dailySummary['progress'] = (completeTask / choiceTask.length).toDouble();
-      DateTime now = DateTime.now();
-      for (var task in listTask) {
-        if (now.isBefore(task.startTime!.toDate())) {
-          now = task.startTime!.toDate();
-          break;
+  _getTaskDate(List<TaskEntity> listTask, String status) {
+    final catList =
+        listTask.where((element) => element.status == status).toList();
+    final List<TaskData> listResult = [];
+    if (catList.isNotEmpty) {
+      final List<DateTime> listDt =
+          catList.map((e) => e.startTime!.toDate()).toList();
+      int value = 1;
+      for (var i = 1; i < listDt.length; i++) {
+        if (listDt[i].day == listDt[i - 1].day) {
+          value++;
+        } else {
+          listResult.add(TaskData(
+              DateTime(listDt[0].year, listDt[0].month, listDt[i - 1].day),
+              value));
+          value = 1;
+        }
+        if (i == listDt.length - 1) {
+          listResult.add(TaskData(
+              DateTime(listDt[0].year, listDt[0].month, listDt[i].day), value));
         }
       }
-      dailySummary['time'] = DateFormat.jm().format(now);
     }
-    return dailySummary;
+    return listResult;
   }
+
+  _getSeriesData(List<TaskEntity> listTask) {
+    final completeTask = _getTaskDate(listTask, 'complete');
+    final uncompleteTask = _getTaskDate(listTask, 'wating');
+
+    List<charts.Series<TaskData, DateTime>> series = [
+      charts.Series(
+          id: "Complete Task",
+          data: completeTask,
+          domainFn: (TaskData series, _) => series.day,
+          measureFn: (TaskData series, _) => series.finishTask,
+          colorFn: (TaskData series, _) =>
+              charts.MaterialPalette.indigo.shadeDefault),
+      charts.Series(
+          id: "Uncomplet Task",
+          data: uncompleteTask,
+          domainFn: (TaskData series, _) => series.day,
+          measureFn: (TaskData series, _) => series.finishTask,
+          colorFn: (TaskData series, _) =>
+              charts.MaterialPalette.pink.shadeDefault),
+    ];
+    return series;
+  }
+}
+
+class TaskData {
+  final DateTime day;
+  final int finishTask;
+
+  TaskData(this.day, this.finishTask);
 }

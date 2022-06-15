@@ -3,6 +3,7 @@ import 'package:adopt/presentation/widgets/pet_adopt_owner_card.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../domain/entities/adopt_enitity.dart';
 
@@ -25,30 +26,21 @@ class _EditProfilePageState extends State<ActivityStatusPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFDF7F9),
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              decoration:
-                  const BoxDecoration(shape: BoxShape.circle, color: kGrey),
-              child: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 18,
-                color: kWhite,
-              ),
-            ),
-          ),
+        elevation: 1,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(FontAwesomeIcons.arrowLeft),
+          color: kPrimaryColor,
         ),
-        centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(
           'Activity Status',
           style: kTextTheme.headline5,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
-        elevation: 1,
-        shadowColor: kGrey,
       ),
       body: SafeArea(
           child: Padding(
@@ -77,7 +69,7 @@ class _EditProfilePageState extends State<ActivityStatusPage> {
   }
 
   Widget _buildOpenAdoptStatus(List<AdoptEntity> adoptList) {
-    if (adoptList.length > 0) {
+    if (adoptList.isNotEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -85,7 +77,7 @@ class _EditProfilePageState extends State<ActivityStatusPage> {
             'Open Adopt Status',
             style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           SizedBox(
@@ -107,34 +99,4 @@ class _EditProfilePageState extends State<ActivityStatusPage> {
     }
   }
 
-  Widget _buildRequestAdoptStatus(List<AdoptEntity> adoptList) {
-    if (adoptList.length > 0) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Open Adopt Status',
-            style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: 130,
-            width: double.infinity,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: adoptList.length,
-                itemBuilder: (context, index) {
-                  return PetAdoptOwnerCard(
-                    adopt: adoptList[index],
-                  );
-                }),
-          )
-        ],
-      );
-    } else {
-      return Container();
-    }
-  }
 }

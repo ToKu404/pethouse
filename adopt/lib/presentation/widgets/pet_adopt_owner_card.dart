@@ -14,19 +14,23 @@ class PetAdoptOwnerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 10),
-      child: ClipRRect(
+      margin: EdgeInsets.only(right: 10),
+      height: 130,
+      width: 300,
+      decoration: BoxDecoration(
+        color: kWhite,
         borderRadius: BorderRadius.circular(10),
-        child: Container(
-          height: 130,
-          width: 300,
-          decoration: BoxDecoration(color: Color(0xFFEFEFEF)),
-          child: Column(
-            children: [
-              _buildTopSide(context),
-            ],
-          ),
-        ),
+        boxShadow: [
+          BoxShadow(
+              blurRadius: 13, color: const Color(0xFF000000).withOpacity(.07)),
+          BoxShadow(
+              blurRadius: 5, color: const Color(0xFF000000).withOpacity(.05))
+        ],
+      ),
+      child: Column(
+        children: [
+          _buildTopSide(context),
+        ],
       ),
     );
   }
@@ -147,7 +151,7 @@ class _BottomSide extends StatelessWidget {
         margin: const EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: const Color(0xFFFED0AC)),
+            color: const Color(0xFFFFB4BE)),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Text('Status : ${adopt.status}'),
       );

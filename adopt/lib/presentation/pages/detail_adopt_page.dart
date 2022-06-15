@@ -32,29 +32,19 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: InkWell(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                decoration:
-                    const BoxDecoration(shape: BoxShape.circle, color: kGrey),
-                child: const Icon(
-                  FontAwesomeIcons.arrowLeft,
-                  size: 18,
-                  color: kWhite,
-                ),
-              ),
-            ),
+          elevation: 1,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(FontAwesomeIcons.arrowLeft),
+            color: kPrimaryColor,
           ),
+          backgroundColor: Colors.white,
           title: Text(
             'Detail Pet',
             style: kTextTheme.headline5,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          elevation: 1,
-          shadowColor: kGrey,
         ),
         body: SafeArea(
           child: BlocConsumer<DetailAdoptBloc, DetailAdoptState>(
@@ -159,7 +149,7 @@ class DetailAdoptData extends StatelessWidget {
                             width: 41,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: kOrange,
+                              color: kPrimaryColor,
                             ),
                             padding: const EdgeInsets.all(3),
                             child: SvgPicture.asset(
@@ -231,10 +221,10 @@ class DetailAdoptData extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
-                                            width: 1, color: kOrange)),
+                                            width: 1, color: kPrimaryColor)),
                                     child: const Icon(
                                       Icons.whatsapp,
-                                      color: kOrange,
+                                      color: kPrimaryColor,
                                     ),
                                   ),
                                 )
@@ -313,12 +303,12 @@ class DetailAdoptData extends StatelessWidget {
                                 height: 52,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    border:
-                                        Border.all(width: 1, color: kOrange)),
+                                    border: Border.all(
+                                        width: 1, color: kPrimaryColor)),
                                 child: Center(
                                   child: Text('Edit Data',
                                       style: kTextTheme.subtitle1
-                                          ?.copyWith(color: kOrange)),
+                                          ?.copyWith(color: kPrimaryColor)),
                                 ),
                               ),
                               onTap: () => Navigator.pushNamed(
