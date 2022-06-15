@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:schedule/presentation/blocs/schedule_task_bloc/schedule_task_bloc.dart';
 
 import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth_cubit/auth_cubit.dart';
@@ -19,44 +20,40 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: kPadding),
-            height: 60,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-                color: kWhite,
-                border: Border(bottom: BorderSide(width: 1, color: kGrey))),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Profile',
-                style: kTextTheme.headline4?.copyWith(color: kDarkBrown),
-              ),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 1,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(FontAwesomeIcons.arrowLeft),
+          color: kPrimaryColor,
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Profile',
+          style: kTextTheme.headline5,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+      body: SafeArea(
+        child: MultiBlocListener(listeners: [
+          BlocListener<AuthCubit, AuthState>(
+            listener: (context, state) {
+              if (state is UnAuthenticated) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    LOGIN_ROUTE_NAME, (route) => false);
+              }
+            },
           ),
-          Expanded(
-            child: MultiBlocListener(listeners: [
-              BlocListener<AuthCubit, AuthState>(
-                listener: (context, state) {
-                  if (state is UnAuthenticated) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        LOGIN_ROUTE_NAME, (route) => false);
-                  }
-                },
-              ),
-              BlocListener<UserDbBloc, UserDbState>(
-                listener: (context, state) {
-                  if (state is SuccessDeleteUser) {
-                    context.read<AuthCubit>().loggedOut();
-                  }
-                },
-              ),
-            ], child: _BuildProfile(user: widget.userEntity)),
+          BlocListener<UserDbBloc, UserDbState>(
+            listener: (context, state) {
+              if (state is SuccessDeleteUser) {
+                context.read<AuthCubit>().loggedOut();
+              }
+            },
           ),
-        ],
+        ], child: _BuildProfile(user: widget.userEntity)),
       ),
     );
   }
@@ -83,7 +80,7 @@ class _BuildProfile extends StatelessWidget {
                     height: 120,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(width: 5, color: kGreyTransparant),
+                      border: Border.all(width: 5, color: kGrey),
                       image: DecorationImage(
                           image: NetworkImage(user.imageUrl ?? ''),
                           fit: BoxFit.cover),
@@ -111,7 +108,7 @@ class _BuildProfile extends StatelessWidget {
               child: Center(
                 child: Text(
                   user.name ?? "YourName",
-                  style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
+                  style: kTextTheme.headline6?.copyWith(color: kPrimaryColor),
                 ),
               ),
             ),
@@ -148,8 +145,10 @@ class _BuildProfile extends StatelessWidget {
                 trailingAction: const Icon(
                   Icons.arrow_forward_ios_sharp,
                   size: 16,
+                  color: kGreyTransparant,
                 ),
-                leadingAction: const Icon(Icons.timelapse, color: kDarkBrown),
+                leadingAction:
+                    const Icon(Icons.timelapse, color: kPrimaryColor),
                 onTap: () {
                   Navigator.pushNamed(context, ACTIVITY_STATUS_ROUT_NAME);
                 }),
@@ -158,21 +157,29 @@ class _BuildProfile extends StatelessWidget {
                 trailingAction: const Icon(
                   Icons.arrow_forward_ios_sharp,
                   size: 16,
+                  color: kGreyTransparant,
                 ),
-                leadingAction: const Icon(Icons.lock, color: kDarkBrown),
+                leadingAction: const Icon(Icons.lock, color: kPrimaryColor),
                 onTap: () {}),
             const NotificationCard(),
             CardProfile(
                 title: 'About',
-                trailingAction:
-                    const Icon(Icons.arrow_forward_ios_sharp, size: 16),
-                leadingAction: const Icon(Icons.info, color: kDarkBrown),
+                trailingAction: const Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  size: 16,
+                  color: kGreyTransparant,
+                ),
+                leadingAction: const Icon(Icons.info, color: kPrimaryColor),
                 onTap: () {}),
             CardProfile(
                 title: 'Log Out',
-                trailingAction:
-                    const Icon(Icons.arrow_forward_ios_sharp, size: 16),
-                leadingAction: const Icon(Icons.exit_to_app, color: kDarkBrown),
+                trailingAction: const Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  size: 16,
+                  color: kGreyTransparant,
+                ),
+                leadingAction:
+                    const Icon(Icons.exit_to_app, color: kPrimaryColor),
                 onTap: () async {
                   context.read<AuthCubit>().loggedOut();
                 })
@@ -232,14 +239,17 @@ class _NotificationCardState extends State<NotificationCard> {
         child: ListTile(
           leading: const Icon(
             Icons.notifications_sharp,
-            color: kDarkBrown,
+            color: kPrimaryColor,
           ),
           title: const Text('Notification'),
           trailing: Switch.adaptive(
+              inactiveTrackColor: kGrey,
               activeColor: kPrimaryColor,
               value: statusSwitch,
-              onChanged: (value) =>
-                  setState(() => statusSwitch = !statusSwitch)),
+              onChanged: (value) {
+                print(value);
+                setState(() => statusSwitch = !statusSwitch);
+              }),
           onTap: () {},
         ),
       ),

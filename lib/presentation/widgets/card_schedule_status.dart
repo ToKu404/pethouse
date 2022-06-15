@@ -33,8 +33,9 @@ class CardScheduleStatus extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'Daily Task',
-                style: kTextTheme.bodyText1?.copyWith(fontSize: 14),
+                'Completed',
+                style: kTextTheme.bodyText2
+                    ?.copyWith(fontSize: 14, color: kDarkBrown),
               ),
               const SizedBox(
                 height: 5,
@@ -55,7 +56,7 @@ class CardScheduleStatus extends StatelessWidget {
                         children: const [
                           TextSpan(
                             text: ' Task',
-                            style: TextStyle(color: kGreyTransparant),
+                            style: TextStyle(color: kDarkBrown),
                           )
                         ]),
                   )

@@ -30,7 +30,7 @@ class AdoptCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: SizedBox(
-                  height: 135,
+                  height: 120,
                   width: double.infinity,
                   child: adoptEntity.petPictureUrl != null &&
                           adoptEntity.petPictureUrl != ''
@@ -70,7 +70,7 @@ class AdoptCard extends StatelessWidget {
               ),
             ]),
             Container(
-              width: 140,
+              width: 125,
               margin: const EdgeInsets.only(top: 5),
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Column(
@@ -129,7 +129,7 @@ class AdoptCard extends StatelessWidget {
                                 getAge(),
                                 style: kTextTheme.overline?.copyWith(
                                   fontSize: 11,
-                                  color: const Color(0xFF747474),
+                                  color: kDarkBrown,
                                 ),
                               ),
                             )

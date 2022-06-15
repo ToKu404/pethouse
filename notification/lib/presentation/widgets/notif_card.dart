@@ -1,8 +1,5 @@
 import 'package:core/core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:notification/domain/entities/nofitication_entity.dart';
 
@@ -26,12 +23,17 @@ class NotifCard extends StatelessWidget {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(kPadding),
-        margin: const EdgeInsets.only(bottom: kMargin),
+        margin: const EdgeInsets.only(bottom: kPadding ),
         decoration: BoxDecoration(
-            border: Border.all(width: 1, color: kGrey),
-            color: notificationEntity.readStatus!
-                ? kWhite
-                : Color.fromARGB(255, 255, 240, 184),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 13,
+                  color: const Color(0xFF000000).withOpacity(.07)),
+              BoxShadow(
+                  blurRadius: 5,
+                  color: const Color(0xFF000000).withOpacity(.05))
+            ],
+            color: notificationEntity.readStatus! ? kWhite : kWhite,
             borderRadius: kBorderRadius),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +46,8 @@ class NotifCard extends StatelessWidget {
                   style: kTextTheme.caption,
                 ),
                 Text(
-                  '${DateFormat.yMMMd().format(notificationEntity.sendTime!.toDate())}',
+                  DateFormat.yMMMd()
+                      .format(notificationEntity.sendTime!.toDate()),
                   style: kTextTheme.caption,
                 )
               ],

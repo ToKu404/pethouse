@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:core/presentation/widgets/appbar_back_button.dart';
 import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -64,7 +65,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
 
     String petDescription = _petDescriptionController.text;
     String waNumber = _whatsappNumberController.text;
-     if (waNumber != '') {
+    if (waNumber != '') {
       if (waNumber.startsWith('0')) {
         waNumber = waNumber.replaceFirst(RegExp(r'0'), '');
       }
@@ -73,17 +74,16 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       }
     }
     AdoptEntity adoptEntity = AdoptEntity(
-      petName: petName,
-      petType: petType,
-      petBreed: petBreed,
-      dateOfBirth: _petDateOfBirth,
-      certificateUrl: _petCertificatePath,
-      petPictureUrl: _petPhotoPath,
-      gender: petGender,
-      petDescription: petDescription,
-      whatsappNumber: waNumber,
-      status: 'open'
-    );
+        petName: petName,
+        petType: petType,
+        petBreed: petBreed,
+        dateOfBirth: _petDateOfBirth,
+        certificateUrl: _petCertificatePath,
+        petPictureUrl: _petPhotoPath,
+        gender: petGender,
+        petDescription: petDescription,
+        whatsappNumber: waNumber,
+        status: 'open');
     context
         .read<OpenAdoptBloc>()
         .add(SubmitOpenAdopt(adoptEntity: adoptEntity));
@@ -93,12 +93,19 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            const Text(kOpenAdoptTitle, style: TextStyle(color: Colors.black)),
-        leading: const AppBarBackButton(),
-        centerTitle: true,
         elevation: 1,
-        backgroundColor: kWhite,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(FontAwesomeIcons.arrowLeft),
+          color: kPrimaryColor,
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Open Adopt',
+          style: kTextTheme.headline5,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: SafeArea(
           child: BlocConsumer<OpenAdoptBloc, OpenAdoptState>(

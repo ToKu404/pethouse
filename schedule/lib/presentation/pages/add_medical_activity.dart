@@ -2,26 +2,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/presentation/widgets/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:core/core.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:schedule/domain/entities/medical_entity.dart';
-import 'package:schedule/presentation/blocs/addmedical_bloc/medical_bloc.dart';
-import 'package:schedule/presentation/widgets/btnback_decoration.dart';
+import 'package:schedule/presentation/blocs/medical_bloc/medical_bloc.dart';
 import 'package:schedule/presentation/widgets/date_picker.dart';
 import 'package:schedule/presentation/widgets/gredient_button.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class AddMedicalActivity extends StatefulWidget {
+class AddMedicalActivityPage extends StatefulWidget {
   final PetEntity petEntity;
-  AddMedicalActivity({required this.petEntity});
-  static const ROUTE_NAME = "medical_activity";
+  const AddMedicalActivityPage({Key? key, required this.petEntity})
+      : super(key: key);
 
   @override
-  State<AddMedicalActivity> createState() => _AddMedicalActivityState();
+  State<AddMedicalActivityPage> createState() => _AddMedicalActivityPageState();
 }
 
-class _AddMedicalActivityState extends State<AddMedicalActivity> {
+class _AddMedicalActivityPageState extends State<AddMedicalActivityPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -45,17 +45,25 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Medical Activity', style: const TextStyle(color: Colors.black)),
-        leading: const btnBack_decoration(),
-        centerTitle: true,
         elevation: 1,
-        backgroundColor: kWhite,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(FontAwesomeIcons.arrowLeft),
+          color: kPrimaryColor,
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Add Medical Activity',
+          style: kTextTheme.headline5,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: SafeArea(
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.all(30),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -63,6 +71,9 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Row(
                         children: [
                           Expanded(
@@ -81,14 +92,9 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              'Your Lovely Animal Medical Activity',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                color: const Color(0XFFCCA88A),
-                                fontSize: 10,
-                              ),
-                            ),
+                            child: Text('Your Lovely Animal Medical Activity',
+                                textAlign: TextAlign.center,
+                                style: kTextTheme.bodyText2),
                           ),
                         ],
                       ),
@@ -156,7 +162,8 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                               tanggalAkhir:
                                   DateTime.now().add(const Duration(days: 366)),
                               tanggalAwal: DateTime.now(),
-                              initDate: DateTime.now().add(const Duration(days: 1)),
+                              initDate:
+                                  DateTime.now().add(const Duration(days: 1)),
                               onDateChanged: (selectedDate) {
                                 dateTime = selectedDate;
                               },
@@ -175,8 +182,8 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                           border:
                               OutlineInputBorder(borderRadius: kBorderRadius),
                         ),
-                        validator: (_locationController) {
-                          if (_locationController!.isNotEmpty) {
+                        validator: (locationController) {
+                          if (locationController!.isNotEmpty) {
                             return null;
                           } else {
                             return 'Plase enter your location';
@@ -191,11 +198,12 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                         decoration: InputDecoration(
                           fillColor: const Color(0xFF929292),
                           labelText: 'Description',
+                          alignLabelWithHint: true,
                           border:
                               OutlineInputBorder(borderRadius: kBorderRadius),
                         ),
-                        validator: (_descriptionController) {
-                          if (_descriptionController!.isNotEmpty) {
+                        validator: (descriptionController) {
+                          if (descriptionController!.isNotEmpty) {
                             return null;
                           } else {
                             return 'Plase enter your description';
@@ -230,7 +238,8 @@ class _AddMedicalActivityState extends State<AddMedicalActivity> {
                                   .add(CreateMedical(
                                       medicalEntity: MedicalEntity(
                                 pet_id: widget.petEntity.id,
-                                time_publish: Timestamp.fromDate(DateTime.now()),
+                                time_publish:
+                                    Timestamp.fromDate(DateTime.now()),
                                 activity: dropdownHint,
                                 location: location,
                                 description: description,
