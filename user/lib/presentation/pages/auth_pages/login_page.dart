@@ -72,15 +72,19 @@ class LoginForm extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            SvgPicture.asset("assets/vectors/login_cat.svg"),
+            SvgPicture.asset(
+              "assets/icons/pethouse_icon.svg",
+              color: kPrimaryColor,
+              height: 50,
+            ),
             const SizedBox(
-              height: 10,
+              height: 30,
             ),
             SizedBox(
               width: double.infinity,
               child: Text(
-                "LOGIN",
-                textAlign: TextAlign.center,
+                "Login",
+                textAlign: TextAlign.left,
                 style: kTextTheme.headline4,
               ),
             ),

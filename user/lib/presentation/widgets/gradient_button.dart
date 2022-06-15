@@ -27,7 +27,7 @@ class GradientButton extends StatelessWidget {
         gradient: isClicked
             ? null
             : const LinearGradient(
-                colors: [kSecondaryColor, kPrimaryColor],
+                colors: [kPrimaryColor, kPrimaryColor],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter),
         borderRadius: kBorderRadius,

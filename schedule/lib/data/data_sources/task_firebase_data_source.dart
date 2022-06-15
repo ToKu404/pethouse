@@ -7,6 +7,8 @@ abstract class TaskFirebaseDataSource {
   Future<void> addTask(TaskEntity taskEntity);
   Stream<List<TaskEntity>> getTodayTask(String petId, DateTime date);
   Future<void> changeTaskStatus(String taskId);
+  Stream<List<TaskEntity>> getMonthlyTask(
+      String petId, DateTime startDate, DateTime endDate);
 }
 
 class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
@@ -45,8 +47,7 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
     final taskCollection = taskFireStore
         .collection('tasks')
         .where('pet_id', isEqualTo: petId)
-        .where('date',
-            isEqualTo: DateFormat("yyyy-MM-dd").format(date));
+        .where('date', isEqualTo: DateFormat("yyyy-MM-dd").format(date));
 
     return taskCollection.snapshots().map((querySnapshot) {
       return querySnapshot.docs
@@ -63,5 +64,21 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
     String status = doc!['status'] == 'complete' ? 'waiting' : 'complete';
     final statusMap = {"status": status};
     await collectionRef.doc(taskId).update(statusMap);
+  }
+
+  @override
+  Stream<List<TaskEntity>> getMonthlyTask(
+      String petId, DateTime startDate, DateTime endDate) {
+    final taskCollection = taskFireStore
+        .collection('tasks')
+        .where('pet_id', isEqualTo: petId)
+        .where('start_time',
+            isGreaterThanOrEqualTo: startDate, isLessThanOrEqualTo: endDate);
+
+    return taskCollection.snapshots().map((querySnapshot) {
+      return querySnapshot.docs
+          .map((docSnap) => TaskModel.fromSnapshot(docSnap))
+          .toList();
+    });
   }
 }

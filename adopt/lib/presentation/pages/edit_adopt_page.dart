@@ -7,6 +7,7 @@ import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:core/presentation/widgets/appbar_back_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
@@ -113,17 +114,16 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
     }
 
     AdoptEntity adoptEntity = AdoptEntity(
-      petName: petName,
-      petType: petType,
-      petBreed: petBreed,
-      dateOfBirth: _petDateOfBirth,
-      certificateUrl: _petCertificatePath,
-      petPictureUrl: _petPhotoPath,
-      gender: petGender,
-      petDescription: petDescription,
-      whatsappNumber: waNumber,
-      status: 'open'
-    );
+        petName: petName,
+        petType: petType,
+        petBreed: petBreed,
+        dateOfBirth: _petDateOfBirth,
+        certificateUrl: _petCertificatePath,
+        petPictureUrl: _petPhotoPath,
+        gender: petGender,
+        petDescription: petDescription,
+        whatsappNumber: waNumber,
+        status: 'open');
 
     context.read<EditAdoptBloc>().add(SubmitUpdateAdopt(
         adoptEntityNew: adoptEntity, adoptEntityOld: widget.adoptPet));
@@ -133,12 +133,19 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            const Text(kEditAdoptTitle, style: TextStyle(color: Colors.black)),
-        leading: const AppBarBackButton(),
-        centerTitle: true,
         elevation: 1,
-        backgroundColor: kWhite,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(FontAwesomeIcons.arrowLeft),
+          color: kPrimaryColor,
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Edit Adopt',
+          style: kTextTheme.headline5,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: SafeArea(
           child: BlocConsumer<EditAdoptBloc, EditAdoptState>(

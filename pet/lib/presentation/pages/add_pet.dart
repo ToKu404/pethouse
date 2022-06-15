@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import '../../domain/entities/pet_entity.dart';
-import 'package:core/presentation/widgets/appbar_back_button.dart';
 import 'package:core/presentation/widgets/gradient_button.dart';
 
 class AddPetPage extends StatefulWidget {
@@ -77,11 +77,19 @@ class _AddPetPageState extends State<AddPetPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Pet', style: TextStyle(color: Colors.black)),
-        leading: const AppBarBackButton(),
-        centerTitle: true,
         elevation: 1,
-        backgroundColor: kWhite,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(FontAwesomeIcons.arrowLeft),
+          color: kPrimaryColor,
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Add Pet',
+          style: kTextTheme.headline5,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: SafeArea(
           child: BlocConsumer<AddPetBloc, AddPetState>(

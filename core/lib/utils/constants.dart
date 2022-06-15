@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const Color kPrimaryColor = Color(0xFFEE4E64);
-const Color kSecondaryColor = Color(0xFFFFC42E);
+const Color kSecondaryColor = Color(0xFFEE4E64);
 const Color kDarkBrown = Color(0xFF300303);
 const Color kWhite = Colors.white;
-const Color kGrey = Color(0xFFCCCDCC);
-const Color kGreyTransparant = Color(0xFF878787);
+const Color kGrey = Color(0xFFEFE6E7);
+const Color kGreyTransparant = Color(0xFFBEC2C5);
 const Color kOrange = Color(0xFFEF9F21);
 
 BorderRadius kBorderRadius = BorderRadius.circular(10);
@@ -137,5 +138,9 @@ const Map<String, String> kTaskVector = {
 };
 
 const kTitleColor = Color(0xFF300303);
-const kMainOrangeColor = Color(0xFFFFC42E);
+const kMainOrangeColor = Color(0xFFEE4E64);
+const kMainBlueColor = Color(0xFF000072);
 const kMainPinkColor = Color(0xFFEE4E64);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();

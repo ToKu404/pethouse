@@ -3,13 +3,15 @@ import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:intl/intl.dart';
-import 'package:schedule/presentation/widgets/btnback_decoration.dart';
-
+import 'package:timezone/data/latest.dart' as tzl;
+import 'package:timezone/timezone.dart' as tz;
 import '../../domain/entities/task_entity.dart';
-import '../blocs/addtask_bloc/task_bloc.dart';
+import '../blocs/task_bloc/task_bloc.dart';
+import '../blocs/schedule_task_bloc/schedule_task_bloc.dart';
 
 class AddTaskPage extends StatefulWidget {
   final PetEntity petEntity;
@@ -30,6 +32,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
   TimeOfDay? _endTime;
   String? _taskType;
   String _taskRepeat = 'No Repeat';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    tzl.initializeTimeZones();
+  }
 
   @override
   void dispose() {
@@ -56,6 +65,21 @@ class _AddTaskPageState extends State<AddTaskPage> {
       petId: widget.petEntity.id,
       date: DateFormat("yyyy-MM-dd").format(date),
     );
+    print(_startTime.hour);
+    final start = DateTime(
+        date.year, date.month, date.day, _startTime.hour, _startTime.minute);
+    final myTime = DateFormat('HH:mm:ss').format(start);
+
+    print(myTime);
+
+    // BlocProvider.of<ScheduleTaskBloc>(context).add(GetScheduleTaskEvent(
+    //   value: true,
+    //   date: myTime,
+    // ));
+    // // tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, date.year, date.month,
+    // //     date.day, _startTime.hour, _startTime.minute);
+    // // NotificationService().showNotification(
+    // //     1, _taskType!, _descriptionController.text, scheduledDate);
     context.read<TaskBloc>().add(CreateTask(taskEntity: taskEntity));
   }
 
@@ -73,12 +97,19 @@ class _AddTaskPageState extends State<AddTaskPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('${widget.petEntity.petName} Task',
-              style: const TextStyle(color: Colors.black)),
-          leading: const btnBack_decoration(),
-          centerTitle: true,
           elevation: 1,
-          backgroundColor: kWhite,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(FontAwesomeIcons.arrowLeft),
+            color: kPrimaryColor,
+          ),
+          backgroundColor: Colors.white,
+          title: Text(
+            '${widget.petEntity.petName} Task',
+            style: kTextTheme.headline5,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         body: SafeArea(
           child: Padding(

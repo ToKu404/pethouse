@@ -21,4 +21,10 @@ class TaskFirebaseRepositoryImpl implements TaskFirebaseRepository {
   Future<void> changeTaskStatus(String taskId) {
     return taskFirebaseDataSource.changeTaskStatus(taskId);
   }
+
+  @override
+  Stream<List<TaskEntity>> getMonthlyTask(
+      String petId, DateTime startDate, DateTime endDate) {
+    return taskFirebaseDataSource.getMonthlyTask(petId, startDate, endDate);
+  }
 }

@@ -69,18 +69,18 @@ class _BuildSplashLayout extends StatelessWidget {
               children: [
                 // logo here
                 SvgPicture.asset(
-                  'assets/vectors/splash_vector.svg',
+                  'assets/icons/pethouse_icon.svg',
                   height: 200,
                 ),
                 const SizedBox(
-                  height: 40,
+                  height: 50,
                 ),
                 Column(
                   children: [
                     Text(
                       kAppTitle,
                       style: kTextTheme.headline1
-                          ?.copyWith(color: kTitleColor, height: 1),
+                          ?.copyWith(color: kWhite, height: 1),
                     ),
                     SizedBox(
                       width: 200,
@@ -88,7 +88,7 @@ class _BuildSplashLayout extends StatelessWidget {
                         kAppDesc,
                         textAlign: TextAlign.center,
                         style: kTextTheme.bodyText1
-                            ?.copyWith(color: kTitleColor, fontSize: 14),
+                            ?.copyWith(color: kWhite, fontSize: 14),
                       ),
                     ),
                   ],
@@ -100,7 +100,7 @@ class _BuildSplashLayout extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 kAppVersion,
-                style: kTextTheme.overline?.copyWith(color: kTitleColor),
+                style: kTextTheme.overline?.copyWith(color: kWhite),
               ),
             ),
           ],

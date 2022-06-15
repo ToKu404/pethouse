@@ -6,6 +6,7 @@ import 'package:schedule/domain/entities/medical_entity.dart';
 
 abstract class MedicalFirebaseDataSource{
   Future<void> addMedical(MedicalEntity medicalEntity);
+  Stream<List<MedicalEntity>> getPetMedical(String pet_id);
 }
 
 class MedicalFirebaseDataSourceImpl implements MedicalFirebaseDataSource{
@@ -15,16 +16,14 @@ class MedicalFirebaseDataSourceImpl implements MedicalFirebaseDataSource{
 
   @override
   Future<void> addMedical(MedicalEntity medicalEntity) async {
-    // TODO: implement addPet
-    final collectionRef = medicalFireStore.collection('medical');
-    final medical_id = collectionRef.doc().id;
-
+    final collectionRef = medicalFireStore.collection('medicals');
+    final medicalId = collectionRef.doc().id;
 
     //mengubah menjadi JSON
-    collectionRef.doc(medical_id).get().then((value) {
+    collectionRef.doc(medicalId).get().then((value) {
       final newMedical = MedicalModel(
           time_publish: medicalEntity.time_publish,
-          medical_id: medical_id,
+          medical_id: medicalId,
           activity: medicalEntity.activity,
           expired_date: medicalEntity.expired_date,
           description: medicalEntity.description,
@@ -32,9 +31,21 @@ class MedicalFirebaseDataSourceImpl implements MedicalFirebaseDataSource{
           pet_id: medicalEntity.pet_id
       ).toJson();
       if (!value.exists) {
-        collectionRef.doc(medical_id).set(newMedical);
+        collectionRef.doc(medicalId).set(newMedical);
       }
       return;
+    });
+  }
+  
+  @override
+  Stream<List<MedicalEntity>> getPetMedical(String petId) {
+    final petCollection = medicalFireStore
+        .collection('medicals')
+        .where('pet_id', isEqualTo: petId);
+    return petCollection.snapshots().map((querySnapshot) {
+      return querySnapshot.docs
+          .map((docSnap) => MedicalModel.fromSnapshot(docSnap))
+          .toList();
     });
   }
 }
