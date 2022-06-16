@@ -13,22 +13,12 @@ class NoPetCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SvgPicture.asset(
-          'assets/vectors/add_pet.svg',
-          fit: BoxFit.cover,
+        const SizedBox(
+          height: 20,
         ),
-        SizedBox(
-          height: 19,
-        ),
-        Text(
-          "You haven't added a pet yet",
-          style: GoogleFonts.poppins(
-            color: kDarkBrown,
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        SizedBox(
+        Text("You haven't added a pet yet",
+            style: kTextTheme.bodyText2?.copyWith(fontSize: 14)),
+        const SizedBox(
           height: 19,
         ),
         GradientButton(

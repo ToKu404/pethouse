@@ -1,13 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pethouse">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    
     <!-- For apps with targetSDK=31 (Android 12) -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
    <application
         android:label="pethouse"
         android:name="${applicationName}"
         android:icon="@drawable/app_icon">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyB90wWlZsgKt8ho740SKokUldLzAWC_XU0"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

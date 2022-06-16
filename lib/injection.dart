@@ -30,11 +30,14 @@ import 'package:pet/domain/repositories/pet_repository.dart';
 import 'package:pet/data/repositories/pet_repository_impl.dart';
 import 'package:pet/domain/usecases/get_pet_desc_usecase.dart';
 import 'package:pet/domain/usecases/get_pets_usecase.dart';
+import 'package:pet/domain/usecases/remove_pet_usecase.dart';
+import 'package:pet/domain/usecases/update_pet_usecase.dart';
 
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
+import 'package:pet/presentation/bloc/update_pet/update_pet_bloc.dart';
 import 'package:schedule/data/data_sources/schedule_data_source.dart';
 import 'package:schedule/data/data_sources/task_firebase_data_source.dart';
 import 'package:schedule/data/repositories/schedule_repository_impl.dart';
@@ -207,6 +210,8 @@ void init() {
   locator.registerLazySingleton(() => ChangeTaskStatusUsecase(locator()));
   locator.registerLazySingleton(() => ScheduleTaskUsecase(locator()));
   locator.registerLazySingleton(() => GetMonthlyTaskUsecase(locator()));
+    locator.registerLazySingleton(() => RemovePetUsecase(locator()));
+  locator.registerLazySingleton(() => UpdatePetUsecase(locator()));
 
   locator
       .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
@@ -255,6 +260,9 @@ void init() {
         requestAdoptUsecase: locator(),
       ));
   locator.registerFactory(() => ListAdoptBloc(getAllPetListUsecase: locator()));
+  locator.registerFactory(() => UpdatePetBloc(addPetCertificateUsecase: locator(), addPetPhotoUsecase: locator(), updatePetUsecase: locator()));
+
+
   locator.registerFactory(() => EditAdoptBloc(
       updateAdoptUsecase: locator(),
       uploadPetCertificateUsecase: locator(),
@@ -268,7 +276,7 @@ void init() {
   locator.registerFactory(() => GetPetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetSchedulePetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetPetDescBloc(
-      getPetDescUsecase: locator(), getTodayTaskUsecase: locator()));
+      getPetDescUsecase: locator(), getTodayTaskUsecase: locator(), removePetUsecase: locator()));
   locator
       .registerFactory(() => ScheduleTaskBloc(scheduleTaskUsecase: locator()));
 

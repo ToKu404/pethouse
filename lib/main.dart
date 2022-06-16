@@ -25,8 +25,10 @@ import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
 import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
+import 'package:pet/presentation/bloc/update_pet/update_pet_bloc.dart';
 import 'package:pet/presentation/pages/add_pet.dart';
 import 'package:pet/presentation/pages/pet_description_page.dart';
+import 'package:pet/presentation/pages/edit_pet_page.dart';
 import 'package:schedule/presentation/blocs/get_pet_medical_bloc/get_pet_medical_bloc.dart';
 import 'package:schedule/presentation/blocs/medical_bloc/medical_bloc.dart';
 import 'package:schedule/presentation/blocs/task_bloc/task_bloc.dart';
@@ -106,6 +108,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<ScheduleTaskBloc>()),
           BlocProvider(create: (_) => di.locator<GetMonthlyTaskBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetMedicalBloc>()),
+          BlocProvider(create: (_) => di.locator<UpdatePetBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -162,6 +165,10 @@ class MyApp extends StatelessWidget {
                 final adopt = settings.arguments as AdoptEntity;
                 return MaterialPageRoute(
                     builder: (context) => EditAdoptPage(adoptPet: adopt));
+              case EDIT_PET_ROUTE_NAME:
+                final pet = settings.arguments as PetEntity;
+                return MaterialPageRoute(
+                    builder: (context) => EditPetPage(pet:  pet,));
               case NoInternetPage.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const NoInternetPage());

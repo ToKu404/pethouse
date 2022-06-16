@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/domain/usecases/get_pet_desc_usecase.dart';
+import 'package:pet/domain/usecases/remove_pet_usecase.dart';
 import 'package:schedule/domain/entities/task_entity.dart';
 import 'package:schedule/domain/use_cases/get_today_task_usecase.dart';
 
@@ -11,8 +12,11 @@ part 'get_pet_desc_state.dart';
 class GetPetDescBloc extends Bloc<GetPetDescEvent, GetPetDescState> {
   final GetPetDescUsecase getPetDescUsecase;
   final GetTodayTaskUsecase getTodayTaskUsecase;
+  final RemovePetUsecase removePetUsecase;
   GetPetDescBloc(
-      {required this.getPetDescUsecase, required this.getTodayTaskUsecase})
+      {required this.getPetDescUsecase,
+      required this.getTodayTaskUsecase,
+      required this.removePetUsecase})
       : super(PetDescInitial()) {
     on<GetPetDesc>(
       (event, emit) async {
@@ -40,6 +44,12 @@ class GetPetDescBloc extends Bloc<GetPetDescEvent, GetPetDescState> {
       (event, emit) {
         emit(PetDescSuccess(
             petEntity: event.petEntity, listTask: event.listTask));
+      },
+    );
+    on<RemovePetEvent>(
+      (event, emit) async{
+        await removePetUsecase.execute(event.petId);
+        emit(RemovePetSuccess());
       },
     );
   }
