@@ -34,4 +34,14 @@ class PetRepositoryImpl implements PetRepository {
   Stream<PetEntity> getPetDesc(String petId) {
     return petFirebaseDataSource.getPetDesc(petId);
   }
+
+  @override
+  Future<void> removePetData(String petId) {
+    return petFirebaseDataSource.removePetData(petId);
+  }
+
+  @override
+  Future<void> updatePetData(PetEntity petEntity) {
+    return petFirebaseDataSource.updatePetData(petEntity);
+  }
 }
