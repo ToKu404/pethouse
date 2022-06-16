@@ -110,7 +110,7 @@ class _EmailField extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           onChanged: (value) {
-            context.read<ResetPasswordBloc>().add(EmailChanged(value));
+            context.read<ResetPasswordBloc>().add(ResetEmailChanged(value));
           },
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(

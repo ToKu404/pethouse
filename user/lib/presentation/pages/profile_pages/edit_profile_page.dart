@@ -190,7 +190,7 @@ class _EmailField extends StatelessWidget {
         return TextFormField(
           initialValue: email,
           onChanged: (value) {
-            context.read<UserProfileBloc>().add(EmailChanged(value));
+            context.read<UserProfileBloc>().add(UserEmailChanged(value));
           },
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
@@ -223,7 +223,7 @@ class _NameField extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           onChanged: (value) {
-            context.read<UserProfileBloc>().add(NameChanged(value));
+            context.read<UserProfileBloc>().add(UserNameChanged(value));
           },
           initialValue: name,
           keyboardType: TextInputType.name,
