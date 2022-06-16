@@ -170,7 +170,9 @@ class _BuildProfile extends StatelessWidget {
                   color: kGreyTransparant,
                 ),
                 leadingAction: const Icon(Icons.info, color: kPrimaryColor),
-                onTap: () {}),
+                onTap: () {
+                  Navigator.pushNamed(context, ABOUT_ROUTE_NAME);
+                }),
             CardProfile(
                 title: 'Log Out',
                 trailingAction: const Icon(

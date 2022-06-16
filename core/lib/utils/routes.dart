@@ -20,6 +20,5 @@ const ADD_MEDICAL_ACTIVITY_ROUTE_NAME = "add-medical-activity";
 const SCHEDULE_CALENDAR_ROUTE_NAME = "schedule-calender";
 const PET_DESC_ROUTE_NAME = "pet-desc";
 
-
-
+const ABOUT_ROUTE_NAME = "about";
 
