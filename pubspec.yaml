@@ -38,6 +38,8 @@ dependencies:
     path: user
   schedule:
     path: schedule
+  petrivia:
+    path: petrivia
   pet:
     path: pet
   notification:

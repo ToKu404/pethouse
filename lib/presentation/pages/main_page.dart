@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pethouse/presentation/pages/map_page.dart';
 import 'package:pethouse/presentation/pages/notification_page.dart';
+import 'package:pethouse/presentation/pages/petrivia_page.dart';
 import 'package:pethouse/presentation/pages/service_page.dart';
 import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
 import 'home_page.dart';
@@ -50,16 +51,10 @@ class _MainPageState extends State<MainPage> {
               HomePage(
                 userEntity: state.user,
               ),
-
               const ServicePage(),
-              // Container(),
-              // ),
               const PetMapPage(),
-              // Container(),
               const NotificationPage(),
-              Container(),
-              // ProfilePage(userEntity: state.user)
-              // CalendarPage(),
+              const PetrviaPage()
             ];
             return screens[currentTab];
           } else {

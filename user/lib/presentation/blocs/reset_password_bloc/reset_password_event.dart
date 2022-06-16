@@ -7,16 +7,14 @@ abstract class ResetPasswordEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class EmailChanged extends ResetPasswordEvent{
+class ResetEmailChanged extends ResetPasswordEvent {
   final String email;
-  const EmailChanged(this.email);
+  const ResetEmailChanged(this.email);
 
   @override
   List<Object> get props => [email];
 }
 
-class SubmitResetPassword extends ResetPasswordEvent {
-  
-}
+class SubmitResetPassword extends ResetPasswordEvent {}
 
-class ResetPasswordInitial extends ResetPasswordEvent{}
+class ResetPasswordInitial extends ResetPasswordEvent {}

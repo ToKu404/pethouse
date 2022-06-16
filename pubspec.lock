@@ -765,6 +765,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  petrivia:
+    dependency: "direct main"
+    description:
+      path: petrivia
+      relative: true
+    source: path
+    version: "0.0.1"
   platform:
     dependency: transitive
     description:

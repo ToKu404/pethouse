@@ -1,21 +1,9 @@
-import 'package:adopt/data/data_sources/adopt_data_source.dart';
-import 'package:adopt/data/repositories/adopt_repository_impl.dart';
-import 'package:adopt/domain/repositories/adopt_repository.dart';
-import 'package:adopt/domain/usecases/create_new_adopt_usecase.dart';
-import 'package:adopt/domain/usecases/get_all_pet_list_usecase.dart';
-import 'package:adopt/domain/usecases/get_open_adopt_list_usecase.dart';
-import 'package:adopt/domain/usecases/get_pet_description_usecase.dart';
-import 'package:adopt/domain/usecases/get_user_id_local_usecase.dart';
-import 'package:adopt/domain/usecases/remove_open_adopt_usecase.dart';
-import 'package:adopt/domain/usecases/request_adopt_usecase.dart';
-import 'package:adopt/domain/usecases/update_adopt_usecase.dart';
-import 'package:adopt/domain/usecases/upload_pet_adopt_photo_usecase.dart';
-import 'package:adopt/domain/usecases/upload_pet_certificate_usecase.dart';
-import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
-import 'package:adopt/presentation/blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
-import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
-import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
-import 'package:adopt/presentation/blocs/open_adopt_status_bloc/open_adopt_status_bloc.dart';
+import 'package:adopt/adopt.dart';
+import 'package:petrivia/data/repositories/petrivia_repository_impl.dart';
+import 'package:user/user.dart';
+import 'package:schedule/schedule.dart';
+import 'package:pet/pet.dart';
+import 'package:petrivia/petrivia.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,79 +14,8 @@ import 'package:notification/domain/repositories/notification_repository.dart';
 import 'package:notification/domain/usecases/get_list_notification_usecase.dart';
 import 'package:notification/domain/usecases/send_adopt_notif_usecase.dart';
 import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
-import 'package:pet/domain/repositories/pet_repository.dart';
-import 'package:pet/data/repositories/pet_repository_impl.dart';
-import 'package:pet/domain/usecases/get_pet_desc_usecase.dart';
-import 'package:pet/domain/usecases/get_pets_usecase.dart';
-import 'package:pet/domain/usecases/remove_pet_usecase.dart';
-import 'package:pet/domain/usecases/update_pet_usecase.dart';
-
-import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
-import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
-import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
-import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
-import 'package:pet/presentation/bloc/update_pet/update_pet_bloc.dart';
-import 'package:schedule/data/data_sources/schedule_data_source.dart';
-import 'package:schedule/data/data_sources/task_firebase_data_source.dart';
-import 'package:schedule/data/repositories/schedule_repository_impl.dart';
-import 'package:schedule/data/repositories/task_repository_impl.dart';
-import 'package:schedule/domain/repositories/medical_activity_repository.dart';
-import 'package:schedule/domain/repositories/schedule_repository.dart';
-import 'package:schedule/domain/repositories/task_repository.dart';
-import 'package:schedule/domain/use_cases/add_medical_usecase.dart';
-import 'package:schedule/domain/use_cases/change_task_status_usecase.dart';
-import 'package:schedule/domain/use_cases/get_monthly_task_usecase.dart';
-import 'package:schedule/domain/use_cases/get_today_task_usecase.dart';
-import 'package:schedule/domain/use_cases/task_add_usecase.dart';
-import 'package:schedule/presentation/blocs/medical_bloc/medical_bloc.dart';
-import 'package:schedule/presentation/blocs/task_bloc/task_bloc.dart';
-import 'package:schedule/presentation/blocs/get_monthly_task_bloc/get_monthly_task_bloc.dart';
-import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
-import 'package:schedule/presentation/blocs/day_calendar_task_bloc/day_calendar_task_bloc.dart';
-
-import 'package:user/data/data_sources/user_data_source.dart';
-import 'package:user/data/repositories/user_repository_impl.dart';
-import 'package:user/domain/repositories/user_repository.dart';
-import 'package:user/domain/usecases/auth_usecases/delete_user_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/get_user_data_local_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/get_user_id_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/is_sign_in_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/remove_user_id_local_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/reset_password_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/save_user_data_local_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/save_username_local_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/sign_in_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/sign_in_with_google_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/sign_out_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/sign_up_usecase.dart';
-import 'package:user/domain/usecases/auth_usecases/verify_email_usecase.dart';
-import 'package:user/domain/usecases/firestore_usecases/delete_old_image_usecase.dart';
-import 'package:user/domain/usecases/firestore_usecases/get_current_user_usecase.dart';
-import 'package:user/domain/usecases/firestore_usecases/save_user_data_usecase.dart';
-import 'package:user/domain/usecases/firestore_usecases/update_user_data_usecase.dart';
-import 'package:user/domain/usecases/storage_usecases/upload_image_usecase.dart';
-import 'package:user/presentation/blocs/auth_cubit/auth_cubit.dart';
-import 'package:user/presentation/blocs/reset_password_bloc/reset_password_bloc.dart';
-import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
-import 'package:user/presentation/blocs/sign_up_bloc/sign_up_bloc.dart';
-import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
 import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
-import 'package:pet/data/data_sources/pet_data_source.dart';
-import 'package:pet/domain/usecases/add_pet_certificate_usecase.dart';
-import 'package:pet/domain/usecases/add_pet_photo_usecase.dart';
-import 'package:pet/domain/usecases/add_pet_usecase.dart';
-
-import 'package:user/presentation/blocs/user_profile_bloc/user_profile_bloc.dart';
-import 'package:schedule/data/repositories/medical_firebase_repository_impl.dart';
-import 'package:schedule/data/data_sources/medical_firebase_data_source.dart';
 import 'package:notification/data/repositories/notification_repository_impl.dart';
-import 'package:schedule/domain/use_cases/schedule_task_usecase.dart';
-import 'package:schedule/domain/use_cases/get_pet_medical_usecase.dart';
-
-import 'package:schedule/presentation/blocs/schedule_task_bloc/schedule_task_bloc.dart';
-import 'package:schedule/presentation/blocs/get_pet_medical_bloc/get_pet_medical_bloc.dart';
-
-
 
 final locator = GetIt.instance;
 
@@ -118,6 +35,8 @@ void init() {
       () => NotificationRepositoryImpl(notificationDataSource: locator()));
   locator.registerLazySingleton<ScheduleRepository>(
       () => ScheduleRepositoryImpl(scheduleDataSource: locator()));
+  locator.registerLazySingleton<PetriviaRepository>(
+      () => PetriviaRepositoryImpl(petriviaDataSource: locator()));
 
   // datasource
   locator.registerLazySingleton<UserDataSource>(() => UserDataSourceImpl(
@@ -139,7 +58,8 @@ void init() {
       () => NotificationDataSourceImpl(firebaseFirestore: locator()));
   locator.registerLazySingleton<ScheduleDataSource>(
       () => ScheduleDataSourceImpl());
-
+  locator.registerLazySingleton<PetriviaDataSource>(
+      () => PetrviaDataSourceImpl(firebaseFirestore: locator()));
   // usecases
   locator.registerLazySingleton(
       () => SignInUsecase(firebaseRepository: locator()));
@@ -196,7 +116,9 @@ void init() {
       () => UpdateAdoptUsecase(adoptRepository: locator()));
   locator.registerLazySingleton(
       () => GetListNotificationUsecase(notificationRepository: locator()));
-  locator.registerLazySingleton(() => GetPetMedicalUsecase(petMedicalRepository: locator()));
+  locator.registerLazySingleton(
+      () => GetPetMedicalUsecase(petMedicalRepository: locator()));
+  locator.registerLazySingleton(() => GetPetriviaUsecase(locator()));
 
   locator.registerLazySingleton(() => GetOpenAdoptListUsecase(locator()));
   locator.registerLazySingleton(() => SaveDataLocalUsecase(locator()));
@@ -210,7 +132,7 @@ void init() {
   locator.registerLazySingleton(() => ChangeTaskStatusUsecase(locator()));
   locator.registerLazySingleton(() => ScheduleTaskUsecase(locator()));
   locator.registerLazySingleton(() => GetMonthlyTaskUsecase(locator()));
-    locator.registerLazySingleton(() => RemovePetUsecase(locator()));
+  locator.registerLazySingleton(() => RemovePetUsecase(locator()));
   locator.registerLazySingleton(() => UpdatePetUsecase(locator()));
 
   locator
@@ -242,6 +164,9 @@ void init() {
 
   locator.registerFactory(() => MedicalBloc(addMedicalUsecase: locator()));
   locator.registerFactory(() => TaskBloc(addTaskUsecase: locator()));
+  locator.registerFactory(() => GetPetriviaBloc(getPetriviaUsecase: locator()));
+
+  
 
   locator.registerFactory(() => AddPetBloc(
         addPetUsecase: locator(),
@@ -260,8 +185,10 @@ void init() {
         requestAdoptUsecase: locator(),
       ));
   locator.registerFactory(() => ListAdoptBloc(getAllPetListUsecase: locator()));
-  locator.registerFactory(() => UpdatePetBloc(addPetCertificateUsecase: locator(), addPetPhotoUsecase: locator(), updatePetUsecase: locator()));
-
+  locator.registerFactory(() => UpdatePetBloc(
+      addPetCertificateUsecase: locator(),
+      addPetPhotoUsecase: locator(),
+      updatePetUsecase: locator()));
 
   locator.registerFactory(() => EditAdoptBloc(
       updateAdoptUsecase: locator(),
@@ -276,7 +203,9 @@ void init() {
   locator.registerFactory(() => GetPetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetSchedulePetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetPetDescBloc(
-      getPetDescUsecase: locator(), getTodayTaskUsecase: locator(), removePetUsecase: locator()));
+      getPetDescUsecase: locator(),
+      getTodayTaskUsecase: locator(),
+      removePetUsecase: locator()));
   locator
       .registerFactory(() => ScheduleTaskBloc(scheduleTaskUsecase: locator()));
 

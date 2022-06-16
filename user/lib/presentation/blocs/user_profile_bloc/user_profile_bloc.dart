@@ -31,8 +31,8 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileValidate> {
             oldImageUrl: '')) {
     on<UserProfileInit>(_onInitUserProfile);
     on<ImageUploaded>(_onImagePicking);
-    on<EmailChanged>(_onEmailChanged);
-    on<NameChanged>(_onNameChanged);
+    on<UserEmailChanged>(_onEmailChanged);
+    on<UserNameChanged>(_onNameChanged);
     on<SubmitUpdate>(_onSubmitUpdate);
   }
 
@@ -80,7 +80,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileValidate> {
     return displayName!.isNotEmpty;
   }
 
-  _onEmailChanged(EmailChanged event, Emitter<UserProfileValidate> emit) {
+  _onEmailChanged(UserEmailChanged event, Emitter<UserProfileValidate> emit) {
     emit(
       state.copyWith(
         isFormValid: false,
@@ -90,7 +90,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileValidate> {
     );
   }
 
-  _onNameChanged(NameChanged event, Emitter<UserProfileValidate> emit) {
+  _onNameChanged(UserNameChanged event, Emitter<UserProfileValidate> emit) {
     emit(state.copyWith(
       isFormValid: false,
       name: event.name,
