@@ -3,7 +3,7 @@ class DataAppModel {
   String description="""Kemajuan ilmu pengetahuan mendorong berbagai inovasi yang memicu perkembangan teknologi salah satunya adalah perkembangan aplikasi dari berbagai platform untuk membantu kebutuhan manusia. Hewan merupakan salah satu makhluk hidup yang sangat dekat dengan kehidupan manusia. Hal ini menimbulkan banyaknya niat manusia untuk memelihara hewan di sekitar. Proses pemeliharaan hewan tersebut tentu saja memerlukan banyak prosedur untuk menjaga hewan tetap sehat. Pemeliharaan Hewan dengan perawatan rutin merupakan hal yang kerap kali menyulitkan bagi para pecinta hewan untuk menjaga seluruh kebiasaan sesuai dengan jadwal. Dengan dibuatnya aplikasi ini diharapkan dapat memudahkan masyarakat yang khususnya pecinta hewan dapat memantau kondisi dan jadwal pemeliharaan hewan.""";
   String programming_leng = 'Dart';
   String framework='Flutter';
-  String database='Firestore Firebase';
+  String database='Firestore';
   String logo = 'assets/icons/pethouse_icon.svg';
 
 }

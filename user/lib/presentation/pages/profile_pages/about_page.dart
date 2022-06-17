@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:user/data/models/about.dart';
+import 'package:user/presentation/widgets/card_about_content.dart';
 
 class AboutPage extends StatelessWidget {
   final DataAppModel dataAppModel = DataAppModel();
@@ -13,7 +14,8 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AboutPage'),
+        title: const Text('About'),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: Padding(
@@ -56,50 +58,37 @@ class AboutPage extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Bahasa Pemrograman',
-                  style: kTextTheme.bodyText1?.copyWith(
-                      fontWeight: FontWeight.bold, color: kDarkBrown),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CardAboutContent(
+                          subjek: 'Bahasa', contentSubjek: dataAppModel.programming_leng
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(child: CardAboutContent(subjek: 'Framework', contentSubjek: dataAppModel.framework)),
+                    const SizedBox(width: 5),
+                    Expanded(child: CardAboutContent(subjek: 'Database', contentSubjek: dataAppModel.database)),
+                  ],
                 ),
                 const SizedBox(
                   height: 5,
                 ),
-                Text(dataAppModel.programming_leng,
-                    style: kTextTheme.bodyText2),
-                const SizedBox(
-                  height: 20,
+                const Divider(
+                  height: 10,
+                  color: kDarkBrown,
                 ),
-                Text(
-                  'Framework',
-                  style: kTextTheme.bodyText1?.copyWith(
-                      fontWeight: FontWeight.bold, color: kDarkBrown),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(dataAppModel.framework, style: kTextTheme.bodyText2),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Database',
-                  style: kTextTheme.bodyText1?.copyWith(
-                      fontWeight: FontWeight.bold, color: kDarkBrown),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(dataAppModel.database, style: kTextTheme.bodyText2),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Package/Depedencies',
-                  style: kTextTheme.bodyText1?.copyWith(
-                      fontWeight: FontWeight.bold, color: kDarkBrown),
-                ),
-                const SizedBox(
-                  height: 5,
+                ListTile(
+                  title: Text(
+                    'Packages',
+                    style: kTextTheme.bodyText1?.copyWith(
+                        fontWeight: FontWeight.bold, color: kDarkBrown),
+                  ),
+                  trailing: Text(
+                    'Version',
+                    style: kTextTheme.bodyText1?.copyWith(
+                        fontWeight: FontWeight.bold, color: kDarkBrown),
+                  ),
                 ),
                 ListView.builder(
                     shrinkWrap: true,
@@ -115,15 +104,18 @@ class AboutPage extends StatelessWidget {
                       );
                     }),
                 const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Assets',
-                  style: kTextTheme.bodyText1?.copyWith(
-                      fontWeight: FontWeight.bold, color: kDarkBrown),
-                ),
-                const SizedBox(
                   height: 5,
+                ),
+                const Divider(
+                  height: 10,
+                  color: kDarkBrown,
+                ),
+                ListTile(
+                  title: Text(
+                    'Assets',
+                    style: kTextTheme.bodyText1?.copyWith(
+                        fontWeight: FontWeight.bold, color: kDarkBrown),
+                  ),
                 ),
                 ListView.builder(
                     shrinkWrap: true,
@@ -154,7 +146,7 @@ class HyperlinkText extends StatelessWidget {
     return RichText(
         text: TextSpan(
             text: text,
-            style: TextStyle(
+            style: const TextStyle(
                 decoration: TextDecoration.underline, color: Colors.blue),
                 recognizer: TapGestureRecognizer()..onTap = (){
                 launch(text);
