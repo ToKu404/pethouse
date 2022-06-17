@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:core/core.dart';
 import 'package:adopt/adopt.dart';
 import 'package:petrivia/petrivia.dart';
+import 'package:user/presentation/pages/profile_pages/about_page.dart';
 import 'package:user/user.dart';
 import 'package:schedule/schedule.dart';
 import 'package:pet/pet.dart';
@@ -177,6 +178,8 @@ class MyApp extends StatelessWidget {
               case ADD_PET_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const AddPetPage());
+              case ABOUT_ROUTE_NAME:
+                return MaterialPageRoute(builder: (context)=> AboutPage());
             }
           },
         ));
