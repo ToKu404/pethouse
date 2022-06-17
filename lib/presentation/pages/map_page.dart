@@ -1,7 +1,11 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class PetMapPage extends StatefulWidget {
   const PetMapPage({Key? key}) : super(key: key);
@@ -11,21 +15,105 @@ class PetMapPage extends StatefulWidget {
 }
 
 class _PetMapPageState extends State<PetMapPage> {
-  late GoogleMapController mapController;
-  final LatLng _myLocation = const LatLng(-5.1544064, 119.4491904);
+  late MapController mapController;
+  final MAPBOX_TOKEN =
+      'pk.eyJ1IjoidG9rdTQwNCIsImEiOiJjbDNib3g3eHIwYmV5M2VsN3Via29iaHc4In0.4RY23MMPBuWzBLcZSWIZ_A';
+  final MAPBOX_STYLE = 'mapbox/light-v10';
 
-  final Set<Marker> _markers = {};
+  final List<Marker> markers = [
+    Marker(
+        height: 40,
+        width: 40,
+        point: LatLng(-5.1393895, 119.4869864),
+        builder: (context) {
+          return InkWell(
+            onTap: () {
+              print('test');
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: kDarkBrown,
+              ),
+              padding: const EdgeInsets.all(5),
+              child: const CircleAvatar(
+                backgroundColor: kPrimaryColor,
+                backgroundImage: NetworkImage(
+                    'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpicfiles.alphacoders.com%2F311%2F311202.jpg&f=1&nofb=1'),
+              ),
+            ),
+          );
+        }),
+    Marker(
+        height: 40,
+        width: 40,
+        point: LatLng(-5.1373, 119.4282),
+        builder: (context) {
+          return Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: kDarkBrown,
+            ),
+            padding: const EdgeInsets.all(5),
+            child: const CircleAvatar(
+              backgroundColor: kPrimaryColor,
+              backgroundImage: NetworkImage(
+                  'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpicfiles.alphacoders.com%2F311%2F311202.jpg&f=1&nofb=1'),
+            ),
+          );
+        }),
+  ];
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-    mapController.setMapStyle(mapStyle);
-    setState(() {
-      _markers.add(Marker(
-          markerId: const MarkerId('id-1'),
-          position: _myLocation,
-          infoWindow:
-              const InfoWindow(title: 'Location', snippet: 'A Location')));
-    });
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    mapController.dispose();
+  }
+
+  _buildMap(MapController mc) async {
+    mapController = mc;
+    LatLng myPostion = await _deteriminePostion();
+    mapController.move(myPostion, 15);
+    markers.removeWhere(
+      (element) => element.key == const Key('myPosition'),
+    );
+    Marker myLocationMarker = Marker(
+      point: myPostion,
+      height: 40,
+      key: const Key('myPosition'),
+      width: 40,
+      builder: (_) {
+        return CachedNetworkImage(
+          imageUrl:
+              'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpicfiles.alphacoders.com%2F311%2F311202.jpg&f=1&nofb=1',
+          placeholder: (context, url) => Container(
+            width: 60,
+            height: 60,
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: AssetImage('assets/images/user_location.png'))),
+          ),
+          imageBuilder: (context, imageProvider) => Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(width: 1, color: kPrimaryColor),
+                image:
+                    DecorationImage(image: imageProvider, fit: BoxFit.cover)),
+          ),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        );
+      },
+    );
+    markers.add(myLocationMarker);
   }
 
   @override
@@ -46,52 +134,60 @@ class _PetMapPageState extends State<PetMapPage> {
                     color: const Color(0xFF000000).withOpacity(.05))
               ],
             ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Pet Maps",
-                style: kTextTheme.headline5?.copyWith(color: kDarkBrown),
-              ),
-            ),
-          ),
-          Expanded(
-              child: Stack(
-            children: [
-              GoogleMap(
-                  onMapCreated: (GoogleMapController controller) {
-                    _onMapCreated(controller);
-                  },
-                  markers: _markers,
-                  initialCameraPosition:
-                      CameraPosition(target: _myLocation, zoom: 15)),
-              Positioned(
-                top: 10,
-                left: 10,
-                child: InkWell(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Pet Maps",
+                  style: kTextTheme.headline5?.copyWith(color: kDarkBrown),
+                ),
+                InkWell(
                   onTap: () async {
-                    Position position = await _deteriminePostion();
-                    mapController.animateCamera(CameraUpdate.newCameraPosition(
-                        CameraPosition(
-                            target:
-                                LatLng(position.latitude, position.longitude),
-                            zoom: 15)));
-                    _markers.removeWhere(
-                        (element) => element.markerId == MarkerId('id-1'));
-                    _markers.add(Marker(
-                        markerId: const MarkerId('id-1'),
-                        position:
-                            LatLng(position.latitude, position.longitude)));
-                    setState(() {});
+                    print(markers.length);
+                    LatLng myPostion = await _deteriminePostion();
+                    mapController.move(myPostion, 15);
+                    markers.removeWhere(
+                      (element) => element.key == const Key('myPosition'),
+                    );
+                    Marker myLocationMarker = Marker(
+                      point: myPostion,
+                      height: 40,
+                      key: const Key('myPosition'),
+                      width: 40,
+                      builder: (_) {
+                        return CachedNetworkImage(
+                          imageUrl:
+                              'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpicfiles.alphacoders.com%2F311%2F311202.jpg&f=1&nofb=1',
+                          placeholder: (context, url) => Container(
+                            width: 60,
+                            height: 60,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/user_location.png'))),
+                          ),
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(width: 1, color: kPrimaryColor),
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover)),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        );
+                      },
+                    );
+                    markers.add(myLocationMarker);
+                    // setState(() {});
                   },
                   child: Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                          blurRadius: 13,
-                          color: const Color(0xFF000000).withOpacity(.07)),
-                      BoxShadow(
-                          blurRadius: 5,
-                          color: const Color(0xFF000000).withOpacity(.05))
-                    ], shape: BoxShape.circle, color: kWhite),
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: kWhite),
                     width: 50,
                     height: 50,
                     child: const Icon(
@@ -99,16 +195,43 @@ class _PetMapPageState extends State<PetMapPage> {
                       color: kPrimaryColor,
                     ),
                   ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: FlutterMap(
+              options: MapOptions(
+                  center: LatLng(-5.1544064, 119.4491904),
+                  zoom: 15,
+                  maxZoom: 15,
+                  minZoom: 10,
+                  interactiveFlags:
+                      InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+                  onMapCreated: (MapController mc) {
+                    _buildMap(mc);
+                  }),
+              layers: [
+                TileLayerOptions(
+                  urlTemplate:
+                      'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
+                  additionalOptions: {
+                    'accessToken': MAPBOX_TOKEN,
+                    'id': MAPBOX_STYLE,
+                  },
                 ),
-              )
-            ],
-          ))
+                MarkerLayerOptions(
+                  markers: markers,
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 
-  Future<Position> _deteriminePostion() async {
+  Future<LatLng> _deteriminePostion() async {
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -127,7 +250,8 @@ class _PetMapPageState extends State<PetMapPage> {
       return Future.error('Location Permission Denied Permanently');
     }
 
-    Position position = await Geolocator.getCurrentPosition();
-    return position;
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    return LatLng(position.latitude, position.longitude);
   }
 }

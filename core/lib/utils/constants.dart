@@ -38,8 +38,8 @@ final TextTheme kTextTheme = TextTheme(
   button: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
   caption: GoogleFonts.poppins(
       fontSize: 10, fontWeight: FontWeight.w400, color: kDarkBrown),
-  overline: GoogleFonts.poppins(
-      fontSize: 12, fontWeight: FontWeight.w400, color: kOrange),
+  overline: GoogleFonts.montserrat(
+      fontSize: 12, fontWeight: FontWeight.w400, color: kDarkBrown),
 );
 
 final kTimePickerTheme = TimePickerThemeData(

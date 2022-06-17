@@ -1,8 +1,6 @@
-// ignore: depend_on_referenced_packages
-import 'package:core/utils/constants.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:petrivia/domain/entities/petrivia_entity.dart';
-import 'package:petrivia/presentation/pages/detail_petrivia_page.dart';
 
 class CardPetrivia extends StatelessWidget {
   final PetriviaEntity petriviaEntity;
@@ -13,7 +11,7 @@ class CardPetrivia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => const DetailPetriviaPage(),
+      onTap: () => Navigator.pushNamed(context, DETAIL_PETRIVIA_ROUTE_NAME, arguments: petriviaEntity),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         width: double.infinity,

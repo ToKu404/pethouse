@@ -108,14 +108,16 @@ class MyApp extends StatelessWidget {
                           userId: uid,
                         ));
               case DETAIL_PETRIVIA_ROUTE_NAME:
+               final petriviaEntity = settings.arguments as PetriviaEntity;
                 return MaterialPageRoute(
-                    builder: (context) => const DetailPetriviaPage());
+                    builder: (context) => DetailPetriviaPage(petriviaEntity: petriviaEntity,));
               case PROFILE_ROUTE_NAME:
                 final userEntity = settings.arguments as UserEntity;
                 return MaterialPageRoute(
                     builder: (context) => ProfilePage(
                           userEntity: userEntity,
                         ));
+             
               case EDIT_PROFILE_ROUTE_NAME:
                 final uid = settings.arguments as String;
                 return MaterialPageRoute(
