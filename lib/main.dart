@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:adopt/adopt.dart';
+import 'package:pet_map/pet_map.dart';
 import 'package:petrivia/petrivia.dart';
 import 'package:user/presentation/pages/profile_pages/about_page.dart';
 import 'package:user/user.dart';
@@ -80,6 +81,13 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<GetPetMedicalBloc>()),
           BlocProvider(create: (_) => di.locator<UpdatePetBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetriviaBloc>()),
+          BlocProvider(create: (_) => di.locator<PetmapCubit>()),
+          BlocProvider(create: (_) => di.locator<GetAllPetMapBloc>()),
+          BlocProvider(create: (_) => di.locator<GetPetMapBloc>()),
+
+
+
+
 
         ],
         child: MaterialApp(
@@ -117,6 +125,12 @@ class MyApp extends StatelessWidget {
                 return MaterialPageRoute(
                     builder: (context) => ProfilePage(
                           userEntity: userEntity,
+                        ));
+               case CHOICE_PET_MAP_ROUTE_NAME:
+                final userId = settings.arguments as String;
+                return MaterialPageRoute(
+                    builder: (context) => ChoicePetPage(
+                          userId: userId,
                         ));
              
               case EDIT_PROFILE_ROUTE_NAME:

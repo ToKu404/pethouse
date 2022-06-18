@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:http/http.dart' as http;
@@ -124,10 +125,26 @@ class StoreCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           child: Column(
             children: [
-              SizedBox(
-                height: 120,
-                width: double.infinity,
-                child: Image.network(store.imgUrl),
+              CachedNetworkImage(
+                imageUrl: store.imgUrl,
+                placeholder: (context, url) => ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: double.infinity,
+                    height: 120,
+                    color: kGrey,
+                    child: const Center(child: Icon(Icons.image)),
+                  ),
+                ),
+                imageBuilder: (context, imageProvider) => Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover)),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
               const SizedBox(
                 height: 10,

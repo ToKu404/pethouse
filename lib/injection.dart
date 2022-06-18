@@ -4,6 +4,7 @@ import 'package:user/user.dart';
 import 'package:schedule/schedule.dart';
 import 'package:pet/pet.dart';
 import 'package:petrivia/petrivia.dart';
+import 'package:pet_map/pet_map.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,6 +38,8 @@ void init() {
       () => ScheduleRepositoryImpl(scheduleDataSource: locator()));
   locator.registerLazySingleton<PetriviaRepository>(
       () => PetriviaRepositoryImpl(petriviaDataSource: locator()));
+  locator.registerLazySingleton<PetMapRepository>(
+      () => PetMapRepositoryImpl(locator()));
 
   // datasource
   locator.registerLazySingleton<UserDataSource>(() => UserDataSourceImpl(
@@ -60,6 +63,8 @@ void init() {
       () => ScheduleDataSourceImpl());
   locator.registerLazySingleton<PetriviaDataSource>(
       () => PetrviaDataSourceImpl(firebaseFirestore: locator()));
+  locator.registerLazySingleton<PetMapDataSource>(
+      () => PetMapDataSourceImpl(locator()));
   // usecases
   locator.registerLazySingleton(
       () => SignInUsecase(firebaseRepository: locator()));
@@ -134,6 +139,12 @@ void init() {
   locator.registerLazySingleton(() => GetMonthlyTaskUsecase(locator()));
   locator.registerLazySingleton(() => RemovePetUsecase(locator()));
   locator.registerLazySingleton(() => UpdatePetUsecase(locator()));
+  locator.registerLazySingleton(() => CreatePetMapUsecase(locator()));
+  locator.registerLazySingleton(() => RemovePetMapUsecase(locator()));
+  locator.registerLazySingleton(() => GetAllPetMapUsecase(locator()));
+  locator.registerLazySingleton(() => CheckPetMapUsecase(locator()));
+  locator.registerLazySingleton(() => GetPetMapUsecase(locator()));
+  locator.registerLazySingleton(() => UpdatePetMapUsecase(locator()));
 
   locator
       .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
@@ -165,8 +176,8 @@ void init() {
   locator.registerFactory(() => MedicalBloc(addMedicalUsecase: locator()));
   locator.registerFactory(() => TaskBloc(addTaskUsecase: locator()));
   locator.registerFactory(() => GetPetriviaBloc(getPetriviaUsecase: locator()));
-
-  
+  locator
+      .registerFactory(() => GetAllPetMapBloc(getAllPetMapUsecase: locator()));
 
   locator.registerFactory(() => AddPetBloc(
         addPetUsecase: locator(),
@@ -217,6 +228,13 @@ void init() {
       () => GetMonthlyTaskBloc(getMonthlyTaskUsecase: locator()));
   locator.registerFactory(
       () => GetPetMedicalBloc(getPetMedicalUsecase: locator()));
+  locator.registerFactory(() => PetmapCubit(
+      createPetMapUsecase: locator(),
+      removePetMapUsecase: locator(),
+      checkPetMapUsecase: locator(),
+      updatePetMapUsecase: locator()));
+
+  locator.registerFactory(() => GetPetMapBloc(getPetMapUsecase: locator()));
 
   //external
   final auth = FirebaseAuth.instance;

@@ -52,7 +52,9 @@ class _MainPageState extends State<MainPage> {
                 userEntity: state.user,
               ),
               const ServicePage(),
-              const PetMapPage(),
+              PetMapPage(
+                userEntity: state.user,
+              ),
               const NotificationPage(),
               const PetrviaPage()
             ];
