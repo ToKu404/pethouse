@@ -14,6 +14,8 @@ abstract class PetDataSource {
       String petCertificatePath, String oldPath);
   Stream<List<PetEntity>> getPets(String userId);
   Stream<PetEntity> getPetDesc(String petId);
+  Future<void> updatePetData(PetEntity petEntity);
+  Future<void> removePetData(String petId);
 }
 
 class PetDataSourceImpl implements PetDataSource {
@@ -115,5 +117,31 @@ class PetDataSourceImpl implements PetDataSource {
     return petCollection
         .snapshots()
         .map((event) => PetModel.fromSnapshot(event));
+  }
+
+  @override
+  Future<void> removePetData(String petId) async {
+    await firebaseFirestore.collection('pets').doc(petId).delete();
+  }
+
+  @override
+  Future<void> updatePetData(PetEntity petEntity) async {
+    Map<String, dynamic> petMap = {};
+    onUpdate('pet_name', petEntity.petName, petMap);
+    onUpdate('pet_type', petEntity.petType, petMap);
+    onUpdate('pet_picture_url', petEntity.petPictureUrl, petMap);
+    onUpdate('gender', petEntity.gender, petMap);
+    onUpdate('pet_breed', petEntity.petBreed, petMap);
+    onUpdate('date_of_birth', petEntity.dateOfBirth, petMap);
+    onUpdate('certificate_url', petEntity.certificateUrl, petMap);
+    onUpdate('pet_description', petEntity.petDescription, petMap);
+
+    await firebaseFirestore.collection('pets').doc(petEntity.id).update(petMap);
+  }
+
+  void onUpdate(String key, dynamic value, Map<String, dynamic> petMap) {
+    if (value != null && value != '') {
+      petMap[key] = value;
+    }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pethouse/presentation/pages/map_page.dart';
 import 'package:pethouse/presentation/pages/notification_page.dart';
+import 'package:pethouse/presentation/pages/petrivia_page.dart';
 import 'package:pethouse/presentation/pages/service_page.dart';
 import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
 import 'home_page.dart';
@@ -36,7 +38,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFDF7F9),
+      backgroundColor: const Color(0xFFFDF7F9),
       // backgroundColor: kWhite,
       body: BlocBuilder<UserDbBloc, UserDbState>(
         builder: (context, state) {
@@ -49,15 +51,12 @@ class _MainPageState extends State<MainPage> {
               HomePage(
                 userEntity: state.user,
               ),
-
-              ServicePage(),
-              // Container(),
-              // ),
-              Container(),
-              NotificationPage(),
-              Container(),
-              // ProfilePage(userEntity: state.user)
-              // CalendarPage(),
+              const ServicePage(),
+              PetMapPage(
+                userEntity: state.user,
+              ),
+              const NotificationPage(),
+              const PetrviaPage()
             ];
             return screens[currentTab];
           } else {
@@ -67,26 +66,7 @@ class _MainPageState extends State<MainPage> {
           }
         },
       ),
-      // bottomNavigationBar: ConvexAppBar(
-      //   style: TabStyle.reactCircle,
-      //   items: const [
-      //     TabItem(icon: Icons.home),
-      //     TabItem(
-      //       icon: Icons.pets,
-      //     ),
-      //     TabItem(icon: Icons.map_sharp),
 
-      //     TabItem(icon: Icons.notifications_sharp),
-      //     TabItem(icon: Icons.library_books),
-      //     // TabItem(icon: Icons.person),
-      //   ],
-      //   initialActiveIndex: currentTab,
-      //   backgroundColor: kWhite,
-      //   color: Color(0xFFD6D6D6),
-      //   activeColor: kPrimaryColor,
-      //   elevation: 0,
-      //   onTap: setBottomBarIndex,
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const [
@@ -115,7 +95,7 @@ class _MainPageState extends State<MainPage> {
         // initialActiveIndex: currentTab,
         backgroundColor: kWhite,
         selectedItemColor: kPrimaryColor,
-        unselectedItemColor: Color(0xFFD6D6D6),
+        unselectedItemColor: const Color(0xFFD6D6D6),
         showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: currentTab,

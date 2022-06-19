@@ -1,6 +1,7 @@
 import 'package:adopt/presentation/pages/adopt_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:pethouse/presentation/pages/store_page.dart';
 
 class ServicePage extends StatefulWidget {
   const ServicePage({Key? key}) : super(key: key);
@@ -14,9 +15,7 @@ class _ServicePageState extends State<ServicePage> {
   int _tabIndex = 0;
   final List<Widget> _bodyPage = [
     const AdoptPage(),
-    const Center(
-      child: Text('Coming Soon'),
-    ),
+    const StorePage(),
   ];
 
   @override

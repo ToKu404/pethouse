@@ -152,15 +152,6 @@ class _BuildProfile extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, ACTIVITY_STATUS_ROUT_NAME);
                 }),
-            CardProfile(
-                title: 'Account',
-                trailingAction: const Icon(
-                  Icons.arrow_forward_ios_sharp,
-                  size: 16,
-                  color: kGreyTransparant,
-                ),
-                leadingAction: const Icon(Icons.lock, color: kPrimaryColor),
-                onTap: () {}),
             const NotificationCard(),
             CardProfile(
                 title: 'About',
@@ -170,7 +161,9 @@ class _BuildProfile extends StatelessWidget {
                   color: kGreyTransparant,
                 ),
                 leadingAction: const Icon(Icons.info, color: kPrimaryColor),
-                onTap: () {}),
+                onTap: () {
+                  Navigator.pushNamed(context, ABOUT_ROUTE_NAME);
+                }),
             CardProfile(
                 title: 'Log Out',
                 trailingAction: const Icon(

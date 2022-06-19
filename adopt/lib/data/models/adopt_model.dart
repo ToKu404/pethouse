@@ -18,6 +18,7 @@ class AdoptModel extends AdoptEntity {
     final String? status,
     final String? adopterId,
     final String? adopterName,
+    final List<String>? titleSearch,
   }) : super(
             adoptId: adoptId,
             userId: userId,
@@ -32,7 +33,8 @@ class AdoptModel extends AdoptEntity {
             petDescription: petDecription,
             status: status,
             adopterId: adopterId,
-            adopterName: adopterName
+            adopterName: adopterName,
+            titleSearch: titleSearch
             );
 
   Map<String, dynamic> toDocument() {
@@ -51,6 +53,8 @@ class AdoptModel extends AdoptEntity {
       "status": status,
       "adopter_id": adopterId,
       "adopter_name":adopterName,
+      "title_search": titleSearch,
+
     };
   }
 
@@ -70,6 +74,7 @@ class AdoptModel extends AdoptEntity {
       status: documentSnapshot.get('status'),
       adopterId: documentSnapshot.get('adopter_id'),
       adopterName: documentSnapshot.get('adopter_name'),
+      titleSearch: List<String>.from(documentSnapshot["title_search"].map((x) => x)),
     );
   }
 
@@ -89,5 +94,6 @@ class AdoptModel extends AdoptEntity {
         status,
         adopterId,
         adopterName,
+        titleSearch
       ];
 }
