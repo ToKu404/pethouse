@@ -16,4 +16,23 @@ class GetListPetriviaEvent extends GetPetriviaEvent {
   List<Object> get props => [listPetrivia];
 }
 
-class FetchListPetriviaEvent extends GetPetriviaEvent{}
+class FetchListPetriviaEvent extends GetPetriviaEvent {}
+
+class FetchSearchPetriviaEvent extends GetPetriviaEvent {
+  final String query;
+
+  const FetchSearchPetriviaEvent({required this.query});
+
+  @override
+  List<Object> get props => [query];
+}
+
+class GetSearchPetriviaEvent extends GetPetriviaEvent {
+  final List<PetriviaEntity> listPetrivia;
+  final String query;
+
+  const GetSearchPetriviaEvent({required this.listPetrivia, required this.query});
+
+  @override
+  List<Object> get props => [listPetrivia, query];
+}

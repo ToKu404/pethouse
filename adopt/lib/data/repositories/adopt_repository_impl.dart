@@ -63,4 +63,9 @@ class AdoptRepositoryImpl implements AdoptRepository {
   Stream<List<AdoptEntity>> getRequestAdoptList(String userId) {
     return adoptDataSource.getRequestAdoptList(userId);
   }
+
+  @override
+  Stream<List<AdoptEntity>> searchPetAdopt(String query) {
+    return adoptDataSource.searchPetAdopt(query);
+  }
 }

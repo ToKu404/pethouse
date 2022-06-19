@@ -145,6 +145,7 @@ void init() {
   locator.registerLazySingleton(() => CheckPetMapUsecase(locator()));
   locator.registerLazySingleton(() => GetPetMapUsecase(locator()));
   locator.registerLazySingleton(() => UpdatePetMapUsecase(locator()));
+  locator.registerLazySingleton(() => SearchPetAdoptUsecase(locator()));
 
   locator
       .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
@@ -175,7 +176,8 @@ void init() {
 
   locator.registerFactory(() => MedicalBloc(addMedicalUsecase: locator()));
   locator.registerFactory(() => TaskBloc(addTaskUsecase: locator()));
-  locator.registerFactory(() => GetPetriviaBloc(getPetriviaUsecase: locator()));
+  locator.registerFactory(() => GetPetriviaBloc(
+      getPetriviaUsecase: locator()));
   locator
       .registerFactory(() => GetAllPetMapBloc(getAllPetMapUsecase: locator()));
 
@@ -195,7 +197,7 @@ void init() {
         getUserIdLocalUsecase: locator(),
         requestAdoptUsecase: locator(),
       ));
-  locator.registerFactory(() => ListAdoptBloc(getAllPetListUsecase: locator()));
+  locator.registerFactory(() => ListAdoptBloc(getAllPetListUsecase: locator(), searchPetAdoptUsecase: locator()));
   locator.registerFactory(() => UpdatePetBloc(
       addPetCertificateUsecase: locator(),
       addPetPhotoUsecase: locator(),

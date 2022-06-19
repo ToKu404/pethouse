@@ -13,11 +13,19 @@ class BuildPetriviaPage extends StatefulWidget {
 }
 
 class _BuildPetriviaPageState extends State<BuildPetriviaPage> {
+  final TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     BlocProvider.of<GetPetriviaBloc>(context).add(FetchListPetriviaEvent());
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,6 +53,11 @@ class _BuildPetriviaPageState extends State<BuildPetriviaPage> {
               ),
               width: double.infinity,
               child: TextField(
+                onChanged: (query) {
+                  BlocProvider.of<GetPetriviaBloc>(context)
+                      .add(FetchSearchPetriviaEvent(query: query));
+                },
+                controller: searchController,
                 autofocus: false,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(

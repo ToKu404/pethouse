@@ -16,6 +16,7 @@ class AdoptEntity extends Equatable {
   final String? status;
   final String? adopterId;
   final String? adopterName;
+  final List<String>? titleSearch;
 
   const AdoptEntity({
     this.adoptId,
@@ -32,6 +33,7 @@ class AdoptEntity extends Equatable {
     required this.status,
     this.adopterId,
     this.adopterName,
+    this.titleSearch,
   });
 
   @override
@@ -50,6 +52,7 @@ class AdoptEntity extends Equatable {
         status,
         adopterId,
         adopterName,
+        titleSearch
       ];
 }
 

@@ -44,6 +44,15 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
           petCertificateUrl = await uploadPetCertificateUsecase.execute(
               event.adoptEntity.certificateUrl!, '');
         }
+
+        String petName = event.adoptEntity.petName!;
+        List<String> caseSearchList = [];
+        String temp = "";
+        for (int i = 0; i < petName.length; i++) {
+          temp = temp + petName[i];
+          caseSearchList.add(temp.toLowerCase());
+        }
+
         AdoptEntity adoptEntity = AdoptEntity(
             petName: event.adoptEntity.petName,
             petType: event.adoptEntity.petType,
@@ -55,9 +64,9 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
             petPictureUrl: petPhotoUrl,
             certificateUrl: petCertificateUrl,
             status: event.adoptEntity.status,
+            titleSearch: caseSearchList,
             adopterId: null,
             adopterName: null);
-
         await createNewAdoptUsecase.execute(adoptEntity);
         emit(OpenAdoptSuccess());
       } catch (e) {

@@ -12,6 +12,8 @@ export 'package:adopt/domain/usecases/remove_open_adopt_usecase.dart';
 export 'package:adopt/domain/usecases/request_adopt_usecase.dart';
 export 'package:adopt/domain/usecases/update_adopt_usecase.dart';
 export 'package:adopt/domain/usecases/upload_pet_adopt_photo_usecase.dart';
+export 'package:adopt/domain/usecases/search_pet_adopt_usecase.dart';
+
 export 'package:adopt/domain/usecases/upload_pet_certificate_usecase.dart';
 export 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
 export 'package:adopt/presentation/blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
