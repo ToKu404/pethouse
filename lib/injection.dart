@@ -117,8 +117,10 @@ void init() {
       () => UpdateAdoptUsecase(adoptRepository: locator()));
   locator.registerLazySingleton(
       () => GetListNotificationUsecase(notificationRepository: locator()));
+
   locator
       .registerLazySingleton(() => GetPlanUsecase(planRepository: locator()));
+
   locator.registerLazySingleton(() => GetPetriviaUsecase(locator()));
 
   locator.registerLazySingleton(() => GetOpenAdoptListUsecase(locator()));
@@ -142,7 +144,6 @@ void init() {
   locator.registerLazySingleton(() => UpdatePetMapUsecase(locator()));
   locator.registerLazySingleton(() => SearchPetAdoptUsecase(locator()));
   locator.registerLazySingleton(() => GetPlanHistoryUsecase(locator()));
-
 
   locator
       .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
@@ -221,7 +222,8 @@ void init() {
   locator.registerFactory(() => DayPlanCalendarBloc(getPlanUsecase: locator()));
   locator.registerFactory(
       () => GetMonthlyTaskBloc(getMonthlyTaskUsecase: locator()));
-  locator.registerFactory(() => GetPlanHistoryBloc(getPlanHistoryUsecase: locator()));
+  locator.registerFactory(
+      () => GetPlanHistoryBloc(getPlanHistoryUsecase: locator()));
   locator.registerFactory(() => PetmapCubit(
       createPetMapUsecase: locator(),
       removePetMapUsecase: locator(),
@@ -230,7 +232,6 @@ void init() {
 
   locator.registerFactory(() => GetPetMapBloc(getPetMapUsecase: locator()));
   locator.registerFactory(() => AddPlanCubit(addPlanUsecase: locator()));
-
   //external
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
