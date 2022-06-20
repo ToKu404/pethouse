@@ -1,50 +1,23 @@
 import 'dart:io';
 
-import 'package:adopt/domain/entities/adopt_enitity.dart';
-import 'package:adopt/presentation/blocs/open_adopt_status_bloc/open_adopt_status_bloc.dart';
-import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
-import 'package:adopt/presentation/blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
-import 'package:adopt/presentation/blocs/list_adopt_bloc/list_adopt_bloc.dart';
-import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
-import 'package:adopt/presentation/pages/detail_adopt_page.dart';
-import 'package:adopt/presentation/pages/edit_adopt_page.dart';
-import 'package:adopt/presentation/pages/open_adopt_page.dart';
-import 'package:adopt/presentation/pages/activity_status_page.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-
 import 'package:core/core.dart';
+import 'package:adopt/adopt.dart';
+import 'package:pet_map/pet_map.dart';
+import 'package:petrivia/petrivia.dart';
+import 'package:user/presentation/pages/profile_pages/about_page.dart';
+import 'package:user/user.dart';
+import 'package:schedule/schedule.dart';
+import 'package:pet/pet.dart';
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petrivia/presentation/pages/detail_petrivia_page.dart';
 import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
-import 'package:pet/domain/entities/pet_entity.dart';
-import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
-import 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
-import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
-import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
-import 'package:pet/presentation/pages/add_pet.dart';
-import 'package:pet/presentation/pages/pet_description_page.dart';
-import 'package:schedule/presentation/blocs/get_pet_medical_bloc/get_pet_medical_bloc.dart';
-import 'package:schedule/presentation/blocs/medical_bloc/medical_bloc.dart';
-import 'package:schedule/presentation/blocs/task_bloc/task_bloc.dart';
-import 'package:schedule/presentation/blocs/get_monthly_task_bloc/get_monthly_task_bloc.dart';
-import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
-import 'package:schedule/presentation/blocs/schedule_task_bloc/schedule_task_bloc.dart';
-import 'package:schedule/presentation/pages/add_medical_activity.dart';
-import 'package:schedule/presentation/pages/add_new_task.dart';
-import 'package:schedule/presentation/pages/calendar_page.dart';
-import 'package:user/domain/entities/user_entity.dart';
-import 'package:user/presentation/blocs/reset_password_bloc/reset_password_bloc.dart';
-import 'package:user/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
-import 'package:user/presentation/blocs/sign_up_bloc/sign_up_bloc.dart';
-import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
-import 'package:user/presentation/blocs/user_profile_bloc/user_profile_bloc.dart';
-import 'package:schedule/presentation/blocs/day_calendar_task_bloc/day_calendar_task_bloc.dart';
-
-import 'package:user/user.dart';
 
 import 'firebase_options.dart';
 import 'injection.dart' as di;
@@ -66,14 +39,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   di.init();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -85,10 +56,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<SignInBloc>()),
           BlocProvider(create: (_) => di.locator<SignUpBloc>()),
           BlocProvider(create: (_) => di.locator<AuthCubit>()),
+          BlocProvider(create: (_) => di.locator<AddPlanCubit>()),
           BlocProvider(create: (_) => di.locator<UserDbBloc>()),
           BlocProvider(create: (_) => di.locator<UserProfileBloc>()),
           BlocProvider(create: (_) => di.locator<ResetPasswordBloc>()),
-          BlocProvider(create: (_) => di.locator<MedicalBloc>()),
           BlocProvider(create: (_) => di.locator<TaskBloc>()),
           BlocProvider(create: (_) => di.locator<AddPetBloc>()),
           BlocProvider(create: (_) => di.locator<OpenAdoptBloc>()),
@@ -101,11 +72,15 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<GetPetBloc>()),
           BlocProvider(create: (_) => di.locator<GetSchedulePetBloc>()),
           BlocProvider(create: (_) => di.locator<GetTodayTaskBloc>()),
-          BlocProvider(create: (_) => di.locator<DayCalendarTaskBloc>()),
+          BlocProvider(create: (_) => di.locator<DayPlanCalendarBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetDescBloc>()),
-          BlocProvider(create: (_) => di.locator<ScheduleTaskBloc>()),
           BlocProvider(create: (_) => di.locator<GetMonthlyTaskBloc>()),
-          BlocProvider(create: (_) => di.locator<GetPetMedicalBloc>()),
+          BlocProvider(create: (_) => di.locator<GetPlanHistoryBloc>()),
+          BlocProvider(create: (_) => di.locator<UpdatePetBloc>()),
+          BlocProvider(create: (_) => di.locator<GetPetriviaBloc>()),
+          BlocProvider(create: (_) => di.locator<PetmapCubit>()),
+          BlocProvider(create: (_) => di.locator<GetAllPetMapBloc>()),
+          BlocProvider(create: (_) => di.locator<GetPetMapBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -133,11 +108,23 @@ class MyApp extends StatelessWidget {
                     builder: (_) => MainPage(
                           userId: uid,
                         ));
+              case DETAIL_PETRIVIA_ROUTE_NAME:
+                final petriviaEntity = settings.arguments as PetriviaEntity;
+                return MaterialPageRoute(
+                    builder: (context) => DetailPetriviaPage(
+                          petriviaEntity: petriviaEntity,
+                        ));
               case PROFILE_ROUTE_NAME:
                 final userEntity = settings.arguments as UserEntity;
                 return MaterialPageRoute(
                     builder: (context) => ProfilePage(
                           userEntity: userEntity,
+                        ));
+              case CHOICE_PET_MAP_ROUTE_NAME:
+                final userId = settings.arguments as String;
+                return MaterialPageRoute(
+                    builder: (context) => ChoicePetPage(
+                          userId: userId,
                         ));
               case EDIT_PROFILE_ROUTE_NAME:
                 final uid = settings.arguments as String;
@@ -162,6 +149,12 @@ class MyApp extends StatelessWidget {
                 final adopt = settings.arguments as AdoptEntity;
                 return MaterialPageRoute(
                     builder: (context) => EditAdoptPage(adoptPet: adopt));
+              case EDIT_PET_ROUTE_NAME:
+                final pet = settings.arguments as PetEntity;
+                return MaterialPageRoute(
+                    builder: (context) => EditPetPage(
+                          pet: pet,
+                        ));
               case NoInternetPage.ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const NoInternetPage());
@@ -188,10 +181,11 @@ class MyApp extends StatelessWidget {
                     builder: (context) => AddTaskPage(
                           petEntity: petEntity,
                         ));
-
               case ADD_PET_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const AddPetPage());
+              case ABOUT_ROUTE_NAME:
+                return MaterialPageRoute(builder: (context) => AboutPage());
             }
           },
         ));

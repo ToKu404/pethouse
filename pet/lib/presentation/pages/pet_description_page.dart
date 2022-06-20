@@ -24,6 +24,7 @@ class PetDescriptionPage extends StatefulWidget {
 }
 
 class _PetDescriptionPageState extends State<PetDescriptionPage> {
+  PetEntity? pet;
   @override
   void initState() {
     super.initState();
@@ -59,15 +60,26 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
                 color: kPrimaryColor,
               ),
             ),
+            onSelected: (val) {
+              if (val == 1) {
+                if (pet != null) {
+                  Navigator.pushNamed(context, EDIT_PET_ROUTE_NAME,
+                      arguments: pet);
+                }
+              } else if (val == 2) {
+                BlocProvider.of<GetPetDescBloc>(context)
+                    .add(RemovePetEvent(petId: widget.petId));
+              }
+            },
             itemBuilder: (context) {
               return [
-                PopupMenuItem(
-                  child: const Text('Edit Pet'),
-                  onTap: () {},
+                const PopupMenuItem(
+                  value: 1,
+                  child: Text('Edit Pet'),
                 ),
-                PopupMenuItem(
-                  child: const Text('Remove Pet'),
-                  onTap: () {},
+                const PopupMenuItem(
+                  value: 2,
+                  child: Text('Remove Pet'),
                 )
               ];
             },
@@ -75,18 +87,28 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
         ],
       ),
       body: SafeArea(
-        child: BlocBuilder<GetPetDescBloc, GetPetDescState>(
-            builder: (context, state) {
-          if (state is PetDescLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is PetDescSuccess) {
-            return _PetDescLayout(
-              pet: state.petEntity,
-            );
-          } else {
-            return const Center();
-          }
-        }),
+        child: BlocListener<GetPetDescBloc, GetPetDescState>(
+          listener: (context, state) {
+            if (state is RemovePetSuccess) {
+              Navigator.pop(context);
+            }
+            if (state is PetDescSuccess) {
+              pet = state.petEntity;
+            }
+          },
+          child: BlocBuilder<GetPetDescBloc, GetPetDescState>(
+              builder: (context, state) {
+            if (state is PetDescLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is PetDescSuccess) {
+              return _PetDescLayout(
+                pet: state.petEntity,
+              );
+            } else {
+              return const Center();
+            }
+          }),
+        ),
       ),
     );
   }
@@ -212,7 +234,7 @@ class _PetDescLayout extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              CardMedicalHistory(
+              CardActivityHistory(
                 petId: pet.id!,
               ),
               const SizedBox(

@@ -10,8 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tzl;
 import 'package:timezone/timezone.dart' as tz;
 import '../../domain/entities/task_entity.dart';
-import '../blocs/task_bloc/task_bloc.dart';
-import '../blocs/schedule_task_bloc/schedule_task_bloc.dart';
+import '../blocs/add_task_bloc/task_bloc.dart';
 
 class AddTaskPage extends StatefulWidget {
   final PetEntity petEntity;
@@ -35,7 +34,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     tzl.initializeTimeZones();
   }
@@ -213,42 +211,43 @@ class _AddTaskPageState extends State<AddTaskPage> {
   _inputTaskDate() {
     final DateFormat _dateFormat = DateFormat.yMMMEd();
     return TextFormField(
-        readOnly: true,
-        validator: (value) {
-          if (value == null || _taskDate == null) {
-            return 'Task Date Cannot Empty';
-          } else {
-            return null;
+      readOnly: true,
+      validator: (value) {
+        if (value == null || _taskDate == null) {
+          return 'Task Date Cannot Empty';
+        } else {
+          return null;
+        }
+      },
+      controller: _taskDateController,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: kPrimaryColor, width: 1.0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          suffixIcon: const Icon(Icons.calendar_month),
+          labelText: 'Task Date'),
+      onTap: () {
+        showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime.now(),
+          lastDate: DateTime.now().add(const Duration(days: 366)),
+        ).then((pickedDate) {
+          // Check if no date is selected
+          if (pickedDate == null) {
+            return;
           }
-        },
-        controller: _taskDateController,
-        decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: kPrimaryColor, width: 1.0),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            suffixIcon: const Icon(Icons.calendar_month),
-            labelText: 'Task Date'),
-        onTap: () {
-          showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime.now(),
-            lastDate: DateTime.now().add(const Duration(days: 366)),
-          ).then((pickedDate) {
-            // Check if no date is selected
-            if (pickedDate == null) {
-              return;
-            }
-            setState(() {
-              _taskDate = Timestamp.fromDate(pickedDate);
-              _taskDateController.text = _dateFormat.format(pickedDate);
-            });
+          setState(() {
+            _taskDate = Timestamp.fromDate(pickedDate);
+            _taskDateController.text = _dateFormat.format(pickedDate);
           });
         });
+      },
+    );
   }
 
   _inputTaskTime() {

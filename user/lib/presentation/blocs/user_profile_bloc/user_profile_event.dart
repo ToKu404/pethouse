@@ -28,17 +28,17 @@ class UserProfileInit extends UserProfileEvent {
   List<Object> get props => [imageUrl, name, email];
 }
 
-class EmailChanged extends UserProfileEvent {
+class UserEmailChanged extends UserProfileEvent {
   final String email;
-  const EmailChanged(this.email);
+  const UserEmailChanged(this.email);
 
   @override
   List<Object> get props => [email];
 }
 
-class NameChanged extends UserProfileEvent {
+class UserNameChanged extends UserProfileEvent {
   final String name;
-  const NameChanged(this.name);
+  const UserNameChanged(this.name);
 
   @override
   List<Object> get props => [name];

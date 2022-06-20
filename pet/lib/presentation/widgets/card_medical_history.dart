@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/presentation/widgets/card_content_medical_history.dart';
-import 'package:schedule/presentation/blocs/get_pet_medical_bloc/get_pet_medical_bloc.dart';
+import 'package:schedule/schedule.dart';
 
-class CardMedicalHistory extends StatefulWidget {
+class CardActivityHistory extends StatefulWidget {
   final String petId;
-  const CardMedicalHistory({Key? key, required this.petId}) : super(key: key);
+  const CardActivityHistory({Key? key, required this.petId}) : super(key: key);
 
   @override
-  State<CardMedicalHistory> createState() => _CardMedicalHistoryState();
+  State<CardActivityHistory> createState() => _CardActivityHistoryState();
 }
 
-class _CardMedicalHistoryState extends State<CardMedicalHistory> {
+class _CardActivityHistoryState extends State<CardActivityHistory> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<GetPetMedicalBloc>(context)
-        .add(FetchListPetMedical(petId: widget.petId));
+    BlocProvider.of<GetPlanHistoryBloc>(context)
+        .add(FetchPlanHistoryEvent(petId: widget.petId));
   }
 
   @override
@@ -71,17 +71,16 @@ class _CardMedicalHistoryState extends State<CardMedicalHistory> {
                   const Divider(),
                   Expanded(
                     child: SingleChildScrollView(child:
-                        BlocBuilder<GetPetMedicalBloc, GetPetMedicalState>(
+                        BlocBuilder<GetPlanHistoryBloc, GetPlanHistoryState>(
                             builder: ((context, state) {
-                      if (state is GetPetMedicalLoading) {
+                      if (state is GetPlanHistoryLoading) {
                         return const CircularProgressIndicator();
-                      } else if (state is GetPetMedicalSucces) {
+                      } else if (state is GetPlanHistorySuccess) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Column(
-                            children: state.listPetMedical
-                                .map(
-                                    (e) => CardContentMedical(medicalEntity: e))
+                            children: state.listPlanHistory
+                                .map((e) => CardContentMedical(planEntity: e))
                                 .toList(),
                           ),
                         );
@@ -115,7 +114,7 @@ class _CardMedicalHistoryState extends State<CardMedicalHistory> {
           color: kDarkBrown,
         ),
         title: Text(
-          'Medical History',
+          'Activity History',
           style: kTextTheme.subtitle1?.copyWith(color: kDarkBrown),
         ),
         trailing: const Icon(

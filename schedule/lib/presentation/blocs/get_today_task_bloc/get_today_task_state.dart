@@ -20,13 +20,10 @@ class GetTodayTaskError extends GetTodayTaskState {
 class GetTodayTaskSuccess extends GetTodayTaskState {
   final List<TaskEntity> listTask;
 
-  
-
   GetTodayTaskSuccess({required this.listTask});
 
   @override
   List<Object> get props => [listTask];
 }
 
-class ChangeTaskStatusSuccess extends GetTodayTaskState{
-}
+class ChangeTaskStatusSuccess extends GetTodayTaskState {}

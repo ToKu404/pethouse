@@ -20,8 +20,6 @@ class GetMonthlyTaskError extends GetMonthlyTaskState {
 class GetMonthlyTaskSuccess extends GetMonthlyTaskState {
   final List<TaskEntity> listTask;
 
-  
-
   GetMonthlyTaskSuccess({required this.listTask});
 
   @override

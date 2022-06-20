@@ -38,8 +38,8 @@ final TextTheme kTextTheme = TextTheme(
   button: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
   caption: GoogleFonts.poppins(
       fontSize: 10, fontWeight: FontWeight.w400, color: kDarkBrown),
-  overline: GoogleFonts.poppins(
-      fontSize: 12, fontWeight: FontWeight.w400, color: kOrange),
+  overline: GoogleFonts.montserrat(
+      fontSize: 12, fontWeight: FontWeight.w400, color: kDarkBrown),
 );
 
 final kTimePickerTheme = TimePickerThemeData(
@@ -113,12 +113,6 @@ const Map<String, String> kPetTypeIcon = {
   'other': 'assets/icons/other_icon_outline.svg',
 };
 
-const Map<String, String> kPetTypeVector = {
-  'fish': 'assets/vectors/fish_vector.svg',
-  'cat': 'assets/vectors/cat_vector.svg',
-  'dog': 'assets/vectors/dog_vector.svg',
-};
-
 const Map<String, IconData> kTaskType = {
   'Feed': FontAwesomeIcons.utensils,
   'Walk': FontAwesomeIcons.personWalking,
@@ -130,13 +124,6 @@ const Map<String, IconData> kTaskType = {
   'Period': FontAwesomeIcons.timeline,
 };
 
-const Map<String, String> kTaskVector = {
-  'Feed': 'assets/icons/icon_feeds.svg',
-  'Walk': 'assets/icons/icon_walks.svg',
-  'Pee': 'assets/icons/icon_pee.svg',
-  'Vitamin': 'assets/icons/icon_vitamin.svg',
-};
-
 const kTitleColor = Color(0xFF300303);
 const kMainOrangeColor = Color(0xFFEE4E64);
 const kMainBlueColor = Color(0xFF000072);
@@ -144,3 +131,166 @@ const kMainPinkColor = Color(0xFFEE4E64);
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+
+const String mapStyle = '''
+[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#bdbdbd"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#ffffff"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#dadada"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#c9c9c9"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  }
+]
+''';

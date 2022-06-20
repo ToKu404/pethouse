@@ -24,14 +24,21 @@ class GetPetDesc extends GetPetDescEvent {
   List<Object> get props => [petEntity];
 }
 
-
 class GetPetTodayTask extends GetPetDescEvent {
   final PetEntity petEntity;
   final List<TaskEntity> listTask;
-
 
   const GetPetTodayTask({required this.petEntity, required this.listTask});
 
   @override
   List<Object> get props => [petEntity, listTask];
+}
+
+class RemovePetEvent extends GetPetDescEvent {
+  final String petId;
+
+  const RemovePetEvent({required this.petId});
+
+  @override
+  List<Object> get props => [petId];
 }

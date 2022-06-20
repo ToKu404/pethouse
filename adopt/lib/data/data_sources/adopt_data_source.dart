@@ -23,6 +23,7 @@ abstract class AdoptDataSource {
   Future<void> requestAdopt(AdoptEntity adoptd);
   Future<void> removeOpenAdopt(String adoptId);
   Stream<List<AdoptEntity>> getRequestAdoptList(String userId);
+  Stream<List<AdoptEntity>> searchPetAdopt(String query);
 }
 
 class AdoptDataSourceImpl implements AdoptDataSource {
@@ -42,21 +43,22 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     final userId = await getUserIdLocal();
     adoptCollectionRef.doc(adoptEntity.adoptId).get().then((value) {
       final newAdopt = AdoptModel(
-              adoptId: adoptId,
-              userId: userId,
-              petName: adoptEntity.petName,
-              petType: adoptEntity.petType,
-              gender: adoptEntity.gender,
-              petBreed: adoptEntity.petBreed,
-              dateOfBirth: adoptEntity.dateOfBirth,
-              petPictureUrl: adoptEntity.petPictureUrl,
-              certificateUrl: adoptEntity.certificateUrl,
-              petDecription: adoptEntity.petDescription,
-              whatsappNumber: adoptEntity.whatsappNumber,
-              status: adoptEntity.status,
-              adopterId: adoptEntity.adopterId,
-              adopterName: adoptEntity.adopterName)
-          .toDocument();
+        adoptId: adoptId,
+        userId: userId,
+        petName: adoptEntity.petName,
+        petType: adoptEntity.petType,
+        gender: adoptEntity.gender,
+        petBreed: adoptEntity.petBreed,
+        dateOfBirth: adoptEntity.dateOfBirth,
+        petPictureUrl: adoptEntity.petPictureUrl,
+        certificateUrl: adoptEntity.certificateUrl,
+        petDecription: adoptEntity.petDescription,
+        whatsappNumber: adoptEntity.whatsappNumber,
+        status: adoptEntity.status,
+        adopterId: adoptEntity.adopterId,
+        adopterName: adoptEntity.adopterName,
+        titleSearch: adoptEntity.titleSearch,
+      ).toDocument();
       if (!value.exists) {
         adoptCollectionRef.doc(adoptId).set(newAdopt);
       }
@@ -158,6 +160,9 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     onUpdate('certificate_url', adoptEntity.certificateUrl, adoptMap);
     onUpdate('pet_decription', adoptEntity.petDescription, adoptMap);
     onUpdate('whatsapp_number', adoptEntity.whatsappNumber, adoptMap);
+    if (adoptEntity.petName != null && adoptEntity.petName != '') {
+      adoptMap['title_search'] = adoptEntity.titleSearch;
+    }
 
     await firebaseFirestore
         .collection('pet_adopts')
@@ -192,6 +197,18 @@ class AdoptDataSourceImpl implements AdoptDataSource {
         .collection("pet_adopts")
         .where('user_id', isEqualTo: adopterId);
     return petCollectionRef.snapshots().map((querySnap) {
+      return querySnap.docs
+          .map((docSnap) => AdoptModel.fromSnapshot(docSnap))
+          .toList();
+    });
+  }
+
+  @override
+  Stream<List<AdoptEntity>> searchPetAdopt(String query) {
+    final collectionReference = firebaseFirestore
+        .collection('pet_adopts')
+        .where('title_search', arrayContains: query);
+    return collectionReference.snapshots().map((querySnap) {
       return querySnap.docs
           .map((docSnap) => AdoptModel.fromSnapshot(docSnap))
           .toList();

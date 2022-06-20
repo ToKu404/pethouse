@@ -11,7 +11,7 @@ abstract class AdoptRepository {
   Future<void> updateAdopt(AdoptEntity adoptEntity);
   Stream<List<AdoptEntity>> getOpenAdoptList(String userId);
   Stream<List<AdoptEntity>> getRequestAdoptList(String userId);
-
+  Stream<List<AdoptEntity>> searchPetAdopt(String query);
   Future<void> requestAdopt(AdoptEntity adopt);
   Future<void> removeOpenAdopt(String adoptId);
   

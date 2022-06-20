@@ -1,6 +1,5 @@
 part of 'get_monthly_task_bloc.dart';
 
-
 abstract class GetMonthlyTaskEvent extends Equatable {
   const GetMonthlyTaskEvent();
   @override

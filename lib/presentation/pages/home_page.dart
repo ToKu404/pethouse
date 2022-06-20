@@ -8,11 +8,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
-import 'package:schedule/presentation/pages/calendar_page.dart';
 import 'package:pethouse/presentation/widgets/no_pet_card.dart';
 import 'package:schedule/domain/entities/task_entity.dart';
-import 'package:schedule/presentation/blocs/day_calendar_task_bloc/day_calendar_task_bloc.dart';
-import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
+import 'package:schedule/schedule.dart';
 import 'package:user/domain/entities/user_entity.dart';
 
 import '../widgets/card_schedule_status.dart';
@@ -247,8 +245,8 @@ class _HomePageState extends State<HomePage> {
                             });
                             BlocProvider.of<GetTodayTaskBloc>(context).add(
                                 FetchTodayTask(petId: listPet[activePage].id!));
-                            BlocProvider.of<DayCalendarTaskBloc>(context).add(
-                                FetchChoiceDayTask(
+                            BlocProvider.of<DayPlanCalendarBloc>(context).add(
+                                FetchPlanCalendarEvent(
                                     petId: listPet[activePage].id!,
                                     choiceDate: _dateNow));
                           },
@@ -303,7 +301,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Activities',
+                            'Plans',
                             style: kTextTheme.headline6
                                 ?.copyWith(color: kDarkBrown),
                           ),
@@ -344,7 +342,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         children: [
                           Text(
-                            'Tasks',
+                            'Daily Task',
                             style: kTextTheme.headline6
                                 ?.copyWith(color: kDarkBrown),
                           ),
@@ -604,8 +602,8 @@ class __BuildHomeCalendarState extends State<_BuildHomeCalendar> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<DayCalendarTaskBloc>(context).add(
-        FetchChoiceDayTask(petId: widget.petId, choiceDate: _selectedDate));
+    BlocProvider.of<DayPlanCalendarBloc>(context).add(
+        FetchPlanCalendarEvent(petId: widget.petId, choiceDate: _selectedDate));
   }
 
   @override
@@ -625,29 +623,29 @@ class __BuildHomeCalendarState extends State<_BuildHomeCalendar> {
               _selectedDate = date;
               widget.onDateTimeChanged(date);
               setState(() {
-                BlocProvider.of<DayCalendarTaskBloc>(context).add(
-                    FetchChoiceDayTask(
+                BlocProvider.of<DayPlanCalendarBloc>(context).add(
+                    FetchPlanCalendarEvent(
                         petId: widget.petId, choiceDate: _selectedDate));
               });
             },
           ),
-          BlocBuilder<DayCalendarTaskBloc, DayCalendarTaskState>(
+          BlocBuilder<DayPlanCalendarBloc, DayPlanCalendarState>(
             builder: (context, state) {
-              if (state is DayCalendarTaskLoading) {
+              if (state is DayPlanCalendarLoading) {
                 return const CircularProgressIndicator();
-              } else if (state is DayCalendarTaskSuccess) {
+              } else if (state is DayPlanCalendarSuccess) {
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   shrinkWrap: true,
-                  itemCount: state.listTask.length,
+                  itemCount: state.listPlan.length,
                   scrollDirection: Axis.vertical,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: ((context, index) {
                     return ScheduleTaskCard(
-                      event: state.listTask[index],
+                      event: state.listPlan[index],
                       isFirst: index == 0 ? true : false,
-                      isLast: index == state.listTask.length - 1 ? true : false,
-                      isSingle: state.listTask.length == 1 ? true : false,
+                      isLast: index == state.listPlan.length - 1 ? true : false,
+                      isSingle: state.listPlan.length == 1 ? true : false,
                     );
                   }),
                 );

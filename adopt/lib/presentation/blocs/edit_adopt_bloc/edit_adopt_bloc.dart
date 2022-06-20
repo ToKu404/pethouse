@@ -66,14 +66,18 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
             petCertificateUrl = await uploadPetCertificateUsecase.execute(
                 event.adoptEntityNew.certificateUrl!, oldCertificateName);
           }
-          print("cert" + petCertificateUrl);
-          print("petPj" + petPhotoUrl);
-
+          String petName = '';
+          List<String> caseSearchList = [];
+          if (event.adoptEntityNew.petName != event.adoptEntityOld.petName) {
+            petName = event.adoptEntityNew.petName ?? '';
+            String temp = "";
+            for (int i = 0; i < petName.length; i++) {
+              temp = temp + petName[i];
+              caseSearchList.add(temp.toLowerCase());
+            }
+          }
           AdoptEntity adoptEntity = AdoptEntity(
-            petName:
-                event.adoptEntityNew.petName != event.adoptEntityOld.petName
-                    ? event.adoptEntityNew.petName
-                    : '',
+            petName: petName,
             petType:
                 event.adoptEntityNew.petType != event.adoptEntityOld.petType
                     ? event.adoptEntityNew.petType
@@ -100,7 +104,8 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
             petPictureUrl: petPhotoUrl,
             certificateUrl: petCertificateUrl,
             adoptId: event.adoptEntityOld.adoptId,
-            status: event.adoptEntityOld.status
+            status: event.adoptEntityOld.status,
+            titleSearch: caseSearchList.isNotEmpty ? caseSearchList : null,
           );
 
           await updateAdoptUsecase.execute(adoptEntity);
@@ -152,6 +157,5 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
         }
       },
     );
-    
   }
 }

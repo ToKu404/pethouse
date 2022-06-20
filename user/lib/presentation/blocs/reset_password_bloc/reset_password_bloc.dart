@@ -1,5 +1,3 @@
-
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +19,7 @@ class ResetPasswordBloc
             isSubmitResetPassword: false,
             isSuccessResetPassword: false)) {
     on<SubmitResetPassword>(_onSubmitResetPassword);
-    on<EmailChanged>(_onEmailChanged);
+    on<ResetEmailChanged>(_onEmailChanged);
     on<ResetPasswordInitial>(_onInitResetPassword);
   }
   final RegExp _emailRegExp = RegExp(
@@ -31,7 +29,8 @@ class ResetPasswordBloc
     return _emailRegExp.hasMatch(email);
   }
 
-  _onEmailChanged(EmailChanged event, Emitter<ResetPasswordValidate> emit) {
+  _onEmailChanged(
+      ResetEmailChanged event, Emitter<ResetPasswordValidate> emit) {
     emit(
       state.copyWith(
         isFormValid: false,
