@@ -8,12 +8,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
+import 'package:pethouse/presentation/widgets/card_schedule_status.dart';
 import 'package:pethouse/presentation/widgets/no_pet_card.dart';
-import 'package:schedule/domain/entities/task_entity.dart';
-import 'package:schedule/schedule.dart';
+import 'package:task/task.dart';
 import 'package:user/domain/entities/user_entity.dart';
-
-import '../widgets/card_schedule_status.dart';
+import 'package:plan/plan.dart';
 
 class HomePage extends StatefulWidget {
   final UserEntity userEntity;
@@ -243,8 +242,8 @@ class _HomePageState extends State<HomePage> {
                             setState(() {
                               activePage = index;
                             });
-                            BlocProvider.of<GetTodayTaskBloc>(context).add(
-                                FetchTodayTask(petId: listPet[activePage].id!));
+                            BlocProvider.of<TaskBloc>(context).add(
+                                FetchTaskEvent(petId: listPet[activePage].id!));
                             BlocProvider.of<DayPlanCalendarBloc>(context).add(
                                 FetchPlanCalendarEvent(
                                     petId: listPet[activePage].id!,
@@ -348,7 +347,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           InkWell(
                             onTap: () => Navigator.pushNamed(
-                                context, ADD_TASK_ROUTE_NAME,
+                                context, ALL_HABBIT_ROUTE_NAME,
                                 arguments: listPet[activePage]),
                             child: Row(
                               children: [
@@ -372,56 +371,6 @@ class _HomePageState extends State<HomePage> {
                       height: 5,
                     ),
                     _BuildSchedule(petEntity: listPet[activePage]),
-                    // const Divider(),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //   child: Row(
-                    //     children: [
-                    //       Text(
-                    //         'Notes',
-                    //         style: kTextTheme.headline6
-                    //             ?.copyWith(color: kDarkBrown),
-                    //       ),
-                    //       InkWell(
-                    //         onTap: () => Navigator.pushNamed(
-                    //             context, ADD_TASK_ROUTE_NAME,
-                    //             arguments: listPet[activePage]),
-                    //         child: Row(
-                    //           children: [
-                    //             Container(
-                    //               width: 30,
-                    //               height: 30,
-                    //               decoration: const BoxDecoration(
-                    //                   shape: BoxShape.circle, color: kWhite),
-                    //               child: const Icon(
-                    //                 Icons.add,
-                    //                 color: kPrimaryColor,
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Container(
-                    //   width: double.infinity,
-                    //   margin: EdgeInsets.symmetric(horizontal: 20),
-                    //   padding: EdgeInsets.all(10),
-                    //   decoration: BoxDecoration(
-                    //       color: kWhite,
-                    //       borderRadius: BorderRadius.circular(10),
-                    //       boxShadow: [
-                    //         BoxShadow(
-                    //             blurRadius: 13,
-                    //             color:
-                    //                 const Color(0xFF000000).withOpacity(.07)),
-                    //         BoxShadow(
-                    //             blurRadius: 5,
-                    //             color: const Color(0xFF000000).withOpacity(.05))
-                    //       ]),
-                    //   child: ListNotes(),
-                    // ),
                   ],
                 ),
               )
@@ -445,19 +394,19 @@ class __BuildScheduleState extends State<_BuildSchedule> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<GetTodayTaskBloc>(context)
-        .add(FetchTodayTask(petId: widget.petEntity.id!));
+    BlocProvider.of<TaskBloc>(context)
+        .add(FetchTaskEvent(petId: widget.petEntity.id!));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetTodayTaskBloc, GetTodayTaskState>(
+    return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state) {
-        if (state is GetTodayTaskLoading) {
+        if (state is TaskLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is GetTodayTaskSuccess) {
+        } else if (state is GetTaskSuccess) {
           if (state.listTask.isEmpty) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -494,7 +443,7 @@ class __BuildScheduleState extends State<_BuildSchedule> {
               ],
             );
           }
-        } else if (state is GetTodayTaskError) {
+        } else if (state is TaskError) {
           return Text(state.message);
         } else {
           return const Text('Error');
@@ -504,7 +453,7 @@ class __BuildScheduleState extends State<_BuildSchedule> {
   }
 
   getCompleteTask(List<TaskEntity> tasks) {
-    return tasks.where((e) => e.status == 'complete').toList().length;
+    return tasks.where((e) => e.completeStatus!).toList().length;
   }
 }
 
@@ -540,19 +489,19 @@ class _TaskCardState extends State<TaskCard> {
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: widget.task.status == 'complete'
+            color: widget.task.completeStatus!
                 ? kGreyTransparant
                 : kMainOrangeColor,
           ),
           child: Center(
             child: Icon(
-              kTaskType[widget.task.activity],
+              kTaskType[widget.task.activityType],
               color: kWhite,
             ),
           ),
         ),
-        title: Text(widget.task.activity ?? '-',
-            style: widget.task.status == 'complete'
+        title: Text(widget.task.title ?? '-',
+            style: widget.task.completeStatus!
                 ? kTextTheme.subtitle1?.copyWith(
                     color: kGreyTransparant,
                     fontWeight: FontWeight.w500,
@@ -562,16 +511,15 @@ class _TaskCardState extends State<TaskCard> {
                     fontWeight: FontWeight.w500,
                   )),
         subtitle: Text(
-          DateFormat.jm().format(widget.task.startTime!.toDate()),
+          DateFormat.jm().format(widget.task.time!.toDate()),
           style: TextStyle(
-              color: widget.task.status == 'complete'
-                  ? kGreyTransparant
-                  : kDarkBrown),
+              color:
+                  widget.task.completeStatus! ? kGreyTransparant : kDarkBrown),
         ),
         trailing: Checkbox(
-          value: widget.task.status == 'complete',
+          value: widget.task.completeStatus!,
           onChanged: (value) {
-            BlocProvider.of<GetTodayTaskBloc>(context).add(ChangeTaskStatus(
+            BlocProvider.of<TaskBloc>(context).add(ChangeTaskStatus(
                 taskId: widget.task.id!, petId: widget.task.petId!));
           },
           shape: RoundedRectangleBorder(

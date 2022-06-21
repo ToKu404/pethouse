@@ -1,8 +1,9 @@
 import 'package:adopt/adopt.dart';
 import 'package:petrivia/data/repositories/petrivia_repository_impl.dart';
 import 'package:user/user.dart';
-import 'package:schedule/schedule.dart';
+import 'package:task/task.dart';
 import 'package:pet/pet.dart';
+import 'package:plan/plan.dart';
 import 'package:petrivia/petrivia.dart';
 import 'package:pet_map/pet_map.dart';
 
@@ -38,6 +39,8 @@ void init() {
       () => PetriviaRepositoryImpl(petriviaDataSource: locator()));
   locator.registerLazySingleton<PetMapRepository>(
       () => PetMapRepositoryImpl(locator()));
+  locator.registerLazySingleton<HabbitRepository>(
+      () => HabbitRepositoryImpl(locator()));
 
   // datasource
   locator.registerLazySingleton<UserDataSource>(() => UserDataSourceImpl(
@@ -47,7 +50,7 @@ void init() {
   locator.registerLazySingleton<PlanDataSource>(
       () => PlanDataSourceImpl(firebaseFireStore: locator()));
   locator.registerLazySingleton<TaskFirebaseDataSource>(
-      () => TaskFirebaseDataSourceImpl(taskFireStore: locator()));
+      () => TaskFirebaseDataSourceImpl(taskFirestore: locator()));
   locator.registerLazySingleton<PetDataSource>(() => PetDataSourceImpl(
       firebaseFirestore: locator(), firebaseStorage: locator()));
   locator.registerLazySingleton<AdoptDataSource>(() => AdoptDataSourceImpl(
@@ -61,6 +64,9 @@ void init() {
       () => PetrviaDataSourceImpl(firebaseFirestore: locator()));
   locator.registerLazySingleton<PetMapDataSource>(
       () => PetMapDataSourceImpl(locator()));
+  locator.registerLazySingleton<HabbitDataSource>(
+      () => HabbitDataSourceImpl(firebaseFirestore: locator()));
+
   // usecases
   locator.registerLazySingleton(
       () => SignInUsecase(firebaseRepository: locator()));
@@ -91,8 +97,7 @@ void init() {
       () => DeleteUserUsecase(firebaseRepository: locator()));
   locator.registerLazySingleton(
       () => AddPlanUsecase(firebaseRepository: locator()));
-  locator.registerLazySingleton(
-      () => AddTaskUseCase(firebaseRepository: locator()));
+
   locator.registerLazySingleton(() => AddPetUsecase(locator()));
   locator.registerLazySingleton(
       () => AddPetPhotoUsecase(petRepository: locator()));
@@ -145,6 +150,13 @@ void init() {
   locator.registerLazySingleton(() => SearchPetAdoptUsecase(locator()));
   locator.registerLazySingleton(() => GetPlanHistoryUsecase(locator()));
 
+  locator.registerLazySingleton(() => InsertHabbitUsecase(locator()));
+  locator.registerLazySingleton(() => RemoveHabbitUsecase(locator()));
+  locator.registerLazySingleton(() => GetTodayHabbitUsecase(locator()));
+  locator.registerLazySingleton(() => GetAllHabbitsUsecase(locator()));
+  locator.registerLazySingleton(() => CheckTaskExistUsecase(locator()));
+  locator.registerLazySingleton(() => TransferTaskUsecase(locator()));
+
   locator
       .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
 
@@ -172,7 +184,6 @@ void init() {
       updateUserDataUsecase: locator(),
       deleteOldImageUsecase: locator()));
 
-  locator.registerFactory(() => TaskBloc(addTaskUsecase: locator()));
   locator.registerFactory(() => GetPetriviaBloc(getPetriviaUsecase: locator()));
   locator
       .registerFactory(() => GetAllPetMapBloc(getAllPetMapUsecase: locator()));
@@ -210,6 +221,13 @@ void init() {
       .registerFactory(() => OpenAdoptStatusBloc(getOpenAdoptList: locator()));
   locator
       .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
+  locator.registerFactory(() => TaskBloc(
+      taskExistUsecase: locator(),
+      transferTaskUsecase: locator(),
+      getAllHabbitsUsecase: locator(),
+      getTodayTaskUsecase: locator(),
+      changeTaskStatus: locator()));
+
   locator.registerFactory(() => GetPetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetSchedulePetBloc(getPetUsecase: locator()));
   locator.registerFactory(() => GetPetDescBloc(
@@ -217,8 +235,6 @@ void init() {
       getTodayTaskUsecase: locator(),
       removePetUsecase: locator()));
 
-  locator.registerFactory(() => GetTodayTaskBloc(
-      getTodayTaskUsecase: locator(), changeTaskStatusUsecase: locator()));
   locator.registerFactory(() => DayPlanCalendarBloc(getPlanUsecase: locator()));
   locator.registerFactory(
       () => GetMonthlyTaskBloc(getMonthlyTaskUsecase: locator()));
@@ -232,6 +248,11 @@ void init() {
 
   locator.registerFactory(() => GetPetMapBloc(getPetMapUsecase: locator()));
   locator.registerFactory(() => AddPlanCubit(addPlanUsecase: locator()));
+  locator.registerFactory(() => GetHabbitBloc(getHabbitUsecase: locator()));
+
+  locator.registerFactory(() => HabbitCubit(
+      insertHabbitUsecase: locator(), removeHabbitUsecase: locator()));
+
   //external
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
@@ -240,4 +261,5 @@ void init() {
   locator.registerLazySingleton(() => auth);
   locator.registerLazySingleton(() => firestore);
   locator.registerLazySingleton(() => storage);
+  // locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
 }

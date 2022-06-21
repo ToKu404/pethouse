@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/presentation/widgets/card_content_medical_history.dart';
-import 'package:schedule/schedule.dart';
+import 'package:plan/plan.dart';
+import 'package:task/task.dart';
 
 class CardActivityHistory extends StatefulWidget {
   final String petId;
@@ -52,7 +53,7 @@ class _CardActivityHistoryState extends State<CardActivityHistory> {
                           width: MediaQuery.of(context).size.width - 80 - 20,
                           child: Center(
                             child: Text(
-                              'Medical Activity',
+                              'Activity History',
                               style: kTextTheme.subtitle1,
                             ),
                           ),

@@ -6,9 +6,9 @@ import 'package:pet_map/pet_map.dart';
 import 'package:petrivia/petrivia.dart';
 import 'package:user/presentation/pages/profile_pages/about_page.dart';
 import 'package:user/user.dart';
-import 'package:schedule/schedule.dart';
+import 'package:task/task.dart';
 import 'package:pet/pet.dart';
-
+import 'package:plan/plan.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -60,7 +60,6 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<UserDbBloc>()),
           BlocProvider(create: (_) => di.locator<UserProfileBloc>()),
           BlocProvider(create: (_) => di.locator<ResetPasswordBloc>()),
-          BlocProvider(create: (_) => di.locator<TaskBloc>()),
           BlocProvider(create: (_) => di.locator<AddPetBloc>()),
           BlocProvider(create: (_) => di.locator<OpenAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<DetailAdoptBloc>()),
@@ -71,7 +70,6 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<SendNotifBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetBloc>()),
           BlocProvider(create: (_) => di.locator<GetSchedulePetBloc>()),
-          BlocProvider(create: (_) => di.locator<GetTodayTaskBloc>()),
           BlocProvider(create: (_) => di.locator<DayPlanCalendarBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetDescBloc>()),
           BlocProvider(create: (_) => di.locator<GetMonthlyTaskBloc>()),
@@ -80,7 +78,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<GetPetriviaBloc>()),
           BlocProvider(create: (_) => di.locator<PetmapCubit>()),
           BlocProvider(create: (_) => di.locator<GetAllPetMapBloc>()),
+          BlocProvider(create: (_) => di.locator<HabbitCubit>()),
           BlocProvider(create: (_) => di.locator<GetPetMapBloc>()),
+          BlocProvider(create: (_) => di.locator<GetHabbitBloc>()),
+          BlocProvider(create: (_) => di.locator<TaskBloc>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -170,15 +171,18 @@ class MyApp extends StatelessWidget {
                     builder: (context) => CalendarPage(
                           petEntity: pet,
                         ));
-              case ADD_MEDICAL_ACTIVITY_ROUTE_NAME:
+              case ADD_PLAN_ROUTE_NAME:
                 final pet = settings.arguments as PetEntity;
                 return MaterialPageRoute(
-                    builder: (context) =>
-                        AddMedicalActivityPage(petEntity: pet));
-              case ADD_TASK_ROUTE_NAME:
+                    builder: (context) => AddPlanPage(petEntity: pet));
+              case ALL_HABBIT_ROUTE_NAME:
+                final pet = settings.arguments as PetEntity;
+                return MaterialPageRoute(
+                    builder: (context) => AllHabbitPage(petEntity: pet));
+              case ADD_HABBIT_ROUTE_NAME:
                 final petEntity = settings.arguments as PetEntity;
                 return MaterialPageRoute(
-                    builder: (context) => AddTaskPage(
+                    builder: (context) => AddHabbitPage(
                           petEntity: petEntity,
                         ));
               case ADD_PET_ROUTE_NAME:

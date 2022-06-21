@@ -4,11 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:core/core.dart';
 import 'package:intl/intl.dart';
-import 'package:schedule/domain/entities/task_entity.dart';
-import 'package:schedule/presentation/blocs/get_monthly_task_bloc/get_monthly_task_bloc.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
+import 'package:task/task.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/card_detail_pet.dart';
@@ -373,13 +372,13 @@ class _PetDescLayout extends StatelessWidget {
     return age;
   }
 
-  _getTaskDate(List<TaskEntity> listTask, String status) {
+  _getTaskDate(List<TaskEntity> listTask, bool status) {
     final catList =
-        listTask.where((element) => element.status == status).toList();
+        listTask.where((element) => element.completeStatus == status).toList();
     final List<TaskData> listResult = [];
     if (catList.isNotEmpty) {
       final List<DateTime> listDt =
-          catList.map((e) => e.startTime!.toDate()).toList();
+          catList.map((e) => e.time!.toDate()).toList();
       int value = 1;
       for (var i = 1; i < listDt.length; i++) {
         if (listDt[i].day == listDt[i - 1].day) {
@@ -400,8 +399,8 @@ class _PetDescLayout extends StatelessWidget {
   }
 
   _getSeriesData(List<TaskEntity> listTask) {
-    final completeTask = _getTaskDate(listTask, 'complete');
-    final uncompleteTask = _getTaskDate(listTask, 'wating');
+    final completeTask = _getTaskDate(listTask, true);
+    final uncompleteTask = _getTaskDate(listTask, false);
 
     List<charts.Series<TaskData, DateTime>> series = [
       charts.Series(

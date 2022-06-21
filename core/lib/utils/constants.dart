@@ -116,12 +116,11 @@ const Map<String, String> kPetTypeIcon = {
 const Map<String, IconData> kTaskType = {
   'Feed': FontAwesomeIcons.utensils,
   'Walk': FontAwesomeIcons.personWalking,
-  'Pee': FontAwesomeIcons.toilet,
+  'Clean Box': FontAwesomeIcons.soap,
+  'Play': FontAwesomeIcons.play,
+  'Give Fresh Water': FontAwesomeIcons.water,
   'Vitamin': FontAwesomeIcons.pills,
-  'Shower': FontAwesomeIcons.shower,
-  'Grooming': FontAwesomeIcons.faceSmile,
-  'Weight Scale': FontAwesomeIcons.weightScale,
-  'Period': FontAwesomeIcons.timeline,
+  'Bath': FontAwesomeIcons.shower,
 };
 
 const kTitleColor = Color(0xFF300303);

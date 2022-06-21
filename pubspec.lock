@@ -828,6 +828,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  plan:
+    dependency: "direct main"
+    description:
+      path: plan
+      relative: true
+    source: path
+    version: "0.0.1"
   platform:
     dependency: transitive
     description:
@@ -891,13 +898,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.4"
-  schedule:
-    dependency: "direct main"
-    description:
-      path: schedule
-      relative: true
-    source: path
-    version: "0.0.1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -974,7 +974,7 @@ packages:
     source: hosted
     version: "1.8.2"
   sqflite:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sqflite
       url: "https://pub.dartlang.org"
@@ -1029,6 +1029,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.5"
+  task:
+    dependency: "direct main"
+    description:
+      path: task
+      relative: true
+    source: path
+    version: "0.0.1"
   term_glyph:
     dependency: transitive
     description:

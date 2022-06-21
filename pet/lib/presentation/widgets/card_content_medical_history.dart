@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:schedule/domain/entities/plan_entity.dart';
+import 'package:plan/plan.dart';
 
 class CardContentMedical extends StatelessWidget {
   final PlanEntity planEntity;
@@ -44,23 +44,19 @@ class CardContentMedical extends StatelessWidget {
                 ],
               ),
               Text(
-                'Posted On ${DateFormat.yMMMd().format(planEntity.time!.toDate())}',
+                DateFormat.yMMMd().format(planEntity.time!.toDate()),
                 style: kTextTheme.caption,
               ),
             ],
           ),
           Text(
-            planEntity.activity!,
+            planEntity.activityTitle!,
             style: kTextTheme.subtitle1?.copyWith(color: kPrimaryColor),
           ),
           Text(
             planEntity.description ?? '-',
             style: kTextTheme.caption,
           ),
-          // Text(
-          //   'Expired on ${planEntity.expiredDate == null ? "-" : DateFormat.yMMMd().format(planEntity.expiredDate!.toDate())}',
-          //   style: kTextTheme.caption?.copyWith(color: kGreyTransparant),
-          // ),
         ],
       ),
     );
