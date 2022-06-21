@@ -1,7 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
 import 'package:task/domain/entities/habbit_entity.dart';
 import 'package:task/domain/entities/task_entity.dart';
 import 'package:task/domain/use_cases/change_task_status_usecase.dart';

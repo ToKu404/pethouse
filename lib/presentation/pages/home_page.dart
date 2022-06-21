@@ -282,8 +282,8 @@ class _HomePageState extends State<HomePage> {
                   ],
                   color: kWhite,
                   borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10)),
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
                 ),
                 constraints: BoxConstraints(
                     minHeight: (MediaQuery.of(context).size.height -
@@ -335,42 +335,30 @@ class _HomePageState extends State<HomePage> {
                         _dateNow = newDt;
                       },
                     ),
-                    const Divider(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Daily Task',
-                            style: kTextTheme.headline6
-                                ?.copyWith(color: kDarkBrown),
-                          ),
-                          InkWell(
-                            onTap: () => Navigator.pushNamed(
-                                context, ALL_HABBIT_ROUTE_NAME,
-                                arguments: listPet[activePage]),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle, color: kWhite),
-                                  child: const Icon(
-                                    Icons.add,
-                                    color: kPrimaryColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(top: 20),
+                      child: _buildListTask(listPet[activePage]),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 4,
+                              offset: const Offset(0, -2),
+                              color: const Color(0xFF000000).withOpacity(.04)),
+                          BoxShadow(
+                              blurRadius: 4,
+                              offset: const Offset(0, -5),
+                              color: const Color(0xFF000000).withOpacity(.05))
                         ],
+                        color: kWhite,
                       ),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    _BuildSchedule(petEntity: listPet[activePage]),
                   ],
                 ),
               )
@@ -378,6 +366,46 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+    );
+  }
+
+  _buildListTask(PetEntity pet) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: [
+              Text(
+                'Daily Task',
+                style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
+              ),
+              InkWell(
+                onTap: () => Navigator.pushNamed(context, ALL_HABBIT_ROUTE_NAME,
+                    arguments: pet),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 30,
+                      height: 30,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: kWhite),
+                      child: const Icon(
+                        Icons.add,
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        _BuildSchedule(petEntity: pet),
+      ],
     );
   }
 }
