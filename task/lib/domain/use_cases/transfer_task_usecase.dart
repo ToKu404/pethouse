@@ -7,7 +7,7 @@ class TransferTaskUsecase {
   TransferTaskUsecase(this.taskFirebaseRepository);
 
   Future<void> execute(
-      List<HabbitEntity> habbits, DateTime date, String petId) {
-    return taskFirebaseRepository.transferTask(habbits, date, petId);
+      List<HabbitEntity> habbits, List<String> listTaskId) {
+    return taskFirebaseRepository.transferTask(habbits, listTaskId);
   }
 }

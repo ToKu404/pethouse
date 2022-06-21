@@ -19,7 +19,6 @@ const ADD_HABBIT_ROUTE_NAME = "add-habbit";
 const ADD_PLAN_ROUTE_NAME = "add-plan";
 const SCHEDULE_CALENDAR_ROUTE_NAME = "schedule-calender";
 const PET_DESC_ROUTE_NAME = "pet-desc";
-const ALL_HABBIT_ROUTE_NAME = "pet-desc";
-
+const ALL_HABBIT_ROUTE_NAME = "all-habbit";
 
 const ABOUT_ROUTE_NAME = "about";

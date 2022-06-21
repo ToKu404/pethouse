@@ -154,7 +154,7 @@ void init() {
   locator.registerLazySingleton(() => RemoveHabbitUsecase(locator()));
   locator.registerLazySingleton(() => GetTodayHabbitUsecase(locator()));
   locator.registerLazySingleton(() => GetAllHabbitsUsecase(locator()));
-  locator.registerLazySingleton(() => CheckTaskExistUsecase(locator()));
+  locator.registerLazySingleton(() => GetOneReadTaskUsecase(locator()));
   locator.registerLazySingleton(() => TransferTaskUsecase(locator()));
 
   locator
@@ -222,7 +222,7 @@ void init() {
   locator
       .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
   locator.registerFactory(() => TaskBloc(
-      taskExistUsecase: locator(),
+      getOneReadTaskUsecase: locator(),
       transferTaskUsecase: locator(),
       getAllHabbitsUsecase: locator(),
       getTodayTaskUsecase: locator(),

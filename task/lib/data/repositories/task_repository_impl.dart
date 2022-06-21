@@ -1,4 +1,5 @@
 import 'package:task/data/data_sources/task_firebase_data_source.dart';
+import 'package:task/domain/entities/date_task_entity.dart';
 import 'package:task/domain/entities/habbit_entity.dart';
 import 'package:task/domain/entities/task_entity.dart';
 import 'package:task/domain/repositories/task_repository.dart';
@@ -25,13 +26,12 @@ class TaskFirebaseRepositoryImpl implements TaskFirebaseRepository {
   }
 
   @override
-  Future<bool> checkTaskExist(String petId, DateTime date) {
-    return taskFirebaseDataSource.checkTaskExist(petId, date);
+  Future<List<TaskEntity>> getOneReadTask(DateTime date, String petId) {
+    return taskFirebaseDataSource.getOneReadTask(date, petId);
   }
 
   @override
-  Future<void> transferTask(
-      List<HabbitEntity> habbits, DateTime date, String petId) {
-    return taskFirebaseDataSource.transferTask(habbits, date, petId);
+  Future<void> transferTask(List<HabbitEntity> habbits, List<String> taskId) {
+    return taskFirebaseDataSource.transferTask(habbits, taskId);
   }
 }

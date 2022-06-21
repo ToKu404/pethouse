@@ -300,7 +300,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Plans',
+                            'Events',
                             style: kTextTheme.headline6
                                 ?.copyWith(color: kDarkBrown),
                           ),

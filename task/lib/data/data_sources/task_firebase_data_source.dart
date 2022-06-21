@@ -1,15 +1,13 @@
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task/data/models/date_task_model.dart';
-import 'package:task/data/models/habbit_model.dart';
 import 'package:task/data/models/task_model.dart';
 import 'package:task/domain/entities/habbit_entity.dart';
 import 'package:task/domain/entities/task_entity.dart';
 
 abstract class TaskFirebaseDataSource {
-  Future<bool> checkTaskExist(String petId, DateTime date);
-  Future<void> transferTask(
-      List<HabbitEntity> habbits, DateTime date, String petId);
+  Future<List<TaskEntity>> getOneReadTask(DateTime date, String petId);
+  Future<void> transferTask(List<HabbitEntity> habbits, List<String> taskId);
   Stream<List<TaskEntity>> getTodayTask(String petId, DateTime date);
   Stream<List<TaskEntity>> getMonthlyTask(
       String petId, DateTime startDate, DateTime endDate);
@@ -29,20 +27,6 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
     bool status = doc!['complete_status'] == true ? false : true;
     final statusMap = {"complete_status": status};
     await collectionRef.doc(taskId).update(statusMap);
-  }
-
-  @override
-  Future<bool> checkTaskExist(String petId, DateTime date) async {
-    String dt = DateFormat.yMMMEd().format(date);
-    // print(dt);
-    final collectionRef = taskFirestore
-        .collection('date_tasks')
-        .where('pet_id', isEqualTo: petId)
-        .where('date', isEqualTo: dt);
-    return collectionRef.get().then((value) {
-      // print(value.docs.isNotEmpty.toString());
-      return value.docs.isNotEmpty;
-    });
   }
 
   @override
@@ -75,20 +59,74 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
     });
   }
 
+  // @override
+  // Future<void> transferTask(
+  //     List<HabbitEntity> habbits, DateTime date, String petId) async {
+  //   final taskRef = taskFirestore.collection('tasks');
+  //   final taskDateRef = taskFirestore.collection('date_tasks');
+  //   List<String> tasksId = [];
+  //   for (var habbit in habbits) {
+  //     final taskId = taskRef.doc().id;
+  //     final habbitTime = habbit.time!.toDate();
+  //     final newTask = TaskModel(
+  //         id: taskId,
+  //         completeStatus: false,
+  //         title: habbit.title,
+  //         habbitId: habbit.id,
+  //         petId: petId,
+  //         date: DateFormat.yMMMEd().format(date),
+  //         time: Timestamp.fromDate(DateTime(date.year, date.month, date.day,
+  //             habbitTime.hour, habbitTime.minute)),
+  //         activityType: habbit.activityType);
+  //     taskRef.doc(taskId).get().then((value) {
+  //       if (!value.exists) {
+  //         taskRef.doc(taskId).set(newTask.toJson());
+  //       }
+  //     });
+  //     tasksId.add(taskId);
+  //   }
+
+  //   final taskDataId = taskDateRef.doc().id;
+  //   taskDateRef.doc(taskDataId).get().then((value) {
+  //     final newDateTask = DateTaskModel(
+  //         id: taskDataId,
+  //         petId: petId,
+  //         date: DateFormat.yMMMEd().format(date),
+  //         listTaskId: tasksId);
+  //     if (!value.exists) {
+  //       taskDateRef.doc(taskDataId).set(newDateTask.toJson());
+  //     }
+  //   });
+  // }
+
   @override
-  Future<void> transferTask(
-      List<HabbitEntity> habbits, DateTime date, String petId) async {
+  Future<List<TaskEntity>> getOneReadTask(DateTime date, String petId) {
+    String dt = DateFormat.yMMMEd().format(date);
+    final collectionRef = taskFirestore
+        .collection('tasks')
+        .where('pet_id', isEqualTo: petId)
+        .where('date', isEqualTo: dt);
+    return collectionRef.get().then((value) {
+      if (value.docs.isEmpty) {
+        return [];
+      }
+      return value.docs.map((e) => TaskModel.fromSnapshot(e)).toList();
+    });
+  }
+
+  @override
+  Future<void> transferTask(List<HabbitEntity> habbits, List<String> taskId) async {
     final taskRef = taskFirestore.collection('tasks');
-    final taskDateRef = taskFirestore.collection('date_tasks');
-    List<String> tasksId = [];
+    final date = DateTime.now();
     for (var habbit in habbits) {
-      final taskId = taskRef.doc().id;
       final habbitTime = habbit.time!.toDate();
+      final taskId = taskRef.doc().id;
       final newTask = TaskModel(
           id: taskId,
           completeStatus: false,
           title: habbit.title,
-          petId: petId,
+          habbitId: habbit.id,
+          petId: habbit.petId,
           date: DateFormat.yMMMEd().format(date),
           time: Timestamp.fromDate(DateTime(date.year, date.month, date.day,
               habbitTime.hour, habbitTime.minute)),
@@ -98,19 +136,10 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
           taskRef.doc(taskId).set(newTask.toJson());
         }
       });
-      tasksId.add(taskId);
     }
 
-    final taskDataId = taskDateRef.doc().id;
-    taskDateRef.doc(taskDataId).get().then((value) {
-      final newDateTask = DateTaskModel(
-          id: taskDataId,
-          petId: petId,
-          date: DateFormat.yMMMEd().format(date),
-          listTaskId: tasksId);
-      if (!value.exists) {
-        taskDateRef.doc(taskDataId).set(newDateTask.toJson());
-      }
-    });
+    for (String id in taskId) {
+      taskRef.doc(id).delete();
+    }
   }
 }

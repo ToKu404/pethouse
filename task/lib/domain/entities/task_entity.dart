@@ -5,6 +5,7 @@ class TaskEntity extends Equatable {
   final String? id;
   final String? title;
   final String? petId;
+  final String? habbitId;
   final String? activityType;
   final bool? completeStatus;
   final String? date;
@@ -15,6 +16,7 @@ class TaskEntity extends Equatable {
       required this.time,
       required this.title,
       required this.petId,
+      required this.habbitId,
       required this.activityType,
       required this.date,
       required this.completeStatus});
@@ -25,6 +27,7 @@ class TaskEntity extends Equatable {
         time,
         date,
         petId,
+        habbitId,
         title,
         activityType,
         completeStatus,
