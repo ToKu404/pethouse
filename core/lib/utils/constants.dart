@@ -100,7 +100,6 @@ const kColorScheme = ColorScheme(
 // Adopt
 const String kOpenAdoptTitle = 'Open Adopt';
 const String kEditAdoptTitle = 'Edit Open Adopt';
-
 const String kOpenAdoptAddPicture = 'Add Picture';
 
 const Map<String, String> kPetTypeIcon = {

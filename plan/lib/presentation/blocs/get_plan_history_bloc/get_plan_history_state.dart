@@ -25,3 +25,4 @@ class GetPlanHistorySuccess extends GetPlanHistoryState {
   @override
   List<Object> get props => [listPlanHistory];
 }
+

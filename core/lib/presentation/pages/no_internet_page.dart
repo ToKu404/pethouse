@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:core/core.dart';
-
-import '../widgets/gradient_button.dart';
-
 class NoInternetPage extends StatelessWidget {
-  static const ROUTE_NAME = 'check_internet';
 
   const NoInternetPage({Key? key}) : super(key: key);
 

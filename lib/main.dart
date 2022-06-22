@@ -26,16 +26,7 @@ import 'presentation/pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final NotificationHelper _notificationHelper = NotificationHelper();
-  final BackgroundService _service = BackgroundService();
-
-  _service.initializeIsolate();
-
-  if (Platform.isAndroid) {
-    await AndroidAlarmManager.initialize();
-  }
-  await _notificationHelper.initNotifications(flutterLocalNotificationsPlugin);
-
+ 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -75,7 +66,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<SendNotifBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetBloc>()),
           BlocProvider(create: (_) => di.locator<GetSchedulePetBloc>()),
-          BlocProvider(create: (_) => di.locator<DayPlanCalendarBloc>()),
+          BlocProvider(create: (_) => di.locator<HomePlanCalendarBloc>()),
+          BlocProvider(create: (_) => di.locator<PlanCalendarBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetDescBloc>()),
           BlocProvider(create: (_) => di.locator<GetMonthlyTaskBloc>()),
           BlocProvider(create: (_) => di.locator<GetPlanHistoryBloc>()),
@@ -87,6 +79,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<GetPetMapBloc>()),
           BlocProvider(create: (_) => di.locator<GetHabbitBloc>()),
           BlocProvider(create: (_) => di.locator<TaskBloc>()),
+          BlocProvider(create: (_) => di.locator<InternetCheckCubit>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -108,7 +101,7 @@ class MyApp extends StatelessWidget {
               case LOGIN_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const LoginPage());
-              case MainPage.ROUTE_NAME:
+              case MAIN_ROUTE_NAME:
                 final uid = settings.arguments as String;
                 return MaterialPageRoute(
                     builder: (_) => MainPage(
@@ -161,9 +154,6 @@ class MyApp extends StatelessWidget {
                     builder: (context) => EditPetPage(
                           pet: pet,
                         ));
-              case NoInternetPage.ROUTE_NAME:
-                return MaterialPageRoute(
-                    builder: (context) => const NoInternetPage());
               case PET_DESC_ROUTE_NAME:
                 final petId = settings.arguments as String;
                 return MaterialPageRoute(

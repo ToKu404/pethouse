@@ -4,7 +4,6 @@ export 'package:task/data/data_sources/habbit_data_sources.dart';
 export 'package:task/data/data_sources/task_firebase_data_source.dart';
 export 'package:task/data/repositories/habbit_repository_impl.dart';
 export 'package:task/data/repositories/task_repository_impl.dart';
-export 'package:task/domain/entities/date_task_entity.dart';
 export 'package:task/domain/entities/habbit_entity.dart';
 export 'package:task/domain/entities/task_entity.dart';
 export 'package:task/domain/repositories/habbit_repository.dart';

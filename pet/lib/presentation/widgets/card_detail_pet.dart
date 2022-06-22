@@ -4,7 +4,7 @@ import 'package:core/core.dart';
 class CardDetailPet extends StatelessWidget {
   final String type;
 
-  CardDetailPet({required this.type, required this.content});
+  const CardDetailPet({required this.type, required this.content});
 
   final String content;
 

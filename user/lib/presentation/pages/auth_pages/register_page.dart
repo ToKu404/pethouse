@@ -6,7 +6,6 @@ import '../../blocs/auth_cubit/auth_cubit.dart';
 import '../../blocs/sign_in_bloc/sign_in_bloc.dart';
 import '../../blocs/sign_up_bloc/sign_up_bloc.dart';
 import '../../widgets/border_button.dart';
-import '../../widgets/gradient_button.dart';
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {

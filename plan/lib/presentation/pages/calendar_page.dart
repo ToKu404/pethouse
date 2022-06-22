@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
-import 'package:plan/presentation/blocs/day_plan_calendar_bloc/day_plan_calendar_bloc.dart';
-import 'package:plan/presentation/widgets/schedule_task_card.dart';
+import 'package:plan/plan.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -27,7 +25,7 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<DayPlanCalendarBloc>(context).add(FetchPlanCalendarEvent(
+    BlocProvider.of<PlanCalendarBloc>(context).add(FetchPlanCalendarEvent(
         petId: widget.petEntity.id!, choiceDate: selectedDay));
   }
 
@@ -76,7 +74,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     onDaySelected: (DateTime selectDay, DateTime focusDay) {
                       setState(() {
                         selectedDay = selectDay;
-                        BlocProvider.of<DayPlanCalendarBloc>(context).add(
+                        BlocProvider.of<PlanCalendarBloc>(context).add(
                             FetchPlanCalendarEvent(
                                 petId: widget.petEntity.id!,
                                 choiceDate: selectedDay));
@@ -115,18 +113,17 @@ class _CalendarPageState extends State<CalendarPage> {
                       decoration: const BoxDecoration(
                         color: kPrimaryColor,
                       ),
-                      titleTextStyle: GoogleFonts.poppins(
-                        color: kWhite,
-                        fontSize: 16,
-                      ),
+                      titleTextStyle:
+                          kTextTheme.headline6?.copyWith(color: kDarkBrown) ??
+                              const TextStyle(),
                     ),
                   ),
                 ),
-                BlocBuilder<DayPlanCalendarBloc, DayPlanCalendarState>(
+                BlocBuilder<PlanCalendarBloc, PlanCalendarState>(
                   builder: (context, state) {
-                    if (state is DayPlanCalendarLoading) {
+                    if (state is PlanCalendarLoading) {
                       return const CircularProgressIndicator();
-                    } else if (state is DayPlanCalendarSuccess) {
+                    } else if (state is PlanCalendarSuccess) {
                       print(state.listPlan);
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -3,7 +3,6 @@ import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/presentation/widgets/card_content_medical_history.dart';
 import 'package:plan/plan.dart';
-import 'package:task/task.dart';
 
 class CardActivityHistory extends StatefulWidget {
   final String petId;

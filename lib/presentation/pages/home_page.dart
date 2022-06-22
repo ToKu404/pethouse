@@ -4,15 +4,16 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// ignore: depend_on_referenced_packages
-import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
-import 'package:pethouse/presentation/widgets/card_schedule_status.dart';
-import 'package:pethouse/presentation/widgets/no_pet_card.dart';
+import 'package:pethouse/presentation/widgets/task_daily_summary_card.dart';
+import 'package:pethouse/presentation/widgets/event_card.dart';
+import 'package:pethouse/presentation/widgets/no_pet_view.dart';
 import 'package:task/task.dart';
 import 'package:user/domain/entities/user_entity.dart';
 import 'package:plan/plan.dart';
+
+import '../widgets/task_card.dart';
 
 class HomePage extends StatefulWidget {
   final UserEntity userEntity;
@@ -25,14 +26,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int activePage = 0;
   DateTime _dateNow = DateTime.now();
-  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<GetSchedulePetBloc>(context).add(FetchListSchedulePet());
 
-    _pageController = PageController(viewportFraction: 0.8, initialPage: 1);
   }
 
   @override
@@ -60,8 +59,6 @@ class _HomePageState extends State<HomePage> {
                       child: SvgPicture.asset(
                         'assets/icons/pethouse_icon.svg',
                         color: kWhite,
-                        // width: 24,
-                        // height: 24,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -101,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                 if (state.listPet.isNotEmpty) {
                   return _buildListPet(state.listPet);
                 } else {
-                  return const Center(child: NoPetCard());
+                  return const Center(child: NoPetView());
                 }
               } else {
                 return const Text('Error');
@@ -244,8 +241,8 @@ class _HomePageState extends State<HomePage> {
                             });
                             BlocProvider.of<TaskBloc>(context).add(
                                 FetchTaskEvent(petId: listPet[activePage].id!));
-                            BlocProvider.of<DayPlanCalendarBloc>(context).add(
-                                FetchPlanCalendarEvent(
+                            BlocProvider.of<HomePlanCalendarBloc>(context).add(
+                                FetchHomePlanCalendarEvent(
                                     petId: listPet[activePage].id!,
                                     choiceDate: _dateNow));
                           },
@@ -282,8 +279,8 @@ class _HomePageState extends State<HomePage> {
                   ],
                   color: kWhite,
                   borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
                 ),
                 constraints: BoxConstraints(
                     minHeight: (MediaQuery.of(context).size.height -
@@ -340,25 +337,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.only(top: 20),
-                      child: _buildListTask(listPet[activePage]),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20)),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 4,
-                              offset: const Offset(0, -2),
-                              color: const Color(0xFF000000).withOpacity(.04)),
-                          BoxShadow(
-                              blurRadius: 4,
-                              offset: const Offset(0, -5),
-                              color: const Color(0xFF000000).withOpacity(.05))
-                        ],
-                        color: kWhite,
-                      ),
+                      height: 10,
+                      color: kGrey,
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _buildListTask(listPet[activePage]),
                   ],
                 ),
               )
@@ -450,7 +435,7 @@ class __BuildScheduleState extends State<_BuildSchedule> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
-                  child: CardScheduleStatus(
+                  child: TaskDailySummaryCard(
                     taskFinish: getCompleteTask(state.listTask),
                     taskAll: state.listTask.length,
                   ),
@@ -485,80 +470,6 @@ class __BuildScheduleState extends State<_BuildSchedule> {
   }
 }
 
-class TaskCard extends StatefulWidget {
-  final TaskEntity task;
-
-  const TaskCard({Key? key, required this.task}) : super(key: key);
-
-  @override
-  State<TaskCard> createState() => _TaskCardState();
-}
-
-class _TaskCardState extends State<TaskCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 13,
-                color: const Color(0xFF000000).withOpacity(.07)),
-            BoxShadow(
-                blurRadius: 5, color: const Color(0xFF000000).withOpacity(.05))
-          ]),
-      width: double.infinity,
-      child: ListTile(
-        leading: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: widget.task.completeStatus!
-                ? kGreyTransparant
-                : kMainOrangeColor,
-          ),
-          child: Center(
-            child: Icon(
-              kTaskType[widget.task.activityType],
-              color: kWhite,
-            ),
-          ),
-        ),
-        title: Text(widget.task.title ?? '-',
-            style: widget.task.completeStatus!
-                ? kTextTheme.subtitle1?.copyWith(
-                    color: kGreyTransparant,
-                    fontWeight: FontWeight.w500,
-                    decoration: TextDecoration.lineThrough)
-                : kTextTheme.subtitle1?.copyWith(
-                    color: kMainOrangeColor,
-                    fontWeight: FontWeight.w500,
-                  )),
-        subtitle: Text(
-          DateFormat.jm().format(widget.task.time!.toDate()),
-          style: TextStyle(
-              color:
-                  widget.task.completeStatus! ? kGreyTransparant : kDarkBrown),
-        ),
-        trailing: Checkbox(
-          value: widget.task.completeStatus!,
-          onChanged: (value) {
-            BlocProvider.of<TaskBloc>(context).add(ChangeTaskStatus(
-                taskId: widget.task.id!, petId: widget.task.petId!));
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-          activeColor: kGreyTransparant,
-        ),
-      ),
-    );
-  }
-}
 
 class _BuildHomeCalendar extends StatefulWidget {
   final String petId;
@@ -578,8 +489,9 @@ class __BuildHomeCalendarState extends State<_BuildHomeCalendar> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<DayPlanCalendarBloc>(context).add(
-        FetchPlanCalendarEvent(petId: widget.petId, choiceDate: _selectedDate));
+    BlocProvider.of<HomePlanCalendarBloc>(context).add(
+        FetchHomePlanCalendarEvent(
+            petId: widget.petId, choiceDate: _selectedDate));
   }
 
   @override
@@ -599,29 +511,29 @@ class __BuildHomeCalendarState extends State<_BuildHomeCalendar> {
               _selectedDate = date;
               widget.onDateTimeChanged(date);
               setState(() {
-                BlocProvider.of<DayPlanCalendarBloc>(context).add(
-                    FetchPlanCalendarEvent(
+                BlocProvider.of<HomePlanCalendarBloc>(context).add(
+                    FetchHomePlanCalendarEvent(
                         petId: widget.petId, choiceDate: _selectedDate));
               });
             },
           ),
-          BlocBuilder<DayPlanCalendarBloc, DayPlanCalendarState>(
+          const SizedBox(
+            height: 10,
+          ),
+          BlocBuilder<HomePlanCalendarBloc, HomePlanCalendarState>(
             builder: (context, state) {
-              if (state is DayPlanCalendarLoading) {
+              if (state is HomePlanCalendarLoading) {
                 return const CircularProgressIndicator();
-              } else if (state is DayPlanCalendarSuccess) {
+              } else if (state is HomePlanCalendarSuccess) {
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
                   shrinkWrap: true,
                   itemCount: state.listPlan.length,
                   scrollDirection: Axis.vertical,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: ((context, index) {
-                    return ScheduleTaskCard(
+                    return EventCard(
                       event: state.listPlan[index],
-                      isFirst: index == 0 ? true : false,
-                      isLast: index == state.listPlan.length - 1 ? true : false,
-                      isSingle: state.listPlan.length == 1 ? true : false,
                     );
                   }),
                 );

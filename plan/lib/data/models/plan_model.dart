@@ -13,7 +13,7 @@ class PlanModel extends PlanEntity {
     final bool? reminder,
     final String? location,
     final String? description,
-    final String? status,
+    final bool? completeStatus,
   }) : super(
             id: id,
             petId: petId,
@@ -23,7 +23,7 @@ class PlanModel extends PlanEntity {
             time: time,
             reminder: reminder,
             location: location,
-            status: status,
+            completeStatus: completeStatus,
             description: description);
 
   Map<String, dynamic> toJson() {
@@ -35,7 +35,7 @@ class PlanModel extends PlanEntity {
       "date": date,
       "time": time,
       "reminder": reminder,
-      "status":status,
+      "complete_status":completeStatus,
       "location": location,
       "description": description
     };
@@ -49,12 +49,12 @@ class PlanModel extends PlanEntity {
         activityTitle: documentSnapshot.get('activity_title'),
         date: documentSnapshot.get('date'),
         time: documentSnapshot.get('time'),
-        status: documentSnapshot.get('status'),
+        completeStatus: documentSnapshot.get('complete_status'),
         reminder: documentSnapshot.get('reminder'),
         location: documentSnapshot.get('location'),
         description: documentSnapshot.get('description'));
   }
   @override
   List<Object?> get props =>
-      [activity, location, time, activityTitle, date, description, reminder, status];
+      [activity, location, time, activityTitle, date, description, reminder, completeStatus];
 }

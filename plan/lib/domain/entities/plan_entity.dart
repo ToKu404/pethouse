@@ -10,7 +10,7 @@ class PlanEntity extends Equatable {
   final Timestamp? time;
   final bool? reminder;
   final String? location;
-  final String? status;
+  final bool? completeStatus;
   final String? description;
 
   const PlanEntity({
@@ -23,10 +23,10 @@ class PlanEntity extends Equatable {
     required this.location,
     required this.description,
     required this.reminder,
-    required this.status
+    required this.completeStatus
   });
 
   @override
   List<Object?> get props =>
-      [activity, location, activityTitle, time, date, description, reminder, status];
+      [activity, location, activityTitle, time, date, description, reminder, completeStatus];
 }

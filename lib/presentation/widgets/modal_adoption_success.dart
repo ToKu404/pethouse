@@ -1,7 +1,7 @@
+import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'gredient_button.dart';
 import 'package:core/core.dart';
 
 class AdoptionSuccess extends StatelessWidget {
@@ -24,7 +24,7 @@ class AdoptionSuccess extends StatelessWidget {
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
             blurRadius: 14,
-            offset: Offset(2, 4),
+            offset: const Offset(2, 4),
           ),
         ],
       ),
@@ -41,7 +41,7 @@ class AdoptionSuccess extends StatelessWidget {
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
                   blurRadius: 10,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -54,18 +54,18 @@ class AdoptionSuccess extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text(
             'Thank You',
             style: GoogleFonts.poppins(
-              color: Color(0XFFAE531E),
+              color: const Color(0XFFAE531E),
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -76,26 +76,26 @@ class AdoptionSuccess extends StatelessWidget {
               fontWeight: FontWeight.normal,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
-          Text(
+          const Text(
             '23 Februari 2022 14:26',
             style: TextStyle(
               color: Colors.grey,
               fontSize: 10,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           GradientButton(
             height: 39,
             width: 159,
             onTap: () {},
-            text: 'View Order Status',
+            text: 'View Order Status', isClicked: false,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Container(
@@ -115,9 +115,9 @@ class AdoptionSuccess extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: kBorderRadius,
               ),
-              child: Text(
+              child: const Text(
                 'Back to Home',
-                style: const TextStyle(color: kDarkBrown),
+                style: TextStyle(color: kDarkBrown),
               ),
             ),
           ),

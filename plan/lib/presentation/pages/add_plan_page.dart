@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
-import 'package:core/presentation/widgets/loading_screen.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:core/core.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
@@ -58,7 +56,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         time: planTime,
         activityTitle: activity,
         petId: widget.petEntity.id,
-        status: 'waiting',
+        completeStatus: false,
         activity: _selectActivity,
         location: _locationController.text,
         description: _descriptionController.text,
@@ -115,11 +113,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                             child: Text(
                               '${widget.petEntity.petName}',
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                color: kDarkBrown,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: kTextTheme.headline6,
                             ),
                           ),
                         ],
@@ -200,27 +194,29 @@ class _AddPlanPageState extends State<AddPlanPage> {
                       vertical: 20,
                     ),
                     child: GradientButton(
-                        height: 50,
-                        width: double.infinity,
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const LoadingScreen();
-                            },
-                          );
-                          Future.delayed(const Duration(seconds: 1), () {
-                            if (!_formKey.currentState!.validate()) {
-                              Navigator.pop(context);
-                              return;
-                            } else {
-                              _onAddPlanSubmit();
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            }
-                          });
-                        },
-                        text: 'Save Medical Activity', isClicked: false,),
+                      height: 50,
+                      width: double.infinity,
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const LoadingView();
+                          },
+                        );
+                        Future.delayed(const Duration(seconds: 1), () {
+                          if (!_formKey.currentState!.validate()) {
+                            Navigator.pop(context);
+                            return;
+                          } else {
+                            _onAddPlanSubmit();
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        });
+                      },
+                      text: 'Save Medical Activity',
+                      isClicked: false,
+                    ),
                   )
                 ],
               ),
@@ -331,10 +327,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         ),
       ),
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: const Color.fromARGB(255, 109, 109, 109),
-        fontSize: 16,
-      ),
+      style: kTextTheme.subtitle1,
       value: _selectActivity,
       items: _activityTypeList.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
@@ -388,10 +381,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         children: [
           Text(
             'Reminder',
-            style: GoogleFonts.poppins(
-              color: kDarkBrown,
-              fontSize: 14,
-            ),
+            style: kTextTheme.subtitle1,
           ),
           Switch.adaptive(
               inactiveTrackColor: kGrey,
@@ -416,10 +406,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         ),
       ),
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: const Color.fromARGB(255, 109, 109, 109),
-        fontSize: 16,
-      ),
+      style: kTextTheme.subtitle1,
       value: _groomingType,
       items: typeGrooming.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(

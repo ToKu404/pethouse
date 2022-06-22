@@ -2,14 +2,9 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:user/presentation/blocs/user_db_bloc/user_db_bloc.dart';
-import 'package:user/presentation/pages/auth_pages/register_page.dart';
-import 'package:user/presentation/pages/auth_pages/reset_password_page.dart';
-
 import '../../blocs/auth_cubit/auth_cubit.dart';
 import '../../blocs/sign_in_bloc/sign_in_bloc.dart';
 import '../../widgets/border_button.dart';
-import '../../widgets/gradient_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

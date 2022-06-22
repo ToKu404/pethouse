@@ -1,9 +1,8 @@
-import 'package:bloc/bloc.dart';
+
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/domain/usecases/get_pets_usecase.dart';
-import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'get_pet_event.dart';

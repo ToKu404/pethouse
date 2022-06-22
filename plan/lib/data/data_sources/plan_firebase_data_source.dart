@@ -31,7 +31,7 @@ class PlanDataSourceImpl implements PlanDataSource {
               activityTitle: plan.activityTitle,
               reminder: plan.reminder,
               location: plan.location,
-              status: plan.status,
+              completeStatus: plan.completeStatus,
               description: plan.description)
           .toJson();
       if (!value.exists) {
@@ -59,8 +59,9 @@ class PlanDataSourceImpl implements PlanDataSource {
     final collectionRef = firebaseFireStore.collection('plans');
     Map<String, dynamic>? doc =
         await collectionRef.doc(planId).get().then((value) => value.data());
-    String status = doc!['status'] == 'complete' ? 'waiting' : 'complete';
-    final statusMap = {"status": status};
+    bool status = !doc!['complete_status'];
+    print(status);
+    final statusMap = {"complete_status": status};
     await collectionRef.doc(planId).update(statusMap);
   }
 

@@ -2,8 +2,6 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:user/presentation/widgets/gradient_button.dart';
-
 import '../../blocs/user_db_bloc/user_db_bloc.dart';
 import '../../blocs/user_profile_bloc/user_profile_bloc.dart';
 

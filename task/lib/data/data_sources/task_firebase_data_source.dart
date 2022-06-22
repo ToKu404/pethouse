@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:task/data/models/date_task_model.dart';
+
 import 'package:task/data/models/task_model.dart';
 import 'package:task/domain/entities/habbit_entity.dart';
 import 'package:task/domain/entities/task_entity.dart';
@@ -58,46 +58,6 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
           .toList();
     });
   }
-
-  // @override
-  // Future<void> transferTask(
-  //     List<HabbitEntity> habbits, DateTime date, String petId) async {
-  //   final taskRef = taskFirestore.collection('tasks');
-  //   final taskDateRef = taskFirestore.collection('date_tasks');
-  //   List<String> tasksId = [];
-  //   for (var habbit in habbits) {
-  //     final taskId = taskRef.doc().id;
-  //     final habbitTime = habbit.time!.toDate();
-  //     final newTask = TaskModel(
-  //         id: taskId,
-  //         completeStatus: false,
-  //         title: habbit.title,
-  //         habbitId: habbit.id,
-  //         petId: petId,
-  //         date: DateFormat.yMMMEd().format(date),
-  //         time: Timestamp.fromDate(DateTime(date.year, date.month, date.day,
-  //             habbitTime.hour, habbitTime.minute)),
-  //         activityType: habbit.activityType);
-  //     taskRef.doc(taskId).get().then((value) {
-  //       if (!value.exists) {
-  //         taskRef.doc(taskId).set(newTask.toJson());
-  //       }
-  //     });
-  //     tasksId.add(taskId);
-  //   }
-
-  //   final taskDataId = taskDateRef.doc().id;
-  //   taskDateRef.doc(taskDataId).get().then((value) {
-  //     final newDateTask = DateTaskModel(
-  //         id: taskDataId,
-  //         petId: petId,
-  //         date: DateFormat.yMMMEd().format(date),
-  //         listTaskId: tasksId);
-  //     if (!value.exists) {
-  //       taskDateRef.doc(taskDataId).set(newDateTask.toJson());
-  //     }
-  //   });
-  // }
 
   @override
   Future<List<TaskEntity>> getOneReadTask(DateTime date, String petId) {

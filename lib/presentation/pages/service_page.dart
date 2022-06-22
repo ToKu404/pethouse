@@ -1,7 +1,7 @@
 import 'package:adopt/presentation/pages/adopt_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:pethouse/presentation/pages/store_page.dart';
+import 'package:store/store.dart';
 
 class ServicePage extends StatefulWidget {
   const ServicePage({Key? key}) : super(key: key);
