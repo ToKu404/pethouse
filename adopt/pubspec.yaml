@@ -26,8 +26,9 @@ dependencies:
   notification:
     path: ../notification
   flutter_svg: ^1.1.0
+  awesome_dialog: ^2.2.1
 
-  
+
 
 dev_dependencies:
   flutter_test:

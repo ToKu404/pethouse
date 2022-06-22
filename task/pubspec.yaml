@@ -23,6 +23,7 @@ dependencies:
   pet:
     path: ../pet  
   intl: ^0.17.0
+  awesome_dialog: ^2.2.1
 
 dev_dependencies:
   flutter_test:

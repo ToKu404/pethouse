@@ -1,5 +1,7 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/presentation/widgets/gradient_button.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,9 +107,7 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
     return BlocListener<HabbitCubit, HabbitState>(
       listener: (context, state) {
         if (state is AddHabbitSuccess) {
-          Future.delayed(const Duration(seconds: 1), () {
-            Navigator.pop(context);
-          });
+
         }
       },
       child: Scaffold(
@@ -172,9 +172,31 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
                       height: 55,
                       width: double.infinity,
                       onTap: () {
-                        if (formKey.currentState!.validate()) {
-                          _submitAddNewTask();
-                        }
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.INFO,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: 'Apakah Anda Sudah Yakin?',
+                          btnCancelOnPress: () {},
+                          btnOkOnPress: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const LoadingView();
+                              },
+                            );
+                            Future.delayed(const Duration(seconds: 1), () {
+                              if (!formKey.currentState!.validate()) {
+                                Navigator.pop(context);
+                                return;
+                              } else {
+                                _submitAddNewTask();
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              }
+                            });
+                          },
+                        ).show();
                       },
                       text: 'Add Habbit',
                       isClicked: false,

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
@@ -197,24 +198,33 @@ class _AddPlanPageState extends State<AddPlanPage> {
                       height: 50,
                       width: double.infinity,
                       onTap: () {
-                        showDialog(
+                        AwesomeDialog(
                           context: context,
-                          builder: (BuildContext context) {
-                            return const LoadingView();
+                          dialogType: DialogType.INFO,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: 'Apakah Anda Sudah Yakin?',
+                          btnCancelOnPress: () {},
+                          btnOkOnPress: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const LoadingView();
+                              },
+                            );
+                            Future.delayed(const Duration(seconds: 1), () {
+                              if (!_formKey.currentState!.validate()) {
+                                Navigator.pop(context);
+                                return;
+                              } else {
+                                _onAddPlanSubmit();
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              }
+                            });
                           },
-                        );
-                        Future.delayed(const Duration(seconds: 1), () {
-                          if (!_formKey.currentState!.validate()) {
-                            Navigator.pop(context);
-                            return;
-                          } else {
-                            _onAddPlanSubmit();
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          }
-                        });
+                        ).show();
                       },
-                      text: 'Save Medical Activity',
+                      text: 'Save Plan Activity',
                       isClicked: false,
                     ),
                   )

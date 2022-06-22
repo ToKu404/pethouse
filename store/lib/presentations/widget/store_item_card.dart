@@ -1,5 +1,7 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:store/domain/entities/store.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -12,12 +14,22 @@ class StoreItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        if (!await launchUrlString(
-          store.detailUrl,
-          mode: LaunchMode.externalApplication,
-        )) {
-          throw 'Could not launch ${store.detailUrl}';
-        }
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.QUESTION,
+          animType: AnimType.SCALE,
+          title: 'Apakah Anda Sudah Yakin?',
+          desc: 'Anda akan diarahkan ke situs web bukalapak.com',
+          btnCancelOnPress: () {},
+          btnOkOnPress: () async {
+            if (!await launchUrlString(
+              store.detailUrl,
+              mode: LaunchMode.externalApplication,
+            )) {
+              throw 'Could not launch ${store.detailUrl}';
+            }
+          },
+        ).show();
       },
       child: Container(
         padding: const EdgeInsets.all(10),

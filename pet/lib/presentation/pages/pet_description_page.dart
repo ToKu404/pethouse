@@ -1,3 +1,5 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -67,8 +69,27 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
                       arguments: pet);
                 }
               } else if (val == 2) {
-                BlocProvider.of<GetPetDescBloc>(context)
-                    .add(RemovePetEvent(petId: widget.petId));
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.INFO,
+                  animType: AnimType.BOTTOMSLIDE,
+                  title: 'Apakah Anda Sudah Yakin?',
+                  btnCancelOnPress: () {},
+                  btnOkOnPress: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const LoadingView();
+                      },
+                    );
+                    Future.delayed(const Duration(seconds: 1), () {
+                      BlocProvider.of<GetPetDescBloc>(context)
+                          .add(RemovePetEvent(petId: widget.petId));
+                      Navigator.pop(context);
+                    });
+                  },
+                ).show();
+
               }
             },
             itemBuilder: (context) {
@@ -178,7 +199,7 @@ class _PetDescLayout extends StatelessWidget {
                             width: 41,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: kOrange,
+                              color: kPrimaryColor,
                             ),
                             padding: const EdgeInsets.all(3),
                             child: SvgPicture.asset(

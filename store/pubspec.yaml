@@ -17,6 +17,7 @@ dependencies:
     path: ../core
   flutter:
     sdk: flutter
+  awesome_dialog: ^2.2.1
 
 dev_dependencies:
   flutter_test:

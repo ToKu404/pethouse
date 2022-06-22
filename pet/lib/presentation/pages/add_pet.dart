@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -94,9 +96,7 @@ class _AddPetPageState extends State<AddPetPage> {
           if (state is AddPetError) {
             print(state.message);
           } else if (state is AddPetSuccess) {
-            Future.delayed(const Duration(seconds: 1), () {
-              Navigator.pop(context);
-            });
+
           }
           if (state is AddPetPhotoSuccess) {
             _petPhotoPath = state.petPhotoPath;
@@ -157,9 +157,31 @@ class _AddPetPageState extends State<AddPetPage> {
                         height: 55,
                         width: double.infinity,
                         onTap: () {
-                          if (formKey.currentState!.validate()) {
-                            _submitOpenAdopt();
-                          }
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.INFO,
+                            animType: AnimType.BOTTOMSLIDE,
+                            title: 'Apakah Anda Sudah Yakin?',
+                            btnCancelOnPress: () {},
+                            btnOkOnPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const LoadingView();
+                                },
+                              );
+                              Future.delayed(const Duration(seconds: 1), () {
+                                if (!formKey.currentState!.validate()) {
+                                  Navigator.pop(context);
+                                  return;
+                                } else {
+                                  _submitOpenAdopt();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
+                              });
+                            },
+                          ).show();
                         },
                         text: 'Save Pet',
                         isClicked: false,
