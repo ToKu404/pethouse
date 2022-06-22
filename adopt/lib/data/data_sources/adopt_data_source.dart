@@ -1,12 +1,10 @@
 import 'dart:io';
-
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart';
 import 'package:adopt/data/models/adopt_model.dart';
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -29,12 +27,9 @@ abstract class AdoptDataSource {
 class AdoptDataSourceImpl implements AdoptDataSource {
   final FirebaseFirestore firebaseFirestore;
   final FirebaseStorage firebaseStorage;
-  final FirebaseAuth firebaseAuth;
 
   AdoptDataSourceImpl(
-      {required this.firebaseFirestore,
-      required this.firebaseStorage,
-      required this.firebaseAuth});
+      {required this.firebaseFirestore, required this.firebaseStorage});
 
   @override
   Future<void> createNewAdopt(AdoptEntity adoptEntity) async {

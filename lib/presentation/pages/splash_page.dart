@@ -6,16 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:user/presentation/blocs/auth_cubit/auth_cubit.dart';
 
-import 'main_page.dart';
-
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+class SplashPage extends StatefulWidget {
+  const SplashPage({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
@@ -29,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (state is Authenticated) {
           Timer(
             const Duration(seconds: 7),
-            () => Navigator.pushReplacementNamed(context, MainPage.ROUTE_NAME,
+            () => Navigator.pushReplacementNamed(context, MAIN_ROUTE_NAME,
                 arguments: state.uid),
           );
         } else {

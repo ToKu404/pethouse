@@ -28,5 +28,4 @@ class PetDescSuccess extends GetPetDescState {
   List<Object> get props => [petEntity, listTask];
 }
 
-
 class RemovePetSuccess extends GetPetDescState {}

@@ -1,14 +1,13 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
-import 'package:core/presentation/widgets/appbar_back_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
 
@@ -283,10 +282,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
                   padding: const EdgeInsets.only(top: 20),
                   child: Text(
                     kOpenAdoptAddPicture,
-                    style: GoogleFonts.poppins(
-                      color: kDarkBrown,
-                      fontSize: 14,
-                    ),
+                    style: kTextTheme.subtitle1
                   ),
                 ),
               ],
@@ -378,10 +374,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
               Expanded(
                 child: Text(
                   name,
-                  style: GoogleFonts.poppins(
-                    color: color,
-                    fontSize: 14,
-                  ),
+                  style: kTextTheme.subtitle1?.copyWith(color: color)
                 ),
               ),
             ],
@@ -456,10 +449,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
       ),
       value: _petType,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: kDarkBrown,
-        fontSize: 16,
-      ),
+      style: kTextTheme.subtitle1,
       validator: (value) {
         if (value == null) {
           return "Choice Pet Type";

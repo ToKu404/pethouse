@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +16,6 @@ class PetMapPage extends StatefulWidget {
 class _PetMapPageState extends State<PetMapPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     BlocProvider.of<PetmapCubit>(context)
         .checkPetMapStatus(widget.userEntity.uid!);
@@ -65,7 +62,7 @@ class _PetMapPageState extends State<PetMapPage> {
                     userId: widget.userEntity.uid!,
                   ));
                 } else {
-                  return Center();
+                  return Container();
                 }
               },
             )

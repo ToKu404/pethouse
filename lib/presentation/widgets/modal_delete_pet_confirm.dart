@@ -1,8 +1,7 @@
 import 'package:core/core.dart';
+import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'gredient_button.dart';
 
 class RemovePetConfirmation extends StatelessWidget {
   const RemovePetConfirmation({Key? key}) : super(key: key);
@@ -24,7 +23,7 @@ class RemovePetConfirmation extends StatelessWidget {
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
             blurRadius: 14,
-            offset: Offset(2, 4),
+            offset: const Offset(2, 4),
           ),
         ],
       ),
@@ -41,28 +40,28 @@ class RemovePetConfirmation extends StatelessWidget {
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
                   blurRadius: 10,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
-            child: Icon(
+            child: const Icon(
               Icons.warning_amber_rounded,
               color: Color(0XFFCF9D7A),
               size: 60,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text(
             'Are You Sure?',
             style: GoogleFonts.poppins(
-              color: Color(0XFFAE531E),
+              color: const Color(0XFFAE531E),
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 2,
           ),
           Text(
@@ -73,7 +72,7 @@ class RemovePetConfirmation extends StatelessWidget {
               fontWeight: FontWeight.normal,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -83,7 +82,7 @@ class RemovePetConfirmation extends StatelessWidget {
                 height: 29,
                 width: 65,
                 decoration: BoxDecoration(
-                  color: Color(0XFFFED0AC),
+                  color: const Color(0XFFFED0AC),
                   borderRadius: kBorderRadius,
                   border: Border.all(
                     color: kDarkBrown,
@@ -96,20 +95,20 @@ class RemovePetConfirmation extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: kBorderRadius,
                   ),
-                  child: Text(
+                  child: const Text(
                     'No',
-                    style: const TextStyle(color: kDarkBrown),
+                    style: TextStyle(color: kDarkBrown),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               GradientButton(
                 height: 29,
                 width: 65,
                 onTap: () {},
-                text: 'Yes',
+                text: 'Yes', isClicked: false,
               ),
             ],
           ),

@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 
 import 'package:adopt/domain/entities/adopt_enitity.dart';
@@ -5,11 +7,8 @@ import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:core/presentation/widgets/appbar_back_button.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class OpenAdoptPage extends StatefulWidget {
@@ -111,9 +110,8 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           child: BlocConsumer<OpenAdoptBloc, OpenAdoptState>(
         listener: (context, state) {
           if (state is OpenAdoptError) {
-            print(state.message);
           } else if (state is OpenAdoptSuccess) {
-            Future.delayed(Duration(seconds: 1), () {
+            Future.delayed(const Duration(seconds: 1), () {
               Navigator.pop(context);
             });
           }
@@ -127,7 +125,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
         },
         builder: (context, state) {
           if (state is OpenAdoptLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -233,10 +231,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
                     padding: const EdgeInsets.only(top: 20),
                     child: Text(
                       kOpenAdoptAddPicture,
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 14,
-                      ),
+                      style: kTextTheme.subtitle1
                     ),
                   ),
                 ],
@@ -304,7 +299,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Icon(
                   icon,
                   color: color,
@@ -313,10 +308,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
               Expanded(
                 child: Text(
                   name,
-                  style: GoogleFonts.poppins(
-                    color: color,
-                    fontSize: 14,
-                  ),
+                  style: kTextTheme.subtitle1?.copyWith(color: color)
                 ),
               ),
             ],
@@ -332,7 +324,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   }
 
   Widget _buildInputDateOfBirth() {
-    final DateFormat _dateFormat = DateFormat.yMMMEd();
+    final DateFormat dateFormat = DateFormat.yMMMEd();
     return TextFormField(
       readOnly: true,
       controller: _petDateBirthController,
@@ -359,7 +351,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           }
           setState(() {
             _petDateOfBirth = Timestamp.fromDate(pickedDate);
-            _petDateBirthController.text = _dateFormat.format(pickedDate);
+            _petDateBirthController.text = dateFormat.format(pickedDate);
           });
         });
       },
@@ -389,10 +381,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       ),
       value: _petType,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: kDarkBrown,
-        fontSize: 16,
-      ),
+      style: kTextTheme.subtitle1,
       validator: (value) {
         if (value == null) {
           return "Choice Pet Type";

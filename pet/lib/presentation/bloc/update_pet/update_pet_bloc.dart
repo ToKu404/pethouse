@@ -1,7 +1,7 @@
-// ignore: depend_on_referenced_packages
+
+// ignore_for_file: depend_on_referenced_packages
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/domain/entities/pet_entity.dart';

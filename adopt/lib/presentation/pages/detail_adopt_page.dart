@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
-import 'package:notification/domain/entities/nofitication_entity.dart';
-import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
+import 'package:notification/notification.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailAdoptPage extends StatefulWidget {
@@ -59,7 +57,7 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
                 child: CircularProgressIndicator(),
               );
             } else if (state is PetDescriptionLoaded) {
-              return DetailAdoptData(
+              return _BuildDetailAdopt(
                 adoptEntity: state.adoptEntity,
                 isOwner: state.isOwner,
               );
@@ -75,10 +73,10 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
   }
 }
 
-class DetailAdoptData extends StatelessWidget {
+class _BuildDetailAdopt extends StatelessWidget {
   final AdoptEntity adoptEntity;
   final bool isOwner;
-  const DetailAdoptData({
+  const _BuildDetailAdopt({
     required this.adoptEntity,
     required this.isOwner,
     Key? key,

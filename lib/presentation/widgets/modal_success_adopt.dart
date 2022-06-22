@@ -22,7 +22,7 @@ class AdoptionSuccess extends StatelessWidget {
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
             blurRadius: 14,
-            offset: Offset(2, 4),
+            offset: const Offset(2, 4),
           ),
         ],
       ),
@@ -43,7 +43,7 @@ class AdoptionSuccess extends StatelessWidget {
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
                   blurRadius: 10,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -56,10 +56,10 @@ class AdoptionSuccess extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text(
+          const Text(
             'Success',
             style: TextStyle(
               color: kDarkBrown,
@@ -67,10 +67,10 @@ class AdoptionSuccess extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
-          Text(
+          const Text(
             'Your open adoption activity was successful',
             style: TextStyle(
               color: kWhite,

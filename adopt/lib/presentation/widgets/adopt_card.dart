@@ -78,6 +78,8 @@ class AdoptCard extends StatelessWidget {
                 children: [
                   Text(
                     adoptEntity.petName ?? 'Pet Name',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: kTextTheme.subtitle1?.copyWith(color: kDarkBrown),
                   ),
                   adoptEntity.petBreed != ''

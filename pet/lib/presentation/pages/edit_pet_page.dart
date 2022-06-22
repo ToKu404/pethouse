@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 
@@ -258,10 +256,7 @@ class _EditPetPageState extends State<EditPetPage> {
                   padding: const EdgeInsets.only(top: 20),
                   child: Text(
                     kOpenAdoptAddPicture,
-                    style: GoogleFonts.poppins(
-                      color: kDarkBrown,
-                      fontSize: 14,
-                    ),
+                    style: kTextTheme.subtitle1,
                   ),
                 ),
               ],
@@ -351,13 +346,8 @@ class _EditPetPageState extends State<EditPetPage> {
                 ),
               ),
               Expanded(
-                child: Text(
-                  name,
-                  style: GoogleFonts.poppins(
-                    color: color,
-                    fontSize: 14,
-                  ),
-                ),
+                child: Text(name,
+                    style: kTextTheme.subtitle1?.copyWith(color: color)),
               ),
             ],
           ),
@@ -431,10 +421,7 @@ class _EditPetPageState extends State<EditPetPage> {
       ),
       value: _petType,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: kDarkBrown,
-        fontSize: 16,
-      ),
+      style: kTextTheme.subtitle1,
       validator: (value) {
         if (value == null) {
           return "Choice Pet Type";

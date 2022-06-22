@@ -5,12 +5,9 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import '../../domain/entities/pet_entity.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
-
 class AddPetPage extends StatefulWidget {
   const AddPetPage({Key? key}) : super(key: key);
 
@@ -97,7 +94,7 @@ class _AddPetPageState extends State<AddPetPage> {
           if (state is AddPetError) {
             print(state.message);
           } else if (state is AddPetSuccess) {
-            Future.delayed(Duration(seconds: 1), () {
+            Future.delayed(const Duration(seconds: 1), () {
               Navigator.pop(context);
             });
           }
@@ -111,7 +108,7 @@ class _AddPetPageState extends State<AddPetPage> {
         },
         builder: (context, state) {
           if (state is AddPetLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: const CircularProgressIndicator());
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -213,10 +210,7 @@ class _AddPetPageState extends State<AddPetPage> {
                     padding: const EdgeInsets.only(top: 20),
                     child: Text(
                       kOpenAdoptAddPicture,
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 14,
-                      ),
+                      style: kTextTheme.subtitle1
                     ),
                   ),
                 ],
@@ -283,7 +277,7 @@ class _AddPetPageState extends State<AddPetPage> {
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Icon(
                   icon,
                   color: color,
@@ -292,10 +286,7 @@ class _AddPetPageState extends State<AddPetPage> {
               Expanded(
                 child: Text(
                   name,
-                  style: GoogleFonts.poppins(
-                    color: color,
-                    fontSize: 14,
-                  ),
+                  style: kTextTheme.subtitle1?.copyWith(color: color)
                 ),
               ),
             ],
@@ -368,10 +359,7 @@ class _AddPetPageState extends State<AddPetPage> {
       ),
       value: _petType,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: kDarkBrown,
-        fontSize: 16,
-      ),
+      style: kTextTheme.subtitle1,
       validator: (value) {
         if (value == null) {
           return "Choice Pet Type";

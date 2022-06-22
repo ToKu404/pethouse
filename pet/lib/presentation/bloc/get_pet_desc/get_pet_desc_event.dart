@@ -39,6 +39,6 @@ class RemovePetEvent extends GetPetDescEvent {
 
   const RemovePetEvent({required this.petId});
 
-    @override
+  @override
   List<Object> get props => [petId];
 }
