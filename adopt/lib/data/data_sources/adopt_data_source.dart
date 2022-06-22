@@ -1,11 +1,12 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
-// ignore: depend_on_referenced_packages
+import 'package:core/services/preference_helper.dart';
 import 'package:path/path.dart';
 import 'package:adopt/data/models/adopt_model.dart';
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class AdoptDataSource {
@@ -27,9 +28,12 @@ abstract class AdoptDataSource {
 class AdoptDataSourceImpl implements AdoptDataSource {
   final FirebaseFirestore firebaseFirestore;
   final FirebaseStorage firebaseStorage;
+  final PreferenceHelper preferenceHelper;
 
   AdoptDataSourceImpl(
-      {required this.firebaseFirestore, required this.firebaseStorage});
+      {required this.firebaseFirestore,
+      required this.firebaseStorage,
+      required this.preferenceHelper});
 
   @override
   Future<void> createNewAdopt(AdoptEntity adoptEntity) async {
@@ -44,6 +48,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
         petType: adoptEntity.petType,
         gender: adoptEntity.gender,
         petBreed: adoptEntity.petBreed,
+        petTypeText: adoptEntity.petTypeText,
         dateOfBirth: adoptEntity.dateOfBirth,
         petPictureUrl: adoptEntity.petPictureUrl,
         certificateUrl: adoptEntity.certificateUrl,
@@ -83,9 +88,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
 
   @override
   Future<String> getUserIdLocal() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString("userId");
-    return userId ?? '';
+    return await preferenceHelper.getUserId();
   }
 
   @override
@@ -149,6 +152,8 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     onUpdate('pet_picture_url', adoptEntity.petPictureUrl, adoptMap);
     onUpdate('pet_name', adoptEntity.petName, adoptMap);
     onUpdate('pet_type', adoptEntity.petType, adoptMap);
+    onUpdate('pet_type_text', adoptEntity.petTypeText, adoptMap);
+
     onUpdate('gender', adoptEntity.gender, adoptMap);
     onUpdate('pet_breed', adoptEntity.petBreed, adoptMap);
     onUpdate('date_of_birth', adoptEntity.dateOfBirth, adoptMap);

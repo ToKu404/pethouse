@@ -6,7 +6,7 @@ export 'package:pet/presentation/bloc/get_pet/get_pet_bloc.dart';
 export 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
 export 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 export 'package:pet/presentation/bloc/update_pet/update_pet_bloc.dart';
-export 'package:pet/presentation/pages/add_pet.dart';
+export 'package:pet/presentation/pages/add_pet_page.dart';
 export 'package:pet/presentation/pages/pet_description_page.dart';
 export 'package:pet/presentation/pages/edit_pet_page.dart';
 export 'package:pet/domain/repositories/pet_repository.dart';

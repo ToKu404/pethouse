@@ -66,7 +66,7 @@ class PetAdoptOwnerCard extends StatelessWidget {
                     style: kTextTheme.subtitle1,
                   ),
                   Text(
-                    adopt.petType ?? '-',
+                    adopt.petTypeText ?? '-',
                     style: kTextTheme.bodyText1,
                   ),
                   _BottomSide(adopt: adopt)

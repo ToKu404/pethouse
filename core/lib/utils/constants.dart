@@ -7,7 +7,7 @@ const Color kPrimaryColor = Color(0xFFEE4E64);
 const Color kSecondaryColor = Color(0xFFEE4E64);
 const Color kDarkBrown = Color(0xFF300303);
 const Color kWhite = Colors.white;
-const Color kGrey = Color(0xFFEFE6E7);
+const Color kGrey = Color(0xFFF3F3F4);
 const Color kGreyTransparant = Color(0xFFBEC2C5);
 const Color kOrange = Color(0xFFEF9F21);
 
@@ -19,8 +19,7 @@ const double kPadding = 10.0;
 final TextTheme kTextTheme = TextTheme(
   headline1: GoogleFonts.poppins(fontSize: 42, fontWeight: FontWeight.w800),
   headline2: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.w600),
-  headline3: GoogleFonts.poppins(
-      fontSize: 21, fontWeight: FontWeight.w600, color: kMainOrangeColor),
+  headline3: GoogleFonts.poppins(fontSize: 14),
   headline4: GoogleFonts.poppins(
       fontSize: 21, fontWeight: FontWeight.w700, color: kDarkBrown),
   headline5: GoogleFonts.poppins(

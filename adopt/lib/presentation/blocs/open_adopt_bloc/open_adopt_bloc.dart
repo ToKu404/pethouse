@@ -56,6 +56,7 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
         AdoptEntity adoptEntity = AdoptEntity(
             petName: event.adoptEntity.petName,
             petType: event.adoptEntity.petType,
+            petTypeText: event.adoptEntity.petTypeText,
             gender: event.adoptEntity.gender,
             dateOfBirth: event.adoptEntity.dateOfBirth,
             petDescription: event.adoptEntity.petDescription,

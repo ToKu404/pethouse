@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 class CardAboutContent extends StatelessWidget {
   final String subjek;
   final String contentSubjek;
-  CardAboutContent({required this.subjek, required this.contentSubjek});
+  const CardAboutContent({required this.subjek, required this.contentSubjek});
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: kPrimaryColor,
@@ -23,7 +23,7 @@ class CardAboutContent extends StatelessWidget {
                 style: kTextTheme.bodyText1
                     ?.copyWith(fontWeight: FontWeight.bold, color: kDarkBrown)),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Expanded(child: Text(contentSubjek, style: kTextTheme.bodyText2?.copyWith(color: kWhite,fontWeight: FontWeight.bold)))

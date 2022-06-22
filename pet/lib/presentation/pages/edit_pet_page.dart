@@ -24,6 +24,8 @@ class _EditPetPageState extends State<EditPetPage> {
   final TextEditingController _petNameController = TextEditingController();
   final TextEditingController _petBreedController = TextEditingController();
   final TextEditingController _petDateBirthController = TextEditingController();
+  final TextEditingController _petOtherTypeController = TextEditingController();
+
   final TextEditingController _petDescriptionController =
       TextEditingController();
   final TextEditingController _petCertificateController =
@@ -40,13 +42,13 @@ class _EditPetPageState extends State<EditPetPage> {
     _petBreedController.dispose();
     _petDescriptionController.dispose();
     _petDateBirthController.dispose();
+    _petOtherTypeController.dispose();
     _petCertificateController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _petNameController.text = widget.pet.petName ?? '';
     if (widget.pet.petBreed != null && widget.pet.petBreed != '') {
@@ -60,6 +62,10 @@ class _EditPetPageState extends State<EditPetPage> {
     }
     if (widget.pet.petDescription != null && widget.pet.petDescription != '') {
       _petDescriptionController.text = widget.pet.petDescription ?? '';
+    }
+
+    if (widget.pet.petTypeText != null && widget.pet.petTypeText != '') {
+      _petOtherTypeController.text = widget.pet.petTypeText ?? '';
     }
 
     if (widget.pet.certificateUrl != null && widget.pet.certificateUrl != '') {
@@ -94,11 +100,17 @@ class _EditPetPageState extends State<EditPetPage> {
 
     String petDescription = _petDescriptionController.text;
 
+    String petTypeText = petType;
+    if (_petType == 'Other') {
+      petTypeText = _petOtherTypeController.text;
+    }
+
     PetEntity petEntity = PetEntity(
       petName: petName,
       petType: petType,
       petBreed: petBreed,
       dateOfBirth: _petDateOfBirth,
+      petTypeText: petTypeText,
       certificateUrl: _petCertificatePath,
       petPictureUrl: _petPhotoPath,
       gender: petGender,
@@ -132,9 +144,7 @@ class _EditPetPageState extends State<EditPetPage> {
               listener: (context, state) {
         if (state is UpdatePetError) {
           print(state.message);
-        } else if (state is UpdatePetSuccess) {
-
-        }
+        } else if (state is UpdatePetSuccess) {}
         if (state is UpdatePetPhotoSuccess) {
           _petPhotoPath = state.petPhotoPath;
         }
@@ -174,6 +184,16 @@ class _EditPetPageState extends State<EditPetPage> {
                         const SizedBox(
                           height: 20,
                         ),
+                        _petType == 'Other'
+                            ? Column(
+                                children: [
+                                  _buildInputOtherPetType(),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              )
+                            : Container(),
                         _buildInputPetGender(),
                         const SizedBox(
                           height: 20,
@@ -223,7 +243,6 @@ class _EditPetPageState extends State<EditPetPage> {
                                 });
                               },
                             ).show();
-
                           },
                           text: 'Update Pet',
                           isClicked: false,
@@ -444,7 +463,7 @@ class _EditPetPageState extends State<EditPetPage> {
       ),
       value: _petType,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: kTextTheme.subtitle1,
+      style: kTextTheme.headline3?.copyWith(color: kDarkBrown),
       validator: (value) {
         if (value == null) {
           return "Choice Pet Type";
@@ -512,6 +531,29 @@ class _EditPetPageState extends State<EditPetPage> {
         border: OutlineInputBorder(borderRadius: kBorderRadius),
       ),
       maxLines: 5,
+    );
+  }
+
+  _buildInputOtherPetType() {
+    return TextFormField(
+      controller: _petOtherTypeController,
+      decoration: InputDecoration(
+          fillColor: const Color(0xFF929292),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: kPrimaryColor, width: 1.0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          labelText: 'Other Pet Type'),
+      validator: (value) {
+        if (value!.isEmpty || !RegExp(r'^[a-z A-Z 0-9]+$').hasMatch(value)) {
+          return "Enter correct pet type";
+        } else {
+          return null;
+        }
+      },
     );
   }
 }

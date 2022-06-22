@@ -6,6 +6,8 @@ class PetEntity extends Equatable {
   final String? userId;
   final String? petName;
   final String? petType;
+  final String? petTypeText;
+
   final String? petPictureUrl;
   final String? gender;
   final String? petBreed;
@@ -18,6 +20,7 @@ class PetEntity extends Equatable {
     this.userId,
     required this.petName,
     required this.petType,
+    this.petTypeText,
     this.petPictureUrl,
     required this.gender,
     this.petBreed,
@@ -33,6 +36,7 @@ class PetEntity extends Equatable {
         gender,
         petType,
         petBreed,
+        petTypeText,
         dateOfBirth,
         certificateUrl,
         id,

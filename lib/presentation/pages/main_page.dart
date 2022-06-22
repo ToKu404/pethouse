@@ -1,3 +1,4 @@
+import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pethouse/presentation/pages/map_page.dart';
@@ -36,51 +37,41 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7F9),
-      body: BlocListener<InternetCheckCubit, InternetCheckState>(
-        listener: (context, state) {
+      backgroundColor: kWhite,
+      body: BlocBuilder<InternetCheckCubit, InternetCheckState>(
+        builder: ((context, state) {
           if (state is InternetCheckGain) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Internet connected!"),
-              backgroundColor: Colors.green,
-            ));
-          } else if (state is InternetCheckLost) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Internet disconnected!"),
-                backgroundColor: Colors.redAccent,
-              ),
+            return BlocBuilder<UserDbBloc, UserDbState>(
+              builder: (context, state) {
+                if (state is UserDbLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is SuccessGetData) {
+                  final List<Widget> screens = [
+                    HomePage(
+                      userEntity: state.user,
+                    ),
+                    const ServicePage(),
+                    PetMapPage(
+                      userEntity: state.user,
+                    ),
+                    const NotificationPage(),
+                    const PetrviaPage()
+                  ];
+                  return screens[currentTab];
+                } else {
+                  return const Center(
+                    child: Text('Error'),
+                  );
+                }
+              },
             );
+          } else {
+            return const NoInternetPage();
           }
-        },
-        child: BlocBuilder<UserDbBloc, UserDbState>(
-          builder: (context, state) {
-            if (state is UserDbLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is SuccessGetData) {
-              final List<Widget> screens = [
-                HomePage(
-                  userEntity: state.user,
-                ),
-                const ServicePage(),
-                PetMapPage(
-                  userEntity: state.user,
-                ),
-                const NotificationPage(),
-                const PetrviaPage()
-              ];
-              return screens[currentTab];
-            } else {
-              return const Center(
-                child: Text('Error'),
-              );
-            }
-          },
-        ),
+        }),
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const [

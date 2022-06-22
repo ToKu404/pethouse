@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
         listener: ((context, state) {
           if (state is Authenticated) {
             Navigator.of(context).pushNamedAndRemoveUntil(
-                "main-page", (route) => false,
+                MAIN_ROUTE_NAME, (route) => false,
                 arguments: state.uid);
           }
         }),

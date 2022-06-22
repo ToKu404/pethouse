@@ -2,7 +2,6 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:plan/domain/entities/plan_entity.dart';
 import 'package:plan/plan.dart';
 
 class EventCard extends StatefulWidget {
@@ -16,7 +15,6 @@ class EventCard extends StatefulWidget {
 class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
-    bool? isCheck = false;
     return Container(
       decoration: const BoxDecoration(
         border: Border(

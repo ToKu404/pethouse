@@ -44,27 +44,31 @@ class DetailPetriviaPage extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              CachedNetworkImage(
-                imageUrl: petriviaEntity.imgUrl!,
-                placeholder: (context, url) => ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: double.infinity,
-                    height: 200,
-                    color: kGrey,
-                    child: const Center(child: Icon(Icons.image)),
-                  ),
-                ),
-                imageBuilder: (context, imageProvider) => Container(
-                  width: double.infinity,
-                  height: 200,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.cover)),
-                ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
+              petriviaEntity.imgUrl == "" || petriviaEntity.imgUrl == null
+                  ? const NoImageCard(
+                      borderRadius: 10,
+                    )
+                  : CachedNetworkImage(
+                      imageUrl: petriviaEntity.imgUrl!,
+                      placeholder: (context, url) => ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: const LoadingImageCard(
+                          borderRadius: 10,
+                          
+                        ),
+                      ),
+                      imageBuilder: (context, imageProvider) => Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover)),
+                      ),
+                      errorWidget: (context, url, error) => const NoImageCard(
+                        height: 200,
+                        borderRadius: 10,
+                      ),
+                    ),
               const SizedBox(
                 height: 10,
               ),

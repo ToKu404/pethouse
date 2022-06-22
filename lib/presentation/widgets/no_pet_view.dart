@@ -1,5 +1,4 @@
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 
 class NoPetView extends StatelessWidget {

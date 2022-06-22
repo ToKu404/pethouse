@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:adopt/adopt.dart';
 import 'package:pet_map/pet_map.dart';
 import 'package:petrivia/petrivia.dart';
+import 'package:store/store.dart';
 import 'package:user/presentation/pages/profile_pages/about_page.dart';
 import 'package:user/user.dart';
 import 'package:task/task.dart';
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<UpdatePetBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetriviaBloc>()),
           BlocProvider(create: (_) => di.locator<PetmapCubit>()),
+          BlocProvider(create: (_) => di.locator<StoreScrappingCubit>()),
           BlocProvider(create: (_) => di.locator<GetAllPetMapBloc>()),
           BlocProvider(create: (_) => di.locator<HabbitCubit>()),
           BlocProvider(create: (_) => di.locator<GetPetMapBloc>()),

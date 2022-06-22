@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import '../../domain/entities/pet_entity.dart';
+
 class AddPetPage extends StatefulWidget {
   const AddPetPage({Key? key}) : super(key: key);
 
@@ -20,6 +21,8 @@ class AddPetPage extends StatefulWidget {
 class _AddPetPageState extends State<AddPetPage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController _petNameController = TextEditingController();
+  final TextEditingController _petOtherTypeController = TextEditingController();
+
   final TextEditingController _petBreedController = TextEditingController();
   final TextEditingController _petDateBirthController = TextEditingController();
   final TextEditingController _petDescriptionController =
@@ -36,6 +39,7 @@ class _AddPetPageState extends State<AddPetPage> {
   void dispose() {
     _petNameController.dispose();
     _petBreedController.dispose();
+    _petOtherTypeController.dispose();
     _petDescriptionController.dispose();
     _petDateBirthController.dispose();
     _petCertificateController.dispose();
@@ -57,6 +61,10 @@ class _AddPetPageState extends State<AddPetPage> {
       petGender = _petGender == Gender.female ? "Female" : "Male";
     }
     String petBreed = _petBreedController.text;
+    String petTypeText = petType;
+    if (_petType == 'Other') {
+      petTypeText = _petOtherTypeController.text;
+    }
 
     String petDescription = _petDescriptionController.text;
     PetEntity petEntity = PetEntity(
@@ -67,6 +75,7 @@ class _AddPetPageState extends State<AddPetPage> {
       certificateUrl: _petCertificatePath,
       petPictureUrl: _petPhotoPath,
       gender: petGender,
+      petTypeText: petTypeText,
       petDescription: petDescription,
     );
     context.read<AddPetBloc>().add(SubmitAddPetEvent(petEntity: petEntity));
@@ -95,9 +104,7 @@ class _AddPetPageState extends State<AddPetPage> {
         listener: (context, state) {
           if (state is AddPetError) {
             print(state.message);
-          } else if (state is AddPetSuccess) {
-
-          }
+          } else if (state is AddPetSuccess) {}
           if (state is AddPetPhotoSuccess) {
             _petPhotoPath = state.petPhotoPath;
           }
@@ -133,6 +140,16 @@ class _AddPetPageState extends State<AddPetPage> {
                       const SizedBox(
                         height: 20,
                       ),
+                      _petType == 'Other'
+                          ? Column(
+                              children: [
+                                _buildInputOtherPetType(),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            )
+                          : Container(),
                       _buildInputPetGender(),
                       const SizedBox(
                         height: 20,
@@ -230,10 +247,8 @@ class _AddPetPageState extends State<AddPetPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
-                    child: Text(
-                      kOpenAdoptAddPicture,
-                      style: kTextTheme.subtitle1
-                    ),
+                    child:
+                        Text(kOpenAdoptAddPicture, style: kTextTheme.subtitle1),
                   ),
                 ],
               ),
@@ -306,10 +321,7 @@ class _AddPetPageState extends State<AddPetPage> {
                 ),
               ),
               Expanded(
-                child: Text(
-                  name,
-                  style: kTextTheme.subtitle1?.copyWith(color: color)
-                ),
+                child: Text(name, style: kTextTheme.headline3),
               ),
             ],
           ),
@@ -324,7 +336,7 @@ class _AddPetPageState extends State<AddPetPage> {
   }
 
   Widget _buildInputDateOfBirth() {
-    final DateFormat _dateFormat = DateFormat.yMMMEd();
+    final DateFormat dateFormat = DateFormat.yMMMEd();
     return TextFormField(
       readOnly: true,
       controller: _petDateBirthController,
@@ -351,7 +363,7 @@ class _AddPetPageState extends State<AddPetPage> {
           }
           setState(() {
             _petDateOfBirth = Timestamp.fromDate(pickedDate);
-            _petDateBirthController.text = _dateFormat.format(pickedDate);
+            _petDateBirthController.text = dateFormat.format(pickedDate);
           });
         });
       },
@@ -381,7 +393,7 @@ class _AddPetPageState extends State<AddPetPage> {
       ),
       value: _petType,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: kTextTheme.subtitle1,
+      style: kTextTheme.headline3?.copyWith(color: kDarkBrown),
       validator: (value) {
         if (value == null) {
           return "Choice Pet Type";
@@ -449,6 +461,29 @@ class _AddPetPageState extends State<AddPetPage> {
         border: OutlineInputBorder(borderRadius: kBorderRadius),
       ),
       maxLines: 5,
+    );
+  }
+
+  _buildInputOtherPetType() {
+    return TextFormField(
+      controller: _petOtherTypeController,
+      decoration: InputDecoration(
+          fillColor: const Color(0xFF929292),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: kPrimaryColor, width: 1.0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          labelText: 'Other Pet Type'),
+      validator: (value) {
+        if (value!.isEmpty || !RegExp(r'^[a-z A-Z 0-9]+$').hasMatch(value)) {
+          return "Enter correct pet type";
+        } else {
+          return null;
+        }
+      },
     );
   }
 }

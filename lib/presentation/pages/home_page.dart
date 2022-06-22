@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                   return const Center(child: NoPetView());
                 }
               } else {
-                return const Text('Error');
+                return const Text('Error Schedule');
               }
             })),
           ),
@@ -198,22 +198,44 @@ class _HomePageState extends State<HomePage> {
                                       padding: const EdgeInsets.all(5),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color: kWhite,
-                                            shape: BoxShape.circle,
-                                            image: listPet[index]
-                                                            .petPictureUrl !=
-                                                        '' &&
-                                                    listPet[index]
-                                                            .petPictureUrl !=
-                                                        null
-                                                ? DecorationImage(
-                                                    image: NetworkImage(
-                                                        listPet[index]
-                                                            .petPictureUrl!),
-                                                    fit: BoxFit.cover)
-                                                : const DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/images/image_user.png'))),
+                                          color: kGrey,
+                                          shape: BoxShape.circle,
+                                          image: listPet[index].petPictureUrl !=
+                                                      '' &&
+                                                  listPet[index]
+                                                          .petPictureUrl !=
+                                                      null
+                                              ? DecorationImage(
+                                                  image: NetworkImage(
+                                                      listPet[index]
+                                                          .petPictureUrl!),
+                                                  fit: BoxFit.cover)
+                                              : null,
+                                        ),
+                                        child: Center(
+                                          child: listPet[index].petPictureUrl !=
+                                                      '' &&
+                                                  listPet[index]
+                                                          .petPictureUrl !=
+                                                      null
+                                              ? null
+                                              : Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.image,
+                                                      color: kGreyTransparant,
+                                                    ),
+                                                    Text('No Image',
+                                                        style: kTextTheme
+                                                            .caption
+                                                            ?.copyWith(
+                                                                color:
+                                                                    kGreyTransparant))
+                                                  ],
+                                                ),
+                                        ),
                                       ),
                                     ),
                                     index == activePage
@@ -334,14 +356,7 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 3,
-                      color: kGrey,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const Divider(),
                     _buildListTask(listPet[activePage]),
                   ],
                 ),
@@ -356,6 +371,9 @@ class _HomePageState extends State<HomePage> {
   _buildListTask(PetEntity pet) {
     return Column(
       children: [
+        const SizedBox(
+          height: 20,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
@@ -367,19 +385,15 @@ class _HomePageState extends State<HomePage> {
               InkWell(
                 onTap: () => Navigator.pushNamed(context, ALL_HABBIT_ROUTE_NAME,
                     arguments: pet),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: kWhite),
-                      child: const Icon(
-                        Icons.add,
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                  ],
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: kWhite),
+                  child: const Icon(
+                    Icons.add,
+                    color: kPrimaryColor,
+                  ),
                 ),
               ),
             ],

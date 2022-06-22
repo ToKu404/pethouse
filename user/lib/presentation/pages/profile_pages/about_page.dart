@@ -2,7 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:user/data/models/about.dart';
 import 'package:user/presentation/widgets/card_about_content.dart';
 
@@ -139,7 +139,7 @@ class AboutPage extends StatelessWidget {
 
 class HyperlinkText extends StatelessWidget {
   final String text;
-  HyperlinkText(this.text);
+  const HyperlinkText(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +149,7 @@ class HyperlinkText extends StatelessWidget {
             style: const TextStyle(
                 decoration: TextDecoration.underline, color: Colors.blue),
                 recognizer: TapGestureRecognizer()..onTap = (){
-                launch(text);
+                launchUrlString(text);
                 }
         ));
   }

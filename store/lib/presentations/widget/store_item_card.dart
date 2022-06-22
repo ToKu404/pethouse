@@ -50,12 +50,7 @@ class StoreItemCard extends StatelessWidget {
                 imageUrl: store.imgUrl,
                 placeholder: (context, url) => ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: double.infinity,
-                    height: 120,
-                    color: kGrey,
-                    child: const Center(child: Icon(Icons.image)),
-                  ),
+                  child: const LoadingImageCard(),
                 ),
                 imageBuilder: (context, imageProvider) => Container(
                   width: double.infinity,
@@ -65,7 +60,7 @@ class StoreItemCard extends StatelessWidget {
                       image: DecorationImage(
                           image: imageProvider, fit: BoxFit.cover)),
                 ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+                errorWidget: (context, url, error) => const NoImageCard(),
               ),
               const SizedBox(
                 height: 10,

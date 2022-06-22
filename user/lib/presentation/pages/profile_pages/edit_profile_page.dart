@@ -65,7 +65,7 @@ class _FormEditProfile extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   _ImageSection(

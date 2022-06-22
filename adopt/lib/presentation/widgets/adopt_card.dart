@@ -1,4 +1,5 @@
 import 'package:adopt/domain/entities/adopt_enitity.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,19 +35,22 @@ class AdoptCard extends StatelessWidget {
                   width: double.infinity,
                   child: adoptEntity.petPictureUrl != null &&
                           adoptEntity.petPictureUrl != ''
-                      ? Image.network(
-                          adoptEntity.petPictureUrl!,
-                          fit: BoxFit.cover,
-                        )
-                      : Container(
-                          color: kGrey,
-                          padding: const EdgeInsets.all(20),
-                          child: SvgPicture.asset(
-                            '${kPetTypeIcon[adoptEntity.petType?.toLowerCase()]}',
-                            color: kGreyTransparant,
-                            height: 80,
+                      ? CachedNetworkImage(
+                          imageUrl: adoptEntity.petPictureUrl!,
+                          placeholder: (context, url) =>
+                              const LoadingImageCard(),
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: double.infinity,
+                            height: 120,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover)),
                           ),
-                        ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        )
+                      : const NoImageCard(),
                 ),
               ),
               Positioned(
@@ -128,7 +132,8 @@ class AdoptCard extends StatelessWidget {
                                 color: const Color(0xFFFFEAD1),
                               ),
                               child: Text(
-                                getAge(),
+                                TextGeneratorHelper.dateToAge(
+                                    adoptEntity.dateOfBirth!.toDate()),
                                 style: kTextTheme.overline?.copyWith(
                                   fontSize: 11,
                                   color: kDarkBrown,
@@ -148,26 +153,5 @@ class AdoptCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String getAge() {
-    DateTime? born = adoptEntity.dateOfBirth?.toDate();
-    DateTime today = DateTime.now();
-    int yearDiff = today.year - (born?.year ?? 0);
-    int monthDiff = today.month - (born?.month ?? 0);
-    int dayDiff = today.day - (born?.day ?? 0);
-
-    String age = '';
-    if (yearDiff > 0) {
-      age += yearDiff.toString();
-      int percentMonth = (monthDiff / 12).round();
-      age += percentMonth > 0 ? '.$percentMonth' : '';
-      age += ' Year';
-    } else if (monthDiff > 0) {
-      age += '$monthDiff Month';
-    } else {
-      age += '$dayDiff Day';
-    }
-    return age;
   }
 }

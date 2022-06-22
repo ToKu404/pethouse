@@ -54,7 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
         BlocListener<AuthCubit, AuthState>(listener: ((context, state) {
           if (state is Authenticated) {
             Navigator.of(context).pushNamedAndRemoveUntil(
-                "main-page", (route) => false,
+                MAIN_ROUTE_NAME, (route) => false,
                 arguments: state.uid);
           }
         })),
@@ -140,7 +140,7 @@ class RegisterForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Already have Account?'),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 InkWell(

@@ -8,6 +8,7 @@ class AdoptModel extends AdoptEntity {
     final String? userId,
     final String? petName,
     final String? petType,
+    final String? petTypeText,
     final String? petPictureUrl,
     final String? gender,
     final String? petBreed,
@@ -26,6 +27,7 @@ class AdoptModel extends AdoptEntity {
             petType: petType,
             petPictureUrl: petPictureUrl,
             gender: gender,
+            petTypeText: petTypeText,
             petBreed: petBreed,
             dateOfBirth: dateOfBirth,
             certificateUrl: certificateUrl,
@@ -34,8 +36,7 @@ class AdoptModel extends AdoptEntity {
             status: status,
             adopterId: adopterId,
             adopterName: adopterName,
-            titleSearch: titleSearch
-            );
+            titleSearch: titleSearch);
 
   Map<String, dynamic> toDocument() {
     return {
@@ -43,6 +44,7 @@ class AdoptModel extends AdoptEntity {
       "user_id": userId,
       "pet_name": petName,
       "pet_type": petType,
+      "pet_type_text": petTypeText,
       "pet_picture_url": petPictureUrl,
       "gender": gender,
       "pet_breed": petBreed,
@@ -52,9 +54,8 @@ class AdoptModel extends AdoptEntity {
       "whatsapp_number": whatsappNumber,
       "status": status,
       "adopter_id": adopterId,
-      "adopter_name":adopterName,
+      "adopter_name": adopterName,
       "title_search": titleSearch,
-
     };
   }
 
@@ -64,6 +65,7 @@ class AdoptModel extends AdoptEntity {
       userId: documentSnapshot.get("user_id"),
       petName: documentSnapshot.get("pet_name"),
       petType: documentSnapshot.get("pet_type"),
+      petTypeText: documentSnapshot.get("pet_type_text"),
       petPictureUrl: documentSnapshot.get("pet_picture_url"),
       gender: documentSnapshot.get("gender"),
       petBreed: documentSnapshot.get("pet_breed"),
@@ -74,7 +76,8 @@ class AdoptModel extends AdoptEntity {
       status: documentSnapshot.get('status'),
       adopterId: documentSnapshot.get('adopter_id'),
       adopterName: documentSnapshot.get('adopter_name'),
-      titleSearch: List<String>.from(documentSnapshot["title_search"].map((x) => x)),
+      titleSearch:
+          List<String>.from(documentSnapshot["title_search"].map((x) => x)),
     );
   }
 
@@ -86,6 +89,7 @@ class AdoptModel extends AdoptEntity {
         petType,
         petPictureUrl,
         gender,
+        petTypeText,
         petBreed,
         dateOfBirth,
         certificateUrl,

@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,8 +19,7 @@ import '../widgets/card_medical_history.dart';
 class PetDescriptionPage extends StatefulWidget {
   final String petId;
 
-  const PetDescriptionPage({Key? key, required this.petId})
-      : super(key: key);
+  const PetDescriptionPage({Key? key, required this.petId}) : super(key: key);
 
   @override
   State<PetDescriptionPage> createState() => _PetDescriptionPageState();
@@ -89,7 +89,6 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
                     });
                   },
                 ).show();
-
               }
             },
             itemBuilder: (context) {
@@ -146,18 +145,26 @@ class _PetDescLayout extends StatelessWidget {
           height: 300,
           width: double.infinity,
           margin: const EdgeInsets.all(kPadding * 2),
-          decoration: BoxDecoration(
-            color: kGrey,
-            borderRadius: BorderRadius.circular(10),
-            image: pet.petPictureUrl != "" && pet.petPictureUrl != null
-                ? DecorationImage(
-                    image: NetworkImage(pet.petPictureUrl ?? ''),
-                    fit: BoxFit.cover)
-                : null,
-          ),
           child: pet.petPictureUrl == "" || pet.petPictureUrl == null
-              ? const Icon(Icons.image)
-              : null,
+              ? const NoImageCard(
+                  borderRadius: 10,
+                )
+              : CachedNetworkImage(
+                  imageUrl: pet.petPictureUrl!,
+                  placeholder: (context, url) => ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: const LoadingImageCard(
+                      borderRadius: 10,
+                    ),
+                  ),
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover)),
+                  ),
+                  errorWidget: (context, url, error) => const NoImageCard(),
+                ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -177,7 +184,7 @@ class _PetDescLayout extends StatelessWidget {
                           style: kTextTheme.headline4,
                         ),
                         Text(
-                          pet.petType ?? '-',
+                          pet.petTypeText ?? '-',
                           style: kTextTheme.bodyText2?.copyWith(
                               height: 1, fontSize: 14, color: kGreyTransparant),
                         ),

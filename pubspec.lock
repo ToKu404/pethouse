@@ -9,7 +9,7 @@ packages:
     source: path
     version: "0.0.1"
   android_alarm_manager_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: android_alarm_manager_plus
       url: "https://pub.dartlang.org"
@@ -141,13 +141,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-  colorful_iconify_flutter:
-    dependency: transitive
-    description:
-      name: colorful_iconify_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.2"
   connectivity_plus:
     dependency: transitive
     description:
@@ -378,7 +371,7 @@ packages:
     source: hosted
     version: "2.0.1"
   flutter_local_notifications:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
@@ -412,13 +405,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.6"
-  flutter_speed_dial:
-    dependency: "direct main"
-    description:
-      name: flutter_speed_dial
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.0.0"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -576,13 +562,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
-  iconify_flutter:
-    dependency: "direct main"
-    description:
-      name: iconify_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
   image_picker:
     dependency: transitive
     description:
@@ -989,6 +968,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  shimmer:
+    dependency: "direct main"
+    description:
+      name: shimmer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   simple_animations:
     dependency: transitive
     description:
@@ -1016,7 +1002,7 @@ packages:
     source: hosted
     version: "1.8.2"
   sqflite:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sqflite
       url: "https://pub.dartlang.org"
