@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:core/core.dart';
 import 'package:adopt/adopt.dart';
 import 'package:pet_map/pet_map.dart';
@@ -9,8 +7,6 @@ import 'package:user/user.dart';
 import 'package:task/task.dart';
 import 'package:pet/pet.dart';
 import 'package:plan/plan.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +22,7 @@ import 'presentation/pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
- 
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -88,13 +84,13 @@ class MyApp extends StatelessWidget {
             colorScheme: kColorScheme,
             timePickerTheme: kTimePickerTheme,
           ),
-          home: const SplashScreen(),
+          home: const SplashPage(),
           navigatorObservers: [routeObserver],
           onGenerateRoute: (RouteSettings settings) {
             switch (settings.name) {
               case SPLASH_ROUTE_NAME:
                 return MaterialPageRoute(
-                    builder: (context) => const SplashScreen());
+                    builder: (context) => const SplashPage());
               case REGISTER_ROUTE_NAME:
                 return MaterialPageRoute(
                     builder: (context) => const RegisterPage());

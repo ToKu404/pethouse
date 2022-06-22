@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:core/core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,8 @@ import 'package:user/presentation/widgets/card_about_content.dart';
 
 class AboutPage extends StatelessWidget {
   final DataAppModel dataAppModel = DataAppModel();
+
+  AboutPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

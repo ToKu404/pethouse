@@ -26,7 +26,7 @@ dependencies:
     path: plan
   notification:
     path: notification
-  adopt:  
+  adopt:
     path: adopt
   google_fonts: ^2.3.3
   flutter_svg: ^1.0.3
@@ -44,7 +44,7 @@ dependencies:
   charts_flutter: ^0.12.0
   sqflite: ^2.0.2+1
   get_it: ^7.1.3
-  flutter_bloc: ^8.0.1 
+  flutter_bloc: ^8.0.1
   url_launcher: ^6.1.3
   firebase_auth: ^3.3.19
   firebase_storage: ^10.2.17
@@ -72,5 +72,3 @@ flutter:
   assets:
     - assets/icons/
     - assets/vectors/
-
-  

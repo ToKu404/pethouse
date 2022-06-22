@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     BlocProvider.of<GetSchedulePetBloc>(context).add(FetchListSchedulePet());
-
   }
 
   @override
@@ -337,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       width: double.infinity,
-                      height: 10,
+                      height: 3,
                       color: kGrey,
                     ),
                     const SizedBox(
@@ -469,7 +468,6 @@ class __BuildScheduleState extends State<_BuildSchedule> {
     return tasks.where((e) => e.completeStatus!).toList().length;
   }
 }
-
 
 class _BuildHomeCalendar extends StatefulWidget {
   final String petId;
