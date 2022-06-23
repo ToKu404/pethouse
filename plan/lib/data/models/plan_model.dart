@@ -11,6 +11,7 @@ class PlanModel extends PlanEntity {
     final String? date,
     final Timestamp? time,
     final bool? reminder,
+    final int? notifId,
     final String? location,
     final String? description,
     final bool? completeStatus,
@@ -21,6 +22,7 @@ class PlanModel extends PlanEntity {
             activityTitle: activityTitle,
             date: date,
             time: time,
+            notifId: notifId,
             reminder: reminder,
             location: location,
             completeStatus: completeStatus,
@@ -30,6 +32,7 @@ class PlanModel extends PlanEntity {
     return {
       "id": id,
       "pet_id": petId,
+      "notif_id": notifId,
       "activity": activity,
       "activity_title": activityTitle,
       "date": date,
@@ -45,6 +48,7 @@ class PlanModel extends PlanEntity {
     return PlanModel(
         id: documentSnapshot.get('id'),
         petId: documentSnapshot.get('pet_id'),
+        notifId: documentSnapshot.get('notif_id'),
         activity: documentSnapshot.get('activity'),
         activityTitle: documentSnapshot.get('activity_title'),
         date: documentSnapshot.get('date'),
@@ -56,5 +60,5 @@ class PlanModel extends PlanEntity {
   }
   @override
   List<Object?> get props =>
-      [activity, location, time, activityTitle, date, description, reminder, completeStatus];
+      [activity, location, time, activityTitle, date, notifId, description, reminder, completeStatus];
 }

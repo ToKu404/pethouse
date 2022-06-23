@@ -1,4 +1,6 @@
-// ignore: depend_on_referenced_packages
+
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:core/core.dart';
 import 'package:path/path.dart';
 import 'package:adopt/domain/usecases/update_adopt_usecase.dart';

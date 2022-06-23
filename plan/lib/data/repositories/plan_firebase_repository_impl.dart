@@ -27,4 +27,9 @@ class PlanRepositoryImpl implements PlanRepository {
   Stream<List<PlanEntity>> getHistoryPlan(String petId) {
     return planDataSource.getHistoryPlan(petId);
   }
+
+  @override
+  Future<List<int>> getPlanNotifId(String petId) {
+    return planDataSource.getPlanNotifId(petId);
+  }
 }

@@ -10,11 +10,11 @@ class TextGeneratorHelper {
   );
 
   static String dateToAge(DateTime date) {
-    DateTime? born = date;
+    DateTime born = date;
     DateTime today = DateTime.now();
-    int yearDiff = today.year - (born.year ?? 0);
-    int monthDiff = today.month - (born.month ?? 0);
-    int dayDiff = today.day - (born.day ?? 0);
+    int yearDiff = today.year - (born.year);
+    int monthDiff = today.month - (born.month);
+    int dayDiff = today.day - (born.day);
 
     String age = '';
     if (yearDiff > 0) {

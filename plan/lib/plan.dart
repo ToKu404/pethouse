@@ -11,6 +11,8 @@ export 'package:plan/presentation/blocs/plan_calendar_bloc/plan_calendar_bloc.da
 export 'package:plan/domain/usecases/add_plan_usecase.dart';
 export 'package:plan/domain/usecases/get_plan_history_usecase.dart';
 export 'package:plan/domain/usecases/get_plan_usecase.dart';
+export 'package:plan/domain/usecases/get_plan_notif_id_usecase.dart';
+
 export 'package:plan/domain/usecases/change_plan_status_usecase.dart';
 
 export 'package:plan/domain/repositories/plan_repository.dart';

@@ -1,5 +1,6 @@
 import 'package:adopt/adopt.dart';
 import 'package:core/core.dart';
+import 'package:core/services/notification_helper.dart';
 import 'package:store/store.dart';
 import 'package:user/user.dart';
 import 'package:task/task.dart';
@@ -17,7 +18,6 @@ import 'package:get_it/get_it.dart';
 final locator = GetIt.instance;
 
 void init() {
-
   // repositoriy
   locator.registerLazySingleton<UserRepository>(
       () => UserRepositoryImpl(firebaseDataSource: locator()));
@@ -150,6 +150,8 @@ void init() {
   locator.registerLazySingleton(() => GetAllHabbitsUsecase(locator()));
   locator.registerLazySingleton(() => GetOneReadTaskUsecase(locator()));
   locator.registerLazySingleton(() => TransferTaskUsecase(locator()));
+  locator.registerLazySingleton(() => GetPlanNotifIdUsecase(locator()));
+
   locator.registerLazySingleton(() => ChangePlanStatusUsecase(locator()));
   locator
       .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
@@ -208,8 +210,8 @@ void init() {
       uploadPetPhoto: locator()));
   locator.registerFactory(() => NotificationBloc(
       getListNotificationUsecase: locator(), preferenceHelper: locator()));
-  locator
-      .registerFactory(() => OpenAdoptStatusBloc(getOpenAdoptList: locator()));
+  locator.registerFactory(() => OpenAdoptStatusBloc(
+      getOpenAdoptList: locator(), preferenceHelper: locator()));
   locator
       .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
   locator.registerFactory(() => TaskBloc(
@@ -238,8 +240,12 @@ void init() {
       checkPetMapUsecase: locator(),
       updatePetMapUsecase: locator()));
   locator.registerFactory(() => GetPetMapBloc(getPetMapUsecase: locator()));
-  locator.registerFactory(() => AddPlanCubit(addPlanUsecase: locator()));
+  locator.registerFactory(() => AddPlanCubit(
+      addPlanUsecase: locator(), getPlanNotifIdUsecase: locator()));
   locator.registerFactory(() => StoreScrappingCubit());
+  locator.registerFactory(
+      () => SettingNotificationCubit(notificationHelper: locator()));
+
   locator.registerFactory(() => InternetCheckCubit());
   locator.registerFactory(() => PlanCalendarBloc(getPlanUsecase: locator()));
   locator.registerFactory(() => GetHabbitBloc(getHabbitUsecase: locator()));
@@ -255,4 +261,5 @@ void init() {
   locator.registerLazySingleton(() => firestore);
   locator.registerLazySingleton(() => storage);
   locator.registerLazySingleton<PreferenceHelper>(() => PreferenceHelper());
+  locator.registerLazySingleton<NotificationHelper>(() => NotificationHelper());
 }

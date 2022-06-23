@@ -8,14 +8,20 @@ abstract class AddPlanState extends Equatable {
 
 class AddPlanInitial extends AddPlanState {}
 
-class AddPlanLoading extends AddPlanState{}
+class AddPlanLoading extends AddPlanState {}
 
-class AddPlanError extends AddPlanState{
+class AddPlanError extends AddPlanState {
   final String message;
   const AddPlanError(this.message);
 
   @override
-  List<Object> get props =>[message];
+  List<Object> get props => [message];
 }
 
-class AddPlanSucces extends AddPlanState{}
+class AddPlanSucces extends AddPlanState {
+  final PlanEntity planEntity;
+    const AddPlanSucces(this.planEntity);
+
+  @override
+  List<Object> get props => [planEntity];
+}

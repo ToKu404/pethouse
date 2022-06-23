@@ -44,8 +44,9 @@ class _AddPlanPageState extends State<AddPlanPage> {
   String? _groomingType;
 
   void _onAddPlanSubmit() {
-    final planTime = Timestamp.fromDate(DateTime(_planDate!.year,
-        _planDate!.month, _planDate!.day, _planTime.hour, _planTime.minute));
+    final planDateTime = DateTime(_planDate!.year, _planDate!.month,
+        _planDate!.day, _planTime.hour, _planTime.minute);
+    final planTime = Timestamp.fromDate(planDateTime);
     String activity = _selectActivity ?? '';
     if (_selectActivity == 'Other') {
       activity = _otherActivityController.text;
@@ -62,6 +63,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         location: _locationController.text,
         description: _descriptionController.text,
         reminder: _statusReminder);
+
     BlocProvider.of<AddPlanCubit>(context).addPlan(newPlan);
   }
 
@@ -77,158 +79,166 @@ class _AddPlanPageState extends State<AddPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
+    return BlocListener<AddPlanCubit, AddPlanState>(
+      listener: (context, state) {
+        if (state is AddPlanSucces) {
+          if (_statusReminder) {
+            final planDateTime = DateTime(_planDate!.year, _planDate!.month,
+                _planDate!.day, _planTime.hour, _planTime.minute);
+            BlocProvider.of<SettingNotificationCubit>(context).initNotification(
+                date: DateTime.parse("$planDateTime"),
+                notifId: state.planEntity.notifId!,
+                eventName: state.planEntity.activityTitle!,
+                eventDesc: state.planEntity.description!);
+          }
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 1,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(FontAwesomeIcons.arrowLeft),
+            color: kPrimaryColor,
+          ),
+          backgroundColor: Colors.white,
+          title: Text(
+            'Add Plan',
+            style: kTextTheme.headline5,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Add Plan',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '${widget.petEntity.petName}',
-                              textAlign: TextAlign.center,
-                              style: kTextTheme.headline6,
+        body: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${widget.petEntity.petName}',
+                                textAlign: TextAlign.center,
+                                style: kTextTheme.headline6,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: kSecondaryColor,
-                            width: 1.8,
-                          ),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              '${widget.petEntity.petPictureUrl}',
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: kSecondaryColor,
+                              width: 1.8,
                             ),
-                            fit: BoxFit.cover,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                '${widget.petEntity.petPictureUrl}',
+                              ),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      _selectActivityBuild(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _selectActivity == 'Other'
-                          ? Column(
-                              children: [
-                                _buildOtherActivity(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            )
-                          : Container(),
-                      _selectActivity == 'Grooming'
-                          ? Column(
-                              children: [
-                                _buildTypeGrooming(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            )
-                          : Container(),
-                      _buildInputDate(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputTime(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputLocation(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _buildInputDescription(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      _buildInputReminder(),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
+                      ],
                     ),
-                    child: GradientButton(
-                      height: 50,
-                      width: double.infinity,
-                      onTap: () {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.INFO,
-                          animType: AnimType.BOTTOMSLIDE,
-                          title: 'Apakah Anda Sudah Yakin?',
-                          btnCancelOnPress: () {},
-                          btnOkOnPress: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const LoadingView();
-                              },
-                            );
-                            Future.delayed(const Duration(seconds: 1), () {
-                              if (!_formKey.currentState!.validate()) {
-                                Navigator.pop(context);
-                                return;
-                              } else {
-                                _onAddPlanSubmit();
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              }
-                            });
-                          },
-                        ).show();
-                      },
-                      text: 'Save Plan Activity',
-                      isClicked: false,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        _selectActivityBuild(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _selectActivity == 'Other'
+                            ? Column(
+                                children: [
+                                  _buildOtherActivity(),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              )
+                            : Container(),
+                        _selectActivity == 'Grooming'
+                            ? Column(
+                                children: [
+                                  _buildTypeGrooming(),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              )
+                            : Container(),
+                        _buildInputDate(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputTime(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputLocation(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildInputDescription(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildInputReminder(),
+                      ],
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                      ),
+                      child: GradientButton(
+                        height: 50,
+                        width: double.infinity,
+                        onTap: () {
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.QUESTION,
+                            animType: AnimType.BOTTOMSLIDE,
+                            title: 'Apakah Anda Sudah Yakin?',
+                            btnCancelOnPress: () {},
+                            btnOkOnPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const LoadingView();
+                                },
+                              );
+                              _onAddPlanSubmit();
+                            },
+                          ).show();
+                        },
+                        text: 'Save Plan Activity',
+                        isClicked: false,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

@@ -46,6 +46,11 @@ class PreferenceHelper {
     return userId!;
   }
 
+  Future<bool> removeUserId() async {
+    final pr = await preferences;
+    return pr!.remove(userIdKey);
+  }
+
   Future<UserEntity> getUserData() async {
     final pr = await preferences;
     String? user = pr!.getString(userDataKey);
@@ -55,11 +60,6 @@ class PreferenceHelper {
       return userEntity;
     }
     return const UserEntity(name: '', email: '');
-  }
-
-  Future<bool> removeUserId() async {
-    final pr = await preferences;
-    return pr!.remove(userIdKey);
   }
 
   Future<bool> removeUserData() async {

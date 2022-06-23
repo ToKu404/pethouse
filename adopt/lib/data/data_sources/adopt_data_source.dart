@@ -21,7 +21,6 @@ abstract class AdoptDataSource {
   Stream<List<AdoptEntity>> getOpenAdoptList(String userId);
   Future<void> requestAdopt(AdoptEntity adoptd);
   Future<void> removeOpenAdopt(String adoptId);
-  Stream<List<AdoptEntity>> getRequestAdoptList(String userId);
   Stream<List<AdoptEntity>> searchPetAdopt(String query);
 }
 
@@ -35,6 +34,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
       required this.firebaseStorage,
       required this.preferenceHelper});
 
+  // Create new adopt data on firestore
   @override
   Future<void> createNewAdopt(AdoptEntity adoptEntity) async {
     final adoptCollectionRef = firebaseFirestore.collection("pet_adopts");
@@ -59,6 +59,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
         adopterName: adoptEntity.adopterName,
         titleSearch: adoptEntity.titleSearch,
       ).toDocument();
+      //check if value is not exist then set new value
       if (!value.exists) {
         adoptCollectionRef.doc(adoptId).set(newAdopt);
       }
@@ -66,6 +67,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     });
   }
 
+  // Upload image to firebase storage then get download url
   @override
   Future<String> uploadPetAdoptPhoto(
       String? petPhotoUrl, String oldPhotoUrl) async {
@@ -86,11 +88,13 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     }
   }
 
+  //get user id
   @override
   Future<String> getUserIdLocal() async {
     return await preferenceHelper.getUserId();
   }
 
+  // upload certificate file to firebase storage then get download url
   @override
   Future<String> uploadPetCertificate(
       String petCertificatePath, String oldPath) async {
@@ -101,6 +105,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
         await certRef.delete();
       }
       String filename = basename(petCertificatePath);
+      //generate unique file name for certificate name
       const uuid = Uuid();
       final ext = filename.split('.');
       filename = uuid.v1() + ext[1];
@@ -113,6 +118,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     }
   }
 
+  //get all pet adopt data from firestore when status is open
   @override
   Stream<List<AdoptEntity>> getAllPetLists() {
     final petCollectionRef = firebaseFirestore
@@ -125,6 +131,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     });
   }
 
+  //get user open adopt data
   @override
   Stream<List<AdoptEntity>> getOpenAdoptList(String userId) {
     final petCollectionRef = firebaseFirestore
@@ -137,6 +144,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     });
   }
 
+  //get pet adopt description
   @override
   Stream<AdoptEntity> getPetDescription(String petId) {
     final petCollectionRef =
@@ -146,14 +154,15 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     });
   }
 
+  //update adopt data
   @override
   Future<void> updateAdopt(AdoptEntity adoptEntity) async {
+    //check adopt data has been change
     Map<String, dynamic> adoptMap = {};
     onUpdate('pet_picture_url', adoptEntity.petPictureUrl, adoptMap);
     onUpdate('pet_name', adoptEntity.petName, adoptMap);
     onUpdate('pet_type', adoptEntity.petType, adoptMap);
-    onUpdate('pet_type_text', adoptEntity.petTypeText, adoptMap);
-
+    onUpdate('pet_type_text', adoptEntity.petTypeText, adoptMap); 
     onUpdate('gender', adoptEntity.gender, adoptMap);
     onUpdate('pet_breed', adoptEntity.petBreed, adoptMap);
     onUpdate('date_of_birth', adoptEntity.dateOfBirth, adoptMap);
@@ -176,6 +185,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     }
   }
 
+  // send request adopt from adopter to pet owner
   @override
   Future<void> requestAdopt(AdoptEntity adopt) async {
     Map<String, dynamic> adoptMap = {};
@@ -186,23 +196,14 @@ class AdoptDataSourceImpl implements AdoptDataSource {
         adoptMap); // await firebaseFirestore.collection('notifications').doc(adopt.userId)
   }
 
+  // remove open adopt data from firestore
   @override
   Future<void> removeOpenAdopt(String adoptId) async {
     await firebaseFirestore.collection('pet_adopts').doc(adoptId).delete();
   }
 
-  @override
-  Stream<List<AdoptEntity>> getRequestAdoptList(String adopterId) {
-    final petCollectionRef = firebaseFirestore
-        .collection("pet_adopts")
-        .where('user_id', isEqualTo: adopterId);
-    return petCollectionRef.snapshots().map((querySnap) {
-      return querySnap.docs
-          .map((docSnap) => AdoptModel.fromSnapshot(docSnap))
-          .toList();
-    });
-  }
 
+  //seatch pet adopt  
   @override
   Stream<List<AdoptEntity>> searchPetAdopt(String query) {
     final collectionReference = firebaseFirestore

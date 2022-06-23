@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:adopt/domain/usecases/request_adopt_usecase.dart';
 import 'package:core/services/preference_helper.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:user/user.dart';
-
 import '../../../domain/entities/adopt_enitity.dart';
 import '../../../domain/usecases/get_pet_description_usecase.dart';
 import '../../../domain/usecases/get_user_id_local_usecase.dart';

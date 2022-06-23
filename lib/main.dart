@@ -3,7 +3,6 @@ import 'package:adopt/adopt.dart';
 import 'package:pet_map/pet_map.dart';
 import 'package:petrivia/petrivia.dart';
 import 'package:store/store.dart';
-import 'package:user/presentation/pages/profile_pages/about_page.dart';
 import 'package:user/user.dart';
 import 'package:task/task.dart';
 import 'package:pet/pet.dart';
@@ -15,7 +14,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petrivia/presentation/pages/detail_petrivia_page.dart';
 import 'package:notification/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
-
 import 'firebase_options.dart';
 import 'injection.dart' as di;
 import 'presentation/pages/main_page.dart';
@@ -23,7 +21,6 @@ import 'presentation/pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -60,6 +57,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<EditAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<NotificationBloc>()),
           BlocProvider(create: (_) => di.locator<OpenAdoptStatusBloc>()),
+          BlocProvider(create: (_) => di.locator<SettingNotificationCubit>()),
           BlocProvider(create: (_) => di.locator<SendNotifBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetBloc>()),
           BlocProvider(create: (_) => di.locator<GetSchedulePetBloc>()),

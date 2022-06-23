@@ -237,7 +237,6 @@ class _NotificationCardState extends State<NotificationCard> {
               activeColor: kPrimaryColor,
               value: statusSwitch,
               onChanged: (value) {
-                print(value);
                 setState(() => statusSwitch = !statusSwitch);
               }),
           onTap: () {},

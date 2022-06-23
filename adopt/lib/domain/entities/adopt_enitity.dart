@@ -7,7 +7,6 @@ class AdoptEntity extends Equatable {
   final String? petName;
   final String? petType;
   final String? petTypeText;
-
   final String? petPictureUrl;
   final String? gender;
   final String? petBreed;
