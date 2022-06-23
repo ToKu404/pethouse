@@ -1,4 +1,6 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core/core.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -170,8 +172,26 @@ class _BuildProfile extends StatelessWidget {
                 ),
                 leadingAction:
                     const Icon(Icons.exit_to_app, color: kPrimaryColor),
-                onTap: () async {
-                  context.read<AuthCubit>().loggedOut();
+                onTap: ()  {
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.QUESTION,
+                    animType: AnimType.SCALE,
+                    title: 'Apakah Anda Ingin Keluar Pethouse?',
+                    btnCancelOnPress: () {},
+                    btnOkOnPress: () async {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const LoadingView();
+                        },
+                      );
+                      Future.delayed(const Duration(seconds: 1), () async {
+                        context.read<AuthCubit>().loggedOut();
+                        Navigator.pop(context);
+                      });
+                    },
+                  ).show();
                 })
           ],
         ),
