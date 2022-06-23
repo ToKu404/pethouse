@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import '../blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
 
@@ -142,20 +141,8 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Edit Adopt',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      appBar: const DefaultAppBar(
+        title: 'Edit Adopt',
       ),
       body: SafeArea(
           child: BlocConsumer<EditAdoptBloc, EditAdoptState>(

@@ -32,21 +32,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Event Calendar',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
+      appBar: const DefaultAppBar(title: 'Event Calendar'),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

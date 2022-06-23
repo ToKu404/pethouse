@@ -10,7 +10,6 @@ import 'package:core/core.dart';
 import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class OpenAdoptPage extends StatefulWidget {
@@ -101,21 +100,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Open Adopt',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
+      appBar: const DefaultAppBar(title: 'Open Adopt',),
       body: SafeArea(
           child: BlocConsumer<OpenAdoptBloc, OpenAdoptState>(
         listener: (context, state) {

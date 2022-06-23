@@ -5,26 +5,32 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 part 'internet_check_state.dart';
 
 class InternetCheckCubit extends Cubit<InternetCheckState> {
-  final Connectivity _connectivity = Connectivity();
   StreamSubscription? connectivitySubscription;
-  InternetCheckCubit() : super(InternetCheckInitial()) {
+  InternetCheckCubit() : super(InternetCheckInitial());
+
+  Future<void> onCheckConnectionRealtime() async {
+    final Connectivity connectivity = Connectivity();
     connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen((event) {
+        connectivity.onConnectivityChanged.listen((event) {
       if (event == ConnectivityResult.mobile ||
           event == ConnectivityResult.wifi) {
-        onInternetGainedEvent();
+        emit(RealtimeCheckGain());
       } else {
-        onInternetLostEvent();
+        emit(RealtimeCheckLost());
       }
     });
   }
 
-  Future<void> onInternetLostEvent() async {
-    emit(InternetCheckLost());
-  }
-
-  Future<void> onInternetGainedEvent() async {
-    emit(InternetCheckGain());
+  Future<void> onCheckConnectionOnetime() async {
+    final Connectivity connectivity = Connectivity();
+    emit(InternetCheckLoading());
+    var result = await connectivity.checkConnectivity();
+    if (result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi) {
+      emit(OnetimeCheckGain());
+    } else {
+      emit(OnetimeCheckLost());
+    }
   }
 
   @override

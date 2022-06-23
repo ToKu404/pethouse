@@ -19,7 +19,7 @@ const double kPadding = 10.0;
 final TextTheme kTextTheme = TextTheme(
   headline1: GoogleFonts.poppins(fontSize: 42, fontWeight: FontWeight.w800),
   headline2: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.w600),
-  headline3: GoogleFonts.poppins(fontSize: 14),
+  headline3: GoogleFonts.poppins(fontSize: 14, color: kDarkBrown),
   headline4: GoogleFonts.poppins(
       fontSize: 21, fontWeight: FontWeight.w700, color: kDarkBrown),
   headline5: GoogleFonts.poppins(

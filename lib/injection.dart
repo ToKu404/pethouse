@@ -250,6 +250,7 @@ void init() {
 
   locator.registerFactory(() => InternetCheckCubit());
   locator.registerFactory(() => PlanCalendarBloc(getPlanUsecase: locator()));
+
   locator.registerFactory(() => GetHabbitBloc(getHabbitUsecase: locator()));
   locator.registerFactory(() => HabbitCubit(
       insertHabbitUsecase: locator(), removeHabbitUsecase: locator()));

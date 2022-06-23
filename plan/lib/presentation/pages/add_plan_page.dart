@@ -89,21 +89,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 1,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(FontAwesomeIcons.arrowLeft),
-            color: kPrimaryColor,
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            'Add Plan',
-            style: kTextTheme.headline5,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
+        appBar: const DefaultAppBar(title: 'Add Plan',),
         body: SafeArea(
           child: Form(
             key: _formKey,

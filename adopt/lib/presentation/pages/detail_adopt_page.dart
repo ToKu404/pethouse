@@ -4,10 +4,10 @@ import 'package:adopt/presentation/widgets/custom_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
+import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notification/notification.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -23,6 +23,7 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<InternetCheckCubit>(context).onCheckConnectionOnetime();
     BlocProvider.of<DetailAdoptBloc>(context)
         .add(FetchPetDescription(petId: widget.petAdoptId));
   }
@@ -30,46 +31,46 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 1,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(FontAwesomeIcons.arrowLeft),
-            color: kPrimaryColor,
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            'Detail Pet',
-            style: kTextTheme.headline5,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+        appBar: const DefaultAppBar(
+          title: 'Detail Pet',
         ),
         body: SafeArea(
-          child: BlocConsumer<DetailAdoptBloc, DetailAdoptState>(
-              listener: (context, state) {
-            if (state is SuccessRequestAdopt) {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            }
-          }, builder: (context, state) {
-            if (state is DetailAdoptLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is PetDescriptionLoaded) {
-              return _BuildDetailAdopt(
-                adoptEntity: state.adoptEntity,
-                isOwner: state.isOwner,
-              );
-            } else if (state is DetailAdoptError) {
-              return Center(
-                child: Text(state.message),
-              );
-            } else {
-              return const Center();
-            }
-          }),
+          child: BlocBuilder<InternetCheckCubit, InternetCheckState>(
+            builder: (context, state) {
+              if (state is InternetCheckLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is OnetimeCheckGain) {
+                return BlocConsumer<DetailAdoptBloc, DetailAdoptState>(
+                    listener: (context, state) {
+                  if (state is SuccessRequestAdopt) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                }, builder: (context, state) {
+                  if (state is DetailAdoptLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state is PetDescriptionLoaded) {
+                    return _BuildDetailAdopt(
+                      adoptEntity: state.adoptEntity,
+                      isOwner: state.isOwner,
+                    );
+                  } else if (state is DetailAdoptError) {
+                    return Center(
+                      child: Text(state.message),
+                    );
+                  } else {
+                    return const Center();
+                  }
+                });
+              } else {
+                return const NoInternetPage();
+              }
+            },
+          ),
         ));
   }
 }

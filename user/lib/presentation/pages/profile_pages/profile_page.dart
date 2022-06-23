@@ -3,7 +3,6 @@ import 'package:core/core.dart';
 import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth_cubit/auth_cubit.dart';
 import '../../blocs/user_db_bloc/user_db_bloc.dart';
@@ -20,20 +19,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Profile',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      appBar: const DefaultAppBar(
+        title: 'Profile',
       ),
       body: SafeArea(
         child: MultiBlocListener(listeners: [
@@ -172,7 +159,7 @@ class _BuildProfile extends StatelessWidget {
                 ),
                 leadingAction:
                     const Icon(Icons.exit_to_app, color: kPrimaryColor),
-                onTap: ()  {
+                onTap: () {
                   AwesomeDialog(
                     context: context,
                     dialogType: DialogType.QUESTION,

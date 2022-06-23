@@ -13,10 +13,7 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('About'),
-        centerTitle: true,
-      ),
+      appBar: const DefaultAppBar(title: 'About',),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),

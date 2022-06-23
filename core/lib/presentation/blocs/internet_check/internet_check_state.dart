@@ -4,6 +4,12 @@ abstract class InternetCheckState {}
 
 class InternetCheckInitial extends InternetCheckState {}
 
-class InternetCheckLost extends InternetCheckState {}
+class InternetCheckLoading extends InternetCheckState {}
 
-class InternetCheckGain extends InternetCheckState {}
+class OnetimeCheckLost extends InternetCheckState {}
+
+class OnetimeCheckGain extends InternetCheckState {}
+
+class RealtimeCheckLost extends InternetCheckState {}
+
+class RealtimeCheckGain extends InternetCheckState {}

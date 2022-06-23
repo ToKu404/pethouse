@@ -3,8 +3,6 @@ import 'package:adopt/presentation/widgets/pet_adopt_owner_card.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../../domain/entities/adopt_enitity.dart';
 
 class ActivityStatusPage extends StatefulWidget {
@@ -27,21 +25,7 @@ class _EditProfilePageState extends State<ActivityStatusPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF7F9),
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Activity Status',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
+      appBar: const DefaultAppBar(title: 'Activity Status',),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(kPadding),

@@ -25,20 +25,8 @@ class _AllHabbitPageState extends State<AllHabbitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          '${widget.petEntity.petName} Tasks',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      appBar: DefaultAppBar(
+        title: '${widget.petEntity.petName} Tasks',
       ),
       body: SafeArea(
         child: Padding(

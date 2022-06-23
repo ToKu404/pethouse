@@ -1,19 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:intl/intl.dart';
 import 'package:task/domain/entities/habbit_entity.dart';
 import 'package:task/presentation/blocs/habbit_cubit/habbit_cubit.dart';
-import 'package:timezone/data/latest.dart' as tzl;
-import 'package:timezone/timezone.dart' as tz;
-import '../../domain/entities/task_entity.dart';
 
 class AddHabbitPage extends StatefulWidget {
   final PetEntity petEntity;
@@ -50,7 +45,6 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
   void initState() {
     super.initState();
     repeatDay.clear();
-    tzl.initializeTimeZones();
   }
 
   @override
@@ -90,16 +84,6 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
         dayRepeat: repeat);
 
     BlocProvider.of<HabbitCubit>(context).onAddHabbit(habbit);
-
-    // BlocProvider.of<ScheduleTaskBloc>(context).add(GetScheduleTaskEvent(
-    //   value: true,
-    //   date: myTime,
-    // ));
-    // // tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, date.year, date.month,
-    // //     date.day, _startTime.hour, _startTime.minute);
-    // // NotificationService().showNotification(
-    // //     1, _taskType!, _descriptionController.text, scheduledDate);
-    // context.read<TaskBloc>().add(CreateTask(taskEntity: taskEntity));
   }
 
   @override
@@ -111,21 +95,7 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 1,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(FontAwesomeIcons.arrowLeft),
-            color: kPrimaryColor,
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            '${widget.petEntity.petName} Habbit',
-            style: kTextTheme.headline5,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
+        appBar: DefaultAppBar(title: '${widget.petEntity.petName} Habbit',),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -235,10 +205,7 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
       ),
       value: _habbitType,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: kDarkBrown,
-        fontSize: 16,
-      ),
+      style: kTextTheme.headline3,
       validator: (value) {
         if (value == null) {
           return "Choice Habbit Type";
@@ -347,10 +314,7 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
       ),
       value: _habbitRepeat,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: kDarkBrown,
-        fontSize: 16,
-      ),
+      style: kTextTheme.headline3,
       validator: (value) {
         if (value == null) {
           return "Task Repeat";

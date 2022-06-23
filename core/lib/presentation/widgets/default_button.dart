@@ -23,13 +23,7 @@ class GradientButton extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: isClicked ? Colors.blueGrey : null,
-        gradient: isClicked
-            ? null
-            : const LinearGradient(
-                colors: [kSecondaryColor, kPrimaryColor],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter),
+        color: isClicked ? Colors.blueGrey : kPrimaryColor,
         borderRadius: kBorderRadius,
       ),
       child: MaterialButton(
@@ -38,7 +32,7 @@ class GradientButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: kBorderRadius,
         ),
-        child: Text('${text}',
+        child: Text(text,
             style: kTextTheme.subtitle1?.copyWith(color: kWhite)),
       ),
     );
