@@ -8,7 +8,7 @@ abstract class PlanDataSource {
   Stream<List<PlanEntity>> getPetPlan(String petId, DateTime date);
   Stream<List<PlanEntity>> getHistoryPlan(String petId);
   Future<void> changePlanStatus(String planId);
-  Future<List<int>> getPlanNotifId(String petId);
+  Future<List<int>> getPlanNotifId(String petId, DateTime date);
 }
 
 class PlanDataSourceImpl implements PlanDataSource {
@@ -81,11 +81,11 @@ class PlanDataSourceImpl implements PlanDataSource {
   }
 
   @override
-  Future<List<int>> getPlanNotifId(String petId) {
+  Future<List<int>> getPlanNotifId(String petId, DateTime date) {
     final petCollection = firebaseFireStore
         .collection('plans')
         .where('pet_id', isEqualTo: petId)
-        .where('time', isGreaterThanOrEqualTo: DateTime.now());
+        .where('time', isGreaterThanOrEqualTo: date);
     return petCollection.get().then((value) {
        return value.docs
           .map((docSnap) => PlanModel.fromSnapshot(docSnap).notifId!)

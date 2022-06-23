@@ -18,10 +18,4 @@ class AddPlanError extends AddPlanState {
   List<Object> get props => [message];
 }
 
-class AddPlanSucces extends AddPlanState {
-  final PlanEntity planEntity;
-    const AddPlanSucces(this.planEntity);
-
-  @override
-  List<Object> get props => [planEntity];
-}
+class AddPlanSucces extends AddPlanState {}

@@ -241,7 +241,9 @@ void init() {
       updatePetMapUsecase: locator()));
   locator.registerFactory(() => GetPetMapBloc(getPetMapUsecase: locator()));
   locator.registerFactory(() => AddPlanCubit(
-      addPlanUsecase: locator(), getPlanNotifIdUsecase: locator()));
+      addPlanUsecase: locator(),
+      getPlanNotifIdUsecase: locator(),
+      notificationHelper: locator()));
   locator.registerFactory(() => StoreScrappingCubit());
   locator.registerFactory(
       () => SettingNotificationCubit(notificationHelper: locator()));

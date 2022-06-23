@@ -29,7 +29,7 @@ class PlanRepositoryImpl implements PlanRepository {
   }
 
   @override
-  Future<List<int>> getPlanNotifId(String petId) {
-    return planDataSource.getPlanNotifId(petId);
+  Future<List<int>> getPlanNotifId(String petId, DateTime date) {
+    return planDataSource.getPlanNotifId(petId, date);
   }
 }

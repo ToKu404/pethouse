@@ -82,17 +82,10 @@ class _AddPlanPageState extends State<AddPlanPage> {
     return BlocListener<AddPlanCubit, AddPlanState>(
       listener: (context, state) {
         if (state is AddPlanSucces) {
-          if (_statusReminder) {
-            final planDateTime = DateTime(_planDate!.year, _planDate!.month,
-                _planDate!.day, _planTime.hour, _planTime.minute);
-            BlocProvider.of<SettingNotificationCubit>(context).initNotification(
-                date: DateTime.parse("$planDateTime"),
-                notifId: state.planEntity.notifId!,
-                eventName: state.planEntity.activityTitle!,
-                eventDesc: state.planEntity.description!);
-          }
-          Navigator.pop(context);
-          Navigator.pop(context);
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
         }
       },
       child: Scaffold(
@@ -216,22 +209,24 @@ class _AddPlanPageState extends State<AddPlanPage> {
                         height: 50,
                         width: double.infinity,
                         onTap: () {
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.QUESTION,
-                            animType: AnimType.BOTTOMSLIDE,
-                            title: 'Apakah Anda Sudah Yakin?',
-                            btnCancelOnPress: () {},
-                            btnOkOnPress: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const LoadingView();
-                                },
-                              );
-                              _onAddPlanSubmit();
-                            },
-                          ).show();
+                          if (_formKey.currentState!.validate()) {
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.QUESTION,
+                              animType: AnimType.BOTTOMSLIDE,
+                              title: 'Apakah Anda Sudah Yakin?',
+                              btnCancelOnPress: () {},
+                              btnOkOnPress: () {
+                                _onAddPlanSubmit();
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const LoadingView();
+                                  },
+                                );
+                              },
+                            ).show();
+                          }
                         },
                         text: 'Save Plan Activity',
                         isClicked: false,
@@ -368,6 +363,15 @@ class _AddPlanPageState extends State<AddPlanPage> {
     return TextFormField(
       readOnly: true,
       controller: _planTimeController,
+      validator: (value) {
+        final choiceTime = DateTime(_planDate!.year, _planDate!.month,
+            _planDate!.day, _planTime.hour, _planTime.minute);
+        if (choiceTime.isBefore(DateTime.now())) {
+          return 'Choice Correct Time';
+        } else {
+          return null;
+        }
+      },
       decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -408,7 +412,6 @@ class _AddPlanPageState extends State<AddPlanPage> {
               activeColor: kPrimaryColor,
               value: _statusReminder,
               onChanged: (value) {
-                print(value);
                 setState(() => _statusReminder = !_statusReminder);
               })
         ],

@@ -15,10 +15,12 @@ class EventCard extends StatefulWidget {
 class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
+    bool isTowards = widget.event.time!.toDate().isAfter(DateTime.now());
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
-          left: BorderSide(width: 4, color: kPrimaryColor),
+          left: BorderSide(
+              width: 4, color: isTowards ? kPrimaryColor : kGreyTransparant),
         ),
       ),
       width: double.infinity,

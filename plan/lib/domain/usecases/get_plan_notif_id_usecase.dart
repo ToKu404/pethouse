@@ -5,7 +5,7 @@ class GetPlanNotifIdUsecase {
 
   GetPlanNotifIdUsecase(this.planRepository);
 
-  Future<List<int>> execute(String petId) {
-    return planRepository.getPlanNotifId(petId);
+  Future<List<int>> execute(String petId, DateTime date) {
+    return planRepository.getPlanNotifId(petId,date);
   }
 }
