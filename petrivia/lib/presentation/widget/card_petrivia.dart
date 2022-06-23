@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:petrivia/domain/entities/petrivia_entity.dart';
@@ -11,7 +12,8 @@ class CardPetrivia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, DETAIL_PETRIVIA_ROUTE_NAME, arguments: petriviaEntity),
+      onTap: () => Navigator.pushNamed(context, DETAIL_PETRIVIA_ROUTE_NAME,
+          arguments: petriviaEntity),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         width: double.infinity,
@@ -31,13 +33,27 @@ class CardPetrivia extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: 100,
                 height: 100,
-                child: Image.network(
-                  petriviaEntity.imgUrl ?? '',
-                  fit: BoxFit.cover,
-                ),
+                child: petriviaEntity.imgUrl == "" ||
+                        petriviaEntity.imgUrl == null
+                    ? const NoImageCard(
+                        borderRadius: 10,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: petriviaEntity.imgUrl!,
+                        placeholder: (context, url) => const LoadingImageCard(
+                          borderRadius: 10,
+                        ),
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover)),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            const NoImageCard(),
+                      ),
               ),
               Expanded(
                 child: Padding(

@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 
@@ -24,6 +24,8 @@ class _EditPetPageState extends State<EditPetPage> {
   final TextEditingController _petNameController = TextEditingController();
   final TextEditingController _petBreedController = TextEditingController();
   final TextEditingController _petDateBirthController = TextEditingController();
+  final TextEditingController _petOtherTypeController = TextEditingController();
+
   final TextEditingController _petDescriptionController =
       TextEditingController();
   final TextEditingController _petCertificateController =
@@ -40,13 +42,13 @@ class _EditPetPageState extends State<EditPetPage> {
     _petBreedController.dispose();
     _petDescriptionController.dispose();
     _petDateBirthController.dispose();
+    _petOtherTypeController.dispose();
     _petCertificateController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _petNameController.text = widget.pet.petName ?? '';
     if (widget.pet.petBreed != null && widget.pet.petBreed != '') {
@@ -60,6 +62,10 @@ class _EditPetPageState extends State<EditPetPage> {
     }
     if (widget.pet.petDescription != null && widget.pet.petDescription != '') {
       _petDescriptionController.text = widget.pet.petDescription ?? '';
+    }
+
+    if (widget.pet.petTypeText != null && widget.pet.petTypeText != '') {
+      _petOtherTypeController.text = widget.pet.petTypeText ?? '';
     }
 
     if (widget.pet.certificateUrl != null && widget.pet.certificateUrl != '') {
@@ -94,11 +100,17 @@ class _EditPetPageState extends State<EditPetPage> {
 
     String petDescription = _petDescriptionController.text;
 
+    String petTypeText = petType;
+    if (_petType == 'Other') {
+      petTypeText = _petOtherTypeController.text;
+    }
+
     PetEntity petEntity = PetEntity(
       petName: petName,
       petType: petType,
       petBreed: petBreed,
       dateOfBirth: _petDateOfBirth,
+      petTypeText: petTypeText,
       certificateUrl: _petCertificatePath,
       petPictureUrl: _petPhotoPath,
       gender: petGender,
@@ -132,11 +144,7 @@ class _EditPetPageState extends State<EditPetPage> {
               listener: (context, state) {
         if (state is UpdatePetError) {
           print(state.message);
-        } else if (state is UpdatePetSuccess) {
-          Future.delayed(const Duration(seconds: 1), () {
-            Navigator.pop(context);
-          });
-        }
+        } else if (state is UpdatePetSuccess) {}
         if (state is UpdatePetPhotoSuccess) {
           _petPhotoPath = state.petPhotoPath;
         }
@@ -176,6 +184,16 @@ class _EditPetPageState extends State<EditPetPage> {
                         const SizedBox(
                           height: 20,
                         ),
+                        _petType == 'Other'
+                            ? Column(
+                                children: [
+                                  _buildInputOtherPetType(),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              )
+                            : Container(),
                         _buildInputPetGender(),
                         const SizedBox(
                           height: 20,
@@ -200,9 +218,31 @@ class _EditPetPageState extends State<EditPetPage> {
                           height: 55,
                           width: double.infinity,
                           onTap: () {
-                            if (formKey.currentState!.validate()) {
-                              _submitUpdatePet();
-                            }
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.INFO,
+                              animType: AnimType.BOTTOMSLIDE,
+                              title: 'Apakah Anda Sudah Yakin?',
+                              btnCancelOnPress: () {},
+                              btnOkOnPress: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const LoadingView();
+                                  },
+                                );
+                                Future.delayed(const Duration(seconds: 1), () {
+                                  if (!formKey.currentState!.validate()) {
+                                    Navigator.pop(context);
+                                    return;
+                                  } else {
+                                    _submitUpdatePet();
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
+                                });
+                              },
+                            ).show();
                           },
                           text: 'Update Pet',
                           isClicked: false,
@@ -258,10 +298,7 @@ class _EditPetPageState extends State<EditPetPage> {
                   padding: const EdgeInsets.only(top: 20),
                   child: Text(
                     kOpenAdoptAddPicture,
-                    style: GoogleFonts.poppins(
-                      color: kDarkBrown,
-                      fontSize: 14,
-                    ),
+                    style: kTextTheme.subtitle1,
                   ),
                 ),
               ],
@@ -351,13 +388,8 @@ class _EditPetPageState extends State<EditPetPage> {
                 ),
               ),
               Expanded(
-                child: Text(
-                  name,
-                  style: GoogleFonts.poppins(
-                    color: color,
-                    fontSize: 14,
-                  ),
-                ),
+                child: Text(name,
+                    style: kTextTheme.subtitle1?.copyWith(color: color)),
               ),
             ],
           ),
@@ -431,10 +463,7 @@ class _EditPetPageState extends State<EditPetPage> {
       ),
       value: _petType,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: kDarkBrown,
-        fontSize: 16,
-      ),
+      style: kTextTheme.headline3?.copyWith(color: kDarkBrown),
       validator: (value) {
         if (value == null) {
           return "Choice Pet Type";
@@ -502,6 +531,29 @@ class _EditPetPageState extends State<EditPetPage> {
         border: OutlineInputBorder(borderRadius: kBorderRadius),
       ),
       maxLines: 5,
+    );
+  }
+
+  _buildInputOtherPetType() {
+    return TextFormField(
+      controller: _petOtherTypeController,
+      decoration: InputDecoration(
+          fillColor: const Color(0xFF929292),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: kPrimaryColor, width: 1.0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          labelText: 'Other Pet Type'),
+      validator: (value) {
+        if (value!.isEmpty || !RegExp(r'^[a-z A-Z 0-9]+$').hasMatch(value)) {
+          return "Enter correct pet type";
+        } else {
+          return null;
+        }
+      },
     );
   }
 }

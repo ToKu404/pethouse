@@ -1,12 +1,12 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:schedule/domain/entities/medical_entity.dart';
+import 'package:plan/plan.dart';
 
 class CardContentMedical extends StatelessWidget {
-  final MedicalEntity medicalEntity;
-  CardContentMedical({Key? key, required this.medicalEntity}) : super(key: key);
+  final PlanEntity planEntity;
+  const CardContentMedical({Key? key, required this.planEntity})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,26 +40,22 @@ class CardContentMedical extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  Text(medicalEntity.location, style: kTextTheme.caption),
+                  Text(planEntity.location ?? '-', style: kTextTheme.caption),
                 ],
               ),
               Text(
-                'Posted On ${DateFormat.yMMMd().format(medicalEntity.time_publish.toDate())}',
+                DateFormat.yMMMd().format(planEntity.time!.toDate()),
                 style: kTextTheme.caption,
               ),
             ],
           ),
           Text(
-            medicalEntity.activity!,
+            planEntity.activityTitle!,
             style: kTextTheme.subtitle1?.copyWith(color: kPrimaryColor),
           ),
           Text(
-            medicalEntity.description,
+            planEntity.description ?? '-',
             style: kTextTheme.caption,
-          ),
-          Text(
-            'Expired on ${medicalEntity.expired_date == null ? "-" : DateFormat.yMMMd().format(medicalEntity.expired_date!.toDate())}',
-            style: kTextTheme.caption?.copyWith(color: kGreyTransparant),
           ),
         ],
       ),

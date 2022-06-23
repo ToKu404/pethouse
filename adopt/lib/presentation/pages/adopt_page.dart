@@ -104,7 +104,7 @@ class _AdoptPageState extends State<AdoptPage> {
                       ),
                     ),
                     state.listAdoptEntity.isEmpty
-                        ? Center(
+                        ? const Center(
                             child: Text("Empty"),
                           )
                         : GridView.builder(

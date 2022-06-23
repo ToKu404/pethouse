@@ -1,3 +1,4 @@
+import 'package:core/services/text_generator_helper.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,19 +43,13 @@ class SignInBloc extends Bloc<SignInEvent, SignInValidate> {
         isFormValidateFailed: false));
   }
 
-  final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-  );
-  final RegExp _passwordRegExp = RegExp(
-    r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
-  );
 
   bool _isEmailValid(String email) {
-    return _emailRegExp.hasMatch(email);
+    return TextGeneratorHelper.emailRegExp.hasMatch(email);
   }
 
   bool _isPasswordValid(String password) {
-    return _passwordRegExp.hasMatch(password);
+    return TextGeneratorHelper.passwordRegExp.hasMatch(password);
   }
 
   _onEmailChanged(EmailChanged event, Emitter<SignInValidate> emit) {

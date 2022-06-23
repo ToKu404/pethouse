@@ -1,14 +1,16 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:core/core.dart';
 import 'package:intl/intl.dart';
-import 'package:schedule/domain/entities/task_entity.dart';
-import 'package:schedule/presentation/blocs/get_monthly_task_bloc/get_monthly_task_bloc.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_pet_desc/get_pet_desc_bloc.dart';
+import 'package:task/task.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/card_detail_pet.dart';
@@ -17,8 +19,7 @@ import '../widgets/card_medical_history.dart';
 class PetDescriptionPage extends StatefulWidget {
   final String petId;
 
-  const PetDescriptionPage({Key? key, required this.petId})
-      : super(key: key);
+  const PetDescriptionPage({Key? key, required this.petId}) : super(key: key);
 
   @override
   State<PetDescriptionPage> createState() => _PetDescriptionPageState();
@@ -68,8 +69,26 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
                       arguments: pet);
                 }
               } else if (val == 2) {
-                BlocProvider.of<GetPetDescBloc>(context)
-                    .add(RemovePetEvent(petId: widget.petId));
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.INFO,
+                  animType: AnimType.BOTTOMSLIDE,
+                  title: 'Apakah Anda Sudah Yakin?',
+                  btnCancelOnPress: () {},
+                  btnOkOnPress: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const LoadingView();
+                      },
+                    );
+                    Future.delayed(const Duration(seconds: 1), () {
+                      BlocProvider.of<GetPetDescBloc>(context)
+                          .add(RemovePetEvent(petId: widget.petId));
+                      Navigator.pop(context);
+                    });
+                  },
+                ).show();
               }
             },
             itemBuilder: (context) {
@@ -126,18 +145,26 @@ class _PetDescLayout extends StatelessWidget {
           height: 300,
           width: double.infinity,
           margin: const EdgeInsets.all(kPadding * 2),
-          decoration: BoxDecoration(
-            color: kGrey,
-            borderRadius: BorderRadius.circular(10),
-            image: pet.petPictureUrl != "" && pet.petPictureUrl != null
-                ? DecorationImage(
-                    image: NetworkImage(pet.petPictureUrl ?? ''),
-                    fit: BoxFit.cover)
-                : null,
-          ),
           child: pet.petPictureUrl == "" || pet.petPictureUrl == null
-              ? const Icon(Icons.image)
-              : null,
+              ? const NoImageCard(
+                  borderRadius: 10,
+                )
+              : CachedNetworkImage(
+                  imageUrl: pet.petPictureUrl!,
+                  placeholder: (context, url) => ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: const LoadingImageCard(
+                      borderRadius: 10,
+                    ),
+                  ),
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover)),
+                  ),
+                  errorWidget: (context, url, error) => const NoImageCard(),
+                ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -157,7 +184,7 @@ class _PetDescLayout extends StatelessWidget {
                           style: kTextTheme.headline4,
                         ),
                         Text(
-                          pet.petType ?? '-',
+                          pet.petTypeText ?? '-',
                           style: kTextTheme.bodyText2?.copyWith(
                               height: 1, fontSize: 14, color: kGreyTransparant),
                         ),
@@ -179,7 +206,7 @@ class _PetDescLayout extends StatelessWidget {
                             width: 41,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: kOrange,
+                              color: kPrimaryColor,
                             ),
                             padding: const EdgeInsets.all(3),
                             child: SvgPicture.asset(
@@ -235,7 +262,7 @@ class _PetDescLayout extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              CardMedicalHistory(
+              CardActivityHistory(
                 petId: pet.id!,
               ),
               const SizedBox(
@@ -374,13 +401,13 @@ class _PetDescLayout extends StatelessWidget {
     return age;
   }
 
-  _getTaskDate(List<TaskEntity> listTask, String status) {
+  _getTaskDate(List<TaskEntity> listTask, bool status) {
     final catList =
-        listTask.where((element) => element.status == status).toList();
+        listTask.where((element) => element.completeStatus == status).toList();
     final List<TaskData> listResult = [];
     if (catList.isNotEmpty) {
       final List<DateTime> listDt =
-          catList.map((e) => e.startTime!.toDate()).toList();
+          catList.map((e) => e.time!.toDate()).toList();
       int value = 1;
       for (var i = 1; i < listDt.length; i++) {
         if (listDt[i].day == listDt[i - 1].day) {
@@ -401,8 +428,8 @@ class _PetDescLayout extends StatelessWidget {
   }
 
   _getSeriesData(List<TaskEntity> listTask) {
-    final completeTask = _getTaskDate(listTask, 'complete');
-    final uncompleteTask = _getTaskDate(listTask, 'wating');
+    final completeTask = _getTaskDate(listTask, true);
+    final uncompleteTask = _getTaskDate(listTask, false);
 
     List<charts.Series<TaskData, DateTime>> series = [
       charts.Series(

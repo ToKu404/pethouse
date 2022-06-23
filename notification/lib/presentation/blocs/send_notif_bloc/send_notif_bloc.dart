@@ -1,7 +1,6 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/nofitication_entity.dart';
 import '../../../domain/usecases/send_adopt_notif_usecase.dart';
 

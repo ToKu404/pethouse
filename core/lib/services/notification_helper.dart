@@ -1,82 +1,64 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/rxdart.dart';
-
-final selectNotificationSubject = BehaviorSubject<String>();
+import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 class NotificationHelper {
+  static FlutterLocalNotificationsPlugin? _flutterLocalNotificationsPlugin;
   static NotificationHelper? _instance;
 
   NotificationHelper._internal() {
     _instance = this;
   }
 
-  factory NotificationHelper() => _instance ?? NotificationHelper._internal();
-
-  Future<void> initNotifications(
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
-    var initializationSettingsAndroid =
-        const AndroidInitializationSettings('app_icon');
-
-    var initializationSettingsIOS = const IOSInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
-
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
-      if (payload != null) {
-        print('notification payload: ' + payload);
-      }
-      selectNotificationSubject.add(payload ?? 'empty payload');
-    });
+  Future<FlutterLocalNotificationsPlugin?>
+      get flutterLocalNotificationPluggin async {
+    _flutterLocalNotificationsPlugin ??= await _initNotifications();
+    return _flutterLocalNotificationsPlugin;
   }
 
-  Future<void> showNotification(
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
-      TaskNotifEntity notif) async {
-    var _channelId = "1";
-    var _channelName = "channel_01";
-    var _channelDescription = "pethouse_task";
+  factory NotificationHelper() => _instance ?? NotificationHelper._internal();
+
+  Future<FlutterLocalNotificationsPlugin> _initNotifications() async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    AndroidInitializationSettings androidInitializationSettings =
+        const AndroidInitializationSettings('app_icon');
+
+    final InitializationSettings initializationSettings =
+        InitializationSettings(android: androidInitializationSettings);
+    tz.initializeTimeZones();
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    return flutterLocalNotificationsPlugin;
+  }
+
+  Future showNotifications(
+      int id, String title, String body, DateTime time) async {
+    var channelId = "1";
+    var channelName = "channel_01";
+    var channelDescription = "dicoding news channel";
+    final notifPluggin = await flutterLocalNotificationPluggin;
+
+    final String currentTimeZone =
+        await FlutterNativeTimezone.getLocalTimezone();
+    final location = tz.getLocation(currentTimeZone);
+    final scheduleDate = tz.TZDateTime.from(time, location);
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        _channelId, _channelName,
-        channelDescription: _channelDescription,
+        channelId, channelName,
+        channelDescription: channelDescription,
         importance: Importance.max,
         priority: Priority.high,
         ticker: 'ticker',
-        groupKey: 'notification_group',
         styleInformation: const DefaultStyleInformation(true, true));
 
-    var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics);
+    var platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    var titleNotification = "<b>Headline News</b>";
-    var titleNews = 'Task Title';
-
-    await flutterLocalNotificationsPlugin.show(
-      1,
-      titleNotification,
-      titleNews,
-      platformChannelSpecifics,
-    );
-    // payload: json.encode(articles.toJson()));
-  } 
-
-  // void configureSelectNotificationSubject(String route) {
-  //   selectNotificationSubject.stream.listen(
-  //     (String payload) async {
-  //       var data = ArticlesResult.fromJson(json.decode(payload));
-  //       var article = data.articles[0];
-  //       Navigation.intentWithData(route, article);
-  //     },
-  //   );
-  // }
+    await notifPluggin!.zonedSchedule(
+        id, title, body, scheduleDate, platformChannelSpecifics,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle: true);
+  }
 }
-
-class TaskNotifEntity {}

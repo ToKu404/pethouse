@@ -4,18 +4,16 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// ignore: depend_on_referenced_packages
-import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
-import 'package:schedule/presentation/pages/calendar_page.dart';
-import 'package:pethouse/presentation/widgets/no_pet_card.dart';
-import 'package:schedule/domain/entities/task_entity.dart';
-import 'package:schedule/presentation/blocs/day_calendar_task_bloc/day_calendar_task_bloc.dart';
-import 'package:schedule/presentation/blocs/get_today_task_bloc/get_today_task_bloc.dart';
+import 'package:pethouse/presentation/widgets/task_daily_summary_card.dart';
+import 'package:pethouse/presentation/widgets/event_card.dart';
+import 'package:pethouse/presentation/widgets/no_pet_view.dart';
+import 'package:task/task.dart';
 import 'package:user/domain/entities/user_entity.dart';
+import 'package:plan/plan.dart';
 
-import '../widgets/card_schedule_status.dart';
+import '../widgets/task_card.dart';
 
 class HomePage extends StatefulWidget {
   final UserEntity userEntity;
@@ -28,14 +26,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int activePage = 0;
   DateTime _dateNow = DateTime.now();
-  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<GetSchedulePetBloc>(context).add(FetchListSchedulePet());
-
-    _pageController = PageController(viewportFraction: 0.8, initialPage: 1);
   }
 
   @override
@@ -63,8 +58,6 @@ class _HomePageState extends State<HomePage> {
                       child: SvgPicture.asset(
                         'assets/icons/pethouse_icon.svg',
                         color: kWhite,
-                        // width: 24,
-                        // height: 24,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -104,10 +97,10 @@ class _HomePageState extends State<HomePage> {
                 if (state.listPet.isNotEmpty) {
                   return _buildListPet(state.listPet);
                 } else {
-                  return const Center(child: NoPetCard());
+                  return const Center(child: NoPetView());
                 }
               } else {
-                return const Text('Error');
+                return const Text('Error Schedule');
               }
             })),
           ),
@@ -205,22 +198,44 @@ class _HomePageState extends State<HomePage> {
                                       padding: const EdgeInsets.all(5),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color: kWhite,
-                                            shape: BoxShape.circle,
-                                            image: listPet[index]
-                                                            .petPictureUrl !=
-                                                        '' &&
-                                                    listPet[index]
-                                                            .petPictureUrl !=
-                                                        null
-                                                ? DecorationImage(
-                                                    image: NetworkImage(
-                                                        listPet[index]
-                                                            .petPictureUrl!),
-                                                    fit: BoxFit.cover)
-                                                : const DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/images/image_user.png'))),
+                                          color: kGrey,
+                                          shape: BoxShape.circle,
+                                          image: listPet[index].petPictureUrl !=
+                                                      '' &&
+                                                  listPet[index]
+                                                          .petPictureUrl !=
+                                                      null
+                                              ? DecorationImage(
+                                                  image: NetworkImage(
+                                                      listPet[index]
+                                                          .petPictureUrl!),
+                                                  fit: BoxFit.cover)
+                                              : null,
+                                        ),
+                                        child: Center(
+                                          child: listPet[index].petPictureUrl !=
+                                                      '' &&
+                                                  listPet[index]
+                                                          .petPictureUrl !=
+                                                      null
+                                              ? null
+                                              : Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.image,
+                                                      color: kGreyTransparant,
+                                                    ),
+                                                    Text('No Image',
+                                                        style: kTextTheme
+                                                            .caption
+                                                            ?.copyWith(
+                                                                color:
+                                                                    kGreyTransparant))
+                                                  ],
+                                                ),
+                                        ),
                                       ),
                                     ),
                                     index == activePage
@@ -245,10 +260,10 @@ class _HomePageState extends State<HomePage> {
                             setState(() {
                               activePage = index;
                             });
-                            BlocProvider.of<GetTodayTaskBloc>(context).add(
-                                FetchTodayTask(petId: listPet[activePage].id!));
-                            BlocProvider.of<DayCalendarTaskBloc>(context).add(
-                                FetchChoiceDayTask(
+                            BlocProvider.of<TaskBloc>(context).add(
+                                FetchTaskEvent(petId: listPet[activePage].id!));
+                            BlocProvider.of<HomePlanCalendarBloc>(context).add(
+                                FetchHomePlanCalendarEvent(
                                     petId: listPet[activePage].id!,
                                     choiceDate: _dateNow));
                           },
@@ -303,7 +318,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Activities',
+                            'Events',
                             style: kTextTheme.headline6
                                 ?.copyWith(color: kDarkBrown),
                           ),
@@ -338,92 +353,11 @@ class _HomePageState extends State<HomePage> {
                         _dateNow = newDt;
                       },
                     ),
-                    const Divider(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Tasks',
-                            style: kTextTheme.headline6
-                                ?.copyWith(color: kDarkBrown),
-                          ),
-                          InkWell(
-                            onTap: () => Navigator.pushNamed(
-                                context, ADD_TASK_ROUTE_NAME,
-                                arguments: listPet[activePage]),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle, color: kWhite),
-                                  child: const Icon(
-                                    Icons.add,
-                                    color: kPrimaryColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     const SizedBox(
-                      height: 5,
+                      height: 20,
                     ),
-                    _BuildSchedule(petEntity: listPet[activePage]),
-                    // const Divider(),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //   child: Row(
-                    //     children: [
-                    //       Text(
-                    //         'Notes',
-                    //         style: kTextTheme.headline6
-                    //             ?.copyWith(color: kDarkBrown),
-                    //       ),
-                    //       InkWell(
-                    //         onTap: () => Navigator.pushNamed(
-                    //             context, ADD_TASK_ROUTE_NAME,
-                    //             arguments: listPet[activePage]),
-                    //         child: Row(
-                    //           children: [
-                    //             Container(
-                    //               width: 30,
-                    //               height: 30,
-                    //               decoration: const BoxDecoration(
-                    //                   shape: BoxShape.circle, color: kWhite),
-                    //               child: const Icon(
-                    //                 Icons.add,
-                    //                 color: kPrimaryColor,
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Container(
-                    //   width: double.infinity,
-                    //   margin: EdgeInsets.symmetric(horizontal: 20),
-                    //   padding: EdgeInsets.all(10),
-                    //   decoration: BoxDecoration(
-                    //       color: kWhite,
-                    //       borderRadius: BorderRadius.circular(10),
-                    //       boxShadow: [
-                    //         BoxShadow(
-                    //             blurRadius: 13,
-                    //             color:
-                    //                 const Color(0xFF000000).withOpacity(.07)),
-                    //         BoxShadow(
-                    //             blurRadius: 5,
-                    //             color: const Color(0xFF000000).withOpacity(.05))
-                    //       ]),
-                    //   child: ListNotes(),
-                    // ),
+                    const Divider(),
+                    _buildListTask(listPet[activePage]),
                   ],
                 ),
               )
@@ -431,6 +365,45 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+    );
+  }
+
+  _buildListTask(PetEntity pet) {
+    return Column(
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: [
+              Text(
+                'Daily Task',
+                style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
+              ),
+              InkWell(
+                onTap: () => Navigator.pushNamed(context, ALL_HABBIT_ROUTE_NAME,
+                    arguments: pet),
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: kWhite),
+                  child: const Icon(
+                    Icons.add,
+                    color: kPrimaryColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        _BuildSchedule(petEntity: pet),
+      ],
     );
   }
 }
@@ -447,19 +420,19 @@ class __BuildScheduleState extends State<_BuildSchedule> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<GetTodayTaskBloc>(context)
-        .add(FetchTodayTask(petId: widget.petEntity.id!));
+    BlocProvider.of<TaskBloc>(context)
+        .add(FetchTaskEvent(petId: widget.petEntity.id!));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetTodayTaskBloc, GetTodayTaskState>(
+    return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state) {
-        if (state is GetTodayTaskLoading) {
+        if (state is TaskLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is GetTodayTaskSuccess) {
+        } else if (state is GetTaskSuccess) {
           if (state.listTask.isEmpty) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -475,7 +448,7 @@ class __BuildScheduleState extends State<_BuildSchedule> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
-                  child: CardScheduleStatus(
+                  child: TaskDailySummaryCard(
                     taskFinish: getCompleteTask(state.listTask),
                     taskAll: state.listTask.length,
                   ),
@@ -496,7 +469,7 @@ class __BuildScheduleState extends State<_BuildSchedule> {
               ],
             );
           }
-        } else if (state is GetTodayTaskError) {
+        } else if (state is TaskError) {
           return Text(state.message);
         } else {
           return const Text('Error');
@@ -506,83 +479,7 @@ class __BuildScheduleState extends State<_BuildSchedule> {
   }
 
   getCompleteTask(List<TaskEntity> tasks) {
-    return tasks.where((e) => e.status == 'complete').toList().length;
-  }
-}
-
-class TaskCard extends StatefulWidget {
-  final TaskEntity task;
-
-  const TaskCard({Key? key, required this.task}) : super(key: key);
-
-  @override
-  State<TaskCard> createState() => _TaskCardState();
-}
-
-class _TaskCardState extends State<TaskCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 13,
-                color: const Color(0xFF000000).withOpacity(.07)),
-            BoxShadow(
-                blurRadius: 5, color: const Color(0xFF000000).withOpacity(.05))
-          ]),
-      width: double.infinity,
-      child: ListTile(
-        leading: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: widget.task.status == 'complete'
-                ? kGreyTransparant
-                : kMainOrangeColor,
-          ),
-          child: Center(
-            child: Icon(
-              kTaskType[widget.task.activity],
-              color: kWhite,
-            ),
-          ),
-        ),
-        title: Text(widget.task.activity ?? '-',
-            style: widget.task.status == 'complete'
-                ? kTextTheme.subtitle1?.copyWith(
-                    color: kGreyTransparant,
-                    fontWeight: FontWeight.w500,
-                    decoration: TextDecoration.lineThrough)
-                : kTextTheme.subtitle1?.copyWith(
-                    color: kMainOrangeColor,
-                    fontWeight: FontWeight.w500,
-                  )),
-        subtitle: Text(
-          DateFormat.jm().format(widget.task.startTime!.toDate()),
-          style: TextStyle(
-              color: widget.task.status == 'complete'
-                  ? kGreyTransparant
-                  : kDarkBrown),
-        ),
-        trailing: Checkbox(
-          value: widget.task.status == 'complete',
-          onChanged: (value) {
-            BlocProvider.of<GetTodayTaskBloc>(context).add(ChangeTaskStatus(
-                taskId: widget.task.id!, petId: widget.task.petId!));
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-          activeColor: kGreyTransparant,
-        ),
-      ),
-    );
+    return tasks.where((e) => e.completeStatus!).toList().length;
   }
 }
 
@@ -604,8 +501,9 @@ class __BuildHomeCalendarState extends State<_BuildHomeCalendar> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<DayCalendarTaskBloc>(context).add(
-        FetchChoiceDayTask(petId: widget.petId, choiceDate: _selectedDate));
+    BlocProvider.of<HomePlanCalendarBloc>(context).add(
+        FetchHomePlanCalendarEvent(
+            petId: widget.petId, choiceDate: _selectedDate));
   }
 
   @override
@@ -625,29 +523,29 @@ class __BuildHomeCalendarState extends State<_BuildHomeCalendar> {
               _selectedDate = date;
               widget.onDateTimeChanged(date);
               setState(() {
-                BlocProvider.of<DayCalendarTaskBloc>(context).add(
-                    FetchChoiceDayTask(
+                BlocProvider.of<HomePlanCalendarBloc>(context).add(
+                    FetchHomePlanCalendarEvent(
                         petId: widget.petId, choiceDate: _selectedDate));
               });
             },
           ),
-          BlocBuilder<DayCalendarTaskBloc, DayCalendarTaskState>(
+          const SizedBox(
+            height: 10,
+          ),
+          BlocBuilder<HomePlanCalendarBloc, HomePlanCalendarState>(
             builder: (context, state) {
-              if (state is DayCalendarTaskLoading) {
+              if (state is HomePlanCalendarLoading) {
                 return const CircularProgressIndicator();
-              } else if (state is DayCalendarTaskSuccess) {
+              } else if (state is HomePlanCalendarSuccess) {
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
                   shrinkWrap: true,
-                  itemCount: state.listTask.length,
+                  itemCount: state.listPlan.length,
                   scrollDirection: Axis.vertical,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: ((context, index) {
-                    return ScheduleTaskCard(
-                      event: state.listTask[index],
-                      isFirst: index == 0 ? true : false,
-                      isLast: index == state.listTask.length - 1 ? true : false,
-                      isSingle: state.listTask.length == 1 ? true : false,
+                    return EventCard(
+                      event: state.listPlan[index],
                     );
                   }),
                 );

@@ -1,6 +1,8 @@
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart';
 
+// ignore_for_file: depend_on_referenced_packages
+
+import 'package:core/core.dart';
+import 'package:path/path.dart';
 import 'package:adopt/domain/usecases/update_adopt_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
@@ -27,12 +29,10 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
       (event, emit) async {
         // emit(EditAdoptLoading());
         try {
-          final firebaseRegex = RegExp(r'%2F([\d\D]*\.[\D]+)\?',
-              multiLine: false, caseSensitive: false);
           String oldPhotoName = '';
           if (event.adoptEntityOld.petPictureUrl != null &&
               event.adoptEntityOld.petPictureUrl != '') {
-            final result = firebaseRegex
+            final result = TextGeneratorHelper.firestorageLinkRegex
                 .allMatches(event.adoptEntityOld.petPictureUrl!)
                 .map((e) => e.group(1))
                 .toList();
@@ -51,7 +51,7 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
           String petCertificateUrl = "";
           if (event.adoptEntityOld.certificateUrl != null &&
               event.adoptEntityOld.certificateUrl != '') {
-            final result = firebaseRegex
+            final result = TextGeneratorHelper.firestorageLinkRegex
                 .allMatches(event.adoptEntityOld.certificateUrl!)
                 .map((e) => e.group(1))
                 .toList();
@@ -82,6 +82,10 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
                 event.adoptEntityNew.petType != event.adoptEntityOld.petType
                     ? event.adoptEntityNew.petType
                     : '',
+            petTypeText: event.adoptEntityNew.petTypeText !=
+                    event.adoptEntityOld.petTypeText
+                ? event.adoptEntityNew.petTypeText
+                : '',
             gender: event.adoptEntityNew.gender != event.adoptEntityOld.gender
                 ? event.adoptEntityNew.gender
                 : '',

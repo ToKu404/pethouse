@@ -1,7 +1,6 @@
-// ignore: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
@@ -23,7 +22,7 @@ class UpdatePetBloc extends Bloc<UpdatePetEvent, UpdatePetState> {
       : super(UpdatePetInitial()) {
     on<SubmitUpdatePetEvent>(
       (event, emit) async {
-         try {
+        try {
           final firebaseRegex = RegExp(r'%2F([\d\D]*\.[\D]+)\?',
               multiLine: false, caseSensitive: false);
           String oldPhotoName = '';
@@ -65,34 +64,34 @@ class UpdatePetBloc extends Bloc<UpdatePetEvent, UpdatePetState> {
           }
 
           PetEntity petEntity = PetEntity(
-            petName:
-                event.petEntityNew.petName != event.petEntityOld.petName
-                    ? event.petEntityNew.petName
-                    : '',
-            petType:
-                event.petEntityNew.petType != event.petEntityOld.petType
-                    ? event.petEntityNew.petType
-                    : '',
+            petName: event.petEntityNew.petName != event.petEntityOld.petName
+                ? event.petEntityNew.petName
+                : '',
+            petType: event.petEntityNew.petType != event.petEntityOld.petType
+                ? event.petEntityNew.petType
+                : '',
             gender: event.petEntityNew.gender != event.petEntityOld.gender
                 ? event.petEntityNew.gender
                 : '',
-            dateOfBirth: event.petEntityNew.dateOfBirth !=
-                    event.petEntityOld.dateOfBirth
-                ? event.petEntityNew.dateOfBirth
-                : null,
+            petTypeText:
+                event.petEntityNew.petTypeText != event.petEntityOld.petTypeText
+                    ? event.petEntityNew.petTypeText
+                    : '',
+            dateOfBirth:
+                event.petEntityNew.dateOfBirth != event.petEntityOld.dateOfBirth
+                    ? event.petEntityNew.dateOfBirth
+                    : null,
             petDescription: event.petEntityNew.petDescription !=
                     event.petEntityOld.petDescription
                 ? event.petEntityNew.petDescription
                 : null,
-            petBreed:
-                event.petEntityNew.petBreed != event.petEntityOld.petBreed
-                    ? event.petEntityNew.petBreed
-                    : null,
+            petBreed: event.petEntityNew.petBreed != event.petEntityOld.petBreed
+                ? event.petEntityNew.petBreed
+                : null,
             petPictureUrl: petPhotoUrl,
             certificateUrl: petCertificateUrl,
             id: event.petEntityOld.id,
             userId: event.petEntityOld.userId,
-      
           );
 
           await updatePetUsecase.execute(petEntity);
@@ -102,7 +101,7 @@ class UpdatePetBloc extends Bloc<UpdatePetEvent, UpdatePetState> {
         }
       },
     );
-     on<UpdatePetPhoto>(
+    on<UpdatePetPhoto>(
       (event, emit) async {
         try {
           final ImagePicker picker = ImagePicker();

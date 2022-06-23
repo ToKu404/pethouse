@@ -51,6 +51,7 @@ class AddPetBloc extends Bloc<AddPetEvent, AddPetState> {
           petDescription: event.petEntity.petDescription,
           petBreed: event.petEntity.petBreed,
           petPictureUrl: petPhotoUrl,
+          petTypeText: event.petEntity.petTypeText,
           certificateUrl: petCertificateUrl,
         );
 

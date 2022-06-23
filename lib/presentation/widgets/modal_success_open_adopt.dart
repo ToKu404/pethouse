@@ -23,7 +23,7 @@ class OpenAdoptionSuccess extends StatelessWidget {
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
             blurRadius: 14,
-            offset: Offset(2, 4),
+            offset: const Offset(2, 4),
           ),
         ],
       ),
@@ -44,7 +44,7 @@ class OpenAdoptionSuccess extends StatelessWidget {
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
                   blurRadius: 10,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -57,7 +57,7 @@ class OpenAdoptionSuccess extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text(
@@ -68,7 +68,7 @@ class OpenAdoptionSuccess extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(

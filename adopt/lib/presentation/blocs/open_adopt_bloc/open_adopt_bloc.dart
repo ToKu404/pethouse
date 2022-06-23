@@ -1,4 +1,5 @@
-// ignore: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:adopt/domain/usecases/remove_open_adopt_usecase.dart';
 import 'package:path/path.dart';
 import 'package:adopt/domain/entities/adopt_enitity.dart';
@@ -56,6 +57,7 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
         AdoptEntity adoptEntity = AdoptEntity(
             petName: event.adoptEntity.petName,
             petType: event.adoptEntity.petType,
+            petTypeText: event.adoptEntity.petTypeText,
             gender: event.adoptEntity.gender,
             dateOfBirth: event.adoptEntity.dateOfBirth,
             petDescription: event.adoptEntity.petDescription,

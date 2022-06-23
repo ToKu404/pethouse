@@ -1,13 +1,12 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core/core.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:schedule/presentation/blocs/schedule_task_bloc/schedule_task_bloc.dart';
-
 import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth_cubit/auth_cubit.dart';
 import '../../blocs/user_db_bloc/user_db_bloc.dart';
-import '../../widgets/gradient_button.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserEntity userEntity;
@@ -173,8 +172,26 @@ class _BuildProfile extends StatelessWidget {
                 ),
                 leadingAction:
                     const Icon(Icons.exit_to_app, color: kPrimaryColor),
-                onTap: () async {
-                  context.read<AuthCubit>().loggedOut();
+                onTap: ()  {
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.QUESTION,
+                    animType: AnimType.SCALE,
+                    title: 'Apakah Anda Ingin Keluar Pethouse?',
+                    btnCancelOnPress: () {},
+                    btnOkOnPress: () async {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const LoadingView();
+                        },
+                      );
+                      Future.delayed(const Duration(seconds: 1), () async {
+                        context.read<AuthCubit>().loggedOut();
+                        Navigator.pop(context);
+                      });
+                    },
+                  ).show();
                 })
           ],
         ),
@@ -240,7 +257,6 @@ class _NotificationCardState extends State<NotificationCard> {
               activeColor: kPrimaryColor,
               value: statusSwitch,
               onChanged: (value) {
-                print(value);
                 setState(() => statusSwitch = !statusSwitch);
               }),
           onTap: () {},

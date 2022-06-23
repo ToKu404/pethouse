@@ -1,0 +1,92 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/core.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
+import 'package:flutter/material.dart';
+import 'package:store/domain/entities/store.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+class StoreItemCard extends StatelessWidget {
+  final Store store;
+  const StoreItemCard({Key? key, required this.store}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.QUESTION,
+          animType: AnimType.SCALE,
+          title: 'Apakah Anda Sudah Yakin?',
+          desc: 'Anda akan diarahkan ke situs web bukalapak.com',
+          btnCancelOnPress: () {},
+          btnOkOnPress: () async {
+            if (!await launchUrlString(
+              store.detailUrl,
+              mode: LaunchMode.externalApplication,
+            )) {
+              throw 'Could not launch ${store.detailUrl}';
+            }
+          },
+        ).show();
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: kWhite,
+          boxShadow: [
+            BoxShadow(
+                blurRadius: 13,
+                color: const Color(0xFF000000).withOpacity(.07)),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Column(
+            children: [
+              CachedNetworkImage(
+                imageUrl: store.imgUrl,
+                placeholder: (context, url) => ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: const LoadingImageCard(),
+                ),
+                imageBuilder: (context, imageProvider) => Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover)),
+                ),
+                errorWidget: (context, url, error) => const NoImageCard(),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  store.title,
+                  style: kTextTheme.subtitle2,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  store.price,
+                  style: kTextTheme.bodyText2?.copyWith(color: kPrimaryColor),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

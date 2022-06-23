@@ -1,3 +1,4 @@
+import 'package:core/services/text_generator_helper.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,12 +69,8 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileValidate> {
     }
   }
 
-  final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-  );
-
   bool _isEmailValid(String email) {
-    return _emailRegExp.hasMatch(email);
+    return TextGeneratorHelper.emailRegExp.hasMatch(email);
   }
 
   bool _isNameValid(String? displayName) {

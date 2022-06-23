@@ -1,15 +1,16 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
+import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
-import 'package:core/presentation/widgets/appbar_back_button.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class OpenAdoptPage extends StatefulWidget {
@@ -23,6 +24,8 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController _petNameController = TextEditingController();
   final TextEditingController _petBreedController = TextEditingController();
+  final TextEditingController _petOtherTypeController = TextEditingController();
+
   final TextEditingController _petDateBirthController = TextEditingController();
   final TextEditingController _petDescriptionController =
       TextEditingController();
@@ -42,6 +45,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
     _petBreedController.dispose();
     _petDescriptionController.dispose();
     _petDateBirthController.dispose();
+    _petOtherTypeController.dispose();
     _whatsappNumberController.dispose();
     _petCertificateController.dispose();
     super.dispose();
@@ -73,6 +77,10 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
         waNumber = '62$waNumber';
       }
     }
+    String petTypeText = petType;
+    if (_petType == 'Other') {
+      petTypeText = _petOtherTypeController.text;
+    }
     AdoptEntity adoptEntity = AdoptEntity(
         petName: petName,
         petType: petType,
@@ -82,6 +90,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
         petPictureUrl: _petPhotoPath,
         gender: petGender,
         petDescription: petDescription,
+        petTypeText: petTypeText,
         whatsappNumber: waNumber,
         status: 'open');
     context
@@ -111,12 +120,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           child: BlocConsumer<OpenAdoptBloc, OpenAdoptState>(
         listener: (context, state) {
           if (state is OpenAdoptError) {
-            print(state.message);
-          } else if (state is OpenAdoptSuccess) {
-            Future.delayed(Duration(seconds: 1), () {
-              Navigator.pop(context);
-            });
-          }
+          } else if (state is OpenAdoptSuccess) {}
           if (state is UploadPetPhotoSuccess) {
             _petPhotoPath = state.petPhotoPath;
           }
@@ -127,7 +131,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
         },
         builder: (context, state) {
           if (state is OpenAdoptLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -152,6 +156,16 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
                       const SizedBox(
                         height: 20,
                       ),
+                      _petType == 'Other'
+                          ? Column(
+                              children: [
+                                _buildInputOtherPetType(),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            )
+                          : Container(),
                       _buildInputPetGender(),
                       const SizedBox(
                         height: 20,
@@ -180,9 +194,32 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
                         height: 55,
                         width: double.infinity,
                         onTap: () {
-                          if (formKey.currentState!.validate()) {
-                            _submitOpenAdopt();
-                          }
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.INFO,
+                            animType: AnimType.BOTTOMSLIDE,
+                            title: 'Apakah Anda Sudah Yakin?',
+                            btnCancelOnPress: () {},
+                            btnOkOnPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const LoadingView();
+                                },
+                              );
+                              Future.delayed(const Duration(seconds: 1), () {
+                                if (!formKey.currentState!.validate()) {
+                                  Navigator.pop(context);
+                                  return;
+                                } else {
+                                  _submitOpenAdopt();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
+                              });
+                            },
+                          ).show();
+                          if (formKey.currentState!.validate()) {}
                         },
                         text: 'Save Pet',
                         isClicked: false,
@@ -231,13 +268,8 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
-                    child: Text(
-                      kOpenAdoptAddPicture,
-                      style: GoogleFonts.poppins(
-                        color: kDarkBrown,
-                        fontSize: 14,
-                      ),
-                    ),
+                    child:
+                        Text(kOpenAdoptAddPicture, style: kTextTheme.subtitle1),
                   ),
                 ],
               ),
@@ -304,20 +336,15 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Icon(
                   icon,
                   color: color,
                 ),
               ),
               Expanded(
-                child: Text(
-                  name,
-                  style: GoogleFonts.poppins(
-                    color: color,
-                    fontSize: 14,
-                  ),
-                ),
+                child: Text(name,
+                    style: kTextTheme.headline3?.copyWith(color: color)),
               ),
             ],
           ),
@@ -332,7 +359,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   }
 
   Widget _buildInputDateOfBirth() {
-    final DateFormat _dateFormat = DateFormat.yMMMEd();
+    final DateFormat dateFormat = DateFormat.yMMMEd();
     return TextFormField(
       readOnly: true,
       controller: _petDateBirthController,
@@ -359,7 +386,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           }
           setState(() {
             _petDateOfBirth = Timestamp.fromDate(pickedDate);
-            _petDateBirthController.text = _dateFormat.format(pickedDate);
+            _petDateBirthController.text = dateFormat.format(pickedDate);
           });
         });
       },
@@ -389,10 +416,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       ),
       value: _petType,
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: GoogleFonts.poppins(
-        color: kDarkBrown,
-        fontSize: 16,
-      ),
+      style: kTextTheme.headline3?.copyWith(color: kDarkBrown),
       validator: (value) {
         if (value == null) {
           return "Choice Pet Type";
@@ -477,6 +501,29 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
       validator: (value) {
         if (value!.isNotEmpty && !RegExp(r'^[0-9]+$').hasMatch(value)) {
           return "Enter correct phone number";
+        } else {
+          return null;
+        }
+      },
+    );
+  }
+
+  _buildInputOtherPetType() {
+    return TextFormField(
+      controller: _petOtherTypeController,
+      decoration: InputDecoration(
+          fillColor: const Color(0xFF929292),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: kPrimaryColor, width: 1.0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          labelText: 'Other Pet Type'),
+      validator: (value) {
+        if (value!.isEmpty || !RegExp(r'^[a-z A-Z 0-9]+$').hasMatch(value)) {
+          return "Enter correct pet type";
         } else {
           return null;
         }

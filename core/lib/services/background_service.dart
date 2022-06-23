@@ -1,37 +1,26 @@
-import 'dart:ui';
-import 'dart:isolate';
+// import 'dart:ui';
+// import 'dart:isolate';
+// final ReceivePort port = ReceivePort();
 
-import '../core.dart';
+// class BackgroundService {
+//   static BackgroundService? _backgroundService;
+//   static const String _isolateName = 'isolate';
+//   static SendPort? _uiSendPort;
 
-final ReceivePort port = ReceivePort();
+//   BackgroundService._instance() {
+//     _backgroundService = this;
+//   }
 
-class BackgroundService {
-  static BackgroundService? _instance;
-  static const String _isolateName = 'isolate';
-  static SendPort? _uiSendPort;
+//   factory BackgroundService() =>
+//       _backgroundService ?? BackgroundService._instance();
 
-  BackgroundService._internal() {
-    _instance = this;
-  }
+//   void initializeIsolate() {
+//     IsolateNameServer.registerPortWithName(port.sendPort, _isolateName);
+//   }
 
-  factory BackgroundService() => _instance ?? BackgroundService._internal();
+//   void settingAlarmServer() {
 
-  void initializeIsolate() {
-    IsolateNameServer.registerPortWithName(
-      port.sendPort,
-      _isolateName,
-    );
-  }
-
-  static Future<bool> callback() async {
-    print('Alarm fired!');
-    final NotificationHelper notificationHelper = NotificationHelper();
-    await notificationHelper.showNotification(
-        flutterLocalNotificationsPlugin, TaskNotifEntity());
-
-    _uiSendPort ??= IsolateNameServer.lookupPortByName(_isolateName);
-    _uiSendPort?.send(null);
-
-    return true;
-  }
-}
+//     _uiSendPort ??= IsolateNameServer.lookupPortByName(_isolateName);
+//     _uiSendPort?.send(null);
+//   }
+// }

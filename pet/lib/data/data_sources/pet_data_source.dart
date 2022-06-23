@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'package:core/services/preference_helper.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet/data/models/pet_model.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class PetDataSource {
@@ -21,9 +22,12 @@ abstract class PetDataSource {
 class PetDataSourceImpl implements PetDataSource {
   final FirebaseFirestore firebaseFirestore;
   final FirebaseStorage firebaseStorage;
+  final PreferenceHelper preferenceHelper;
 
   PetDataSourceImpl(
-      {required this.firebaseFirestore, required this.firebaseStorage});
+      {required this.firebaseFirestore,
+      required this.firebaseStorage,
+      required this.preferenceHelper});
 
   @override
   Future<void> addPet(PetEntity petEntity) async {
@@ -39,6 +43,7 @@ class PetDataSourceImpl implements PetDataSource {
         gender: petEntity.gender,
         petBreed: petEntity.petBreed,
         dateOfBirth: petEntity.dateOfBirth,
+        petTypeText: petEntity.petTypeText,
         petPictureUrl: petEntity.petPictureUrl,
         certificateUrl: petEntity.certificateUrl,
         petDecription: petEntity.petDescription,
@@ -71,9 +76,7 @@ class PetDataSourceImpl implements PetDataSource {
   }
 
   Future<String> getUserIdLocal() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString("userId");
-    return userId ?? '';
+    return await preferenceHelper.getUserId();
   }
 
   @override
@@ -132,6 +135,7 @@ class PetDataSourceImpl implements PetDataSource {
     onUpdate('pet_picture_url', petEntity.petPictureUrl, petMap);
     onUpdate('gender', petEntity.gender, petMap);
     onUpdate('pet_breed', petEntity.petBreed, petMap);
+    onUpdate('pet_type_text', petEntity.petTypeText, petMap);
     onUpdate('date_of_birth', petEntity.dateOfBirth, petMap);
     onUpdate('certificate_url', petEntity.certificateUrl, petMap);
     onUpdate('pet_description', petEntity.petDescription, petMap);

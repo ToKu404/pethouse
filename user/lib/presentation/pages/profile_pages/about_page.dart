@@ -1,15 +1,15 @@
-import 'dart:io';
-
 import 'package:core/core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:user/data/models/about.dart';
 import 'package:user/presentation/widgets/card_about_content.dart';
 
 class AboutPage extends StatelessWidget {
   final DataAppModel dataAppModel = DataAppModel();
+
+  AboutPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +46,20 @@ class AboutPage extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  'Deskripsi',
+                  'Latar Belakang',
+                  style: kTextTheme.bodyText1?.copyWith(
+                      fontWeight: FontWeight.bold, color: kDarkBrown),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(dataAppModel.background,
+                    textAlign: TextAlign.justify, style: kTextTheme.bodyText2),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Apa itu Pethouse?',
                   style: kTextTheme.bodyText1?.copyWith(
                       fontWeight: FontWeight.bold, color: kDarkBrown),
                 ),
@@ -97,10 +110,10 @@ class AboutPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final DataPackages dataPackages = dataPackagesList[index];
                       return ListTile(
-                        title: Text(dataPackages.name),
+                        title: Text(dataPackages.name,style: kTextTheme.bodyText2),
                         subtitle: HyperlinkText(dataPackages.link),
                         dense: true,
-                        trailing: Text(dataPackages.version),
+                        trailing: Text(dataPackages.version,style: kTextTheme.bodyText2),
                       );
                     }),
                 const SizedBox(
@@ -124,8 +137,9 @@ class AboutPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final DataAssets dataAssets = dataAssetsList[index];
                       return ListTile(
-                        title: Text(dataAssets.name),
-                        subtitle: HyperlinkText(dataAssets.link),                        dense: true,
+                        title: Text(dataAssets.name,style: kTextTheme.bodyText2),
+                        subtitle: HyperlinkText(dataAssets.link),
+                        dense: true,
                       );
                     }),
               ],
@@ -139,7 +153,7 @@ class AboutPage extends StatelessWidget {
 
 class HyperlinkText extends StatelessWidget {
   final String text;
-  HyperlinkText(this.text);
+  const HyperlinkText(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +163,7 @@ class HyperlinkText extends StatelessWidget {
             style: const TextStyle(
                 decoration: TextDecoration.underline, color: Colors.blue),
                 recognizer: TapGestureRecognizer()..onTap = (){
-                launch(text);
+                launchUrlString(text);
                 }
         ));
   }

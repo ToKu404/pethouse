@@ -20,7 +20,6 @@ class ListAdoptBloc extends Bloc<ListAdoptEvent, ListAdoptState> {
     on<FetchListPetAdopt>(
       (event, emit) async {
         emit(ListAdoptLoading());
-        // final result = await getAllPetListUsecase.e
         try {
           getAllPetListUsecase.execute().listen((adopt) {
             add(GetListPetAdopt(listPet: adopt));

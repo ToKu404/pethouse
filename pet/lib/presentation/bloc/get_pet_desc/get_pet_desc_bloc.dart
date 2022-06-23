@@ -1,10 +1,10 @@
-import 'package:bloc/bloc.dart';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/domain/usecases/get_pet_desc_usecase.dart';
 import 'package:pet/domain/usecases/remove_pet_usecase.dart';
-import 'package:schedule/domain/entities/task_entity.dart';
-import 'package:schedule/domain/use_cases/get_today_task_usecase.dart';
+import 'package:task/task.dart';
 
 part 'get_pet_desc_event.dart';
 part 'get_pet_desc_state.dart';

@@ -1,15 +1,14 @@
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:adopt/presentation/blocs/detail_adopt_bloc/detail_adopt_bloc.dart';
 import 'package:adopt/presentation/widgets/custom_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:core/presentation/widgets/gradient_button.dart';
-import 'package:notification/domain/entities/nofitication_entity.dart';
-import 'package:notification/presentation/blocs/send_notif_bloc/send_notif_bloc.dart';
+import 'package:notification/notification.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailAdoptPage extends StatefulWidget {
@@ -59,7 +58,7 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
                 child: CircularProgressIndicator(),
               );
             } else if (state is PetDescriptionLoaded) {
-              return DetailAdoptData(
+              return _BuildDetailAdopt(
                 adoptEntity: state.adoptEntity,
                 isOwner: state.isOwner,
               );
@@ -75,10 +74,10 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
   }
 }
 
-class DetailAdoptData extends StatelessWidget {
+class _BuildDetailAdopt extends StatelessWidget {
   final AdoptEntity adoptEntity;
   final bool isOwner;
-  const DetailAdoptData({
+  const _BuildDetailAdopt({
     required this.adoptEntity,
     required this.isOwner,
     Key? key,
@@ -92,20 +91,27 @@ class DetailAdoptData extends StatelessWidget {
           child: Container(
             width: double.infinity,
             margin: const EdgeInsets.all(kPadding * 2),
-            decoration: BoxDecoration(
-              color: kGrey,
-              borderRadius: BorderRadius.circular(10),
-              image: adoptEntity.petPictureUrl != "" &&
-                      adoptEntity.petPictureUrl != null
-                  ? DecorationImage(
-                      image: NetworkImage(adoptEntity.petPictureUrl ?? ''),
-                      fit: BoxFit.cover)
-                  : null,
-            ),
             child: adoptEntity.petPictureUrl == "" ||
                     adoptEntity.petPictureUrl == null
-                ? const Icon(Icons.image)
-                : null,
+                ? const NoImageCard(
+                    borderRadius: 10,
+                  )
+                : CachedNetworkImage(
+                    imageUrl: adoptEntity.petPictureUrl!,
+                    placeholder: (context, url) => ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: const LoadingImageCard(
+                        borderRadius: 10,
+                      ),
+                    ),
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover)),
+                    ),
+                    errorWidget: (context, url, error) => const NoImageCard(),
+                  ),
           ),
         ),
         Padding(
@@ -126,7 +132,7 @@ class DetailAdoptData extends StatelessWidget {
                           style: kTextTheme.headline4,
                         ),
                         Text(
-                          adoptEntity.petType ?? '-',
+                          adoptEntity.petTypeText ?? '-',
                           style: kTextTheme.bodyText2?.copyWith(
                               height: 1, fontSize: 14, color: kGreyTransparant),
                         ),
@@ -174,7 +180,10 @@ class DetailAdoptData extends StatelessWidget {
                   ),
                   _buildCardDescPet(
                     'Age',
-                    adoptEntity.dateOfBirth != null ? _getAge() : '-',
+                    adoptEntity.dateOfBirth != null
+                        ? TextGeneratorHelper.dateToAge(
+                            adoptEntity.dateOfBirth!.toDate())
+                        : '-',
                   ),
                   const SizedBox(
                     width: 10,
@@ -364,26 +373,5 @@ class DetailAdoptData extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _getAge() {
-    DateTime? born = adoptEntity.dateOfBirth?.toDate();
-    DateTime today = DateTime.now();
-    int yearDiff = today.year - (born?.year ?? 0);
-    int monthDiff = today.month - (born?.month ?? 0);
-    int dayDiff = today.day - (born?.day ?? 0);
-
-    String age = '';
-    if (yearDiff > 0) {
-      age += yearDiff.toString();
-      int percentMonth = (monthDiff / 12).round();
-      age += percentMonth > 0 ? '.$percentMonth' : '';
-      age += ' Year';
-    } else if (monthDiff > 0) {
-      age += '$monthDiff Month';
-    } else {
-      age += '$dayDiff Day';
-    }
-    return age;
   }
 }

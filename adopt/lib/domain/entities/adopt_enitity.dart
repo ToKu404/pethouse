@@ -6,6 +6,7 @@ class AdoptEntity extends Equatable {
   final String? userId;
   final String? petName;
   final String? petType;
+  final String? petTypeText;
   final String? petPictureUrl;
   final String? gender;
   final String? petBreed;
@@ -24,6 +25,7 @@ class AdoptEntity extends Equatable {
     required this.petName,
     required this.petType,
     this.petPictureUrl,
+    this.petTypeText,
     required this.gender,
     this.petBreed,
     this.dateOfBirth,
@@ -42,6 +44,7 @@ class AdoptEntity extends Equatable {
         petPictureUrl,
         gender,
         petType,
+        petTypeText,
         petBreed,
         dateOfBirth,
         certificateUrl,

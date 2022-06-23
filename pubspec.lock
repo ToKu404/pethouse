@@ -9,7 +9,7 @@ packages:
     source: path
     version: "0.0.1"
   android_alarm_manager_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: android_alarm_manager_plus
       url: "https://pub.dartlang.org"
@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.2"
+  awesome_dialog:
+    dependency: "direct main"
+    description:
+      name: awesome_dialog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   bloc:
     dependency: transitive
     description:
@@ -134,20 +141,48 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-  colorful_iconify_flutter:
+  connectivity_plus:
     dependency: transitive
     description:
-      name: colorful_iconify_flutter
+      name: connectivity_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2"
-  convex_bottom_bar:
-    dependency: "direct main"
+    version: "2.3.5"
+  connectivity_plus_linux:
+    dependency: transitive
     description:
-      name: convex_bottom_bar
+      name: connectivity_plus_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "1.3.1"
+  connectivity_plus_macos:
+    dependency: transitive
+    description:
+      name: connectivity_plus_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.4"
+  connectivity_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: connectivity_plus_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
+  connectivity_plus_web:
+    dependency: transitive
+    description:
+      name: connectivity_plus_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.2"
+  connectivity_plus_windows:
+    dependency: transitive
+    description:
+      name: connectivity_plus_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.2"
   core:
     dependency: "direct main"
     description:
@@ -183,13 +218,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  curved_navigation_bar:
-    dependency: "direct main"
-    description:
-      name: curved_navigation_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
   date_picker_timeline:
     dependency: "direct main"
     description:
@@ -204,13 +232,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.4"
-  dotted_border:
-    dependency: "direct main"
-    description:
-      name: dotted_border
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+2"
   equatable:
     dependency: transitive
     description:
@@ -309,6 +330,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.16"
+  flare_flutter:
+    dependency: transitive
+    description:
+      name: flare_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -343,7 +371,7 @@ packages:
     source: hosted
     version: "2.0.1"
   flutter_local_notifications:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
@@ -370,6 +398,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  flutter_native_timezone:
+    dependency: "direct main"
+    description:
+      name: flutter_native_timezone
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -377,13 +412,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.6"
-  flutter_speed_dial:
-    dependency: "direct main"
-    description:
-      name: flutter_speed_dial
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.0.0"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -391,13 +419,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.1.0"
-  flutter_staggered_grid_view:
-    dependency: "direct main"
-    description:
-      name: flutter_staggered_grid_view
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -548,13 +569,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
-  iconify_flutter:
-    dependency: "direct main"
-    description:
-      name: iconify_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
   image_picker:
     dependency: transitive
     description:
@@ -667,6 +681,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  nm:
+    dependency: transitive
+    description:
+      name: nm
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.0"
   notification:
     dependency: "direct main"
     description:
@@ -828,6 +849,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  plan:
+    dependency: "direct main"
+    description:
+      path: plan
+      relative: true
+    source: path
+    version: "0.0.1"
   platform:
     dependency: transitive
     description:
@@ -891,13 +919,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.4"
-  schedule:
-    dependency: "direct main"
-    description:
-      path: schedule
-      relative: true
-    source: path
-    version: "0.0.1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -954,6 +975,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  shimmer:
+    dependency: "direct main"
+    description:
+      name: shimmer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  simple_animations:
+    dependency: transitive
+    description:
+      name: simple_animations
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.0"
   simple_gesture_detector:
     dependency: transitive
     description:
@@ -994,6 +1029,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  store:
+    dependency: "direct main"
+    description:
+      path: store
+      relative: true
+    source: path
+    version: "0.0.1"
   stream_channel:
     dependency: transitive
     description:
@@ -1029,6 +1071,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.5"
+  task:
+    dependency: "direct main"
+    description:
+      path: task
+      relative: true
+    source: path
+    version: "0.0.1"
   term_glyph:
     dependency: transitive
     description:
@@ -1135,7 +1184,7 @@ packages:
     source: path
     version: "0.0.1"
   uuid:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: uuid
       url: "https://pub.dartlang.org"
@@ -1148,34 +1197,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  webview_flutter:
-    dependency: "direct main"
-    description:
-      name: webview_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.4"
-  webview_flutter_android:
-    dependency: transitive
-    description:
-      name: webview_flutter_android
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.8.11"
-  webview_flutter_platform_interface:
-    dependency: transitive
-    description:
-      name: webview_flutter_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.9.1"
-  webview_flutter_wkwebview:
-    dependency: transitive
-    description:
-      name: webview_flutter_wkwebview
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.8.1"
   win32:
     dependency: transitive
     description:

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:core/services/preference_helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 // ignore: depend_on_referenced_packages
@@ -7,7 +8,6 @@ import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/user_entity.dart';
 import '../models/user_model.dart';
@@ -37,11 +37,13 @@ class UserDataSourceImpl implements UserDataSource {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
   final FirebaseStorage firebaseStorage;
+  final PreferenceHelper preferenceHelper;
 
   UserDataSourceImpl({
     required this.firebaseFirestore,
     required this.firebaseAuth,
     required this.firebaseStorage,
+    required this.preferenceHelper,
   });
 
   @override
@@ -63,14 +65,11 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Future<bool> isSignIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey('userId') ? true : false;
+    return preferenceHelper.checkUserIdExist();
   }
 
   @override
   Future<String> getUserId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? user = prefs.getString('userId');
     if (firebaseAuth.currentUser?.uid != null) {
       return firebaseAuth.currentUser!.uid;
     } else {
@@ -110,7 +109,6 @@ class UserDataSourceImpl implements UserDataSource {
     notif['notif_id'] = uid;
     await notifCollection.doc(uid).get().then((value) {
       if (!value.exists) {
-        print('ada');
         notifCollection.doc(uid).set(notif);
       }
     });
@@ -159,8 +157,6 @@ class UserDataSourceImpl implements UserDataSource {
 
     if (user.name != null) userMap['name'] = user.name;
     userCollectionRef.doc(user.uid).update(userMap);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
     await updateLocalUserData(user);
   }
 
@@ -248,61 +244,33 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Future<void> saveUserIdToLocal(String userId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userId', userId);
-    return;
+    await preferenceHelper.setUserId(userId);
   }
 
   @override
   Future<void> removeUserIdLocal() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('userId');
-    await prefs.remove('userData');
+    await preferenceHelper.removeUserId();
+    await preferenceHelper.removeUserData();
     return;
   }
 
   @override
   Future<void> saveDataToLocal(UserEntity userEntity) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('userData')) {
-      return;
-    }
-    String user = jsonEncode(UserModel(
-            name: userEntity.name,
-            email: userEntity.email,
-            imgUrl: userEntity.imageUrl,
-            uid: userEntity.uid)
-        .toJson());
-    await prefs.setString('userData', user);
-
+    await preferenceHelper.setUserData(userEntity);
     return;
   }
 
   @override
   Future<UserEntity> getUserDataLocal() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? user = prefs.getString('userData');
-    if (user != null) {
-      Map<String, dynamic> jsonString = json.decode(user);
-      UserEntity userEntity = UserModel.fromJson(jsonString);
-      return userEntity;
-    }
-    return const UserEntity(name: '', email: '');
+    final result = await preferenceHelper.getUserData();
+    print("NAMEEEEE ${result.name}");
+    return result;
   }
 
   Future<void> updateLocalUserData(UserEntity user) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? jsonUser = prefs.getString('userData');
-    Map<String, dynamic> userMap = json.decode(jsonUser!);
-    if (user.imageUrl != null && user.imageUrl != '') {
-      userMap['img_url'] = user.imageUrl;
-    }
+    await preferenceHelper.updateUserData(user);
     if (user.email != null) {
-      userMap['email'] = user.email;
       await firebaseAuth.currentUser?.updateEmail(user.email ?? '');
     }
-    if (user.name != null) userMap['name'] = user.name;
-    await prefs.remove('userData');
-    await prefs.setString('userData', jsonEncode(userMap));
   }
 }

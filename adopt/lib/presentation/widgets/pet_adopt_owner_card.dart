@@ -14,7 +14,7 @@ class PetAdoptOwnerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(right: 10),
+      margin: const EdgeInsets.only(right: 10),
       height: 130,
       width: 300,
       decoration: BoxDecoration(
@@ -66,7 +66,7 @@ class PetAdoptOwnerCard extends StatelessWidget {
                     style: kTextTheme.subtitle1,
                   ),
                   Text(
-                    adopt.petType ?? '-',
+                    adopt.petTypeText ?? '-',
                     style: kTextTheme.bodyText1,
                   ),
                   _BottomSide(adopt: adopt)
