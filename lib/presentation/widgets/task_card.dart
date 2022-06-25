@@ -39,7 +39,7 @@ class _TaskCardState extends State<TaskCard> {
             borderRadius: BorderRadius.circular(10),
             color: widget.task.completeStatus!
                 ? kGreyTransparant
-                : kMainOrangeColor,
+                : kPrimaryColor,
           ),
           child: Center(
             child: Icon(
@@ -55,7 +55,7 @@ class _TaskCardState extends State<TaskCard> {
                     fontWeight: FontWeight.w500,
                     decoration: TextDecoration.lineThrough)
                 : kTextTheme.subtitle1?.copyWith(
-                    color: kMainOrangeColor,
+                    color: kPrimaryColor,
                     fontWeight: FontWeight.w500,
                   )),
         subtitle: Text(

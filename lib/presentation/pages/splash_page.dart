@@ -52,10 +52,7 @@ class _BuildSplashLayout extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              colors: [kMainOrangeColor, kMainPinkColor],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter),
+         color: kPrimaryColor
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

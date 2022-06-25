@@ -49,7 +49,7 @@ class ScheduleTaskCard extends StatelessWidget {
                     height: 8,
                     width: 8,
                     decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: kMainOrangeColor),
+                        shape: BoxShape.circle, color: kPrimaryColor),
                   ),
                 ),
                 (isSingle)
@@ -60,7 +60,7 @@ class ScheduleTaskCard extends StatelessWidget {
                             child: Container(
                               height: 40,
                               width: 2,
-                              color: kMainOrangeColor,
+                              color: kPrimaryColor,
                             ),
                           )
                         : (isFirst)
@@ -70,7 +70,7 @@ class ScheduleTaskCard extends StatelessWidget {
                                 child: Container(
                                   height: 20,
                                   width: 2,
-                                  color: kMainOrangeColor,
+                                  color: kPrimaryColor,
                                 ),
                               )
                             : Positioned(
@@ -79,7 +79,7 @@ class ScheduleTaskCard extends StatelessWidget {
                                 child: Container(
                                   height: 20,
                                   width: 2,
-                                  color: kMainOrangeColor,
+                                  color: kPrimaryColor,
                                 ),
                               ),
               ],
@@ -90,7 +90,7 @@ class ScheduleTaskCard extends StatelessWidget {
             Expanded(
                 child: Text(
               event.activityTitle!,
-              style: kTextTheme.subtitle2?.copyWith(color: kMainOrangeColor),
+              style: kTextTheme.subtitle2?.copyWith(color: kPrimaryColor),
             )),
           ],
         ),

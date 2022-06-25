@@ -78,11 +78,11 @@ class _CalendarPageState extends State<CalendarPage> {
                       markersMaxCount: 3,
                       markerSizeScale: .15,
                       selectedDecoration: BoxDecoration(
-                          color: const Color(0xFFFFB4BE),
+                          color: kSecondaryColor,
                           borderRadius: BorderRadius.circular(10),
                           shape: BoxShape.rectangle),
                       todayDecoration: BoxDecoration(
-                          color: kMainPinkColor,
+                          color: kPrimaryColor,
                           borderRadius: BorderRadius.circular(10),
                           shape: BoxShape.rectangle),
                       defaultDecoration: BoxDecoration(

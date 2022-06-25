@@ -189,11 +189,10 @@ class _HomePageState extends State<HomePage> {
                                         border: index == activePage
                                             ? Border.all(
                                                 width: 6,
-                                                color: const Color(0xFFFFB4BE),
+                                                color: kSmoothYellow,
                                               )
                                             : Border.all(
-                                                width: 4,
-                                                color: const Color(0xFFFFB4BE)),
+                                                width: 4, color: kSmoothYellow),
                                       ),
                                       padding: const EdgeInsets.all(5),
                                       child: Container(

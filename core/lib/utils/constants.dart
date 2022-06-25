@@ -3,13 +3,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const Color kPrimaryColor = Color(0xFFEE4E64);
-const Color kSecondaryColor = Color(0xFFEE4E64);
+const Color kPrimaryColor = Color(0xFFFFD062);
+const Color kSecondaryColor = Color(0xFFA6E8F3);
 const Color kDarkBrown = Color(0xFF300303);
 const Color kWhite = Colors.white;
 const Color kGrey = Color(0xFFF3F3F4);
 const Color kGreyTransparant = Color(0xFFBEC2C5);
-const Color kOrange = Color(0xFFEF9F21);
+const Color kSmoothYellow = Color(0xFFFFF2D4);
 
 BorderRadius kBorderRadius = BorderRadius.circular(10);
 
@@ -48,7 +48,7 @@ final kTimePickerTheme = TimePickerThemeData(
     side: BorderSide(color: kPrimaryColor, width: 1),
   ),
   dayPeriodColor: MaterialStateColor.resolveWith((states) =>
-      states.contains(MaterialState.selected) ? kSecondaryColor : kWhite),
+      states.contains(MaterialState.selected) ? kPrimaryColor : kWhite),
   shape: const RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(8)),
     side: BorderSide(color: kPrimaryColor, width: 1),
@@ -59,11 +59,11 @@ final kTimePickerTheme = TimePickerThemeData(
     side: BorderSide(color: kPrimaryColor, width: 1),
   ),
   hourMinuteColor: MaterialStateColor.resolveWith((states) =>
-      states.contains(MaterialState.selected) ? kSecondaryColor : kWhite),
+      states.contains(MaterialState.selected) ? kPrimaryColor : kWhite),
   hourMinuteTextColor: MaterialStateColor.resolveWith((states) =>
-      states.contains(MaterialState.selected) ? kWhite : kSecondaryColor),
+      states.contains(MaterialState.selected) ? kWhite : kPrimaryColor),
   dialHandColor: kDarkBrown,
-  dialBackgroundColor: kSecondaryColor,
+  dialBackgroundColor: kPrimaryColor,
   hourMinuteTextStyle:
       const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
   dayPeriodTextStyle:
@@ -80,10 +80,10 @@ final kTimePickerTheme = TimePickerThemeData(
 );
 
 const kColorScheme = ColorScheme(
-  primary: kMainOrangeColor,
-  primaryContainer: kMainOrangeColor,
-  secondary: kMainPinkColor,
-  secondaryContainer: kMainPinkColor,
+  primary: kPrimaryColor,
+  primaryContainer: kPrimaryColor,
+  secondary: kPrimaryColor,
+  secondaryContainer: kPrimaryColor,
   surface: kDarkBrown,
   background: kWhite,
   error: Colors.red,
@@ -121,10 +121,10 @@ const Map<String, IconData> kTaskType = {
   'Bath': FontAwesomeIcons.shower,
 };
 
-const kTitleColor = Color(0xFF300303);
-const kMainOrangeColor = Color(0xFFEE4E64);
+// const kTitleColor = Color(0xFF300303);
+// const kMainOrangeColor = Color(0xFFFFD87E);
 const kMainBlueColor = Color(0xFF000072);
-const kMainPinkColor = Color(0xFFEE4E64);
+// const kMainPinkColor = Color(0xFFFFD87E);
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();

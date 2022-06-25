@@ -1,7 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:task/presentation/blocs/get_habbit_bloc/get_habbit_bloc.dart';
 
@@ -93,7 +92,7 @@ class _AllHabbitPageState extends State<AllHabbitPage> {
         onPressed: () => Navigator.pushNamed(context, ADD_HABBIT_ROUTE_NAME,
             arguments: widget.petEntity),
         foregroundColor: kWhite,
-        backgroundColor: kSecondaryColor,
+        backgroundColor: kPrimaryColor,
         child: const Icon(Icons.add),
       ),
     );

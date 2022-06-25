@@ -35,12 +35,17 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     );
     on<GetAllHabbits>(
       (event, emit) async {
+        // mengecek habbit yang cocok untuk hari ini
         List<HabbitEntity> allHabbit = _checkMatchHabbit(event.listHabbit);
+        print(allHabbit);
         final tasks =
             await getOneReadTaskUsecase.execute(DateTime.now(), event.petId);
 
         List<String> habbitsId = allHabbit.map((e) => e.id!).toList();
         List<String> taskId = tasks.map((e) => e.habbitId!).toList();
+
+        print(taskId);
+        print(habbitsId);
 
         List<HabbitEntity> habbitAdd = [];
         List<String> habbitRemove = [];
@@ -56,7 +61,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
             habbitRemove
                 .add(tasks.where((val) => val.habbitId == element).first.id!);
           }
+          habbitsId.remove(element);
         }
+
+        print(habbitAdd);
+        print(habbitRemove);
+
         await transferTaskUsecase.execute(habbitAdd, habbitRemove);
         getTodayTaskUsecase
             .execute(event.petId, DateTime.now())
