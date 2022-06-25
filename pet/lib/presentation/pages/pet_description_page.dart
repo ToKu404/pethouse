@@ -14,7 +14,7 @@ import 'package:task/task.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/card_detail_pet.dart';
-import '../widgets/card_medical_history.dart';
+import '../widgets/card_activity_history.dart';
 
 class PetDescriptionPage extends StatefulWidget {
   final String petId;

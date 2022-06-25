@@ -27,3 +27,6 @@ class HomePlanCalendarSuccess extends HomePlanCalendarState {
 }
 
 class ChangePlanStatusSuccess extends HomePlanCalendarState {}
+
+class RemovePlanStatusSuccess extends HomePlanCalendarState {}
+

@@ -152,6 +152,12 @@ class MyApp extends StatelessWidget {
                     builder: (context) => EditPetPage(
                           pet: pet,
                         ));
+               case EDIT_PLAN_ROUTE_NAME:
+                final plan = settings.arguments as PlanEntity;
+                return MaterialPageRoute(
+                    builder: (context) => EditPlanPage(
+                          plan: plan,
+                        ));
               case PET_DESC_ROUTE_NAME:
                 final petId = settings.arguments as String;
                 return MaterialPageRoute(

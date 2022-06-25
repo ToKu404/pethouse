@@ -3,6 +3,7 @@ const DETAIL_ADOPT_ROUTE_NAME = "detail-adopt";
 const OPEN_ADOPT_ROUTE_NAME = "open-adopt";
 const MAIN_ROUTE_NAME = "main";
 const EDIT_ADOPT_ROUTE_NAME = "edit-adopt";
+const EDIT_PLAN_ROUTE_NAME = "edit-plan";
 const EDIT_PET_ROUTE_NAME = "edit-pet";
 const DETAIL_PETRIVIA_ROUTE_NAME = "detail-petrivia";
 const ACTIVITY_STATUS_ROUT_NAME = 'activity-status';

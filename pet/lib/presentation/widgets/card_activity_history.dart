@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pet/presentation/widgets/card_content_medical_history.dart';
+import 'package:pet/presentation/widgets/card_content_activity_history.dart';
 import 'package:plan/plan.dart';
 
 class CardActivityHistory extends StatefulWidget {
@@ -80,7 +80,8 @@ class _CardActivityHistoryState extends State<CardActivityHistory> {
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Column(
                             children: state.listPlanHistory
-                                .map((e) => CardContentMedical(planEntity: e))
+                                .map((e) =>
+                                    CardContentActivityHistory(planEntity: e))
                                 .toList(),
                           ),
                         );

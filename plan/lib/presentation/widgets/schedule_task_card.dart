@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:plan/presentation/widgets/plan_desc_card.dart';
 
 import '../../domain/entities/plan_entity.dart';
 
@@ -21,7 +22,15 @@ class ScheduleTaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print(isLast);
+        showModalBottomSheet(
+            context: context,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10))),
+            builder: (builder) {
+              return PlanDescCard(plan: event);
+            });
       },
       child: Container(
         height: 40,
@@ -90,7 +99,7 @@ class ScheduleTaskCard extends StatelessWidget {
             Expanded(
                 child: Text(
               event.activityTitle!,
-              style: kTextTheme.subtitle2?.copyWith(color: kPrimaryColor),
+              style: kTextTheme.headline3?.copyWith(color: kDarkBrown),
             )),
           ],
         ),

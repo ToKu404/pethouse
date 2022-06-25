@@ -144,6 +144,7 @@ void init() {
   locator.registerLazySingleton(() => CheckPetMapUsecase(locator()));
   locator.registerLazySingleton(() => GetPetMapUsecase(locator()));
   locator.registerLazySingleton(() => UpdatePetMapUsecase(locator()));
+  locator.registerLazySingleton(() => RemovePlanUsecase(locator()));
   locator.registerLazySingleton(() => SearchPetAdoptUsecase(locator()));
   locator.registerLazySingleton(() => GetPlanHistoryUsecase(locator()));
   locator.registerLazySingleton(() => InsertHabbitUsecase(locator()));
@@ -190,17 +191,16 @@ void init() {
         addPetPhotoUsecase: locator(),
       ));
   locator.registerFactory(() => OpenAdoptBloc(
-      createNewAdoptUsecase: locator(),
-      uploadPetPhoto: locator(),
-      uploadPetCertificateUsecase: locator(),
+        createNewAdoptUsecase: locator(),
+        uploadPetPhoto: locator(),
+        uploadPetCertificateUsecase: locator(),
       ));
   locator.registerFactory(() => DetailAdoptBloc(
-        getPetDescriptionUsecase: locator(),
-        getUserIdLocalUsecase: locator(),
-        requestAdoptUsecase: locator(),
-        preferenceHelper: locator(),
-        removeOpenAdoptUsecase: locator()
-      ));
+      getPetDescriptionUsecase: locator(),
+      getUserIdLocalUsecase: locator(),
+      requestAdoptUsecase: locator(),
+      preferenceHelper: locator(),
+      removeOpenAdoptUsecase: locator()));
   locator.registerFactory(() => ListAdoptBloc(
       getAllPetListUsecase: locator(), searchPetAdoptUsecase: locator()));
   locator.registerFactory(() => UpdatePetBloc(
@@ -234,7 +234,9 @@ void init() {
       getTodayTaskUsecase: locator(),
       removePetUsecase: locator()));
   locator.registerFactory(() => HomePlanCalendarBloc(
-      getPlanUsecase: locator(), changePlanStatusUsecase: locator()));
+      getPlanUsecase: locator(),
+      changePlanStatusUsecase: locator(),
+      removePlanUsecase: locator()));
   locator.registerFactory(
       () => GetMonthlyTaskBloc(getMonthlyTaskUsecase: locator()));
   locator.registerFactory(
