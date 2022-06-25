@@ -26,3 +26,27 @@ class RequestAdopt extends DetailAdoptEvent {
   @override
   List<Object> get props => [adoptEntity];
 }
+
+class DisagreeRequestAdopt extends DetailAdoptEvent {
+  final AdoptEntity adoptEntity;
+  const DisagreeRequestAdopt({required this.adoptEntity});
+  @override
+  List<Object> get props => [adoptEntity];
+}
+
+
+class AgreeRequestAdopt extends DetailAdoptEvent {
+  final AdoptEntity adoptEntity;
+  const AgreeRequestAdopt({required this.adoptEntity});
+  @override
+  List<Object> get props => [adoptEntity];
+}
+
+class RemoveOpenAdoptEvent extends DetailAdoptEvent {
+  final String adoptId;
+
+  const RemoveOpenAdoptEvent({required this.adoptId});
+
+    @override
+  List<Object> get props => [adoptId];
+}

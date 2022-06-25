@@ -90,12 +90,12 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
   Widget build(BuildContext context) {
     return BlocListener<HabbitCubit, HabbitState>(
       listener: (context, state) {
-        if (state is AddHabbitSuccess) {
-
-        }
+        if (state is AddHabbitSuccess) {}
       },
       child: Scaffold(
-        appBar: DefaultAppBar(title: '${widget.petEntity.petName} Habbit',),
+        appBar: DefaultAppBar(
+          title: '${widget.petEntity.petName} Habbit',
+        ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -138,7 +138,7 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    GradientButton(
+                    DefaultButton(
                       height: 55,
                       width: double.infinity,
                       onTap: () {

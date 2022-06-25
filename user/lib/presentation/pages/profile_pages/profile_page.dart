@@ -113,7 +113,7 @@ class _BuildProfile extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            GradientButton(
+            DefaultButton(
               height: 34,
               width: 200,
               text: 'Edit Profile',
@@ -138,7 +138,6 @@ class _BuildProfile extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, ACTIVITY_STATUS_ROUT_NAME);
                 }),
-            const NotificationCard(),
             CardProfile(
                 title: 'About',
                 trailingAction: const Icon(
@@ -211,42 +210,6 @@ class CardProfile extends StatelessWidget {
           title: Text(title),
           trailing: trailingAction,
           onTap: onTap,
-        ),
-      ),
-    );
-  }
-}
-
-class NotificationCard extends StatefulWidget {
-  const NotificationCard({Key? key}) : super(key: key);
-
-  @override
-  State<NotificationCard> createState() => _NotificationCardState();
-}
-
-class _NotificationCardState extends State<NotificationCard> {
-  bool statusSwitch = false;
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: SizedBox(
-        width: double.infinity,
-        child: ListTile(
-          leading: const Icon(
-            Icons.notifications_sharp,
-            color: kPrimaryColor,
-          ),
-          title: const Text('Notification'),
-          trailing: Switch.adaptive(
-              inactiveTrackColor: kGrey,
-              activeColor: kPrimaryColor,
-              value: statusSwitch,
-              onChanged: (value) {
-                setState(() => statusSwitch = !statusSwitch);
-              }),
-          onTap: () {},
         ),
       ),
     );

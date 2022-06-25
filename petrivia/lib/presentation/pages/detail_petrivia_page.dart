@@ -20,7 +20,7 @@ class _DetailPetriviaPageState extends State<DetailPetriviaPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<InternetCheckCubit>(context).onCheckConnectionOnetime();
+    BlocProvider.of<OnetimeInternetCheckCubit>(context).onCheckConnectionOnetime();
   }
 
   @override
@@ -29,13 +29,13 @@ class _DetailPetriviaPageState extends State<DetailPetriviaPage> {
       backgroundColor: kWhite,
       appBar: const DefaultAppBar(),
       body: SafeArea(
-        child: BlocBuilder<InternetCheckCubit, InternetCheckState>(
+        child: BlocBuilder<OnetimeInternetCheckCubit, OnetimeInternetCheckState>(
           builder: (context, state) {
-            if (state is InternetCheckLoading) {
+            if (state is OnetimeInternetCheckLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state is OnetimeCheckGain) {
+            } else if (state is OnetimeInternetCheckGain) {
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),

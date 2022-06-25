@@ -47,9 +47,9 @@ class _PetMapPageState extends State<PetMapPage> {
               ),
             ),
           ),
-          BlocBuilder<InternetCheckCubit, InternetCheckState>(
+          BlocBuilder<RealtimeInternetCheckCubit, RealtimeInternetCheckState>(
             builder: (context, state) {
-              if (state is RealtimeCheckLost) {
+              if (state is RealtimeInternetCheckLost) {
                 return Expanded(
                   child: Center(
                     child: Column(

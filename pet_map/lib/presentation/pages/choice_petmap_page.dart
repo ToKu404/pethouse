@@ -115,7 +115,7 @@ class _ChoicePetPageState extends State<ChoicePetPage> {
                     }
                   },
                 ),
-                GradientButton(
+                DefaultButton(
                     height: 50,
                     width: double.infinity,
                     onTap: () async {

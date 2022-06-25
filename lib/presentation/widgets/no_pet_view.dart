@@ -18,7 +18,7 @@ class NoPetView extends StatelessWidget {
         const SizedBox(
           height: 19,
         ),
-        GradientButton(
+        DefaultButton(
           height: 52,
           width: 200,
           onTap: () {

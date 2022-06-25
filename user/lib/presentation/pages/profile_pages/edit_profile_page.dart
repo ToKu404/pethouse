@@ -22,7 +22,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: DefaultAppBar(title: 'Edit Profile',),
+      appBar: DefaultAppBar(
+        title: 'Edit Profile',
+      ),
       body: SafeArea(child: _FormEditProfile()),
     );
   }
@@ -70,7 +72,7 @@ class _FormEditProfile extends StatelessWidget {
                   const SizedBox(
                     height: 30,
                   ),
-                  GradientButton(
+                  DefaultButton(
                       height: 50,
                       width: double.infinity,
                       onTap: () {
@@ -147,7 +149,7 @@ class _ImageSection extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        GradientButton(
+        DefaultButton(
             height: 40,
             width: 200,
             onTap: () async {

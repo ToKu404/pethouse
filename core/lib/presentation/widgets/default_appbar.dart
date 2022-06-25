@@ -28,6 +28,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
+      actions: actions,
     );
   }
 }

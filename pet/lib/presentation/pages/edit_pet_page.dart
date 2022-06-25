@@ -202,7 +202,7 @@ class _EditPetPageState extends State<EditPetPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        GradientButton(
+                        DefaultButton(
                           height: 55,
                           width: double.infinity,
                           onTap: () {

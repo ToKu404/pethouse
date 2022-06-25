@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../utils/constants.dart';
 
-class GradientButton extends StatelessWidget {
+class DefaultButton extends StatelessWidget {
   final double height;
   final double width;
   final VoidCallback? onTap;
   final String text;
   final bool isClicked;
 
-  const GradientButton(
+  const DefaultButton(
       {super.key,
       required this.height,
       required this.width,
@@ -32,8 +32,7 @@ class GradientButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: kBorderRadius,
         ),
-        child: Text(text,
-            style: kTextTheme.subtitle1?.copyWith(color: kWhite)),
+        child: Text(text, style: kTextTheme.subtitle1?.copyWith(color: kWhite)),
       ),
     );
   }

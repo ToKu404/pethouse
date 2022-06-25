@@ -110,7 +110,7 @@ class RegisterForm extends StatelessWidget {
             ),
             BlocBuilder<SignUpBloc, SignUpValidate>(
               builder: ((context, state) {
-                return GradientButton(
+                return DefaultButton(
                     height: 50,
                     width: double.infinity,
                     isClicked: state.isFormValid,
@@ -145,8 +145,7 @@ class RegisterForm extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, LOGIN_ROUTE_NAME);
+                    Navigator.pushReplacementNamed(context, LOGIN_ROUTE_NAME);
                   },
                   child: const Text('Log In',
                       style: TextStyle(

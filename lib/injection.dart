@@ -125,6 +125,8 @@ void init() {
       .registerLazySingleton(() => GetPlanUsecase(planRepository: locator()));
   locator.registerLazySingleton(() => GetPetriviaUsecase(locator()));
   locator.registerLazySingleton(() => GetOpenAdoptListUsecase(locator()));
+  locator.registerLazySingleton(() => GetRequestAdoptListUsecase(locator()));
+
   locator.registerLazySingleton(() => SaveDataLocalUsecase(locator()));
   locator.registerLazySingleton(() => GetUserDataLocalUsecase(locator()));
   locator.registerLazySingleton(() => RequestAdoptUsecase(locator()));
@@ -191,12 +193,13 @@ void init() {
       createNewAdoptUsecase: locator(),
       uploadPetPhoto: locator(),
       uploadPetCertificateUsecase: locator(),
-      removeOpenAdoptUsecase: locator()));
+      ));
   locator.registerFactory(() => DetailAdoptBloc(
         getPetDescriptionUsecase: locator(),
         getUserIdLocalUsecase: locator(),
         requestAdoptUsecase: locator(),
         preferenceHelper: locator(),
+        removeOpenAdoptUsecase: locator()
       ));
   locator.registerFactory(() => ListAdoptBloc(
       getAllPetListUsecase: locator(), searchPetAdoptUsecase: locator()));
@@ -212,6 +215,8 @@ void init() {
       getListNotificationUsecase: locator(), preferenceHelper: locator()));
   locator.registerFactory(() => OpenAdoptStatusBloc(
       getOpenAdoptList: locator(), preferenceHelper: locator()));
+  locator.registerFactory(() => RequestAdoptStatusBloc(
+      getRequestAdoptList: locator(), preferenceHelper: locator()));
   locator
       .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
   locator.registerFactory(() => TaskBloc(
@@ -248,7 +253,8 @@ void init() {
   locator.registerFactory(
       () => SettingNotificationCubit(notificationHelper: locator()));
 
-  locator.registerFactory(() => InternetCheckCubit());
+  locator.registerFactory(() => OnetimeInternetCheckCubit());
+  locator.registerFactory(() => RealtimeInternetCheckCubit());
   locator.registerFactory(() => PlanCalendarBloc(getPlanUsecase: locator()));
 
   locator.registerFactory(() => GetHabbitBloc(getHabbitUsecase: locator()));

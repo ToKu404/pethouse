@@ -30,7 +30,7 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<InternetCheckCubit>(context).onCheckConnectionOnetime();
+    BlocProvider.of<OnetimeInternetCheckCubit>(context).onCheckConnectionOnetime();
     BlocProvider.of<GetPetDescBloc>(context)
         .add(FetchPetDesc(petId: widget.petId));
     BlocProvider.of<GetMonthlyTaskBloc>(context)
@@ -96,13 +96,15 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
         ],
       ),
       body: SafeArea(
-        child: BlocBuilder<InternetCheckCubit, InternetCheckState>(
+        child: BlocBuilder<OnetimeInternetCheckCubit, OnetimeInternetCheckState>(
           builder: (context, state) {
-            if (state is InternetCheckLoading) {
+            if (state is OnetimeInternetCheckLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state is OnetimeCheckGain) {
+            } else if (state is OnetimeInternetCheckLost) {
+              return const NoInternetPage();
+            } else {
               return BlocListener<GetPetDescBloc, GetPetDescState>(
                 listener: (context, state) {
                   if (state is RemovePetSuccess) {
@@ -125,8 +127,6 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
                   }
                 }),
               );
-            } else {
-              return const NoInternetPage();
             }
           },
         ),

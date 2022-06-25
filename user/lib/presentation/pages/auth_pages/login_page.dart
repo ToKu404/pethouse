@@ -107,7 +107,7 @@ class LoginForm extends StatelessWidget {
             ),
             BlocBuilder<SignInBloc, SignInValidate>(
               builder: ((context, state) {
-                return GradientButton(
+                return DefaultButton(
                     height: 50,
                     width: double.infinity,
                     isClicked: state.isFormValid,

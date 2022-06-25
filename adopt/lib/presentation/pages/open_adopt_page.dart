@@ -100,7 +100,9 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const DefaultAppBar(title: 'Open Adopt',),
+      appBar: const DefaultAppBar(
+        title: 'Open Adopt',
+      ),
       body: SafeArea(
           child: BlocConsumer<OpenAdoptBloc, OpenAdoptState>(
         listener: (context, state) {
@@ -175,7 +177,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      GradientButton(
+                      DefaultButton(
                         height: 55,
                         width: double.infinity,
                         onTap: () {

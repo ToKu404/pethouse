@@ -84,7 +84,9 @@ class _AddPetPageState extends State<AddPetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const DefaultAppBar(title: 'Add Pet',),
+      appBar: const DefaultAppBar(
+        title: 'Add Pet',
+      ),
       body: SafeArea(
           child: BlocConsumer<AddPetBloc, AddPetState>(
         listener: (context, state) {
@@ -156,7 +158,7 @@ class _AddPetPageState extends State<AddPetPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      GradientButton(
+                      DefaultButton(
                         height: 55,
                         width: double.infinity,
                         onTap: () {

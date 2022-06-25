@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<EditAdoptBloc>()),
           BlocProvider(create: (_) => di.locator<NotificationBloc>()),
           BlocProvider(create: (_) => di.locator<OpenAdoptStatusBloc>()),
+          BlocProvider(create: (_) => di.locator<RequestAdoptStatusBloc>()),
           BlocProvider(create: (_) => di.locator<SettingNotificationCubit>()),
           BlocProvider(create: (_) => di.locator<SendNotifBloc>()),
           BlocProvider(create: (_) => di.locator<GetPetBloc>()),
@@ -75,7 +76,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<GetPetMapBloc>()),
           BlocProvider(create: (_) => di.locator<GetHabbitBloc>()),
           BlocProvider(create: (_) => di.locator<TaskBloc>()),
-          BlocProvider(create: (_) => di.locator<InternetCheckCubit>()),
+          BlocProvider(create: (_) => di.locator<OnetimeInternetCheckCubit>()),
+          BlocProvider(create: (_) => di.locator<RealtimeInternetCheckCubit>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

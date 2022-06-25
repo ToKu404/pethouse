@@ -227,7 +227,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        GradientButton(
+                        DefaultButton(
                           height: 55,
                           width: double.infinity,
                           onTap: () {

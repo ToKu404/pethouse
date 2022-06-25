@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pethouse/presentation/pages/map_page.dart';
@@ -29,7 +31,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<InternetCheckCubit>(context).onCheckConnectionRealtime();
+    BlocProvider.of<RealtimeInternetCheckCubit>(context).onCheckConnectionRealtime();
     BlocProvider.of<UserDbBloc>(context).add(GetUserFromDb(widget.userId));
   }
 
@@ -38,17 +40,18 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: kWhite,
-      body: BlocListener<InternetCheckCubit, InternetCheckState>(
+      body: BlocListener<RealtimeInternetCheckCubit, RealtimeInternetCheckState>(
         listener: (context, state) {
-          if (state is RealtimeCheckLost) {
+          if (state is RealtimeInternetCheckLost) {
             const snackBar = SnackBar(
                 backgroundColor: Colors.red,
                 content: Text(
                   'Your internet connection is lost!',
                   style: TextStyle(color: kWhite),
                 ));
-            // ignore: deprecated_member_use
             _scaffoldKey.currentState!.showSnackBar(snackBar);
+          } else if (state is RealtimeInternetCheckGain) {
+            _scaffoldKey.currentState!.removeCurrentSnackBar();
           }
         },
         child: BlocBuilder<UserDbBloc, UserDbState>(

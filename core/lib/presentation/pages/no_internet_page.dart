@@ -14,9 +14,13 @@ class NoInternetPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/vectors/dog_sleep.svg',
-              fit: BoxFit.cover,
+            SizedBox(
+              width: double.infinity,
+              height: 100,
+              child: SvgPicture.asset(
+                'assets/vectors/dog_sleep.svg',
+                fit: BoxFit.scaleDown,
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -34,11 +38,11 @@ class NoInternetPage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            GradientButton(
+            DefaultButton(
               height: 52,
               width: 150,
               onTap: () {
-                BlocProvider.of<InternetCheckCubit>(context)
+                BlocProvider.of<OnetimeInternetCheckCubit>(context)
                     .onCheckConnectionOnetime();
               },
               text: 'Reconnect',

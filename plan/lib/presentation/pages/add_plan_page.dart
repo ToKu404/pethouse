@@ -89,7 +89,9 @@ class _AddPlanPageState extends State<AddPlanPage> {
         }
       },
       child: Scaffold(
-        appBar: const DefaultAppBar(title: 'Add Plan',),
+        appBar: const DefaultAppBar(
+          title: 'Add Plan',
+        ),
         body: SafeArea(
           child: Form(
             key: _formKey,
@@ -191,7 +193,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
                       padding: const EdgeInsets.symmetric(
                         vertical: 20,
                       ),
-                      child: GradientButton(
+                      child: DefaultButton(
                         height: 50,
                         width: double.infinity,
                         onTap: () {

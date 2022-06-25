@@ -6,6 +6,7 @@ import 'package:user/user.dart';
 import '../../../domain/entities/adopt_enitity.dart';
 import '../../../domain/usecases/get_pet_description_usecase.dart';
 import '../../../domain/usecases/get_user_id_local_usecase.dart';
+import '../../../domain/usecases/remove_open_adopt_usecase.dart';
 
 part 'detail_adopt_event.dart';
 part 'detail_adopt_state.dart';
@@ -15,12 +16,15 @@ class DetailAdoptBloc extends Bloc<DetailAdoptEvent, DetailAdoptState> {
   final GetPetDescriptionUsecase getPetDescriptionUsecase;
   final RequestAdoptUsecase requestAdoptUsecase;
   final PreferenceHelper preferenceHelper;
+    final RemoveOpenAdoptUsecase removeOpenAdoptUsecase;
 
   DetailAdoptBloc(
       {required this.getUserIdLocalUsecase,
       required this.getPetDescriptionUsecase,
       required this.preferenceHelper,
-      required this.requestAdoptUsecase})
+      required this.requestAdoptUsecase,
+      required this.removeOpenAdoptUsecase
+      })
       : super(DetailAdoptInitial()) {
     on<GetPetDescription>(
       (event, emit) async {
@@ -59,6 +63,42 @@ class DetailAdoptBloc extends Bloc<DetailAdoptEvent, DetailAdoptState> {
             userId: event.adoptEntity.userId);
         await requestAdoptUsecase.execute(adopt);
         emit(SuccessRequestAdopt());
+      },
+    );
+    on<DisagreeRequestAdopt>(
+      (event, emit) async {
+        AdoptEntity adopt = AdoptEntity(
+            petName: '',
+            petType: '',
+            gender: '',
+            adoptId: event.adoptEntity.adoptId,
+            status: 'open',
+            adopterId: '',
+            adopterName: '',
+            userId: event.adoptEntity.userId);
+        await requestAdoptUsecase.execute(adopt);
+        emit(SuccessDisagreeRequestAdopt());
+      },
+    );
+    on<AgreeRequestAdopt>(
+      (event, emit) async {
+        AdoptEntity adopt = AdoptEntity(
+            petName: '',
+            petType: '',
+            gender: '',
+            adoptId: event.adoptEntity.adoptId,
+            status: 'completed',
+            adopterId: '',
+            adopterName: '',
+            userId: event.adoptEntity.userId);
+        await requestAdoptUsecase.execute(adopt);
+        emit(SuccessAgreeRequestAdopt());
+      },
+    );
+    on<RemoveOpenAdoptEvent>(
+      (event, emit) async {
+        await removeOpenAdoptUsecase.execute(event.adoptId);
+        emit(RemoveAdoptSuccess());
       },
     );
   }
