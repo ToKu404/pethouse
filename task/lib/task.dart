@@ -12,6 +12,8 @@ export 'package:task/domain/use_cases/change_task_status_usecase.dart';
 export 'package:task/domain/use_cases/get_all_habbits_usecases.dart';
 export 'package:task/domain/use_cases/get_monthly_task_usecase.dart';
 export 'package:task/domain/use_cases/get_one_read_task_usecase.dart';
+export 'package:task/domain/use_cases/get_one_read_habbit_usecase.dart';
+
 
 export 'package:task/domain/use_cases/get_today_habbit_usecase.dart';
 export 'package:task/domain/use_cases/get_today_task_usecase.dart';

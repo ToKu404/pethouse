@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:store/domain/entities/store.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -50,7 +49,7 @@ class StoreItemCard extends StatelessWidget {
                 imageUrl: store.imgUrl,
                 placeholder: (context, url) => ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: const LoadingImageCard(),
+                  child: const ShimmerLoadingView(),
                 ),
                 imageBuilder: (context, imageProvider) => Container(
                   width: double.infinity,

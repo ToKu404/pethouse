@@ -31,7 +31,8 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<RealtimeInternetCheckCubit>(context).onCheckConnectionRealtime();
+    BlocProvider.of<RealtimeInternetCheckCubit>(context)
+        .onCheckConnectionRealtime();
     BlocProvider.of<UserDbBloc>(context).add(GetUserFromDb(widget.userId));
   }
 
@@ -40,7 +41,8 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: kWhite,
-      body: BlocListener<RealtimeInternetCheckCubit, RealtimeInternetCheckState>(
+      body:
+          BlocListener<RealtimeInternetCheckCubit, RealtimeInternetCheckState>(
         listener: (context, state) {
           if (state is RealtimeInternetCheckLost) {
             const snackBar = SnackBar(
@@ -57,9 +59,7 @@ class _MainPageState extends State<MainPage> {
         child: BlocBuilder<UserDbBloc, UserDbState>(
           builder: (context, state) {
             if (state is UserDbLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const LoadingView();
             } else if (state is SuccessGetData) {
               final List<Widget> screens = [
                 HomePage(

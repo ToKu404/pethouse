@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,9 +64,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         },
         builder: (context, state) {
           if (state.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const LoadingView();
           } else if (state.message == "") {
             return const _ResetPasswordForm();
           } else {

@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import '../../domain/entities/pet_entity.dart';
@@ -103,7 +101,7 @@ class _AddPetPageState extends State<AddPetPage> {
         },
         builder: (context, state) {
           if (state is AddPetLoading) {
-            return const Center(child: const CircularProgressIndicator());
+            return const LoadingView();
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),

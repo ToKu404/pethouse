@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:plan/plan.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -108,9 +107,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 BlocBuilder<PlanCalendarBloc, PlanCalendarState>(
                   builder: (context, state) {
                     if (state is PlanCalendarLoading) {
-                      return const CircularProgressIndicator();
+                      return const LoadingView();
                     } else if (state is PlanCalendarSuccess) {
-                      print(state.listPlan);
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -143,8 +141,10 @@ class _CalendarPageState extends State<CalendarPage> {
                           ),
                         ],
                       );
-                    } else {
+                    } else if (state is PlanCalendarError) {
                       return const Text('');
+                    } else {
+                      return Container();
                     }
                   },
                 )

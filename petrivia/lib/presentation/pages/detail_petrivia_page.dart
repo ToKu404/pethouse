@@ -20,7 +20,8 @@ class _DetailPetriviaPageState extends State<DetailPetriviaPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<OnetimeInternetCheckCubit>(context).onCheckConnectionOnetime();
+    BlocProvider.of<OnetimeInternetCheckCubit>(context)
+        .onCheckConnectionOnetime();
   }
 
   @override
@@ -29,12 +30,11 @@ class _DetailPetriviaPageState extends State<DetailPetriviaPage> {
       backgroundColor: kWhite,
       appBar: const DefaultAppBar(),
       body: SafeArea(
-        child: BlocBuilder<OnetimeInternetCheckCubit, OnetimeInternetCheckState>(
+        child:
+            BlocBuilder<OnetimeInternetCheckCubit, OnetimeInternetCheckState>(
           builder: (context, state) {
             if (state is OnetimeInternetCheckLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const LoadingView();
             } else if (state is OnetimeInternetCheckGain) {
               return SingleChildScrollView(
                 child: Padding(
@@ -61,27 +61,30 @@ class _DetailPetriviaPageState extends State<DetailPetriviaPage> {
                           ? const NoImageCard(
                               borderRadius: 10,
                             )
-                          : CachedNetworkImage(
-                              imageUrl: widget.petriviaEntity.imgUrl!,
-                              placeholder: (context, url) => ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: const LoadingImageCard(
+                          : Hero(
+                              tag: widget.petriviaEntity.id!,
+                              child: CachedNetworkImage(
+                                imageUrl: widget.petriviaEntity.imgUrl!,
+                                placeholder: (context, url) => ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: const ShimmerLoadingView(
+                                    borderRadius: 10,
+                                  ),
+                                ),
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover)),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const NoImageCard(
+                                  height: 200,
                                   borderRadius: 10,
                                 ),
-                              ),
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                height: 200,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover)),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const NoImageCard(
-                                height: 200,
-                                borderRadius: 10,
                               ),
                             ),
                       const SizedBox(

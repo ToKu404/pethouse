@@ -7,7 +7,7 @@ import 'package:task/domain/entities/task_entity.dart';
 
 abstract class TaskFirebaseDataSource {
   Future<List<TaskEntity>> getOneReadTask(DateTime date, String petId);
-  Future<void> transferTask(List<HabbitEntity> habbits, List<String> taskId);
+  Future<void> transferTask(List<HabbitEntity> habbits, List<TaskEntity> tasks);
   Stream<List<TaskEntity>> getTodayTask(String petId, DateTime date);
   Stream<List<TaskEntity>> getMonthlyTask(
       String petId, DateTime startDate, DateTime endDate);
@@ -75,7 +75,9 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
   }
 
   @override
-  Future<void> transferTask(List<HabbitEntity> habbits, List<String> taskId) async {
+  Future<void> transferTask(
+      List<HabbitEntity> habbits, List<TaskEntity> tasks) async {
+
     final taskRef = taskFirestore.collection('tasks');
     final date = DateTime.now();
     for (var habbit in habbits) {
@@ -98,8 +100,8 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
       });
     }
 
-    for (String id in taskId) {
-      taskRef.doc(id).delete();
+    for (var task in tasks) {
+      taskRef.doc(task.id).delete();
     }
   }
 }

@@ -60,7 +60,7 @@ class _ChoicePetPageState extends State<ChoicePetPage> {
                 BlocBuilder<GetPetBloc, GetPetState>(
                   builder: (context, state) {
                     if (state is GetPetLoading) {
-                      return const CircularProgressIndicator();
+                      return const LoadingView();
                     } else if (state is GetPetSuccess) {
                       petName = state.listPet[0].petName!;
                       petPictureUrl = state.listPet[0].petPictureUrl ?? '';
@@ -110,8 +110,10 @@ class _ChoicePetPageState extends State<ChoicePetPage> {
                           },
                         ),
                       );
+                    } else if (state is GetAllPetMapError) {
+                      return const ErrorView(message: 'Error when get pet map');
                     } else {
-                      return const Text('Error');
+                      return Container();
                     }
                   },
                 ),

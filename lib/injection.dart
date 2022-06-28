@@ -145,6 +145,7 @@ void init() {
   locator.registerLazySingleton(() => GetPetMapUsecase(locator()));
   locator.registerLazySingleton(() => UpdatePetMapUsecase(locator()));
   locator.registerLazySingleton(() => RemovePlanUsecase(locator()));
+  locator.registerLazySingleton(() => EditPlanUsecase(locator()));
   locator.registerLazySingleton(() => SearchPetAdoptUsecase(locator()));
   locator.registerLazySingleton(() => GetPlanHistoryUsecase(locator()));
   locator.registerLazySingleton(() => InsertHabbitUsecase(locator()));
@@ -152,9 +153,9 @@ void init() {
   locator.registerLazySingleton(() => GetTodayHabbitUsecase(locator()));
   locator.registerLazySingleton(() => GetAllHabbitsUsecase(locator()));
   locator.registerLazySingleton(() => GetOneReadTaskUsecase(locator()));
+  locator.registerLazySingleton(() => GetOneReadHabbitUsecase(locator()));
   locator.registerLazySingleton(() => TransferTaskUsecase(locator()));
   locator.registerLazySingleton(() => GetPlanNotifIdUsecase(locator()));
-
   locator.registerLazySingleton(() => ChangePlanStatusUsecase(locator()));
   locator
       .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
@@ -220,11 +221,13 @@ void init() {
   locator
       .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
   locator.registerFactory(() => TaskBloc(
+       getAllHabbitsUsecase: locator(),
       getOneReadTaskUsecase: locator(),
+      getOneReadHabbitUsecase: locator(),
       transferTaskUsecase: locator(),
-      getAllHabbitsUsecase: locator(),
-      getTodayTaskUsecase: locator(),
-      changeTaskStatus: locator()));
+        getTodayTaskUsecase: locator(),
+        changeTaskStatus: locator(),
+      ));
   locator.registerFactory(
       () => GetPetBloc(getPetUsecase: locator(), preferenceHelper: locator()));
   locator.registerFactory(() => GetSchedulePetBloc(
@@ -239,6 +242,7 @@ void init() {
       removePlanUsecase: locator()));
   locator.registerFactory(
       () => GetMonthlyTaskBloc(getMonthlyTaskUsecase: locator()));
+  locator.registerFactory(() => EditPlanCubit(editPlanUsecase: locator()));
   locator.registerFactory(
       () => GetPlanHistoryBloc(getPlanHistoryUsecase: locator()));
   locator.registerFactory(() => PetmapCubit(
@@ -261,7 +265,9 @@ void init() {
 
   locator.registerFactory(() => GetHabbitBloc(getHabbitUsecase: locator()));
   locator.registerFactory(() => HabbitCubit(
-      insertHabbitUsecase: locator(), removeHabbitUsecase: locator()));
+   
+      insertHabbitUsecase: locator(),
+      removeHabbitUsecase: locator()));
 
   //external
   final auth = FirebaseAuth.instance;

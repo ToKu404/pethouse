@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:task/domain/entities/habbit_entity.dart';
 import 'package:task/domain/entities/task_entity.dart';
 import 'package:task/domain/use_cases/change_task_status_usecase.dart';
-import 'package:task/domain/use_cases/get_one_read_task_usecase.dart';
 import 'package:task/domain/use_cases/get_all_habbits_usecases.dart';
+import 'package:task/domain/use_cases/get_one_read_habbit_usecase.dart';
+import 'package:task/domain/use_cases/get_one_read_task_usecase.dart';
 import 'package:task/domain/use_cases/get_today_task_usecase.dart';
 import 'package:task/domain/use_cases/transfer_task_usecase.dart';
 
@@ -15,10 +16,12 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GetOneReadTaskUsecase getOneReadTaskUsecase;
   final TransferTaskUsecase transferTaskUsecase;
+  final GetOneReadHabbitUsecase getOneReadHabbitUsecase;
   final GetAllHabbitsUsecase getAllHabbitsUsecase;
   final GetTodayTaskUsecase getTodayTaskUsecase;
   final ChangeTaskStatusUsecase changeTaskStatus;
   TaskBloc({
+    required this.getOneReadHabbitUsecase,
     required this.getOneReadTaskUsecase,
     required this.transferTaskUsecase,
     required this.getAllHabbitsUsecase,
@@ -33,41 +36,55 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         });
       },
     );
+
     on<GetAllHabbits>(
       (event, emit) async {
-        // mengecek habbit yang cocok untuk hari ini
+        //  Mendapatkan tasks hari ini
+        final tasks = await getOneReadTaskUsecase.execute(DateTime.now(), event.petId);
+        // Mendapatkan habbit yang cocok dengan hari ini
         List<HabbitEntity> allHabbit = _checkMatchHabbit(event.listHabbit);
-        print(allHabbit);
-        final tasks =
-            await getOneReadTaskUsecase.execute(DateTime.now(), event.petId);
 
+        // Mendapatkan semua habbit id dari all habbit
         List<String> habbitsId = allHabbit.map((e) => e.id!).toList();
-        List<String> taskId = tasks.map((e) => e.habbitId!).toList();
+        print("TODAY Habbit $habbitsId");
+        // Mendapatkan semua habbit id dari task hari ini
+        List<String> habbitIdTasks = tasks.map((e) => e.habbitId!).toList();
+        print("TODAY Tasks $habbitIdTasks");
 
-        print(taskId);
-        print(habbitsId);
 
+        // list untuk habbit baru yang akan ditambahkan
         List<HabbitEntity> habbitAdd = [];
-        List<String> habbitRemove = [];
+        // list task id yang akan diremove
+        List<TaskEntity> taskIdRemove = [];
 
+        // Mengecek id di habbit id
         for (var element in habbitsId) {
-          if (!taskId.contains(element)) {
+          // Jika dalam habbit id pada task tidak memuat id yg ada pada habbit id
+          if (!habbitIdTasks.contains(element)) {
+            // tambahkan habbit yang ber id tersebut ke dalam habbit add
             habbitAdd.add(allHabbit.where((val) => val.id == element).first);
           }
         }
+        print("Habbit Add $habbitAdd");
 
-        for (var element in taskId) {
+
+        // Mengecek id habbit pada list task
+        for (var element in habbitIdTasks) {
+          // jika terdapat id didalamnya yang tidak terdapat pada habbits id
           if (!habbitsId.contains(element)) {
-            habbitRemove
-                .add(tasks.where((val) => val.habbitId == element).first.id!);
+            // menambahkan id task yang memiliki id habbit tersebut ke id yang akan diremove
+            for (var task in tasks) {
+              if (task.habbitId == element) {
+                taskIdRemove.add(task);
+              }
+            }
           }
           habbitsId.remove(element);
         }
+        print("Habbit Remove $taskIdRemove");
 
-        print(habbitAdd);
-        print(habbitRemove);
+        await transferTaskUsecase.execute(habbitAdd, taskIdRemove);
 
-        await transferTaskUsecase.execute(habbitAdd, habbitRemove);
         getTodayTaskUsecase
             .execute(event.petId, DateTime.now())
             .listen((event) {
@@ -88,7 +105,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       },
     );
   }
-
   _checkMatchHabbit(List<HabbitEntity> listHabbit) {
     List<HabbitEntity> matchHabbit = [];
     final df = DateFormat.yMMMEd();

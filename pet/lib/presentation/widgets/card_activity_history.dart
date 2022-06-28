@@ -74,19 +74,31 @@ class _CardActivityHistoryState extends State<CardActivityHistory> {
                         BlocBuilder<GetPlanHistoryBloc, GetPlanHistoryState>(
                             builder: ((context, state) {
                       if (state is GetPlanHistoryLoading) {
-                        return const CircularProgressIndicator();
+                        return const LoadingView();
                       } else if (state is GetPlanHistorySuccess) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            children: state.listPlanHistory
-                                .map((e) =>
-                                    CardContentActivityHistory(planEntity: e))
-                                .toList(),
-                          ),
-                        );
+                        if (state.listPlanHistory.isEmpty) {
+                          return Center(
+                            child: Text(
+                              'Activity History Empty',
+                              style: kTextTheme.headline3
+                                  ?.copyWith(color: kGreyTransparant),
+                            ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              children: state.listPlanHistory
+                                  .map((e) =>
+                                      CardContentActivityHistory(planEntity: e))
+                                  .toList(),
+                            ),
+                          );
+                        }
+                      } else if (state is GetPlanHistoryError) {
+                        return ErrorView(message: state.message);
                       } else {
-                        return const Text('Error');
+                        return Container();
                       }
                     }))),
                   ),

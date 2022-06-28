@@ -7,7 +7,6 @@ import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -118,7 +117,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
         },
         builder: (context, state) {
           if (state is OpenAdoptLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const LoadingView();
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),

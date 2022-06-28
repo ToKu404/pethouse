@@ -16,7 +16,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       required this.preferenceHelper})
       : super(NotificationInitial()) {
     on<GetListNotification>((event, emit) {
-      emit(NotificationSuccess(listNotification: event.listNotification));
+      emit(NotificationSuccess(
+          listNotification: event.listNotification.reversed.toList()));
     });
     on<FetchListNotification>(
       (event, emit) async {

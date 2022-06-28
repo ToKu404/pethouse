@@ -41,19 +41,22 @@ class CardPetrivia extends StatelessWidget {
                     ? const NoImageCard(
                         borderRadius: 10,
                       )
-                    : CachedNetworkImage(
-                        imageUrl: petriviaEntity.imgUrl!,
-                        placeholder: (context, url) => const LoadingImageCard(
-                          borderRadius: 10,
+                    : Hero(
+                      tag: petriviaEntity.id!,
+                      child: CachedNetworkImage(
+                          imageUrl: petriviaEntity.imgUrl!,
+                          placeholder: (context, url) => const ShimmerLoadingView(
+                            borderRadius: 10,
+                          ),
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover)),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const NoImageCard(),
                         ),
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.cover)),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            const NoImageCard(),
-                      ),
+                    ),
               ),
               Expanded(
                 child: Padding(

@@ -3,6 +3,7 @@ import 'package:adopt/adopt.dart';
 import 'package:pet_map/pet_map.dart';
 import 'package:petrivia/petrivia.dart';
 import 'package:store/store.dart';
+import 'package:user/presentation/pages/auth_pages/reset_password_page.dart';
 import 'package:user/user.dart';
 import 'package:task/task.dart';
 import 'package:pet/pet.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.locator<SignUpBloc>()),
           BlocProvider(create: (_) => di.locator<AuthCubit>()),
           BlocProvider(create: (_) => di.locator<AddPlanCubit>()),
+          BlocProvider(create: (_) => di.locator<EditPlanCubit>()),
           BlocProvider(create: (_) => di.locator<UserDbBloc>()),
           BlocProvider(create: (_) => di.locator<UserProfileBloc>()),
           BlocProvider(create: (_) => di.locator<ResetPasswordBloc>()),
@@ -152,7 +154,7 @@ class MyApp extends StatelessWidget {
                     builder: (context) => EditPetPage(
                           pet: pet,
                         ));
-               case EDIT_PLAN_ROUTE_NAME:
+              case EDIT_PLAN_ROUTE_NAME:
                 final plan = settings.arguments as PlanEntity;
                 return MaterialPageRoute(
                     builder: (context) => EditPlanPage(
@@ -189,6 +191,8 @@ class MyApp extends StatelessWidget {
                     builder: (context) => const AddPetPage());
               case ABOUT_ROUTE_NAME:
                 return MaterialPageRoute(builder: (context) => AboutPage());
+              case RESET_PASSWORD_ROUTE_NAME:
+                return MaterialPageRoute(builder: (context) => const ResetPasswordPage());
             }
           },
         ));

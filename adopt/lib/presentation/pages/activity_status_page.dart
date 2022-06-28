@@ -87,9 +87,7 @@ class _BuildRequestAdoptStatus extends StatelessWidget {
             BlocBuilder<RequestAdoptStatusBloc, RequestAdoptStatusState>(
               builder: (context, state) {
                 if (state is RequestAdoptStatusLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const LoadingView();
                 } else if (state is ListRequestAdoptLoaded) {
                   if (state.adoptList.isNotEmpty) {
                     final statusWaiting = state.adoptList
@@ -154,10 +152,10 @@ class _BuildRequestAdoptStatus extends StatelessWidget {
                   } else {
                     return Container();
                   }
+                } else if (state is RequestAdoptStatusError) {
+                  return ErrorView(message: state.message);
                 } else {
-                  return const Center(
-                    child: Text("Error"),
-                  );
+                  return Container();
                 }
               },
             ),
@@ -181,9 +179,7 @@ class _BuildOpenAdoptStatus extends StatelessWidget {
             BlocBuilder<OpenAdoptStatusBloc, OpenAdoptStatusState>(
               builder: (context, state) {
                 if (state is ActivityStatusLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const LoadingView();
                 } else if (state is ListOpenAdoptLoaded) {
                   if (state.adoptList.isNotEmpty) {
                     final statusOpen = state.adoptList
@@ -248,10 +244,10 @@ class _BuildOpenAdoptStatus extends StatelessWidget {
                   } else {
                     return Container();
                   }
+                } else if (state is ActivityStatusError) {
+                  return ErrorView(message: state.message);
                 } else {
-                  return const Center(
-                    child: Text("Error"),
-                  );
+                  return Container();
                 }
               },
             ),

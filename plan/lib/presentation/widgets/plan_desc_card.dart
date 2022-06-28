@@ -116,7 +116,8 @@ class PlanDescCard extends StatelessWidget {
                         width: 120,
                         onTap: () {
                           if (plan.time!.toDate().isAfter(DateTime.now())) {
-                            Navigator.pushNamed(context, EDIT_PLAN_ROUTE_NAME);
+                            Navigator.pushNamed(context, EDIT_PLAN_ROUTE_NAME,
+                                arguments: plan);
                           } else {
                             showDialog(
                                 context: context,

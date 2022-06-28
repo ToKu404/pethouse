@@ -163,9 +163,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
         }
       }, builder: (context, state) {
         if (state is EditAdoptLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const LoadingView();
         } else {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),

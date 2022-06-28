@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class LoadingImageCard extends StatelessWidget {
+class ShimmerLoadingView extends StatelessWidget {
   final double borderRadius;
-  const LoadingImageCard({Key? key, this.borderRadius = 0}) : super(key: key);
+  const ShimmerLoadingView({Key? key, this.borderRadius = 0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

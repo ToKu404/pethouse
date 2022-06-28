@@ -82,25 +82,19 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
                 OnetimeInternetCheckState>(
               builder: (context, state) {
                 if (state is OnetimeInternetCheckLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const LoadingView();
                 } else if (state is OnetimeInternetCheckGain) {
                   return BlocBuilder<DetailAdoptBloc, DetailAdoptState>(
                       builder: (context, state) {
                     if (state is DetailAdoptLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const LoadingView();
                     } else if (state is PetDescriptionLoaded) {
                       return _BuildDetailAdopt(
                         adoptEntity: state.adoptEntity,
                         isOwner: state.isOwner,
                       );
                     } else if (state is DetailAdoptError) {
-                      return Center(
-                        child: Text(state.message),
-                      );
+                      return ErrorView(message: state.message);
                     } else {
                       return const Center();
                     }
@@ -208,7 +202,7 @@ class _BuildDetailAdopt extends StatelessWidget {
                           imageUrl: adoptEntity.petPictureUrl!,
                           placeholder: (context, url) => ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: const LoadingImageCard(
+                            child: const ShimmerLoadingView(
                               borderRadius: 10,
                             ),
                           ),

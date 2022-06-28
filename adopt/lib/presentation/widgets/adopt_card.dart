@@ -38,7 +38,7 @@ class AdoptCard extends StatelessWidget {
                       ? CachedNetworkImage(
                           imageUrl: adoptEntity.petPictureUrl!,
                           placeholder: (context, url) =>
-                              const LoadingImageCard(),
+                              const ShimmerLoadingView(),
                           imageBuilder: (context, imageProvider) => Container(
                             width: double.infinity,
                             height: 120,

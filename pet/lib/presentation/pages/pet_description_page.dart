@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/presentation/pages/no_internet_page.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,7 +29,8 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<OnetimeInternetCheckCubit>(context).onCheckConnectionOnetime();
+    BlocProvider.of<OnetimeInternetCheckCubit>(context)
+        .onCheckConnectionOnetime();
     BlocProvider.of<GetPetDescBloc>(context)
         .add(FetchPetDesc(petId: widget.petId));
     BlocProvider.of<GetMonthlyTaskBloc>(context)
@@ -96,12 +96,11 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
         ],
       ),
       body: SafeArea(
-        child: BlocBuilder<OnetimeInternetCheckCubit, OnetimeInternetCheckState>(
+        child:
+            BlocBuilder<OnetimeInternetCheckCubit, OnetimeInternetCheckState>(
           builder: (context, state) {
             if (state is OnetimeInternetCheckLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const LoadingView();
             } else if (state is OnetimeInternetCheckLost) {
               return const NoInternetPage();
             } else {
@@ -117,13 +116,15 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
                 child: BlocBuilder<GetPetDescBloc, GetPetDescState>(
                     builder: (context, state) {
                   if (state is PetDescLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const LoadingView();
                   } else if (state is PetDescSuccess) {
                     return _PetDescLayout(
                       pet: state.petEntity,
                     );
+                  } else if (state is PetDescError) {
+                    return ErrorView(message: state.message);
                   } else {
-                    return const Center();
+                    return Container();
                   }
                 }),
               );
@@ -154,7 +155,7 @@ class _PetDescLayout extends StatelessWidget {
                   imageUrl: pet.petPictureUrl!,
                   placeholder: (context, url) => ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: const LoadingImageCard(
+                    child: const ShimmerLoadingView(
                       borderRadius: 10,
                     ),
                   ),

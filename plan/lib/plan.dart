@@ -6,6 +6,8 @@ export 'package:plan/presentation/pages/edit_plan_page.dart';
 
 export 'package:plan/presentation/pages/calendar_page.dart';
 export 'package:plan/presentation/blocs/add_plan_cubit/add_plan_cubit.dart';
+export 'package:plan/presentation/blocs/edit_plan_cubit/edit_plan_cubit.dart';
+
 export 'package:plan/presentation/blocs/home_plan_calendar_bloc/home_plan_calendar_bloc.dart';
 export 'package:plan/presentation/blocs/get_plan_history_bloc/get_plan_history_bloc.dart';
 export 'package:plan/presentation/blocs/plan_calendar_bloc/plan_calendar_bloc.dart';

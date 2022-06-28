@@ -83,13 +83,9 @@ class _AdoptPageState extends State<AdoptPage> {
           BlocBuilder<ListAdoptBloc, ListAdoptState>(
             builder: (context, state) {
               if (state is ListAdoptLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const LoadingView();
               } else if (state is ListAdoptError) {
-                return Center(
-                  child: Text(state.message),
-                );
+                return ErrorView(message: state.message);
               } else if (state is ListPetAdoptLoaded) {
                 print(state.listAdoptEntity.length);
                 return Column(
