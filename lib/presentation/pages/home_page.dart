@@ -9,7 +9,7 @@ import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 import 'package:pethouse/presentation/widgets/task_daily_summary_card.dart';
 import 'package:pethouse/presentation/widgets/event_card.dart';
-import 'package:pethouse/presentation/widgets/no_pet_view.dart';
+import 'package:core/presentation/widgets/no_pet_view.dart';
 import 'package:task/task.dart';
 import 'package:user/domain/entities/user_entity.dart';
 import 'package:plan/plan.dart';

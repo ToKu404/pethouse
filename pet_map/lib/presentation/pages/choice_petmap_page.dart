@@ -46,87 +46,92 @@ class _ChoicePetPageState extends State<ChoicePetPage> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Choice One Of Your Pet to Use this Feature',
-                  style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                BlocBuilder<GetPetBloc, GetPetState>(
-                  builder: (context, state) {
-                    if (state is GetPetLoading) {
-                      return const LoadingView();
-                    } else if (state is GetPetSuccess) {
-                      petName = state.listPet[0].petName!;
-                      petPictureUrl = state.listPet[0].petPictureUrl ?? '';
-                      return SizedBox(
-                        height: 90,
-                        width: double.infinity,
-                        child: ListView.builder(
-                          itemCount: state.listPet.length,
-                          scrollDirection: Axis.horizontal,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final petMap = state.listPet[index];
-                            return InkWell(
-                              onTap: () {
-                                petName = petMap.petName!;
-                                petPictureUrl = petMap.petPictureUrl ?? '';
-                                selectedPet = index;
-                                setState(() {});
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 60,
-                                    width: 60,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: index == selectedPet
-                                          ? Border.all(
-                                              width: 2, color: kPrimaryColor)
-                                          : null,
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              petMap.petPictureUrl!),
-                                          fit: BoxFit.cover),
-                                    ),
-                                  ),
-                                  Text(
-                                    state.listPet[index].petName ?? '-',
-                                    style: kTextTheme.bodyText1
-                                        ?.copyWith(color: kDarkBrown),
-                                    maxLines: 1,
-                                  )
-                                ],
-                              ),
-                            );
-                          },
+            child: BlocBuilder<GetPetBloc, GetPetState>(
+              builder: (context, state) {
+                if (state is GetPetLoading) {
+                  return const LoadingView();
+                } else if (state is GetPetSuccess) {
+                  if (state.listPet.isEmpty) {
+                    return const Center(child: NoPetView());
+                  } else {
+                    petName = state.listPet[0].petName!;
+                    petPictureUrl = state.listPet[0].petPictureUrl ?? '';
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Choice One Of Your Pet to Use this Feature',
+                          style:
+                              kTextTheme.headline6?.copyWith(color: kDarkBrown),
                         ),
-                      );
-                    } else if (state is GetAllPetMapError) {
-                      return const ErrorView(message: 'Error when get pet map');
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-                DefaultButton(
-                    height: 50,
-                    width: double.infinity,
-                    onTap: () async {
-                      LatLng initPosition = await _deteriminePostion();
-                      _onSubmitPetmap(initPosition);
-                    },
-                    isClicked: false,
-                    text: 'Continue')
-              ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          height: 90,
+                          width: double.infinity,
+                          child: ListView.builder(
+                            itemCount: state.listPet.length,
+                            scrollDirection: Axis.horizontal,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              final petMap = state.listPet[index];
+                              return InkWell(
+                                onTap: () {
+                                  petName = petMap.petName!;
+                                  petPictureUrl = petMap.petPictureUrl ?? '';
+                                  selectedPet = index;
+                                  setState(() {});
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 60,
+                                      width: 60,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: index == selectedPet
+                                            ? Border.all(
+                                                width: 2, color: kPrimaryColor)
+                                            : null,
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                petMap.petPictureUrl!),
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                    Text(
+                                      state.listPet[index].petName ?? '-',
+                                      style: kTextTheme.bodyText1
+                                          ?.copyWith(color: kDarkBrown),
+                                      maxLines: 1,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        DefaultButton(
+                            height: 50,
+                            width: double.infinity,
+                            onTap: () async {
+                              LatLng initPosition = await _deteriminePostion();
+                              _onSubmitPetmap(initPosition);
+                            },
+                            isClicked: false,
+                            text: 'Continue')
+                      ],
+                    );
+                  }
+                } else if (state is GetAllPetMapError) {
+                  return const ErrorView(message: 'Error when get pet map');
+                } else {
+                  return Container();
+                }
+              },
             ),
           ),
         ),
