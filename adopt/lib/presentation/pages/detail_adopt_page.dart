@@ -34,7 +34,6 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
       listener: (context, state) {
         if (state is SuccessRequestAdopt) {
           Navigator.pop(context);
-          Navigator.pop(context);
         } else if (state is SuccessDisagreeRequestAdopt) {
           Navigator.pop(context);
         } else if (state is RemoveAdoptSuccess) {
@@ -402,29 +401,22 @@ class _BuildDetailAdopt extends StatelessWidget {
                   height: 52,
                   width: 100,
                   onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return showInfoDialog(context,
-                              title: 'Send Adopt request to pet owner?',
-                              onTap: () {
-                            final notif = NotificationEntity(
-                              title: 'Request For Adopt',
-                              value: 'some people want to adopt your pet',
-                              type: 'adopt',
-                              readStatus: false,
-                              sendTime: Timestamp.fromDate(DateTime.now()),
-                            );
-                            BlocProvider.of<DetailAdoptBloc>(context)
-                                .add(RequestAdopt(
-                              adoptEntity: adoptEntity,
-                            ));
-                            BlocProvider.of<SendNotifBloc>(context).add(
-                                SendAdoptNotification(
-                                    ownerId: adoptEntity.userId!,
-                                    notificationEntity: notif));
-                          });
-                        });
+                    showQuestionDialog(context,
+                        title: 'Send Adopt request to pet owner?', onTap: () {
+                      final notif = NotificationEntity(
+                        title: 'Request For Adopt',
+                        value: 'some people want to adopt your pet',
+                        type: 'adopt',
+                        readStatus: false,
+                        sendTime: Timestamp.fromDate(DateTime.now()),
+                      );
+                      BlocProvider.of<DetailAdoptBloc>(context)
+                          .add(RequestAdopt(adoptEntity: adoptEntity));
+                      BlocProvider.of<SendNotifBloc>(context).add(
+                          SendAdoptNotification(
+                              ownerId: adoptEntity.userId!,
+                              notificationEntity: notif));
+                    });
                   },
                   text: 'Adopt Now',
                   isClicked: false,
@@ -443,8 +435,11 @@ class _BuildDetailAdopt extends StatelessWidget {
             height: 52,
             width: 100,
             onTap: () {
-              BlocProvider.of<DetailAdoptBloc>(context)
-                  .add(DisagreeRequestAdopt(adoptEntity: adoptEntity));
+              showQuestionDialog(context,
+                  title: 'Are you sure to cancel request adopt?', onTap: () {
+                BlocProvider.of<DetailAdoptBloc>(context)
+                    .add(DisagreeRequestAdopt(adoptEntity: adoptEntity));
+              });
             },
             text: 'Cancel Request',
             isClicked: false,
@@ -460,8 +455,11 @@ class _BuildDetailAdopt extends StatelessWidget {
             height: 52,
             width: 100,
             onTap: () {
-              BlocProvider.of<DetailAdoptBloc>(context)
-                  .add(RemoveOpenAdoptEvent(adoptId: adoptEntity.adoptId!));
+              showQuestionDialog(context,
+                  title: 'Are you sure to remove open adopt?', onTap: () {
+                BlocProvider.of<DetailAdoptBloc>(context)
+                    .add(RemoveOpenAdoptEvent(adoptId: adoptEntity.adoptId!));
+              });
             },
             text: 'Adoption Completed',
             isClicked: false,

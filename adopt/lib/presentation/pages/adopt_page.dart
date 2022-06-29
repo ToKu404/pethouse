@@ -87,7 +87,6 @@ class _AdoptPageState extends State<AdoptPage> {
               } else if (state is ListAdoptError) {
                 return ErrorView(message: state.message);
               } else if (state is ListPetAdoptLoaded) {
-                print(state.listAdoptEntity.length);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

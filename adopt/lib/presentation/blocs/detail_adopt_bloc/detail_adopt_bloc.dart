@@ -1,5 +1,4 @@
 import 'package:adopt/domain/usecases/request_adopt_usecase.dart';
-import 'package:core/services/preference_helper.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user/user.dart';
@@ -15,16 +14,15 @@ class DetailAdoptBloc extends Bloc<DetailAdoptEvent, DetailAdoptState> {
   final GetUserIdLocalUsecase getUserIdLocalUsecase;
   final GetPetDescriptionUsecase getPetDescriptionUsecase;
   final RequestAdoptUsecase requestAdoptUsecase;
-  final PreferenceHelper preferenceHelper;
-    final RemoveOpenAdoptUsecase removeOpenAdoptUsecase;
+  final GetOneReadUserUsecase getOneReadUserUsecase;
+  final RemoveOpenAdoptUsecase removeOpenAdoptUsecase;
 
   DetailAdoptBloc(
       {required this.getUserIdLocalUsecase,
       required this.getPetDescriptionUsecase,
-      required this.preferenceHelper,
       required this.requestAdoptUsecase,
-      required this.removeOpenAdoptUsecase
-      })
+      required this.getOneReadUserUsecase,
+      required this.removeOpenAdoptUsecase})
       : super(DetailAdoptInitial()) {
     on<GetPetDescription>(
       (event, emit) async {
@@ -51,18 +49,25 @@ class DetailAdoptBloc extends Bloc<DetailAdoptEvent, DetailAdoptState> {
     );
     on<RequestAdopt>(
       (event, emit) async {
-        UserEntity user = await preferenceHelper.getUserData();
-        AdoptEntity adopt = AdoptEntity(
-            petName: '',
-            petType: '',
-            gender: '',
-            adoptId: event.adoptEntity.adoptId,
-            status: 'wait',
-            adopterId: user.uid,
-            adopterName: user.name,
-            userId: event.adoptEntity.userId);
-        await requestAdoptUsecase.execute(adopt);
-        emit(SuccessRequestAdopt());
+        print('call');
+        try {
+          final user = await getOneReadUserUsecase.execute();
+          print(user.name);
+
+          AdoptEntity adopt = AdoptEntity(
+              petName: '',
+              petType: '',
+              gender: '',
+              adoptId: event.adoptEntity.adoptId,
+              status: 'wait',
+              adopterId: user.uid,
+              adopterName: user.name,
+              userId: event.adoptEntity.userId);
+          await requestAdoptUsecase.execute(adopt);
+          emit(SuccessRequestAdopt());
+        } catch (e) {
+          print(e);
+        }
       },
     );
     on<DisagreeRequestAdopt>(

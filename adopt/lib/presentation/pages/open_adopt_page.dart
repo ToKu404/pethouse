@@ -186,7 +186,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
                         width: double.infinity,
                         onTap: () {
                           if (formKey.currentState!.validate()) {
-                            showInfoDialog(context,
+                            showQuestionDialog(context,
                                 title: 'Confirm Create New Open Adopt',
                                 onTap: () {
                               _submitOpenAdopt();

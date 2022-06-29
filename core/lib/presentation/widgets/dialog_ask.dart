@@ -16,11 +16,11 @@ showWarningDialog(BuildContext context,
   ).show();
 }
 
-showInfoDialog(BuildContext context,
+showQuestionDialog(BuildContext context,
     {required String title, required VoidCallback onTap}) {
   return AwesomeDialog(
     context: context,
-    dialogType: DialogType.INFO,
+    dialogType: DialogType.QUESTION,
     animType: AnimType.SCALE,
     title: title,
     btnCancelColor: Colors.redAccent,
@@ -30,8 +30,7 @@ showInfoDialog(BuildContext context,
   ).show();
 }
 
-showSuccessDialog(BuildContext context,
-    {required String title}) {
+showSuccessDialog(BuildContext context, {required String title}) {
   return AwesomeDialog(
     context: context,
     dialogType: DialogType.SUCCES,

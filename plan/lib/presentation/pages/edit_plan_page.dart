@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -54,19 +53,19 @@ class _EditPlanPageState extends State<EditPlanPage> {
         time: planTime,
         activityTitle: activity,
         completeStatus: false,
+        id: widget.plan.id,
         activity: _selectActivity,
         location: _locationController.text,
         description: _descriptionController.text,
         reminder: _statusReminder);
 
-    BlocProvider.of<EditPlanCubit>(context).submitUpdatePlan(plan);
+    BlocProvider.of<EditPlanCubit>(context).submitUpdatePlan(plan, widget.plan);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-
     _descriptionController.dispose();
     _locationController.dispose();
     _planDateController.dispose();
@@ -84,13 +83,12 @@ class _EditPlanPageState extends State<EditPlanPage> {
     _planTime = TimeOfDay.fromDateTime(dt);
     _planDate = DateTime(dt.year, dt.month, dt.day);
 
-    if (_selectActivity == 'Gromming') {
+    if (_selectActivity == 'Grooming') {
       _groomingType = widget.plan.activityTitle!.split(' ')[0];
     }
     if (_selectActivity == 'Other') {
       _otherActivityController.text = widget.plan.activityTitle ?? '';
     }
-    final format = DateFormat.yMMMEd();
     _locationController.text = widget.plan.location ?? '';
     _descriptionController.text = widget.plan.description ?? '';
     _planDateController.text = widget.plan.date ?? '';
@@ -102,7 +100,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     return BlocListener<EditPlanCubit, EditPlanState>(
       listener: (context, state) {
         if (state is EditPlanSuccess) {
-          showSuccessDialog(context, title: 'Success Update Plan');
+          showSuccessDialog(context, title: 'Success Edit Plan');
           Future.delayed(const Duration(seconds: 2), () async {
             Navigator.pop(context);
             Navigator.pop(context);
@@ -179,7 +177,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                         width: double.infinity,
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            showInfoDialog(context,
+                            showQuestionDialog(context,
                                 title: 'Confirm update plan', onTap: () {
                               _onEditPlanSubmit();
                             });

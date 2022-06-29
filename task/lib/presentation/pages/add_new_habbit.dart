@@ -146,7 +146,7 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
                       width: double.infinity,
                       onTap: () {
                         if (formKey.currentState!.validate()) {
-                          showInfoDialog(context,
+                          showQuestionDialog(context,
                               title: 'Confirm create new habbit', onTap: () {
                             _submitAddNewTask();
                           });

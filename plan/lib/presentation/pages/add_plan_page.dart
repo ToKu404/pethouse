@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -156,12 +155,12 @@ class _AddPlanPageState extends State<AddPlanPage> {
                         height: 50,
                         width: double.infinity,
                         onTap: () {
-                           if (_formKey.currentState!.validate()) {
-                          showInfoDialog(context,
-                              title: 'Confirm create new plan', onTap: () {
-                            _onAddPlanSubmit();
-                          });
-                        }
+                          if (_formKey.currentState!.validate()) {
+                            showQuestionDialog(context,
+                                title: 'Confirm create new plan', onTap: () {
+                              _onAddPlanSubmit();
+                            });
+                          }
                         },
                         text: 'Save Plan Activity',
                         isClicked: false,

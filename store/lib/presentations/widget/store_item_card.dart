@@ -13,22 +13,15 @@ class StoreItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.QUESTION,
-          animType: AnimType.SCALE,
-          title: 'Apakah Anda Sudah Yakin?',
-          desc: 'Anda akan diarahkan ke situs web bukalapak.com',
-          btnCancelOnPress: () {},
-          btnOkOnPress: () async {
-            if (!await launchUrlString(
-              store.detailUrl,
-              mode: LaunchMode.externalApplication,
-            )) {
-              throw 'Could not launch ${store.detailUrl}';
-            }
-          },
-        ).show();
+        showQuestionDialog(context,
+            title: 'Page will redirect to Bukalapak.com', onTap: () async {
+          if (!await launchUrlString(
+            store.detailUrl,
+            mode: LaunchMode.externalApplication,
+          )) {
+            throw 'Could not launch ${store.detailUrl}';
+          }
+        });
       },
       child: Container(
         padding: const EdgeInsets.all(10),

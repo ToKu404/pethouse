@@ -1,4 +1,5 @@
-import 'package:notification/presentation/pages/build_notification.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notification/notification.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class _NotificationPageState extends State<NotificationPage> {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
+            padding: const EdgeInsets.symmetric(horizontal: kPadding),
             height: 60,
             width: double.infinity,
             decoration: BoxDecoration(
@@ -33,12 +34,34 @@ class _NotificationPageState extends State<NotificationPage> {
                     color: const Color(0xFF000000).withOpacity(.05))
               ],
             ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Notification",
-                style: kTextTheme.headline5?.copyWith(color: kDarkBrown),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    "Notification",
+                    style: kTextTheme.headline5?.copyWith(color: kDarkBrown),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    showWarningDialog(context,
+                        title: 'Are you sure to clear notifications?',
+                        onTap: () {
+                      BlocProvider.of<NotificationBloc>(context)
+                          .add(ClearNotification());
+                    });
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 8),
+                      child: Text(
+                        'Clear',
+                        style: kTextTheme.headline3
+                            ?.copyWith(color: kGreyTransparant),
+                      )),
+                )
+              ],
             ),
           ),
           const Expanded(child: BuildNotification())

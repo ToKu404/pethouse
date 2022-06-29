@@ -138,6 +138,7 @@ void init() {
   locator.registerLazySingleton(() => CreatePetMapUsecase(locator()));
   locator.registerLazySingleton(() => RemovePetMapUsecase(locator()));
   locator.registerLazySingleton(() => GetAllPetMapUsecase(locator()));
+  locator.registerLazySingleton(() => GetOneReadUserUsecase(locator()));
   locator.registerLazySingleton(() => CheckPetMapUsecase(locator()));
   locator.registerLazySingleton(() => GetPetMapUsecase(locator()));
   locator.registerLazySingleton(() => UpdatePetMapUsecase(locator()));
@@ -151,6 +152,8 @@ void init() {
   locator.registerLazySingleton(() => GetAllHabbitsUsecase(locator()));
   locator.registerLazySingleton(() => GetOneReadTaskUsecase(locator()));
   locator.registerLazySingleton(() => GetOneReadHabbitUsecase(locator()));
+  locator.registerLazySingleton(() => ClearNotificationUsecase(locator()));
+
   locator.registerLazySingleton(() => TransferTaskUsecase(locator()));
   locator.registerLazySingleton(() => GetPlanNotifIdUsecase(locator()));
   locator.registerLazySingleton(() => ChangePlanStatusUsecase(locator()));
@@ -200,7 +203,7 @@ void init() {
       getPetDescriptionUsecase: locator(),
       getUserIdLocalUsecase: locator(),
       requestAdoptUsecase: locator(),
-      preferenceHelper: locator(),
+      getOneReadUserUsecase: locator(),
       removeOpenAdoptUsecase: locator()));
   locator.registerFactory(() => ListAdoptBloc(
       getAllPetListUsecase: locator(), searchPetAdoptUsecase: locator()));
@@ -213,7 +216,9 @@ void init() {
       uploadPetCertificateUsecase: locator(),
       uploadPetPhoto: locator()));
   locator.registerFactory(() => NotificationBloc(
-      getListNotificationUsecase: locator(), preferenceHelper: locator()));
+      clearNotificationUsecase: locator(),
+      getListNotificationUsecase: locator(),
+      preferenceHelper: locator()));
   locator.registerFactory(() => OpenAdoptStatusBloc(
       getOpenAdoptList: locator(), preferenceHelper: locator()));
   locator.registerFactory(() => RequestAdoptStatusBloc(

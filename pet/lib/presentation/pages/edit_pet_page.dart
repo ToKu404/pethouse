@@ -201,7 +201,7 @@ class _EditPetPageState extends State<EditPetPage> {
                           width: double.infinity,
                           onTap: () {
                             if (formKey.currentState!.validate()) {
-                              showInfoDialog(
+                              showQuestionDialog(
                                 context,
                                 title: "Confirm update pet data",
                                 onTap: () {

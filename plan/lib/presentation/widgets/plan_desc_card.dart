@@ -99,10 +99,14 @@ class PlanDescCard extends StatelessWidget {
                         height: 50,
                         width: 120,
                         onTap: () {
-                          BlocProvider.of<HomePlanCalendarBloc>(context).add(
-                              RemovePlanEvent(
-                                  planId: plan.id!,
-                                  choiceDate: plan.time!.toDate()));
+                          showQuestionDialog(context,
+                              title: 'Are you sure, to delete this plan?',
+                              onTap: () {
+                            BlocProvider.of<HomePlanCalendarBloc>(context).add(
+                                RemovePlanEvent(
+                                    planId: plan.id!,
+                                    choiceDate: plan.time!.toDate()));
+                          });
                         },
                         isClicked: false,
                         text: 'Delete'),
@@ -119,24 +123,10 @@ class PlanDescCard extends StatelessWidget {
                             Navigator.pushNamed(context, EDIT_PLAN_ROUTE_NAME,
                                 arguments: plan);
                           } else {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text('Cannot edit old plan'),
-                                    titleTextStyle: kTextTheme.bodyText1,
-                                    actions: [
-                                      DefaultButton(
-                                          height: 30,
-                                          width: 100,
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          isClicked: false,
-                                          text: 'Okay')
-                                    ],
-                                  );
-                                });
+                            showWarningDialog(context,
+                                title: 'Cannot Edit Old Plan', onTap: () {
+                              Navigator.pop(context);
+                            });
                           }
                         },
                         isClicked: plan.time!.toDate().isAfter(DateTime.now())

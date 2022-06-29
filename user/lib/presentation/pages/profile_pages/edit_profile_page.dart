@@ -75,8 +75,8 @@ class _FormEditProfile extends StatelessWidget {
                       height: 50,
                       width: double.infinity,
                       onTap: () {
-                        showInfoDialog(context, title: 'Confirm Update Profile',
-                            onTap: () {
+                        showQuestionDialog(context,
+                            title: 'Confirm Update Profile', onTap: () {
                           context
                               .read<UserProfileBloc>()
                               .add(SubmitUpdate(state.user.uid ?? 'uid'));

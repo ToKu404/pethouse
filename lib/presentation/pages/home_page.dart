@@ -166,6 +166,7 @@ class _HomePageState extends State<HomePage> {
                       height: 160,
                       child: CarouselSlider.builder(
                         itemCount: listPet.length,
+                        
                         itemBuilder: (ctx, index, _) {
                           return Transform.scale(
                               scale: index == activePage ? 1 : .8,

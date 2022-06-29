@@ -16,7 +16,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     BlocProvider.of<UserDbBloc>(context).add(GetUserFromDb(widget.userId));
   }

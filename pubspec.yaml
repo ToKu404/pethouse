@@ -36,7 +36,6 @@ dependencies:
   carousel_slider: ^4.1.1
   flutter_native_timezone: ^2.0.0
   table_calendar: ^3.0.5
-  google_maps_flutter: ^2.1.8
   firebase_core: ^1.17.1
   cloud_firestore: ^3.1.17
   date_picker_timeline: ^1.2.3

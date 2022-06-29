@@ -5,6 +5,8 @@ import '../../domain/entities/nofitication_entity.dart';
 
 abstract class NotificationDataSource {
   Stream<List<NotificationEntity>> getAllNotification(String uid);
+  Future<void> clearNotification(String uid);
+
   Future<void> sendAdoptNotif(
       String idReceiver, NotificationEntity notificationEntity);
 }
@@ -43,5 +45,13 @@ class NotificationDataSourceImpl implements NotificationDataSource {
     await firebaseFirestore.collection('notifications').doc(idReceiver).update({
       "all_notif": FieldValue.arrayUnion([data])
     });
+  }
+
+  @override
+  Future<void> clearNotification(String uid) async {
+    await firebaseFirestore
+        .collection('notifications')
+        .doc(uid)
+        .update({'all_notif': []});
   }
 }

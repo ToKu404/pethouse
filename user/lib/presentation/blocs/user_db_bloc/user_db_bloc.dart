@@ -15,12 +15,10 @@ part 'user_db_state.dart';
 class UserDbBloc extends Bloc<UserDbEvent, UserDbState> {
   final GetCurrentUserUsecase getUserFromDb;
   final DeleteUserUsecase deleteUserUsecase;
-  // final SaveDataLocalUsecase saveUserDataLocalUsecase;
 
   UserDbBloc({
     required this.getUserFromDb,
     required this.deleteUserUsecase,
-    // required this.saveUserDataLocalUsecase,
   }) : super(UserDbInitial()) {
     on<GetUserFromDb>(
       (event, emit) async {

@@ -93,7 +93,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
           .allMatches(url)
           .map((e) => e.group(1))
           .toList();
-      _petCertificateController.text = result[0] ?? '';
+      _petCertificateController.text = result.isEmpty ? '' : result[0]!;
     }
   }
 
@@ -150,9 +150,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
         if (state is EditAdoptError) {
           print(state.message);
         } else if (state is EditAdoptSuccess) {
-          Future.delayed(const Duration(seconds: 1), () {
-            Navigator.pop(context);
-          });
+          Navigator.pop(context);
         }
         if (state is EditPetPhotoSuccess) {
           _petPhotoPath = state.petPhotoPath;
@@ -230,7 +228,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
                           width: double.infinity,
                           onTap: () {
                             if (formKey.currentState!.validate()) {
-                              showInfoDialog(context,
+                              showQuestionDialog(context,
                                   title: 'Confirm Update Open Adopt',
                                   onTap: () {
                                 _submitEditAdopt();

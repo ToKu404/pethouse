@@ -25,11 +25,10 @@ abstract class UserDataSource {
   Future<void> deleteOldImage(String oldImageUrl);
   Future<void> resetPassword(String email);
   Future<void> sendEmailVerification();
+  Future<UserEntity> getOneReadUser();
   Future<void> deleteUser(UserEntity user);
   Future<void> saveUserIdToLocal(String userId);
   Future<void> removeUserIdLocal();
-  Future<void> saveDataToLocal(UserEntity userEntity);
-  Future<UserEntity> getUserDataLocal();
 }
 
 class UserDataSourceImpl implements UserDataSource {
@@ -156,7 +155,6 @@ class UserDataSourceImpl implements UserDataSource {
 
     if (user.name != null) userMap['name'] = user.name;
     userCollectionRef.doc(user.uid).update(userMap);
-    await updateLocalUserData(user);
   }
 
   @override
@@ -249,27 +247,14 @@ class UserDataSourceImpl implements UserDataSource {
   @override
   Future<void> removeUserIdLocal() async {
     await preferenceHelper.removeUserId();
-    await preferenceHelper.removeUserData();
+
     return;
   }
 
   @override
-  Future<void> saveDataToLocal(UserEntity userEntity) async {
-    await preferenceHelper.setUserData(userEntity);
-    return;
-  }
-
-  @override
-  Future<UserEntity> getUserDataLocal() async {
-    final result = await preferenceHelper.getUserData();
-    print("NAMEEEEE ${result.name}");
-    return result;
-  }
-
-  Future<void> updateLocalUserData(UserEntity user) async {
-    await preferenceHelper.updateUserData(user);
-    if (user.email != null) {
-      await firebaseAuth.currentUser?.updateEmail(user.email ?? '');
-    }
+  Future<UserEntity> getOneReadUser() async {
+    final ref = firebaseFirestore.collection('users');
+    final userId = await preferenceHelper.getUserId();
+    return ref.doc(userId).get().then((value) => UserModel.fromSnapshot(value));
   }
 }

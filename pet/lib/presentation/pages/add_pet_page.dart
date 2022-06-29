@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +88,9 @@ class _AddPetPageState extends State<AddPetPage> {
         listener: (context, state) {
           if (state is AddPetError) {
             print(state.message);
-          } else if (state is AddPetSuccess) {}
+          } else if (state is AddPetSuccess) {
+            Navigator.pop(context);
+          }
           if (state is AddPetPhotoSuccess) {
             _petPhotoPath = state.petPhotoPath;
           }
@@ -161,7 +161,7 @@ class _AddPetPageState extends State<AddPetPage> {
                         width: double.infinity,
                         onTap: () {
                           if (formKey.currentState!.validate()) {
-                            showInfoDialog(
+                            showQuestionDialog(
                               context,
                               title: "Confirm Add New Pet",
                               onTap: () {
@@ -172,7 +172,6 @@ class _AddPetPageState extends State<AddPetPage> {
                                   },
                                 );
                                 _submitAddPet();
-                                Navigator.pop(context);
                                 Navigator.pop(context);
                               },
                             );

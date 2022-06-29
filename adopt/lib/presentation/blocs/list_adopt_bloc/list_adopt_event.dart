@@ -20,7 +20,7 @@ class FetchListPetAdopt extends ListAdoptEvent {}
 class FetchSearchPetAdopt extends ListAdoptEvent {
   final String query;
 
-  FetchSearchPetAdopt(this.query);
+  const FetchSearchPetAdopt(this.query);
 
   
   @override

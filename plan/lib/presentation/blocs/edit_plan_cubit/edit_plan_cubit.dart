@@ -9,10 +9,32 @@ class EditPlanCubit extends Cubit<EditPlanState> {
   final EditPlanUsecase editPlanUsecase;
   EditPlanCubit({required this.editPlanUsecase}) : super(EditPlanInitial());
 
-  Future<void> submitUpdatePlan(PlanEntity updatePlan) async {
+  Future<void> submitUpdatePlan(
+      PlanEntity updatePlan, PlanEntity oldPlan) async {
     try {
       emit(EditPlanLoading());
-      await editPlanUsecase.execute(updatePlan);
+      PlanEntity newPlan = PlanEntity(
+        id: oldPlan.id,
+        date: updatePlan.date != oldPlan.date ? updatePlan.date : '',
+        time: updatePlan.time != oldPlan.time ? updatePlan.time : null,
+        activity:
+            updatePlan.activity != oldPlan.activity ? updatePlan.activity : '',
+        activityTitle: updatePlan.activityTitle != oldPlan.activityTitle
+            ? updatePlan.activityTitle
+            : '',
+        location:
+            updatePlan.location != oldPlan.location ? updatePlan.location : '',
+        description: updatePlan.description != oldPlan.description
+            ? updatePlan.description
+            : '',
+        reminder: updatePlan.reminder != oldPlan.reminder
+            ? updatePlan.reminder
+            : null,
+        completeStatus: updatePlan.completeStatus != oldPlan.completeStatus
+            ? updatePlan.completeStatus
+            : null,
+      );
+      await editPlanUsecase.execute(newPlan);
       emit(EditPlanSuccess());
     } catch (_) {
       emit(EditPlanFailure(message: 'Failed Edit Plan'));
