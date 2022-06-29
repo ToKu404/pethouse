@@ -99,8 +99,12 @@ class _AdoptPageState extends State<AdoptPage> {
                       ),
                     ),
                     state.listAdoptEntity.isEmpty
-                        ? const Center(
-                            child: Text("Empty"),
+                        ? Center(
+                            child: Text(
+                              "No Pet Found",
+                              style: kTextTheme.headline3
+                                  ?.copyWith(color: kGreyTransparant),
+                            ),
                           )
                         : GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),
