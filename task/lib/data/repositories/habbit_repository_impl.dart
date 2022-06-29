@@ -1,5 +1,3 @@
-
-
 import 'package:task/data/data_sources/habbit_data_sources.dart';
 import 'package:task/domain/entities/habbit_entity.dart';
 
@@ -28,5 +26,10 @@ class HabbitRepositoryImpl implements HabbitRepository {
   @override
   Stream<List<HabbitEntity>> getAllHabbits(String petId) {
     return habbitDataSource.getAllHabbits(petId);
+  }
+
+  @override
+  Future<List<HabbitEntity>> getOneReadHabbits(String petId) {
+    return habbitDataSource.getOneReadHabbits(petId);
   }
 }

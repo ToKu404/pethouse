@@ -1,12 +1,8 @@
 import 'dart:io';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 
@@ -124,20 +120,8 @@ class _EditPetPageState extends State<EditPetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Edit Adopt',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      appBar: const DefaultAppBar(
+        title: 'Edit Pet',
       ),
       body: SafeArea(
           child: BlocConsumer<UpdatePetBloc, UpdatePetState>(
@@ -154,9 +138,7 @@ class _EditPetPageState extends State<EditPetPage> {
         }
       }, builder: (context, state) {
         if (state is UpdatePetLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const LoadingView();
         } else {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -214,35 +196,27 @@ class _EditPetPageState extends State<EditPetPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        GradientButton(
+                        DefaultButton(
                           height: 55,
                           width: double.infinity,
                           onTap: () {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.INFO,
-                              animType: AnimType.BOTTOMSLIDE,
-                              title: 'Apakah Anda Sudah Yakin?',
-                              btnCancelOnPress: () {},
-                              btnOkOnPress: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return const LoadingView();
-                                  },
-                                );
-                                Future.delayed(const Duration(seconds: 1), () {
-                                  if (!formKey.currentState!.validate()) {
-                                    Navigator.pop(context);
-                                    return;
-                                  } else {
-                                    _submitUpdatePet();
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  }
-                                });
-                              },
-                            ).show();
+                            if (formKey.currentState!.validate()) {
+                              showQuestionDialog(
+                                context,
+                                title: "Confirm update pet data",
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const LoadingView();
+                                    },
+                                  );
+                                  _submitUpdatePet();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                              );
+                            }
                           },
                           text: 'Update Pet',
                           isClicked: false,
@@ -389,7 +363,7 @@ class _EditPetPageState extends State<EditPetPage> {
               ),
               Expanded(
                 child: Text(name,
-                    style: kTextTheme.subtitle1?.copyWith(color: color)),
+                    style: kTextTheme.headline3?.copyWith(color: color)),
               ),
             ],
           ),

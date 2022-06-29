@@ -44,7 +44,7 @@ class TaskDailySummaryCard extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.check_circle,
-                    color: kMainOrangeColor,
+                    color: kPrimaryColor,
                   ),
                   const SizedBox(
                     width: 4,
@@ -69,7 +69,7 @@ class TaskDailySummaryCard extends StatelessWidget {
               lineWidth: 10.0,
               circularStrokeCap: CircularStrokeCap.round,
               percent: (taskFinish! / taskAll!),
-              progressColor: kMainOrangeColor,
+              progressColor: kPrimaryColor,
               backgroundColor: kGrey,
               center: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

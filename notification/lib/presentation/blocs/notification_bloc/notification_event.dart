@@ -18,3 +18,4 @@ class GetListNotification extends NotificationEvent {
 
 class FetchListNotification extends NotificationEvent {}
 
+class ClearNotification extends NotificationEvent {}

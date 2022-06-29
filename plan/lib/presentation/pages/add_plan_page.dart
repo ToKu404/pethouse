@@ -1,9 +1,6 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:core/core.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
@@ -82,27 +79,16 @@ class _AddPlanPageState extends State<AddPlanPage> {
     return BlocListener<AddPlanCubit, AddPlanState>(
       listener: (context, state) {
         if (state is AddPlanSucces) {
-          Future.delayed(const Duration(seconds: 1), () {
+          showSuccessDialog(context, title: 'Success Add New Plan');
+          Future.delayed(const Duration(seconds: 2), () async {
             Navigator.pop(context);
             Navigator.pop(context);
           });
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 1,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(FontAwesomeIcons.arrowLeft),
-            color: kPrimaryColor,
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            'Add Plan',
-            style: kTextTheme.headline5,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+        appBar: const DefaultAppBar(
+          title: 'Add Plan',
         ),
         body: SafeArea(
           child: Form(
@@ -112,46 +98,6 @@ class _AddPlanPageState extends State<AddPlanPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                '${widget.petEntity.petName}',
-                                textAlign: TextAlign.center,
-                                style: kTextTheme.headline6,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: kSecondaryColor,
-                              width: 1.8,
-                            ),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                '${widget.petEntity.petPictureUrl}',
-                              ),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -205,27 +151,15 @@ class _AddPlanPageState extends State<AddPlanPage> {
                       padding: const EdgeInsets.symmetric(
                         vertical: 20,
                       ),
-                      child: GradientButton(
+                      child: DefaultButton(
                         height: 50,
                         width: double.infinity,
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.QUESTION,
-                              animType: AnimType.BOTTOMSLIDE,
-                              title: 'Apakah Anda Sudah Yakin?',
-                              btnCancelOnPress: () {},
-                              btnOkOnPress: () {
-                                _onAddPlanSubmit();
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return const LoadingView();
-                                  },
-                                );
-                              },
-                            ).show();
+                            showQuestionDialog(context,
+                                title: 'Confirm create new plan', onTap: () {
+                              _onAddPlanSubmit();
+                            });
                           }
                         },
                         text: 'Save Plan Activity',
@@ -274,7 +208,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
   }
 
   _buildInputDate() {
-    final DateFormat _dateFormat = DateFormat.yMMMEd();
+    final DateFormat dateFormat = DateFormat.yMMMEd();
     return TextFormField(
       readOnly: true,
       validator: (value) {
@@ -308,7 +242,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
           }
           setState(() {
             _planDate = pickedDate;
-            _planDateController.text = _dateFormat.format(pickedDate);
+            _planDateController.text = dateFormat.format(pickedDate);
           });
         });
       },
@@ -342,7 +276,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         ),
       ),
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: kTextTheme.subtitle1,
+      style: kTextTheme.headline3?.copyWith(color: kDarkBrown),
       value: _selectActivity,
       items: _activityTypeList.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
@@ -429,7 +363,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
         ),
       ),
       icon: const Icon(Icons.arrow_drop_down_rounded),
-      style: kTextTheme.subtitle1,
+      style: kTextTheme.headline3?.copyWith(color: kDarkBrown),
       value: _groomingType,
       items: typeGrooming.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(

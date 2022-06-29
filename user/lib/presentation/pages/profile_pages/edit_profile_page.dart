@@ -1,7 +1,7 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../blocs/user_db_bloc/user_db_bloc.dart';
 import '../../blocs/user_profile_bloc/user_profile_bloc.dart';
 
@@ -22,23 +22,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Edit Profile',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+    return const Scaffold(
+      appBar: DefaultAppBar(
+        title: 'Edit Profile',
       ),
-      body: const SafeArea(child: _FormEditProfile()),
+      body: SafeArea(child: _FormEditProfile()),
     );
   }
 }
@@ -50,9 +38,7 @@ class _FormEditProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserDbBloc, UserDbState>(builder: ((context, state) {
       if (state is UserDbLoading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const LoadingView();
       } else if (state is SuccessGetData) {
         BlocProvider.of<UserProfileBloc>(context).add(UserProfileInit(
             imageUrl: state.user.imageUrl ?? '',
@@ -85,14 +71,15 @@ class _FormEditProfile extends StatelessWidget {
                   const SizedBox(
                     height: 30,
                   ),
-                  GradientButton(
+                  DefaultButton(
                       height: 50,
                       width: double.infinity,
                       onTap: () {
-                        context
-                            .read<UserProfileBloc>()
-                            .add(SubmitUpdate(state.user.uid ?? 'uid'));
-                        Future.delayed(const Duration(seconds: 1), () {
+                        showQuestionDialog(context,
+                            title: 'Confirm Update Profile', onTap: () {
+                          context
+                              .read<UserProfileBloc>()
+                              .add(SubmitUpdate(state.user.uid ?? 'uid'));
                           Navigator.pop(context);
                         });
                       },
@@ -162,7 +149,7 @@ class _ImageSection extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        GradientButton(
+        DefaultButton(
             height: 40,
             width: 200,
             onTap: () async {

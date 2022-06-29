@@ -21,6 +21,5 @@ abstract class UserRepository {
   Future<void> deleteUser(UserEntity user);
   Future<void> saveUserIdToLocal(String userId);
   Future<void> removeUserIdLocal();
-  Future<void> saveUserDataLocal(UserEntity user);
-  Future<UserEntity> getUserDataLocal();
+  Future<UserEntity> getOneReadUser();
 }

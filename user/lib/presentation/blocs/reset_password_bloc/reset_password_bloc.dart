@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,11 +23,9 @@ class ResetPasswordBloc
     on<ResetEmailChanged>(_onEmailChanged);
     on<ResetPasswordInitial>(_onInitResetPassword);
   }
-  final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-  );
+
   bool _isEmailValid(String email) {
-    return _emailRegExp.hasMatch(email);
+    return TextGeneratorHelper.emailRegExp.hasMatch(email);
   }
 
   _onEmailChanged(

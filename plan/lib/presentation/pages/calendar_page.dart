@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:plan/plan.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -32,21 +31,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Event Calendar',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
+      appBar: const DefaultAppBar(title: 'Event Calendar'),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -92,11 +77,11 @@ class _CalendarPageState extends State<CalendarPage> {
                       markersMaxCount: 3,
                       markerSizeScale: .15,
                       selectedDecoration: BoxDecoration(
-                          color: const Color(0xFFFFB4BE),
+                          color: kSecondaryColor,
                           borderRadius: BorderRadius.circular(10),
                           shape: BoxShape.rectangle),
                       todayDecoration: BoxDecoration(
-                          color: kMainPinkColor,
+                          color: kPrimaryColor,
                           borderRadius: BorderRadius.circular(10),
                           shape: BoxShape.rectangle),
                       defaultDecoration: BoxDecoration(
@@ -122,9 +107,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 BlocBuilder<PlanCalendarBloc, PlanCalendarState>(
                   builder: (context, state) {
                     if (state is PlanCalendarLoading) {
-                      return const CircularProgressIndicator();
+                      return const LoadingView();
                     } else if (state is PlanCalendarSuccess) {
-                      print(state.listPlan);
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -157,8 +141,10 @@ class _CalendarPageState extends State<CalendarPage> {
                           ),
                         ],
                       );
-                    } else {
+                    } else if (state is PlanCalendarError) {
                       return const Text('');
+                    } else {
+                      return Container();
                     }
                   },
                 )

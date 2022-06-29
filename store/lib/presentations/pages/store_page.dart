@@ -1,12 +1,8 @@
 import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:html/dom.dart' as dom;
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:store/presentations/widget/store_item_card.dart';
 import 'package:store/store.dart';
-
-import '../../domain/entities/store.dart';
 
 class StorePage extends StatefulWidget {
   const StorePage({Key? key}) : super(key: key);
@@ -27,7 +23,7 @@ class _StorePageState extends State<StorePage> {
     return BlocBuilder<StoreScrappingCubit, StoreScrappingState>(
         builder: ((context, state) {
       if (state is StoreScrappingLoading) {
-        return const Center(child: CircularProgressIndicator());
+        return const LoadingView();
       } else if (state is StoreScrappingSuccess) {
         return GridView.builder(
           padding: const EdgeInsets.symmetric(
@@ -43,6 +39,8 @@ class _StorePageState extends State<StorePage> {
             return StoreItemCard(store: state.listStore[index]);
           },
         );
+      } else if (state is StoreScrappingError) {
+        return const ErrorView(message: 'Error Scrap Web');
       } else {
         return Container();
       }

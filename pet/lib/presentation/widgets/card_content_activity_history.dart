@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:plan/plan.dart';
 
-class CardContentMedical extends StatelessWidget {
+class CardContentActivityHistory extends StatelessWidget {
   final PlanEntity planEntity;
-  const CardContentMedical({Key? key, required this.planEntity})
+  const CardContentActivityHistory({Key? key, required this.planEntity})
       : super(key: key);
 
   @override

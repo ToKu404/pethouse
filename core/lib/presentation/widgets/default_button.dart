@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../utils/constants.dart';
 
-class GradientButton extends StatelessWidget {
+class DefaultButton extends StatelessWidget {
   final double height;
   final double width;
   final VoidCallback? onTap;
   final String text;
   final bool isClicked;
 
-  const GradientButton(
+  const DefaultButton(
       {super.key,
       required this.height,
       required this.width,
@@ -20,16 +20,11 @@ class GradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: isClicked ? Colors.blueGrey : null,
-        gradient: isClicked
-            ? null
-            : const LinearGradient(
-                colors: [kSecondaryColor, kPrimaryColor],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter),
+        color: isClicked ? Colors.blueGrey : kPrimaryColor,
         borderRadius: kBorderRadius,
       ),
       child: MaterialButton(
@@ -38,8 +33,7 @@ class GradientButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: kBorderRadius,
         ),
-        child: Text('${text}',
-            style: kTextTheme.subtitle1?.copyWith(color: kWhite)),
+        child: Text(text, style: kTextTheme.subtitle1?.copyWith(color: kWhite)),
       ),
     );
   }

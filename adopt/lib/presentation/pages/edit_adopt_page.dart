@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import '../blocs/edit_adopt_bloc/edit_adopt_bloc.dart';
 
@@ -94,11 +93,11 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
           .allMatches(url)
           .map((e) => e.group(1))
           .toList();
-      _petCertificateController.text = result[0] ?? '';
+      _petCertificateController.text = result.isEmpty ? '' : result[0]!;
     }
   }
 
-  void _submitOpenAdopt() {
+  void _submitEditAdopt() {
     String petName = _petNameController.text;
     String petType = _petType;
     String petGender = "";
@@ -142,20 +141,8 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Edit Adopt',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      appBar: const DefaultAppBar(
+        title: 'Edit Adopt',
       ),
       body: SafeArea(
           child: BlocConsumer<EditAdoptBloc, EditAdoptState>(
@@ -163,9 +150,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
         if (state is EditAdoptError) {
           print(state.message);
         } else if (state is EditAdoptSuccess) {
-          Future.delayed(const Duration(seconds: 1), () {
-            Navigator.pop(context);
-          });
+          Navigator.pop(context);
         }
         if (state is EditPetPhotoSuccess) {
           _petPhotoPath = state.petPhotoPath;
@@ -176,9 +161,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
         }
       }, builder: (context, state) {
         if (state is EditAdoptLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const LoadingView();
         } else {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -240,12 +223,17 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        GradientButton(
+                        DefaultButton(
                           height: 55,
                           width: double.infinity,
                           onTap: () {
                             if (formKey.currentState!.validate()) {
-                              _submitOpenAdopt();
+                              showQuestionDialog(context,
+                                  title: 'Confirm Update Open Adopt',
+                                  onTap: () {
+                                _submitEditAdopt();
+                                Navigator.pop(context);
+                              });
                             }
                           },
                           text: 'Update Pet',

@@ -36,3 +36,13 @@ class ChangePlanStatusEvent extends HomePlanCalendarEvent {
   @override
   List<Object> get props => [petId, planId, choiceDate];
 }
+
+class RemovePlanEvent extends HomePlanCalendarEvent {
+  final String planId;
+  final DateTime choiceDate;
+
+
+  const RemovePlanEvent({required this.planId, required this.choiceDate});
+  @override
+  List<Object> get props => [planId, choiceDate];
+}

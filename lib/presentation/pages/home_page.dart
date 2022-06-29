@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:core/core.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
@@ -8,7 +9,7 @@ import 'package:pet/domain/entities/pet_entity.dart';
 import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dart';
 import 'package:pethouse/presentation/widgets/task_daily_summary_card.dart';
 import 'package:pethouse/presentation/widgets/event_card.dart';
-import 'package:pethouse/presentation/widgets/no_pet_view.dart';
+import 'package:core/presentation/widgets/no_pet_view.dart';
 import 'package:task/task.dart';
 import 'package:user/domain/entities/user_entity.dart';
 import 'package:plan/plan.dart';
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE_NAME,
-                      arguments: widget.userEntity),
+                      arguments: widget.userEntity.uid),
                   child: Container(
                     width: 35,
                     height: 35,
@@ -92,15 +93,17 @@ class _HomePageState extends State<HomePage> {
             child: BlocBuilder<GetSchedulePetBloc, GetSchedulePetState>(
                 builder: ((context, state) {
               if (state is GetSchedulePetLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const LoadingView();
               } else if (state is GetSchedulePetSuccess) {
                 if (state.listPet.isNotEmpty) {
                   return _buildListPet(state.listPet);
                 } else {
                   return const Center(child: NoPetView());
                 }
+              } else if (state is GetSchedulePetError) {
+                return ErrorView(message: state.message);
               } else {
-                return const Text('Error Schedule');
+                return const Center();
               }
             })),
           ),
@@ -163,6 +166,7 @@ class _HomePageState extends State<HomePage> {
                       height: 160,
                       child: CarouselSlider.builder(
                         itemCount: listPet.length,
+                        
                         itemBuilder: (ctx, index, _) {
                           return Transform.scale(
                               scale: index == activePage ? 1 : .8,
@@ -189,37 +193,49 @@ class _HomePageState extends State<HomePage> {
                                         border: index == activePage
                                             ? Border.all(
                                                 width: 6,
-                                                color: const Color(0xFFFFB4BE),
+                                                color: kSmoothYellow,
                                               )
                                             : Border.all(
-                                                width: 4,
-                                                color: const Color(0xFFFFB4BE)),
+                                                width: 4, color: kSmoothYellow),
                                       ),
                                       padding: const EdgeInsets.all(5),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: kGrey,
-                                          shape: BoxShape.circle,
-                                          image: listPet[index].petPictureUrl !=
-                                                      '' &&
-                                                  listPet[index]
-                                                          .petPictureUrl !=
-                                                      null
-                                              ? DecorationImage(
-                                                  image: NetworkImage(
-                                                      listPet[index]
-                                                          .petPictureUrl!),
-                                                  fit: BoxFit.cover)
-                                              : null,
-                                        ),
-                                        child: Center(
-                                          child: listPet[index].petPictureUrl !=
-                                                      '' &&
-                                                  listPet[index]
-                                                          .petPictureUrl !=
-                                                      null
-                                              ? null
-                                              : Column(
+                                      child: listPet[index].petPictureUrl !=
+                                                  '' &&
+                                              listPet[index].petPictureUrl !=
+                                                  null
+                                          ? CachedNetworkImage(
+                                              imageUrl:
+                                                  listPet[index].petPictureUrl!,
+                                              placeholder: (context, url) =>
+                                                  Container(
+                                                decoration: const BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: kGrey),
+                                              ),
+                                              imageBuilder: (context,
+                                                      imagePrviceder) =>
+                                                  Container(
+                                                      decoration: BoxDecoration(
+                                                          color: kGrey,
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          image: DecorationImage(
+                                                              image:
+                                                                  imagePrviceder,
+                                                              fit: BoxFit
+                                                                  .cover))),
+                                              errorWidget: (context, url,
+                                                      error) =>
+                                                  const Center(
+                                                      child: Icon(Icons.image)),
+                                            )
+                                          : Container(
+                                              decoration: const BoxDecoration(
+                                                color: kGrey,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Center(
+                                                child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
@@ -235,8 +251,8 @@ class _HomePageState extends State<HomePage> {
                                                                     kGreyTransparant))
                                                   ],
                                                 ),
-                                        ),
-                                      ),
+                                              ),
+                                            ),
                                     ),
                                     index == activePage
                                         ? Container()
@@ -260,6 +276,8 @@ class _HomePageState extends State<HomePage> {
                             setState(() {
                               activePage = index;
                             });
+                            BlocProvider.of<GetHabbitBloc>(context).add(
+                                FetchHabbits(petId: listPet[activePage].id!));
                             BlocProvider.of<TaskBloc>(context).add(
                                 FetchTaskEvent(petId: listPet[activePage].id!));
                             BlocProvider.of<HomePlanCalendarBloc>(context).add(
@@ -420,6 +438,8 @@ class __BuildScheduleState extends State<_BuildSchedule> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<GetHabbitBloc>(context)
+        .add(FetchHabbits(petId: widget.petEntity.id!));
     BlocProvider.of<TaskBloc>(context)
         .add(FetchTaskEvent(petId: widget.petEntity.id!));
   }
@@ -429,8 +449,11 @@ class __BuildScheduleState extends State<_BuildSchedule> {
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state) {
         if (state is TaskLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            width: double.infinity,
+            height: 15,
+            child: const ShimmerLoadingView(borderRadius: 10),
           );
         } else if (state is GetTaskSuccess) {
           if (state.listTask.isEmpty) {
@@ -472,7 +495,7 @@ class __BuildScheduleState extends State<_BuildSchedule> {
         } else if (state is TaskError) {
           return Text(state.message);
         } else {
-          return const Text('Error');
+          return const Center();
         }
       },
     );
@@ -535,22 +558,43 @@ class __BuildHomeCalendarState extends State<_BuildHomeCalendar> {
           BlocBuilder<HomePlanCalendarBloc, HomePlanCalendarState>(
             builder: (context, state) {
               if (state is HomePlanCalendarLoading) {
-                return const CircularProgressIndicator();
-              } else if (state is HomePlanCalendarSuccess) {
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  shrinkWrap: true,
-                  itemCount: state.listPlan.length,
-                  scrollDirection: Axis.vertical,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: ((context, index) {
-                    return EventCard(
-                      event: state.listPlan[index],
-                    );
-                  }),
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  width: double.infinity,
+                  height: 15,
+                  child: const ShimmerLoadingView(
+                    borderRadius: 10,
+                  ),
                 );
+              } else if (state is HomePlanCalendarSuccess) {
+                if (state.listPlan.isEmpty) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    width: double.infinity,
+                    child: Text(
+                      'No Event Today',
+                      style: kTextTheme.subtitle2
+                          ?.copyWith(color: kGreyTransparant, fontSize: 14),
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    shrinkWrap: true,
+                    itemCount: state.listPlan.length,
+                    scrollDirection: Axis.vertical,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: ((context, index) {
+                      return EventCard(
+                        event: state.listPlan[index],
+                      );
+                    }),
+                  );
+                }
+              } else if (state is HomePlanCalendarError) {
+                return const Text('Error');
               } else {
-                return const Text('');
+                return Container();
               }
             },
           )

@@ -1,12 +1,8 @@
 import 'dart:io';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pet/presentation/bloc/add_pet/add_pet_bloc.dart';
 import '../../domain/entities/pet_entity.dart';
@@ -53,7 +49,7 @@ class _AddPetPageState extends State<AddPetPage> {
     BlocProvider.of<AddPetBloc>(context).add(AddPetInitEvent());
   }
 
-  void _submitOpenAdopt() {
+  void _submitAddPet() {
     String petName = _petNameController.text;
     String petType = _petType ?? '';
     String petGender = "";
@@ -84,27 +80,17 @@ class _AddPetPageState extends State<AddPetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Add Pet',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      appBar: const DefaultAppBar(
+        title: 'Add Pet',
       ),
       body: SafeArea(
           child: BlocConsumer<AddPetBloc, AddPetState>(
         listener: (context, state) {
           if (state is AddPetError) {
             print(state.message);
-          } else if (state is AddPetSuccess) {}
+          } else if (state is AddPetSuccess) {
+            Navigator.pop(context);
+          }
           if (state is AddPetPhotoSuccess) {
             _petPhotoPath = state.petPhotoPath;
           }
@@ -115,7 +101,7 @@ class _AddPetPageState extends State<AddPetPage> {
         },
         builder: (context, state) {
           if (state is AddPetLoading) {
-            return const Center(child: const CircularProgressIndicator());
+            return const LoadingView();
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -170,35 +156,26 @@ class _AddPetPageState extends State<AddPetPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      GradientButton(
+                      DefaultButton(
                         height: 55,
                         width: double.infinity,
                         onTap: () {
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.INFO,
-                            animType: AnimType.BOTTOMSLIDE,
-                            title: 'Apakah Anda Sudah Yakin?',
-                            btnCancelOnPress: () {},
-                            btnOkOnPress: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const LoadingView();
-                                },
-                              );
-                              Future.delayed(const Duration(seconds: 1), () {
-                                if (!formKey.currentState!.validate()) {
-                                  Navigator.pop(context);
-                                  return;
-                                } else {
-                                  _submitOpenAdopt();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                }
-                              });
-                            },
-                          ).show();
+                          if (formKey.currentState!.validate()) {
+                            showQuestionDialog(
+                              context,
+                              title: "Confirm Add New Pet",
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const LoadingView();
+                                  },
+                                );
+                                _submitAddPet();
+                                Navigator.pop(context);
+                              },
+                            );
+                          }
                         },
                         text: 'Save Pet',
                         isClicked: false,

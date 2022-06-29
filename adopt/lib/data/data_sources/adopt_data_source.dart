@@ -19,6 +19,7 @@ abstract class AdoptDataSource {
   Future<String> getUserIdLocal();
   Future<void> updateAdopt(AdoptEntity adoptEntity);
   Stream<List<AdoptEntity>> getOpenAdoptList(String userId);
+  Stream<List<AdoptEntity>> getRequestAdoptList(String userId);
   Future<void> requestAdopt(AdoptEntity adoptd);
   Future<void> removeOpenAdopt(String adoptId);
   Stream<List<AdoptEntity>> searchPetAdopt(String query);
@@ -144,6 +145,19 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     });
   }
 
+  //get user open adopt data
+  @override
+  Stream<List<AdoptEntity>> getRequestAdoptList(String adopterId) {
+    final petCollectionRef = firebaseFirestore
+        .collection("pet_adopts")
+        .where('adopter_id', isEqualTo: adopterId);
+    return petCollectionRef.snapshots().map((querySnap) {
+      return querySnap.docs
+          .map((docSnap) => AdoptModel.fromSnapshot(docSnap))
+          .toList();
+    });
+  }
+
   //get pet adopt description
   @override
   Stream<AdoptEntity> getPetDescription(String petId) {
@@ -162,7 +176,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     onUpdate('pet_picture_url', adoptEntity.petPictureUrl, adoptMap);
     onUpdate('pet_name', adoptEntity.petName, adoptMap);
     onUpdate('pet_type', adoptEntity.petType, adoptMap);
-    onUpdate('pet_type_text', adoptEntity.petTypeText, adoptMap); 
+    onUpdate('pet_type_text', adoptEntity.petTypeText, adoptMap);
     onUpdate('gender', adoptEntity.gender, adoptMap);
     onUpdate('pet_breed', adoptEntity.petBreed, adoptMap);
     onUpdate('date_of_birth', adoptEntity.dateOfBirth, adoptMap);
@@ -202,8 +216,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     await firebaseFirestore.collection('pet_adopts').doc(adoptId).delete();
   }
 
-
-  //seatch pet adopt  
+  //seatch pet adopt
   @override
   Stream<List<AdoptEntity>> searchPetAdopt(String query) {
     final collectionReference = firebaseFirestore

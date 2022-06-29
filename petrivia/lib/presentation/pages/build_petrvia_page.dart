@@ -39,6 +39,7 @@ class _BuildPetriviaPageState extends State<BuildPetriviaPage> {
               height: 20,
             ),
             Container(
+              height: 55,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: kWhite,
@@ -81,7 +82,7 @@ class _BuildPetriviaPageState extends State<BuildPetriviaPage> {
             BlocBuilder<GetPetriviaBloc, GetPetriviaState>(
               builder: (context, state) {
                 if (state is GetPetriviaLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Expanded(child: LoadingView());
                 } else if (state is GetPetriviaSuccess) {
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -94,8 +95,10 @@ class _BuildPetriviaPageState extends State<BuildPetriviaPage> {
                       );
                     },
                   );
+                } else if (state is GetPetriviaError) {
+                  return ErrorView(message: state.message);
                 } else {
-                  return const Text("error");
+                  return Container();
                 }
               },
             )

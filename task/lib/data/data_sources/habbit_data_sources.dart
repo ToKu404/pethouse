@@ -8,6 +8,7 @@ abstract class HabbitDataSource {
   Stream<List<HabbitEntity>> getTodayHabbit(String dayName, String petId);
   Future<void> removeHabbit(String habbitId);
   Stream<List<HabbitEntity>> getAllHabbits(String petId);
+  Future<List<HabbitEntity>> getOneReadHabbits(String petId);
 }
 
 class HabbitDataSourceImpl implements HabbitDataSource {
@@ -37,7 +38,9 @@ class HabbitDataSourceImpl implements HabbitDataSource {
   }
 
   @override
-  Future<void> removeHabbit(String habbitId) async {}
+  Future<void> removeHabbit(String habbitId) async {
+    await firebaseFirestore.collection('habbits').doc(habbitId).delete();
+  }
 
   @override
   Stream<List<HabbitEntity>> getTodayHabbit(String dayName, String petId) {
@@ -61,6 +64,17 @@ class HabbitDataSourceImpl implements HabbitDataSource {
       return querySnapshot.docs
           .map((docSnap) => HabbitModel.fromSnapshot(docSnap))
           .toList();
+    });
+  }
+
+  @override
+  Future<List<HabbitEntity>> getOneReadHabbits(String petId) {
+    print("CALLER HABBIT");
+    final collectionRef = firebaseFirestore
+        .collection('habbits')
+        .where('pet_id', isEqualTo: petId);
+    return collectionRef.get().then((value) {
+      return value.docs.map((e) => HabbitModel.fromSnapshot(e)).toList();
     });
   }
 }

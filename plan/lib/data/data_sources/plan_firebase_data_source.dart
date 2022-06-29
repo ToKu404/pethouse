@@ -5,6 +5,8 @@ import '../models/plan_model.dart';
 
 abstract class PlanDataSource {
   Future<void> addPlan(PlanEntity plan);
+  Future<void> editPlan(PlanEntity planEntity);
+  Future<void> removePlan(String planId);
   Stream<List<PlanEntity>> getPetPlan(String petId, DateTime date);
   Stream<List<PlanEntity>> getHistoryPlan(String petId);
   Future<void> changePlanStatus(String planId);
@@ -87,9 +89,38 @@ class PlanDataSourceImpl implements PlanDataSource {
         .where('pet_id', isEqualTo: petId)
         .where('time', isGreaterThanOrEqualTo: date);
     return petCollection.get().then((value) {
-       return value.docs
+      return value.docs
           .map((docSnap) => PlanModel.fromSnapshot(docSnap).notifId!)
           .toList();
     });
+  }
+
+  @override
+  Future<void> editPlan(PlanEntity planEntity) async {
+    Map<String, dynamic> planMap = {};
+    onUpdate("notif_id", planEntity.notifId, planMap);
+    onUpdate("activity", planEntity.activity, planMap);
+    onUpdate("activity_title", planEntity.activityTitle, planMap);
+    onUpdate("date", planEntity.date, planMap);
+    onUpdate("time", planEntity.time, planMap);
+    onUpdate("reminder", planEntity.reminder, planMap);
+    onUpdate("location", planEntity.location, planMap);
+    onUpdate("description", planEntity.description, planMap);
+
+    await firebaseFireStore
+        .collection('plans')
+        .doc(planEntity.id)
+        .update(planMap);
+  }
+
+  void onUpdate(String key, dynamic value, Map<String, dynamic> planMap) {
+    if (value != null && value != '') {
+      planMap[key] = value;
+    }
+  }
+
+  @override
+  Future<void> removePlan(String planId) async {
+    await firebaseFireStore.collection('plans').doc(planId).delete();
   }
 }

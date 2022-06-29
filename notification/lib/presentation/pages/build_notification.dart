@@ -8,7 +8,6 @@ import '../../domain/entities/nofitication_entity.dart';
 
 class BuildNotification extends StatefulWidget {
   const BuildNotification({Key? key}) : super(key: key);
-
   @override
   State<BuildNotification> createState() => _BuildNotificationState();
 }
@@ -25,23 +24,30 @@ class _BuildNotificationState extends State<BuildNotification> {
     return BlocBuilder<NotificationBloc, NotificationState>(
       builder: (context, state) {
         if (state is NotificationLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const LoadingView();
         } else if (state is NotificationError) {
           return Text(state.message);
         } else if (state is NotificationSuccess) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(kPadding * 2),
-              child: Column(
-                  children: state.listNotification
-                      .map((e) => _buildListNotification(e))
-                      .toList()),
-            ),
-          );
+          if (state.listNotification.isEmpty) {
+            return Center(
+              child: Text(
+                'No Notification',
+                style: kTextTheme.headline3?.copyWith(color: kGreyTransparant),
+              ),
+            );
+          } else {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(kPadding * 2),
+                child: Column(
+                    children: state.listNotification
+                        .map((e) => _buildListNotification(e))
+                        .toList()),
+              ),
+            );
+          }
         } else {
-          return const Center(
-            child: Text('null'),
-          );
+          return Container();
         }
       },
     );

@@ -83,15 +83,10 @@ class _AdoptPageState extends State<AdoptPage> {
           BlocBuilder<ListAdoptBloc, ListAdoptState>(
             builder: (context, state) {
               if (state is ListAdoptLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const LoadingView();
               } else if (state is ListAdoptError) {
-                return Center(
-                  child: Text(state.message),
-                );
+                return ErrorView(message: state.message);
               } else if (state is ListPetAdoptLoaded) {
-                print(state.listAdoptEntity.length);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -104,8 +99,12 @@ class _AdoptPageState extends State<AdoptPage> {
                       ),
                     ),
                     state.listAdoptEntity.isEmpty
-                        ? const Center(
-                            child: Text("Empty"),
+                        ? Center(
+                            child: Text(
+                              "No Pet Found",
+                              style: kTextTheme.headline3
+                                  ?.copyWith(color: kGreyTransparant),
+                            ),
                           )
                         : GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),

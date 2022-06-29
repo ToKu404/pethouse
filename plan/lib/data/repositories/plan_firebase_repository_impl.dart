@@ -32,4 +32,14 @@ class PlanRepositoryImpl implements PlanRepository {
   Future<List<int>> getPlanNotifId(String petId, DateTime date) {
     return planDataSource.getPlanNotifId(petId, date);
   }
+
+  @override
+  Future<void> editPlan(PlanEntity planEntity) {
+    return planDataSource.editPlan(planEntity);
+  }
+
+  @override
+  Future<void> removePlan(String planId) {
+    return planDataSource.removePlan(planId);
+  }
 }

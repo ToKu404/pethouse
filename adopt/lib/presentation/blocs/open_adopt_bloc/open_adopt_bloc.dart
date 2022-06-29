@@ -18,12 +18,11 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
   final CreateNewAdoptUsecase createNewAdoptUsecase;
   final UploadPetAdoptPhotoUsecase uploadPetPhoto;
   final UploadPetCertificateUsecase uploadPetCertificateUsecase;
-  final RemoveOpenAdoptUsecase removeOpenAdoptUsecase;
   OpenAdoptBloc(
       {required this.createNewAdoptUsecase,
       required this.uploadPetPhoto,
       required this.uploadPetCertificateUsecase,
-      required this.removeOpenAdoptUsecase})
+     })
       : super(OpenAdoptInitial()) {
     on<OpenAdoptInit>(
       (event, emit) {
@@ -115,12 +114,6 @@ class OpenAdoptBloc extends Bloc<OpenAdoptEvent, OpenAdoptState> {
         } else {
           emit(OpenAdoptError(message: 'failed upload pet certificate'));
         }
-      },
-    );
-    on<RemoveOpenAdoptEvent>(
-      (event, emit) async {
-        await removeOpenAdoptUsecase.execute(event.adoptId);
-        emit(RemoveAdoptSuccess());
       },
     );
   }

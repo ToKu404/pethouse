@@ -13,10 +13,7 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('About'),
-        centerTitle: true,
-      ),
+      appBar: const DefaultAppBar(title: 'About',),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -153,7 +150,7 @@ class AboutPage extends StatelessWidget {
 
 class HyperlinkText extends StatelessWidget {
   final String text;
-  const HyperlinkText(this.text);
+  const HyperlinkText(this.text, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

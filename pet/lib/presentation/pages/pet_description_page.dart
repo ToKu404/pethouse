@@ -1,10 +1,8 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
+import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:core/core.dart';
 import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -14,7 +12,7 @@ import 'package:task/task.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/card_detail_pet.dart';
-import '../widgets/card_medical_history.dart';
+import '../widgets/card_activity_history.dart';
 
 class PetDescriptionPage extends StatefulWidget {
   final String petId;
@@ -30,6 +28,8 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<OnetimeInternetCheckCubit>(context)
+        .onCheckConnectionOnetime();
     BlocProvider.of<GetPetDescBloc>(context)
         .add(FetchPetDesc(petId: widget.petId));
     BlocProvider.of<GetMonthlyTaskBloc>(context)
@@ -39,20 +39,8 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Pet Profile',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      appBar: DefaultAppBar(
+        title: 'Pet Profile',
         actions: [
           PopupMenuButton(
             child: const Padding(
@@ -69,26 +57,20 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
                       arguments: pet);
                 }
               } else if (val == 2) {
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.INFO,
-                  animType: AnimType.BOTTOMSLIDE,
-                  title: 'Apakah Anda Sudah Yakin?',
-                  btnCancelOnPress: () {},
-                  btnOkOnPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const LoadingView();
-                      },
-                    );
-                    Future.delayed(const Duration(seconds: 1), () {
-                      BlocProvider.of<GetPetDescBloc>(context)
-                          .add(RemovePetEvent(petId: widget.petId));
-                      Navigator.pop(context);
-                    });
-                  },
-                ).show();
+                showWarningDialog(context,
+                    title: 'Are you sure to delete this pet?', onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const LoadingView();
+                    },
+                  );
+                  Future.delayed(const Duration(seconds: 1), () {
+                    BlocProvider.of<GetPetDescBloc>(context)
+                        .add(RemovePetEvent(petId: widget.petId));
+                    Navigator.pop(context);
+                  });
+                });
               }
             },
             itemBuilder: (context) {
@@ -107,27 +89,40 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
         ],
       ),
       body: SafeArea(
-        child: BlocListener<GetPetDescBloc, GetPetDescState>(
-          listener: (context, state) {
-            if (state is RemovePetSuccess) {
-              Navigator.pop(context);
-            }
-            if (state is PetDescSuccess) {
-              pet = state.petEntity;
+        child:
+            BlocBuilder<OnetimeInternetCheckCubit, OnetimeInternetCheckState>(
+          builder: (context, state) {
+            if (state is OnetimeInternetCheckLoading) {
+              return const LoadingView();
+            } else if (state is OnetimeInternetCheckLost) {
+              return const NoInternetPage();
+            } else {
+              return BlocListener<GetPetDescBloc, GetPetDescState>(
+                listener: (context, state) {
+                  if (state is RemovePetSuccess) {
+                    Navigator.pop(context);
+                  }
+                  if (state is PetDescSuccess) {
+                    pet = state.petEntity;
+                  }
+                },
+                child: BlocBuilder<GetPetDescBloc, GetPetDescState>(
+                    builder: (context, state) {
+                  if (state is PetDescLoading) {
+                    return const LoadingView();
+                  } else if (state is PetDescSuccess) {
+                    return _PetDescLayout(
+                      pet: state.petEntity,
+                    );
+                  } else if (state is PetDescError) {
+                    return ErrorView(message: state.message);
+                  } else {
+                    return Container();
+                  }
+                }),
+              );
             }
           },
-          child: BlocBuilder<GetPetDescBloc, GetPetDescState>(
-              builder: (context, state) {
-            if (state is PetDescLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is PetDescSuccess) {
-              return _PetDescLayout(
-                pet: state.petEntity,
-              );
-            } else {
-              return const Center();
-            }
-          }),
         ),
       ),
     );
@@ -153,7 +148,7 @@ class _PetDescLayout extends StatelessWidget {
                   imageUrl: pet.petPictureUrl!,
                   placeholder: (context, url) => ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: const LoadingImageCard(
+                    child: const ShimmerLoadingView(
                       borderRadius: 10,
                     ),
                   ),
@@ -250,15 +245,23 @@ class _PetDescLayout extends StatelessWidget {
                 height: 10,
               ),
               const Divider(),
-              Text(
-                'Description',
-                style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
-              ),
-              Text(
-                pet.petDescription!,
-                style: kTextTheme.bodyText2?.copyWith(fontSize: 14),
-              ),
-              const Divider(),
+              pet.petDescription == "" || pet.petDescription == null
+                  ? Container()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Description',
+                          style:
+                              kTextTheme.headline6?.copyWith(color: kDarkBrown),
+                        ),
+                        Text(
+                          pet.petDescription!,
+                          style: kTextTheme.bodyText2?.copyWith(fontSize: 14),
+                        ),
+                        const Divider(),
+                      ],
+                    ),
               const SizedBox(
                 height: 10,
               ),

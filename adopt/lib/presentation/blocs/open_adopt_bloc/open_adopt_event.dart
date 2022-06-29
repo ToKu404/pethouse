@@ -21,11 +21,4 @@ class UploadPetPhoto extends OpenAdoptEvent {}
 
 class UploadPetCertificate extends OpenAdoptEvent {}
 
-class RemoveOpenAdoptEvent extends OpenAdoptEvent {
-  final String adoptId;
 
-  const RemoveOpenAdoptEvent({required this.adoptId});
-
-    @override
-  List<Object> get props => [adoptId];
-}

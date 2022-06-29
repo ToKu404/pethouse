@@ -17,6 +17,8 @@ export 'package:user/domain/usecases/auth_usecases/sign_out_usecase.dart';
 export 'package:user/domain/usecases/auth_usecases/sign_up_usecase.dart';
 export 'package:user/domain/usecases/auth_usecases/verify_email_usecase.dart';
 export 'package:user/domain/usecases/firestore_usecases/delete_old_image_usecase.dart';
+export 'package:user/domain/usecases/firestore_usecases/get_one_read_user_usecase.dart';
+
 export 'package:user/domain/usecases/firestore_usecases/get_current_user_usecase.dart';
 export 'package:user/domain/usecases/firestore_usecases/save_user_data_usecase.dart';
 export 'package:user/domain/usecases/firestore_usecases/update_user_data_usecase.dart';

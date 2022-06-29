@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:plan/presentation/widgets/plan_desc_card.dart';
 
 import '../../domain/entities/plan_entity.dart';
 
@@ -21,7 +22,15 @@ class ScheduleTaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print(isLast);
+        showModalBottomSheet(
+            context: context,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10))),
+            builder: (builder) {
+              return PlanDescCard(plan: event);
+            });
       },
       child: Container(
         height: 40,
@@ -49,7 +58,7 @@ class ScheduleTaskCard extends StatelessWidget {
                     height: 8,
                     width: 8,
                     decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: kMainOrangeColor),
+                        shape: BoxShape.circle, color: kPrimaryColor),
                   ),
                 ),
                 (isSingle)
@@ -60,7 +69,7 @@ class ScheduleTaskCard extends StatelessWidget {
                             child: Container(
                               height: 40,
                               width: 2,
-                              color: kMainOrangeColor,
+                              color: kPrimaryColor,
                             ),
                           )
                         : (isFirst)
@@ -70,7 +79,7 @@ class ScheduleTaskCard extends StatelessWidget {
                                 child: Container(
                                   height: 20,
                                   width: 2,
-                                  color: kMainOrangeColor,
+                                  color: kPrimaryColor,
                                 ),
                               )
                             : Positioned(
@@ -79,7 +88,7 @@ class ScheduleTaskCard extends StatelessWidget {
                                 child: Container(
                                   height: 20,
                                   width: 2,
-                                  color: kMainOrangeColor,
+                                  color: kPrimaryColor,
                                 ),
                               ),
               ],
@@ -90,7 +99,7 @@ class ScheduleTaskCard extends StatelessWidget {
             Expanded(
                 child: Text(
               event.activityTitle!,
-              style: kTextTheme.subtitle2?.copyWith(color: kMainOrangeColor),
+              style: kTextTheme.headline3?.copyWith(color: kDarkBrown),
             )),
           ],
         ),

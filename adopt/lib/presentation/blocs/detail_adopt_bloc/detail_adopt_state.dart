@@ -29,3 +29,13 @@ class PetDescriptionLoaded extends DetailAdoptState {
 }
 
 class SuccessRequestAdopt extends DetailAdoptState {}
+
+class SuccessDisagreeRequestAdopt extends DetailAdoptState {}
+
+class SuccessAgreeRequestAdopt extends DetailAdoptState {}
+
+class RemoveAdoptSuccess extends DetailAdoptState {
+  
+}
+
+

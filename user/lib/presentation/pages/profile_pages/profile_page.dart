@@ -1,16 +1,13 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth_cubit/auth_cubit.dart';
 import '../../blocs/user_db_bloc/user_db_bloc.dart';
 
 class ProfilePage extends StatefulWidget {
-  final UserEntity userEntity;
-  const ProfilePage({Key? key, required this.userEntity}) : super(key: key);
+  final String userId;
+  const ProfilePage({Key? key, required this.userId}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -18,41 +15,49 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<UserDbBloc>(context).add(GetUserFromDb(widget.userId));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Profile',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      appBar: const DefaultAppBar(
+        title: 'Profile',
       ),
       body: SafeArea(
-        child: MultiBlocListener(listeners: [
-          BlocListener<AuthCubit, AuthState>(
-            listener: (context, state) {
-              if (state is UnAuthenticated) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    LOGIN_ROUTE_NAME, (route) => false);
-              }
-            },
-          ),
-          BlocListener<UserDbBloc, UserDbState>(
-            listener: (context, state) {
-              if (state is SuccessDeleteUser) {
-                context.read<AuthCubit>().loggedOut();
-              }
-            },
-          ),
-        ], child: _BuildProfile(user: widget.userEntity)),
+        child: MultiBlocListener(
+            listeners: [
+              BlocListener<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is UnAuthenticated) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        LOGIN_ROUTE_NAME, (route) => false);
+                  }
+                },
+              ),
+              BlocListener<UserDbBloc, UserDbState>(
+                listener: (context, state) {
+                  if (state is SuccessDeleteUser) {
+                    context.read<AuthCubit>().loggedOut();
+                  }
+                },
+              ),
+            ],
+            child: BlocBuilder<UserDbBloc, UserDbState>(
+              builder: (context, state) {
+                if (state is UserDbLoading) {
+                  return const LoadingView();
+                } else if (state is SuccessGetData) {
+                  return _BuildProfile(user: state.user);
+                } else if (state is UserDbFailure) {
+                  return ErrorView(message: state.message);
+                } else {
+                  return Container();
+                }
+              },
+            )),
       ),
     );
   }
@@ -126,7 +131,7 @@ class _BuildProfile extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            GradientButton(
+            DefaultButton(
               height: 34,
               width: 200,
               text: 'Edit Profile',
@@ -151,7 +156,6 @@ class _BuildProfile extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, ACTIVITY_STATUS_ROUT_NAME);
                 }),
-            const NotificationCard(),
             CardProfile(
                 title: 'About',
                 trailingAction: const Icon(
@@ -172,26 +176,20 @@ class _BuildProfile extends StatelessWidget {
                 ),
                 leadingAction:
                     const Icon(Icons.exit_to_app, color: kPrimaryColor),
-                onTap: ()  {
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.QUESTION,
-                    animType: AnimType.SCALE,
-                    title: 'Apakah Anda Ingin Keluar Pethouse?',
-                    btnCancelOnPress: () {},
-                    btnOkOnPress: () async {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const LoadingView();
-                        },
-                      );
-                      Future.delayed(const Duration(seconds: 1), () async {
-                        context.read<AuthCubit>().loggedOut();
-                        Navigator.pop(context);
-                      });
-                    },
-                  ).show();
+                onTap: () {
+                  showWarningDialog(context, title: 'Are you sure to close?',
+                      onTap: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const LoadingView();
+                      },
+                    );
+                    Future.delayed(const Duration(seconds: 1), () async {
+                      context.read<AuthCubit>().loggedOut();
+                      Navigator.pop(context);
+                    });
+                  });
                 })
           ],
         ),
@@ -224,42 +222,6 @@ class CardProfile extends StatelessWidget {
           title: Text(title),
           trailing: trailingAction,
           onTap: onTap,
-        ),
-      ),
-    );
-  }
-}
-
-class NotificationCard extends StatefulWidget {
-  const NotificationCard({Key? key}) : super(key: key);
-
-  @override
-  State<NotificationCard> createState() => _NotificationCardState();
-}
-
-class _NotificationCardState extends State<NotificationCard> {
-  bool statusSwitch = false;
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: SizedBox(
-        width: double.infinity,
-        child: ListTile(
-          leading: const Icon(
-            Icons.notifications_sharp,
-            color: kPrimaryColor,
-          ),
-          title: const Text('Notification'),
-          trailing: Switch.adaptive(
-              inactiveTrackColor: kGrey,
-              activeColor: kPrimaryColor,
-              value: statusSwitch,
-              onChanged: (value) {
-                setState(() => statusSwitch = !statusSwitch);
-              }),
-          onTap: () {},
         ),
       ),
     );

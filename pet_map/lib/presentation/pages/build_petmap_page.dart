@@ -26,8 +26,6 @@ class _BuildPetMapPageState extends State<BuildPetMapPage>
       'pk.eyJ1IjoidG9rdTQwNCIsImEiOiJjbDNib3g3eHIwYmV5M2VsN3Via29iaHc4In0.4RY23MMPBuWzBLcZSWIZ_A';
   final MAPBOX_STYLE = 'mapbox/light-v10';
 
-  final _pageController = PageController();
-
   final List<Marker> markers = [];
 
   @override
@@ -126,7 +124,7 @@ class _BuildPetMapPageState extends State<BuildPetMapPage>
       child: BlocBuilder<GetPetMapBloc, GetPetMapState>(
         builder: (context, state) {
           if (state is GetPetMapLoading) {
-            return const Center(child: const CircularProgressIndicator());
+            return const LoadingView();
           } else if (state is GetPetMapSuccess) {
             return Stack(
               children: [
@@ -180,9 +178,10 @@ class _BuildPetMapPageState extends State<BuildPetMapPage>
                           id: state.petMapEntity.id,
                           latitude: myPostion.latitude,
                           longitude: myPostion.longitude);
-                      BlocProvider.of<PetmapCubit>(context)
-                          .updatePetMap(newPm);
-                      // setState(() {});
+                      setState(() {
+                        BlocProvider.of<PetmapCubit>(context)
+                            .updatePetMap(newPm);
+                      });
                     },
                     child: Container(
                       decoration: const BoxDecoration(
@@ -196,19 +195,12 @@ class _BuildPetMapPageState extends State<BuildPetMapPage>
                     ),
                   ),
                 ),
-                // Positioned(
-                //   left: 0,
-                //   right: 0,
-                //   bottom: 20,
-                //   height: MediaQuery.of(context).size.height * .2,
-                //   child: PageView.builder(itemBuilder: ((context, index) {
-                //     return _MapItemDetails();
-                //   })),
-                // )
               ],
             );
+          } else if (state is GetAllPetMapError) {
+            return const ErrorView(message: 'Error');
           } else {
-            return const Text('Error');
+            return Container();
           }
         },
       ),
@@ -285,19 +277,4 @@ class _MyLocationMarker extends AnimatedWidget {
   }
 }
 
-class _MapItemDetails extends StatelessWidget {
-  const _MapItemDetails({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: kWhite,
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-    );
-  }
-}

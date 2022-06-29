@@ -4,13 +4,10 @@ import 'dart:io';
 
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
-import 'package:core/presentation/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class OpenAdoptPage extends StatefulWidget {
@@ -101,26 +98,20 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(FontAwesomeIcons.arrowLeft),
-          color: kPrimaryColor,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Open Adopt',
-          style: kTextTheme.headline5,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      appBar: const DefaultAppBar(
+        title: 'Open Adopt',
       ),
       body: SafeArea(
           child: BlocConsumer<OpenAdoptBloc, OpenAdoptState>(
         listener: (context, state) {
           if (state is OpenAdoptError) {
-          } else if (state is OpenAdoptSuccess) {}
+          } else if (state is OpenAdoptSuccess) {
+            showSuccessDialog(context, title: 'Success Open Adopt');
+            Future.delayed(const Duration(seconds: 2), () async {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            });
+          }
           if (state is UploadPetPhotoSuccess) {
             _petPhotoPath = state.petPhotoPath;
           }
@@ -131,7 +122,7 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
         },
         builder: (context, state) {
           if (state is OpenAdoptLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const LoadingView();
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding * 2),
@@ -190,36 +181,17 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      GradientButton(
+                      DefaultButton(
                         height: 55,
                         width: double.infinity,
                         onTap: () {
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.INFO,
-                            animType: AnimType.BOTTOMSLIDE,
-                            title: 'Apakah Anda Sudah Yakin?',
-                            btnCancelOnPress: () {},
-                            btnOkOnPress: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const LoadingView();
-                                },
-                              );
-                              Future.delayed(const Duration(seconds: 1), () {
-                                if (!formKey.currentState!.validate()) {
-                                  Navigator.pop(context);
-                                  return;
-                                } else {
-                                  _submitOpenAdopt();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                }
-                              });
-                            },
-                          ).show();
-                          if (formKey.currentState!.validate()) {}
+                          if (formKey.currentState!.validate()) {
+                            showQuestionDialog(context,
+                                title: 'Confirm Create New Open Adopt',
+                                onTap: () {
+                              _submitOpenAdopt();
+                            });
+                          }
                         },
                         text: 'Save Pet',
                         isClicked: false,

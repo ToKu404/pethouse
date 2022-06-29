@@ -17,4 +17,9 @@ class NotificationRepositoryImpl implements NotificationRepository {
     return notificationDataSource.sendAdoptNotif(
         idReceiver, notificationEntity);
   }
+
+  @override
+  Future<void> clearNotification(String uId) {
+    return notificationDataSource.clearNotification(uId);
+  }
 }

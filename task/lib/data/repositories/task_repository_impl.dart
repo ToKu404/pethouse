@@ -30,7 +30,7 @@ class TaskFirebaseRepositoryImpl implements TaskFirebaseRepository {
   }
 
   @override
-  Future<void> transferTask(List<HabbitEntity> habbits, List<String> taskId) {
-    return taskFirebaseDataSource.transferTask(habbits, taskId);
+  Future<void> transferTask(List<HabbitEntity> newHabbits, List<TaskEntity> deleteTasks) {
+    return taskFirebaseDataSource.transferTask(newHabbits, deleteTasks);
   }
 }

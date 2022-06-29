@@ -125,8 +125,7 @@ void init() {
       .registerLazySingleton(() => GetPlanUsecase(planRepository: locator()));
   locator.registerLazySingleton(() => GetPetriviaUsecase(locator()));
   locator.registerLazySingleton(() => GetOpenAdoptListUsecase(locator()));
-  locator.registerLazySingleton(() => SaveDataLocalUsecase(locator()));
-  locator.registerLazySingleton(() => GetUserDataLocalUsecase(locator()));
+  locator.registerLazySingleton(() => GetRequestAdoptListUsecase(locator()));
   locator.registerLazySingleton(() => RequestAdoptUsecase(locator()));
   locator.registerLazySingleton(() => RemoveOpenAdoptUsecase(locator()));
   locator.registerLazySingleton(() => GetTodayTaskUsecase(locator()));
@@ -139,9 +138,12 @@ void init() {
   locator.registerLazySingleton(() => CreatePetMapUsecase(locator()));
   locator.registerLazySingleton(() => RemovePetMapUsecase(locator()));
   locator.registerLazySingleton(() => GetAllPetMapUsecase(locator()));
+  locator.registerLazySingleton(() => GetOneReadUserUsecase(locator()));
   locator.registerLazySingleton(() => CheckPetMapUsecase(locator()));
   locator.registerLazySingleton(() => GetPetMapUsecase(locator()));
   locator.registerLazySingleton(() => UpdatePetMapUsecase(locator()));
+  locator.registerLazySingleton(() => RemovePlanUsecase(locator()));
+  locator.registerLazySingleton(() => EditPlanUsecase(locator()));
   locator.registerLazySingleton(() => SearchPetAdoptUsecase(locator()));
   locator.registerLazySingleton(() => GetPlanHistoryUsecase(locator()));
   locator.registerLazySingleton(() => InsertHabbitUsecase(locator()));
@@ -149,9 +151,11 @@ void init() {
   locator.registerLazySingleton(() => GetTodayHabbitUsecase(locator()));
   locator.registerLazySingleton(() => GetAllHabbitsUsecase(locator()));
   locator.registerLazySingleton(() => GetOneReadTaskUsecase(locator()));
+  locator.registerLazySingleton(() => GetOneReadHabbitUsecase(locator()));
+  locator.registerLazySingleton(() => ClearNotificationUsecase(locator()));
+
   locator.registerLazySingleton(() => TransferTaskUsecase(locator()));
   locator.registerLazySingleton(() => GetPlanNotifIdUsecase(locator()));
-
   locator.registerLazySingleton(() => ChangePlanStatusUsecase(locator()));
   locator
       .registerLazySingleton(() => GetPetDescUsecase(petRepository: locator()));
@@ -171,10 +175,13 @@ void init() {
       signOutUsecase: locator(),
       removeUserIdLocalUsecase: locator(),
       saveUserIdLocal: locator()));
-  locator.registerFactory(() => UserDbBloc(
+  locator.registerFactory(
+    () => UserDbBloc(
       getUserFromDb: locator(),
       deleteUserUsecase: locator(),
-      saveUserDataLocalUsecase: locator()));
+      // saveUserDataLocalUsecase: locator(),
+    ),
+  );
   locator.registerFactory(() => UserProfileBloc(
       uploadImageUsecase: locator(),
       updateUserDataUsecase: locator(),
@@ -188,16 +195,16 @@ void init() {
         addPetPhotoUsecase: locator(),
       ));
   locator.registerFactory(() => OpenAdoptBloc(
-      createNewAdoptUsecase: locator(),
-      uploadPetPhoto: locator(),
-      uploadPetCertificateUsecase: locator(),
-      removeOpenAdoptUsecase: locator()));
-  locator.registerFactory(() => DetailAdoptBloc(
-        getPetDescriptionUsecase: locator(),
-        getUserIdLocalUsecase: locator(),
-        requestAdoptUsecase: locator(),
-        preferenceHelper: locator(),
+        createNewAdoptUsecase: locator(),
+        uploadPetPhoto: locator(),
+        uploadPetCertificateUsecase: locator(),
       ));
+  locator.registerFactory(() => DetailAdoptBloc(
+      getPetDescriptionUsecase: locator(),
+      getUserIdLocalUsecase: locator(),
+      requestAdoptUsecase: locator(),
+      getOneReadUserUsecase: locator(),
+      removeOpenAdoptUsecase: locator()));
   locator.registerFactory(() => ListAdoptBloc(
       getAllPetListUsecase: locator(), searchPetAdoptUsecase: locator()));
   locator.registerFactory(() => UpdatePetBloc(
@@ -209,17 +216,21 @@ void init() {
       uploadPetCertificateUsecase: locator(),
       uploadPetPhoto: locator()));
   locator.registerFactory(() => NotificationBloc(
-      getListNotificationUsecase: locator(), preferenceHelper: locator()));
+      clearNotificationUsecase: locator(),
+      getListNotificationUsecase: locator(),
+      preferenceHelper: locator()));
   locator.registerFactory(() => OpenAdoptStatusBloc(
       getOpenAdoptList: locator(), preferenceHelper: locator()));
+  locator.registerFactory(() => RequestAdoptStatusBloc(
+      getRequestAdoptList: locator(), preferenceHelper: locator()));
   locator
       .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
   locator.registerFactory(() => TaskBloc(
-      getOneReadTaskUsecase: locator(),
-      transferTaskUsecase: locator(),
-      getAllHabbitsUsecase: locator(),
-      getTodayTaskUsecase: locator(),
-      changeTaskStatus: locator()));
+        getOneReadHabbitUsecase: locator(),
+        transferTaskUsecase: locator(),
+        getTodayTaskUsecase: locator(),
+        changeTaskStatus: locator(),
+      ));
   locator.registerFactory(
       () => GetPetBloc(getPetUsecase: locator(), preferenceHelper: locator()));
   locator.registerFactory(() => GetSchedulePetBloc(
@@ -229,9 +240,12 @@ void init() {
       getTodayTaskUsecase: locator(),
       removePetUsecase: locator()));
   locator.registerFactory(() => HomePlanCalendarBloc(
-      getPlanUsecase: locator(), changePlanStatusUsecase: locator()));
+      getPlanUsecase: locator(),
+      changePlanStatusUsecase: locator(),
+      removePlanUsecase: locator()));
   locator.registerFactory(
       () => GetMonthlyTaskBloc(getMonthlyTaskUsecase: locator()));
+  locator.registerFactory(() => EditPlanCubit(editPlanUsecase: locator()));
   locator.registerFactory(
       () => GetPlanHistoryBloc(getPlanHistoryUsecase: locator()));
   locator.registerFactory(() => PetmapCubit(
@@ -248,9 +262,15 @@ void init() {
   locator.registerFactory(
       () => SettingNotificationCubit(notificationHelper: locator()));
 
-  locator.registerFactory(() => InternetCheckCubit());
+  locator.registerFactory(() => OnetimeInternetCheckCubit());
+  locator.registerFactory(() => RealtimeInternetCheckCubit());
   locator.registerFactory(() => PlanCalendarBloc(getPlanUsecase: locator()));
-  locator.registerFactory(() => GetHabbitBloc(getHabbitUsecase: locator()));
+
+  locator.registerFactory(() => GetHabbitBloc(
+        getHabbitUsecase: locator(),
+        getOneReadTaskUsecase: locator(),
+        transferTaskUsecase: locator(),
+      ));
   locator.registerFactory(() => HabbitCubit(
       insertHabbitUsecase: locator(), removeHabbitUsecase: locator()));
 

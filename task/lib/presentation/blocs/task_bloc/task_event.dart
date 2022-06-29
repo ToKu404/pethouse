@@ -22,10 +22,12 @@ class GetAllHabbits extends TaskEvent {
 }
 
 class GetTaskEvent extends TaskEvent {
+  final String petId;
+
   final List<TaskEntity> tasks;
-  const GetTaskEvent({required this.tasks});
+  const GetTaskEvent({required this.tasks, required this.petId});
   @override
-  List<Object> get props => [tasks];
+  List<Object> get props => [tasks, petId];
 }
 
 class ChangeTaskStatus extends TaskEvent {

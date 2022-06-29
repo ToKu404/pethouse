@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plan/domain/entities/plan_entity.dart';
-import 'package:plan/domain/usecases/get_plan_usecase.dart';
+import 'package:plan/domain/usecases/remove_plan_usecase.dart';
 import 'package:plan/plan.dart';
 
 part 'home_plan_calendar_event.dart';
@@ -10,10 +9,13 @@ part 'home_plan_calendar_state.dart';
 class HomePlanCalendarBloc
     extends Bloc<HomePlanCalendarEvent, HomePlanCalendarState> {
   final GetPlanUsecase getPlanUsecase;
+  final RemovePlanUsecase removePlanUsecase;
   final ChangePlanStatusUsecase changePlanStatusUsecase;
 
   HomePlanCalendarBloc(
-      {required this.getPlanUsecase, required this.changePlanStatusUsecase})
+      {required this.getPlanUsecase,
+      required this.changePlanStatusUsecase,
+      required this.removePlanUsecase})
       : super(HomePlanCalendarInitial()) {
     on<GetHomePlanCalendarEvent>((event, emit) {
       List<PlanEntity> list = event.listPlan;
@@ -39,6 +41,14 @@ class HomePlanCalendarBloc
         emit(ChangePlanStatusSuccess());
         add(FetchHomePlanCalendarEvent(
             petId: event.petId, choiceDate: event.choiceDate));
+      },
+    );
+    on<RemovePlanEvent>(
+      (event, emit) async {
+        await removePlanUsecase.execute(event.planId);
+        emit(RemovePlanStatusSuccess());
+        add(FetchHomePlanCalendarEvent(
+            petId: event.planId, choiceDate: event.choiceDate));
       },
     );
   }

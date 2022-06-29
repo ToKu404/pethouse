@@ -37,6 +37,3 @@ class UploadPetCertificateSuccess extends OpenAdoptState {
   List<Object> get props => [petCertificatePath, petCertificateFileName];
 }
 
-class RemoveAdoptSuccess extends OpenAdoptState {
-  
-}

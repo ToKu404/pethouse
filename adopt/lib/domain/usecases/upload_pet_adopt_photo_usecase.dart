@@ -1,5 +1,4 @@
 import 'package:adopt/domain/repositories/adopt_repository.dart';
-import 'package:image_picker/image_picker.dart';
 
 class UploadPetAdoptPhotoUsecase {
   final AdoptRepository adoptRepository;
