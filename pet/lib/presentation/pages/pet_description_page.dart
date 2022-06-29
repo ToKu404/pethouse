@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/presentation/pages/no_internet_page.dart';
 import 'package:flutter/material.dart';
@@ -58,26 +57,20 @@ class _PetDescriptionPageState extends State<PetDescriptionPage> {
                       arguments: pet);
                 }
               } else if (val == 2) {
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.INFO,
-                  animType: AnimType.BOTTOMSLIDE,
-                  title: 'Apakah Anda Sudah Yakin?',
-                  btnCancelOnPress: () {},
-                  btnOkOnPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const LoadingView();
-                      },
-                    );
-                    Future.delayed(const Duration(seconds: 1), () {
-                      BlocProvider.of<GetPetDescBloc>(context)
-                          .add(RemovePetEvent(petId: widget.petId));
-                      Navigator.pop(context);
-                    });
-                  },
-                ).show();
+                showWarningDialog(context,
+                    title: 'Are you sure to delete this pet?', onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const LoadingView();
+                    },
+                  );
+                  Future.delayed(const Duration(seconds: 1), () {
+                    BlocProvider.of<GetPetDescBloc>(context)
+                        .add(RemovePetEvent(petId: widget.petId));
+                    Navigator.pop(context);
+                  });
+                });
               }
             },
             itemBuilder: (context) {
@@ -252,15 +245,23 @@ class _PetDescLayout extends StatelessWidget {
                 height: 10,
               ),
               const Divider(),
-              Text(
-                'Description',
-                style: kTextTheme.headline6?.copyWith(color: kDarkBrown),
-              ),
-              Text(
-                pet.petDescription!,
-                style: kTextTheme.bodyText2?.copyWith(fontSize: 14),
-              ),
-              const Divider(),
+              pet.petDescription == "" || pet.petDescription == null
+                  ? Container()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Description',
+                          style:
+                              kTextTheme.headline6?.copyWith(color: kDarkBrown),
+                        ),
+                        Text(
+                          pet.petDescription!,
+                          style: kTextTheme.bodyText2?.copyWith(fontSize: 14),
+                        ),
+                        const Divider(),
+                      ],
+                    ),
               const SizedBox(
                 height: 10,
               ),

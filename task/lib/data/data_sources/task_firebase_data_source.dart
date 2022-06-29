@@ -61,26 +61,25 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
 
   @override
   Future<List<TaskEntity>> getOneReadTask(DateTime date, String petId) {
+    print("CALLER TASK");
     String dt = DateFormat.yMMMEd().format(date);
     final collectionRef = taskFirestore
         .collection('tasks')
         .where('pet_id', isEqualTo: petId)
         .where('date', isEqualTo: dt);
     return collectionRef.get().then((value) {
-      if (value.docs.isEmpty) {
-        return [];
-      }
       return value.docs.map((e) => TaskModel.fromSnapshot(e)).toList();
     });
   }
 
   @override
   Future<void> transferTask(
-      List<HabbitEntity> habbits, List<TaskEntity> tasks) async {
-
+      List<HabbitEntity> newHabbits, List<TaskEntity> deleteTask) async {
+    print("TRANSFER");
     final taskRef = taskFirestore.collection('tasks');
     final date = DateTime.now();
-    for (var habbit in habbits) {
+    // menambahkan semua habbit dalam list habbit baru ke daftar task
+    for (var habbit in newHabbits) {
       final habbitTime = habbit.time!.toDate();
       final taskId = taskRef.doc().id;
       final newTask = TaskModel(
@@ -100,7 +99,8 @@ class TaskFirebaseDataSourceImpl implements TaskFirebaseDataSource {
       });
     }
 
-    for (var task in tasks) {
+    // Menghapus semua task dalam yang ada pada list delete task
+    for (var task in deleteTask) {
       taskRef.doc(task.id).delete();
     }
   }

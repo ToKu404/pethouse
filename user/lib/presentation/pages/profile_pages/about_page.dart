@@ -150,7 +150,7 @@ class AboutPage extends StatelessWidget {
 
 class HyperlinkText extends StatelessWidget {
   final String text;
-  const HyperlinkText(this.text);
+  const HyperlinkText(this.text, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

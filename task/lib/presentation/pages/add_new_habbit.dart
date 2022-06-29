@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
@@ -88,7 +87,13 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
   Widget build(BuildContext context) {
     return BlocListener<HabbitCubit, HabbitState>(
       listener: (context, state) {
-        if (state is AddHabbitSuccess) {}
+        if (state is AddHabbitSuccess) {
+          showSuccessDialog(context, title: 'Success Add New Habbit');
+          Future.delayed(const Duration(seconds: 2), () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+        }
       },
       child: Scaffold(
         appBar: DefaultAppBar(
@@ -140,31 +145,12 @@ class _AddHabbitPageState extends State<AddHabbitPage> {
                       height: 55,
                       width: double.infinity,
                       onTap: () {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.INFO,
-                          animType: AnimType.BOTTOMSLIDE,
-                          title: 'Apakah Anda Sudah Yakin?',
-                          btnCancelOnPress: () {},
-                          btnOkOnPress: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const LoadingView();
-                              },
-                            );
-                            Future.delayed(const Duration(seconds: 1), () {
-                              if (!formKey.currentState!.validate()) {
-                                Navigator.pop(context);
-                                return;
-                              } else {
-                                _submitAddNewTask();
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              }
-                            });
-                          },
-                        ).show();
+                        if (formKey.currentState!.validate()) {
+                          showInfoDialog(context,
+                              title: 'Confirm create new habbit', onTap: () {
+                            _submitAddNewTask();
+                          });
+                        }
                       },
                       text: 'Add Habbit',
                       isClicked: false,

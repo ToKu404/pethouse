@@ -7,12 +7,13 @@ abstract class GetHabbitEvent extends Equatable {
 }
 
 class GetHabbits extends GetHabbitEvent {
+  final String petId;
   final List<HabbitEntity> listHabbit;
 
-  const GetHabbits({required this.listHabbit});
+  const GetHabbits({required this.listHabbit, required this.petId});
 
   @override
-  List<Object> get props => [listHabbit];
+  List<Object> get props => [listHabbit, petId];
 }
 
 class FetchHabbits extends GetHabbitEvent {

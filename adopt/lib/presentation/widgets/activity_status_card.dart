@@ -46,7 +46,14 @@ class ActivityStatusCard extends StatelessWidget {
                     width: 80,
                     height: 80,
                   )
-                : null,
+                : Container(
+                    width: 80,
+                    height: 80,
+                    decoration: const BoxDecoration(
+                      color: kGrey,
+                    ),
+                    child: const Icon(Icons.image),
+                  ),
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),

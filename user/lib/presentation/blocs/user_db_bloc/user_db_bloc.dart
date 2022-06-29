@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:user/domain/usecases/auth_usecases/save_username_local_usecase.dart';
+// import 'package:user/domain/usecases/auth_usecases/save_username_local_usecase.dart';
 
 import '../../../domain/entities/user_entity.dart';
 import '../../../domain/usecases/auth_usecases/delete_user_usecase.dart';
@@ -15,12 +15,12 @@ part 'user_db_state.dart';
 class UserDbBloc extends Bloc<UserDbEvent, UserDbState> {
   final GetCurrentUserUsecase getUserFromDb;
   final DeleteUserUsecase deleteUserUsecase;
-  final SaveDataLocalUsecase saveUserDataLocalUsecase;
+  // final SaveDataLocalUsecase saveUserDataLocalUsecase;
 
   UserDbBloc({
     required this.getUserFromDb,
     required this.deleteUserUsecase,
-    required this.saveUserDataLocalUsecase,
+    // required this.saveUserDataLocalUsecase,
   }) : super(UserDbInitial()) {
     on<GetUserFromDb>(
       (event, emit) async {
@@ -38,7 +38,7 @@ class UserDbBloc extends Bloc<UserDbEvent, UserDbState> {
     );
     on<GetUserData>(
       (event, emit) async {
-        await saveUserDataLocalUsecase.execute(event.userEntity);
+        // await saveUserDataLocalUsecase.execute(event.userEntity);
         emit(SuccessGetData(event.userEntity));
       },
     );

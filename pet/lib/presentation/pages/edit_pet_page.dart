@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -202,31 +200,23 @@ class _EditPetPageState extends State<EditPetPage> {
                           height: 55,
                           width: double.infinity,
                           onTap: () {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.INFO,
-                              animType: AnimType.BOTTOMSLIDE,
-                              title: 'Apakah Anda Sudah Yakin?',
-                              btnCancelOnPress: () {},
-                              btnOkOnPress: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return const LoadingView();
-                                  },
-                                );
-                                Future.delayed(const Duration(seconds: 1), () {
-                                  if (!formKey.currentState!.validate()) {
-                                    Navigator.pop(context);
-                                    return;
-                                  } else {
-                                    _submitUpdatePet();
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  }
-                                });
-                              },
-                            ).show();
+                            if (formKey.currentState!.validate()) {
+                              showInfoDialog(
+                                context,
+                                title: "Confirm update pet data",
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const LoadingView();
+                                    },
+                                  );
+                                  _submitUpdatePet();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                              );
+                            }
                           },
                           text: 'Update Pet',
                           isClicked: false,
@@ -373,7 +363,7 @@ class _EditPetPageState extends State<EditPetPage> {
               ),
               Expanded(
                 child: Text(name,
-                    style: kTextTheme.subtitle1?.copyWith(color: color)),
+                    style: kTextTheme.headline3?.copyWith(color: color)),
               ),
             ],
           ),

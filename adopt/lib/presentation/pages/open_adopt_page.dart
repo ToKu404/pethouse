@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:adopt/presentation/blocs/open_adopt_bloc/open_adopt_bloc.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +105,13 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
           child: BlocConsumer<OpenAdoptBloc, OpenAdoptState>(
         listener: (context, state) {
           if (state is OpenAdoptError) {
-          } else if (state is OpenAdoptSuccess) {}
+          } else if (state is OpenAdoptSuccess) {
+            showSuccessDialog(context, title: 'Success Open Adopt');
+            Future.delayed(const Duration(seconds: 2), () async {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            });
+          }
           if (state is UploadPetPhotoSuccess) {
             _petPhotoPath = state.petPhotoPath;
           }
@@ -180,32 +185,13 @@ class _OpenAdoptPageState extends State<OpenAdoptPage> {
                         height: 55,
                         width: double.infinity,
                         onTap: () {
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.INFO,
-                            animType: AnimType.BOTTOMSLIDE,
-                            title: 'Apakah Anda Sudah Yakin?',
-                            btnCancelOnPress: () {},
-                            btnOkOnPress: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const LoadingView();
-                                },
-                              );
-                              Future.delayed(const Duration(seconds: 1), () {
-                                if (!formKey.currentState!.validate()) {
-                                  Navigator.pop(context);
-                                  return;
-                                } else {
-                                  _submitOpenAdopt();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                }
-                              });
-                            },
-                          ).show();
-                          if (formKey.currentState!.validate()) {}
+                          if (formKey.currentState!.validate()) {
+                            showInfoDialog(context,
+                                title: 'Confirm Create New Open Adopt',
+                                onTap: () {
+                              _submitOpenAdopt();
+                            });
+                          }
                         },
                         text: 'Save Pet',
                         isClicked: false,

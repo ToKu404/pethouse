@@ -10,7 +10,6 @@ import 'package:pet/presentation/bloc/get_schedule_pet/get_schedule_pet_bloc.dar
 import 'package:pethouse/presentation/widgets/task_daily_summary_card.dart';
 import 'package:pethouse/presentation/widgets/event_card.dart';
 import 'package:pethouse/presentation/widgets/no_pet_view.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:task/task.dart';
 import 'package:user/domain/entities/user_entity.dart';
 import 'package:plan/plan.dart';
@@ -75,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE_NAME,
-                      arguments: widget.userEntity),
+                      arguments: widget.userEntity.uid),
                   child: Container(
                     width: 35,
                     height: 35,
@@ -224,11 +223,10 @@ class _HomePageState extends State<HomePage> {
                                                                   imagePrviceder,
                                                               fit: BoxFit
                                                                   .cover))),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      const Center(
-                                                          child: Icon(
-                                                              Icons.image)),
+                                              errorWidget: (context, url,
+                                                      error) =>
+                                                  const Center(
+                                                      child: Icon(Icons.image)),
                                             )
                                           : Container(
                                               decoration: const BoxDecoration(
@@ -277,6 +275,8 @@ class _HomePageState extends State<HomePage> {
                             setState(() {
                               activePage = index;
                             });
+                            BlocProvider.of<GetHabbitBloc>(context).add(
+                                FetchHabbits(petId: listPet[activePage].id!));
                             BlocProvider.of<TaskBloc>(context).add(
                                 FetchTaskEvent(petId: listPet[activePage].id!));
                             BlocProvider.of<HomePlanCalendarBloc>(context).add(
@@ -437,6 +437,8 @@ class __BuildScheduleState extends State<_BuildSchedule> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<GetHabbitBloc>(context)
+        .add(FetchHabbits(petId: widget.petEntity.id!));
     BlocProvider.of<TaskBloc>(context)
         .add(FetchTaskEvent(petId: widget.petEntity.id!));
   }

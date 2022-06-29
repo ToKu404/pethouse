@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,9 +38,7 @@ class _FormEditProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserDbBloc, UserDbState>(builder: ((context, state) {
       if (state is UserDbLoading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const LoadingView();
       } else if (state is SuccessGetData) {
         BlocProvider.of<UserProfileBloc>(context).add(UserProfileInit(
             imageUrl: state.user.imageUrl ?? '',
@@ -76,10 +75,11 @@ class _FormEditProfile extends StatelessWidget {
                       height: 50,
                       width: double.infinity,
                       onTap: () {
-                        context
-                            .read<UserProfileBloc>()
-                            .add(SubmitUpdate(state.user.uid ?? 'uid'));
-                        Future.delayed(const Duration(seconds: 1), () {
+                        showInfoDialog(context, title: 'Confirm Update Profile',
+                            onTap: () {
+                          context
+                              .read<UserProfileBloc>()
+                              .add(SubmitUpdate(state.user.uid ?? 'uid'));
                           Navigator.pop(context);
                         });
                       },

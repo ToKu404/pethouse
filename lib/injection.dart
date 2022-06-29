@@ -126,9 +126,6 @@ void init() {
   locator.registerLazySingleton(() => GetPetriviaUsecase(locator()));
   locator.registerLazySingleton(() => GetOpenAdoptListUsecase(locator()));
   locator.registerLazySingleton(() => GetRequestAdoptListUsecase(locator()));
-
-  locator.registerLazySingleton(() => SaveDataLocalUsecase(locator()));
-  locator.registerLazySingleton(() => GetUserDataLocalUsecase(locator()));
   locator.registerLazySingleton(() => RequestAdoptUsecase(locator()));
   locator.registerLazySingleton(() => RemoveOpenAdoptUsecase(locator()));
   locator.registerLazySingleton(() => GetTodayTaskUsecase(locator()));
@@ -175,10 +172,13 @@ void init() {
       signOutUsecase: locator(),
       removeUserIdLocalUsecase: locator(),
       saveUserIdLocal: locator()));
-  locator.registerFactory(() => UserDbBloc(
+  locator.registerFactory(
+    () => UserDbBloc(
       getUserFromDb: locator(),
       deleteUserUsecase: locator(),
-      saveUserDataLocalUsecase: locator()));
+      // saveUserDataLocalUsecase: locator(),
+    ),
+  );
   locator.registerFactory(() => UserProfileBloc(
       uploadImageUsecase: locator(),
       updateUserDataUsecase: locator(),
@@ -221,10 +221,8 @@ void init() {
   locator
       .registerFactory(() => SendNotifBloc(sendAdoptNotifUsecase: locator()));
   locator.registerFactory(() => TaskBloc(
-       getAllHabbitsUsecase: locator(),
-      getOneReadTaskUsecase: locator(),
-      getOneReadHabbitUsecase: locator(),
-      transferTaskUsecase: locator(),
+        getOneReadHabbitUsecase: locator(),
+        transferTaskUsecase: locator(),
         getTodayTaskUsecase: locator(),
         changeTaskStatus: locator(),
       ));
@@ -263,11 +261,13 @@ void init() {
   locator.registerFactory(() => RealtimeInternetCheckCubit());
   locator.registerFactory(() => PlanCalendarBloc(getPlanUsecase: locator()));
 
-  locator.registerFactory(() => GetHabbitBloc(getHabbitUsecase: locator()));
+  locator.registerFactory(() => GetHabbitBloc(
+        getHabbitUsecase: locator(),
+        getOneReadTaskUsecase: locator(),
+        transferTaskUsecase: locator(),
+      ));
   locator.registerFactory(() => HabbitCubit(
-   
-      insertHabbitUsecase: locator(),
-      removeHabbitUsecase: locator()));
+      insertHabbitUsecase: locator(), removeHabbitUsecase: locator()));
 
   //external
   final auth = FirebaseAuth.instance;

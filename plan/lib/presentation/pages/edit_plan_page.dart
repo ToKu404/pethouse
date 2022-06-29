@@ -39,7 +39,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   String? _selectActivity;
   String? _groomingType;
 
-  void _onAddPlanSubmit() {
+  void _onEditPlanSubmit() {
     final planDateTime = DateTime(_planDate!.year, _planDate!.month,
         _planDate!.day, _planTime.hour, _planTime.minute);
     final planTime = Timestamp.fromDate(planDateTime);
@@ -102,7 +102,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
     return BlocListener<EditPlanCubit, EditPlanState>(
       listener: (context, state) {
         if (state is EditPlanSuccess) {
-          Future.delayed(const Duration(seconds: 1), () {
+          showSuccessDialog(context, title: 'Success Update Plan');
+          Future.delayed(const Duration(seconds: 2), () async {
             Navigator.pop(context);
             Navigator.pop(context);
           });
@@ -178,22 +179,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
                         width: double.infinity,
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.QUESTION,
-                              animType: AnimType.BOTTOMSLIDE,
-                              title: 'Apakah Anda Sudah Yakin?',
-                              btnCancelOnPress: () {},
-                              btnOkOnPress: () {
-                                _onAddPlanSubmit();
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return const LoadingView();
-                                  },
-                                );
-                              },
-                            ).show();
+                            showInfoDialog(context,
+                                title: 'Confirm update plan', onTap: () {
+                              _onEditPlanSubmit();
+                            });
                           }
                         },
                         text: 'Save Plan Activity',

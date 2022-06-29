@@ -19,6 +19,7 @@ class _HabbitCardState extends State<HabbitCard> {
       key: Key(widget.habbit.id!),
       onDismissed: (DismissDirection direction) {
         BlocProvider.of<HabbitCubit>(context).onRemoveHabbit(widget.habbit);
+       
       },
       child: Container(
         width: double.infinity,

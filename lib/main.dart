@@ -114,10 +114,10 @@ class MyApp extends StatelessWidget {
                           petriviaEntity: petriviaEntity,
                         ));
               case PROFILE_ROUTE_NAME:
-                final userEntity = settings.arguments as UserEntity;
+                final userId = settings.arguments as String;
                 return MaterialPageRoute(
                     builder: (context) => ProfilePage(
-                          userEntity: userEntity,
+                          userId: userId,
                         ));
               case CHOICE_PET_MAP_ROUTE_NAME:
                 final userId = settings.arguments as String;
@@ -138,10 +138,10 @@ class MyApp extends StatelessWidget {
                 return MaterialPageRoute(
                     builder: (context) => const ActivityStatusPage());
               case DETAIL_ADOPT_ROUTE_NAME:
-                final petId = settings.arguments as String;
+                final adoptId = settings.arguments as String;
                 return MaterialPageRoute(
                   builder: (context) => DetailAdoptPage(
-                    petAdoptId: petId,
+                    adoptId: adoptId,
                   ),
                 );
               case EDIT_ADOPT_ROUTE_NAME:
@@ -192,7 +192,8 @@ class MyApp extends StatelessWidget {
               case ABOUT_ROUTE_NAME:
                 return MaterialPageRoute(builder: (context) => AboutPage());
               case RESET_PASSWORD_ROUTE_NAME:
-                return MaterialPageRoute(builder: (context) => const ResetPasswordPage());
+                return MaterialPageRoute(
+                    builder: (context) => const ResetPasswordPage());
             }
           },
         ));

@@ -69,12 +69,11 @@ class HabbitDataSourceImpl implements HabbitDataSource {
 
   @override
   Future<List<HabbitEntity>> getOneReadHabbits(String petId) {
-    final collectionRef =
-        firebaseFirestore.collection('habbits').where('pet_id', isEqualTo: petId);
+    print("CALLER HABBIT");
+    final collectionRef = firebaseFirestore
+        .collection('habbits')
+        .where('pet_id', isEqualTo: petId);
     return collectionRef.get().then((value) {
-      if (value.docs.isEmpty) {
-        return [];
-      }
       return value.docs.map((e) => HabbitModel.fromSnapshot(e)).toList();
     });
   }

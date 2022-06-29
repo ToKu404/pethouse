@@ -27,6 +27,7 @@ dependencies:
   android_alarm_manager_plus: ^2.0.5
   shared_preferences: ^2.0.15
   connectivity_plus: ^2.3.5
+  awesome_dialog: ^2.2.1
 
 dev_dependencies:
   flutter_test:

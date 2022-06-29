@@ -97,7 +97,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
     }
   }
 
-  void _submitOpenAdopt() {
+  void _submitEditAdopt() {
     String petName = _petNameController.text;
     String petType = _petType;
     String petGender = "";
@@ -230,7 +230,12 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
                           width: double.infinity,
                           onTap: () {
                             if (formKey.currentState!.validate()) {
-                              _submitOpenAdopt();
+                              showInfoDialog(context,
+                                  title: 'Confirm Update Open Adopt',
+                                  onTap: () {
+                                _submitEditAdopt();
+                                Navigator.pop(context);
+                              });
                             }
                           },
                           text: 'Update Pet',

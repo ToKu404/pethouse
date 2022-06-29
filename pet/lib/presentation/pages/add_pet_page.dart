@@ -51,7 +51,7 @@ class _AddPetPageState extends State<AddPetPage> {
     BlocProvider.of<AddPetBloc>(context).add(AddPetInitEvent());
   }
 
-  void _submitOpenAdopt() {
+  void _submitAddPet() {
     String petName = _petNameController.text;
     String petType = _petType ?? '';
     String petGender = "";
@@ -160,31 +160,23 @@ class _AddPetPageState extends State<AddPetPage> {
                         height: 55,
                         width: double.infinity,
                         onTap: () {
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.INFO,
-                            animType: AnimType.BOTTOMSLIDE,
-                            title: 'Apakah Anda Sudah Yakin?',
-                            btnCancelOnPress: () {},
-                            btnOkOnPress: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const LoadingView();
-                                },
-                              );
-                              Future.delayed(const Duration(seconds: 1), () {
-                                if (!formKey.currentState!.validate()) {
-                                  Navigator.pop(context);
-                                  return;
-                                } else {
-                                  _submitOpenAdopt();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                }
-                              });
-                            },
-                          ).show();
+                          if (formKey.currentState!.validate()) {
+                            showInfoDialog(
+                              context,
+                              title: "Confirm Add New Pet",
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const LoadingView();
+                                  },
+                                );
+                                _submitAddPet();
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                            );
+                          }
                         },
                         text: 'Save Pet',
                         isClicked: false,

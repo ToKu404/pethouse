@@ -1,5 +1,4 @@
 import 'package:adopt/adopt.dart';
-import 'package:adopt/presentation/widgets/custom_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core/core.dart';
@@ -11,8 +10,8 @@ import 'package:notification/notification.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailAdoptPage extends StatefulWidget {
-  final String petAdoptId;
-  const DetailAdoptPage({Key? key, required this.petAdoptId}) : super(key: key);
+  final String adoptId;
+  const DetailAdoptPage({Key? key, required this.adoptId}) : super(key: key);
 
   @override
   State<DetailAdoptPage> createState() => _DetailAdoptPageState();
@@ -26,7 +25,7 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
     BlocProvider.of<OnetimeInternetCheckCubit>(context)
         .onCheckConnectionOnetime();
     BlocProvider.of<DetailAdoptBloc>(context)
-        .add(FetchPetDescription(petId: widget.petAdoptId));
+        .add(FetchPetDescription(petId: widget.adoptId));
   }
 
   @override
@@ -40,9 +39,11 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
           Navigator.pop(context);
         } else if (state is RemoveAdoptSuccess) {
           Navigator.pop(context);
-        } else if (state is PetDescriptionLoaded) {
-          isOwner = state.isOwner;
-          print(isOwner);
+        }
+        if (state is PetDescriptionLoaded) {
+          setState(() {
+            isOwner = state.isOwner;
+          });
         }
       },
       child: Scaffold(
@@ -61,8 +62,23 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
                       ),
                       onSelected: (val) {
                         if (val == 1) {
-                          BlocProvider.of<DetailAdoptBloc>(context).add(
-                              RemoveOpenAdoptEvent(adoptId: widget.petAdoptId));
+                          showWarningDialog(context,
+                              title: "Are you sure to remove open adopt?",
+                              onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const LoadingView();
+                              },
+                            );
+                            Future.delayed(const Duration(seconds: 1),
+                                () async {
+                              BlocProvider.of<DetailAdoptBloc>(context).add(
+                                  RemoveOpenAdoptEvent(
+                                      adoptId: widget.adoptId));
+                              Navigator.pop(context);
+                            });
+                          });
                         }
                       },
                       itemBuilder: (context) {
@@ -77,33 +93,33 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
                   ]
                 : null,
           ),
-          body: SafeArea(
-            child: BlocBuilder<OnetimeInternetCheckCubit,
-                OnetimeInternetCheckState>(
-              builder: (context, state) {
-                if (state is OnetimeInternetCheckLoading) {
-                  return const LoadingView();
-                } else if (state is OnetimeInternetCheckGain) {
-                  return BlocBuilder<DetailAdoptBloc, DetailAdoptState>(
-                      builder: (context, state) {
-                    if (state is DetailAdoptLoading) {
-                      return const LoadingView();
-                    } else if (state is PetDescriptionLoaded) {
-                      return _BuildDetailAdopt(
+          body:
+              BlocBuilder<OnetimeInternetCheckCubit, OnetimeInternetCheckState>(
+            builder: (context, state) {
+              if (state is OnetimeInternetCheckLoading) {
+                return const LoadingView();
+              } else if (state is OnetimeInternetCheckGain) {
+                return BlocBuilder<DetailAdoptBloc, DetailAdoptState>(
+                    builder: (context, state) {
+                  if (state is DetailAdoptLoading) {
+                    return const LoadingView();
+                  } else if (state is PetDescriptionLoaded) {
+                    return SafeArea(
+                      child: _BuildDetailAdopt(
                         adoptEntity: state.adoptEntity,
                         isOwner: state.isOwner,
-                      );
-                    } else if (state is DetailAdoptError) {
-                      return ErrorView(message: state.message);
-                    } else {
-                      return const Center();
-                    }
-                  });
-                } else {
-                  return const NoInternetPage();
-                }
-              },
-            ),
+                      ),
+                    );
+                  } else if (state is DetailAdoptError) {
+                    return ErrorView(message: state.message);
+                  } else {
+                    return const Center();
+                  }
+                });
+              } else {
+                return const NoInternetPage();
+              }
+            },
           )),
     );
   }
@@ -389,41 +405,25 @@ class _BuildDetailAdopt extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: kBorderRadius,
-                            ),
-                            elevation: 0,
-                            backgroundColor: Colors.transparent,
-                            child: CustomDialog(
-                                desc: 'Adopt request sent to pet owner',
-                                title: 'Success',
-                                buttons: [
-                                  DialogButton(
-                                      text: 'OK',
-                                      func: () {
-                                        final notif = NotificationEntity(
-                                          title: 'Request For Adopt',
-                                          value:
-                                              'some people want to adopt your pet',
-                                          type: 'adopt',
-                                          readStatus: false,
-                                          sendTime: Timestamp.fromDate(
-                                              DateTime.now()),
-                                        );
-                                        BlocProvider.of<DetailAdoptBloc>(
-                                                context)
-                                            .add(RequestAdopt(
-                                          adoptEntity: adoptEntity,
-                                        ));
-                                        BlocProvider.of<SendNotifBloc>(context)
-                                            .add(SendAdoptNotification(
-                                                ownerId: adoptEntity.userId!,
-                                                notificationEntity: notif));
-                                      },
-                                      type: 'submit'),
-                                ]),
-                          );
+                          return showInfoDialog(context,
+                              title: 'Send Adopt request to pet owner?',
+                              onTap: () {
+                            final notif = NotificationEntity(
+                              title: 'Request For Adopt',
+                              value: 'some people want to adopt your pet',
+                              type: 'adopt',
+                              readStatus: false,
+                              sendTime: Timestamp.fromDate(DateTime.now()),
+                            );
+                            BlocProvider.of<DetailAdoptBloc>(context)
+                                .add(RequestAdopt(
+                              adoptEntity: adoptEntity,
+                            ));
+                            BlocProvider.of<SendNotifBloc>(context).add(
+                                SendAdoptNotification(
+                                    ownerId: adoptEntity.userId!,
+                                    notificationEntity: notif));
+                          });
                         });
                   },
                   text: 'Adopt Now',

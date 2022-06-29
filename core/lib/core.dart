@@ -16,3 +16,5 @@ export 'package:core/presentation/widgets/error_view.dart';
 export 'package:core/presentation/widgets/loading_view.dart';
 export 'package:core/presentation/widgets/shimmer_loading_view.dart';
 export 'package:core/presentation/widgets/default_appbar.dart';
+export 'package:core/presentation/widgets/dialog_ask.dart';
+

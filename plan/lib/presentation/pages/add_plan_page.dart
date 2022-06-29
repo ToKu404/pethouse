@@ -80,7 +80,8 @@ class _AddPlanPageState extends State<AddPlanPage> {
     return BlocListener<AddPlanCubit, AddPlanState>(
       listener: (context, state) {
         if (state is AddPlanSucces) {
-          Future.delayed(const Duration(seconds: 1), () {
+          showSuccessDialog(context, title: 'Success Add New Plan');
+          Future.delayed(const Duration(seconds: 2), () async {
             Navigator.pop(context);
             Navigator.pop(context);
           });
@@ -155,24 +156,12 @@ class _AddPlanPageState extends State<AddPlanPage> {
                         height: 50,
                         width: double.infinity,
                         onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.QUESTION,
-                              animType: AnimType.BOTTOMSLIDE,
-                              title: 'Apakah Anda Sudah Yakin?',
-                              btnCancelOnPress: () {},
-                              btnOkOnPress: () {
-                                _onAddPlanSubmit();
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return const LoadingView();
-                                  },
-                                );
-                              },
-                            ).show();
-                          }
+                           if (_formKey.currentState!.validate()) {
+                          showInfoDialog(context,
+                              title: 'Confirm create new plan', onTap: () {
+                            _onAddPlanSubmit();
+                          });
+                        }
                         },
                         text: 'Save Plan Activity',
                         isClicked: false,
