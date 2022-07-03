@@ -3,7 +3,7 @@
 ## What is Pethouse?
 Pethouse is the CPSG 40 team's final capstone project on the MSIB Kampus Merdeka x Dicoding Program path Multiplatform & Backend.
 
-Pethouse is a special application for animal lovers that can help to manage the animals of the activities they have. 
+Pethouse is a special application for pets lovers that can help to manage the animals of the activities they have. 
 
 ### This application offers various features such as: 
 - Daily Pet Tasks, 
