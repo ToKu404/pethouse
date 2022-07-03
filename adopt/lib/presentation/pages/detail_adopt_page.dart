@@ -38,6 +38,8 @@ class _DetailAdoptPageState extends State<DetailAdoptPage> {
           Navigator.pop(context);
         } else if (state is RemoveAdoptSuccess) {
           Navigator.pop(context);
+        } else if (state is SuccessAgreeRequestAdopt) {
+          Navigator.pop(context);
         }
         if (state is PetDescriptionLoaded) {
           setState(() {
@@ -178,8 +180,22 @@ class _BuildDetailAdopt extends StatelessWidget {
                           width: 10,
                         ),
                         InkWell(
-                          onTap: () => BlocProvider.of<DetailAdoptBloc>(context)
-                              .add(AgreeRequestAdopt(adoptEntity: adoptEntity)),
+                          onTap: () {
+                            final notif = NotificationEntity(
+                              title: 'Success Adopt Pet',
+                              value:
+                                  'your adoption request is approved by the pet owner',
+                              type: 'adopt',
+                              readStatus: false,
+                              sendTime: Timestamp.fromDate(DateTime.now()),
+                            );
+                            BlocProvider.of<SendNotifBloc>(context).add(
+                                SendAdoptNotification(
+                                    ownerId: adoptEntity.adopterId!,
+                                    notificationEntity: notif));
+                            BlocProvider.of<DetailAdoptBloc>(context).add(
+                                AgreeRequestAdopt(adoptEntity: adoptEntity));
+                          },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),

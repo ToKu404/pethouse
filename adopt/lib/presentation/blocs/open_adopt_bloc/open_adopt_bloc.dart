@@ -1,6 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:adopt/domain/usecases/remove_open_adopt_usecase.dart';
 import 'package:path/path.dart';
 import 'package:adopt/domain/entities/adopt_enitity.dart';
 import 'package:adopt/domain/usecases/create_new_adopt_usecase.dart';

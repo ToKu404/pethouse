@@ -36,64 +36,78 @@ class _FormEditProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserDbBloc, UserDbState>(builder: ((context, state) {
-      if (state is UserDbLoading) {
-        return const LoadingView();
-      } else if (state is SuccessGetData) {
-        BlocProvider.of<UserProfileBloc>(context).add(UserProfileInit(
-            imageUrl: state.user.imageUrl ?? '',
-            name: state.user.name ?? '',
-            email: state.user.email ?? ''));
-        return SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _ImageSection(
-                    userId: state.user.uid ?? 'uid',
-                    imageUrl: state.user.imageUrl ?? '',
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _NameField(
-                    name: state.user.name ?? '',
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _EmailField(email: state.user.email ?? ''),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  DefaultButton(
-                      height: 50,
-                      width: double.infinity,
-                      onTap: () {
-                        showQuestionDialog(context,
-                            title: 'Confirm Update Profile', onTap: () {
-                          context
-                              .read<UserProfileBloc>()
-                              .add(SubmitUpdate(state.user.uid ?? 'uid'));
-                          Navigator.pop(context);
-                        });
-                      },
-                      isClicked: false,
-                      text: 'Save Update')
-                ],
+    return BlocListener<UserProfileBloc, UserProfileState>(
+      listener: (context, state) {
+        if (state is UserProfileValidate) {
+          if (state.isFormValid && !state.isLoading) {
+            showSuccessDialog(context, title: 'Success Edit Profile');
+            Future.delayed(const Duration(seconds: 2), () async {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            });
+          }
+        }
+      },
+      child: BlocBuilder<UserDbBloc, UserDbState>(builder: ((context, state) {
+        if (state is UserDbLoading) {
+          return const LoadingView();
+        } else if (state is SuccessGetData) {
+          BlocProvider.of<UserProfileBloc>(context).add(
+            UserProfileInit(
+                imageUrl: state.user.imageUrl ?? '',
+                name: state.user.name ?? '',
+                email: state.user.email ?? ''),
+          );
+          return SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _ImageSection(
+                      userId: state.user.uid ?? 'uid',
+                      imageUrl: state.user.imageUrl ?? '',
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _NameField(
+                      name: state.user.name ?? '',
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _EmailField(email: state.user.email ?? ''),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    DefaultButton(
+                        height: 50,
+                        width: double.infinity,
+                        onTap: () {
+                          showQuestionDialog(context,
+                              title: 'Confirm Update Profile', onTap: () {
+                            context
+                                .read<UserProfileBloc>()
+                                .add(SubmitUpdate(state.user.uid ?? 'uid'));
+                          });
+                        },
+                        isClicked: false,
+                        text: 'Save Update')
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      } else {
-        return const Center();
-      }
-    }));
+          );
+        } else {
+          return const Center();
+        }
+      })),
+    );
   }
 }
 

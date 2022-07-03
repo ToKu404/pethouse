@@ -10,7 +10,7 @@ class SubmitUpdatePetEvent extends UpdatePetEvent {
   final PetEntity petEntityNew;
   final PetEntity petEntityOld;
 
-  SubmitUpdatePetEvent(
+  const SubmitUpdatePetEvent(
       {required this.petEntityNew, required this.petEntityOld});
 }
 
