@@ -6,12 +6,12 @@ Pethouse is the CPSG 40 team's final capstone project on the MSIB Kampus Merdeka
 Pethouse is a special application for animal lovers that can help to manage the animals of the activities they have. 
 
 ### This application offers various features such as: 
-- daily scheduling, 
-- event planning and reminders 
-- open adoption and adoption of pets 
+- Daily Pet Tasks, 
+- Event planning and reminders 
+- Open adoption and adoption of pets 
 - Pet maps to see animal lovers around 
-- store to buy feed for animals 
-- petrivia to know info about animals 
+- Store to buy feed for animals 
+- Petrivia to know info about animals 
 
 
 ### Pethouse is built using flutter by applying : 
