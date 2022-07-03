@@ -1,7 +1,7 @@
 # PETHOUSE
 ![pethouse_ss](https://github.com/ToKu404/Pethouse/blob/main/screenshoot/screenshoot.png?raw=true "pethouse_Ss")
 ## What is Pethouse?
-Pethouse is the CPSG 40 team's final capstone project on the MSIB Kampus Merdeka x Dicoding Program path Multiplatform Backend.
+Pethouse is the CPSG 40 team's final capstone project on the MSIB Kampus Merdeka x Dicoding Program path Multiplatform & Backend.
 
 Pethouse is a special application for animal lovers that can help to manage the animals of the activities they have. 
 
