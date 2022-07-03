@@ -93,7 +93,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
           .allMatches(url)
           .map((e) => e.group(1))
           .toList();
-      _petCertificateController.text = result.isEmpty ? '' : result[0]!;
+      _petCertificateController.text = result[0] ?? '';
     }
   }
 
@@ -121,6 +121,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
     if (_petType == 'Other') {
       petTypeText = _petOtherTypeController.text;
     }
+
     AdoptEntity adoptEntity = AdoptEntity(
         petName: petName,
         petType: petType,
@@ -134,7 +135,7 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
         whatsappNumber: waNumber,
         status: 'open');
 
-    context.read<EditAdoptBloc>().add(SubmitUpdateAdopt(
+    BlocProvider.of<EditAdoptBloc>(context).add(SubmitUpdateAdopt(
         adoptEntityNew: adoptEntity, adoptEntityOld: widget.adoptPet));
   }
 
@@ -150,7 +151,12 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
         if (state is EditAdoptError) {
           print(state.message);
         } else if (state is EditAdoptSuccess) {
-          Navigator.pop(context);
+          showSuccessDialog(context, title: 'Success Edit Adopt');
+          Future.delayed(const Duration(seconds: 2), () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
         }
         if (state is EditPetPhotoSuccess) {
           _petPhotoPath = state.petPhotoPath;
@@ -231,8 +237,13 @@ class _EditAdoptPageState extends State<EditAdoptPage> {
                               showQuestionDialog(context,
                                   title: 'Confirm Update Open Adopt',
                                   onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const LoadingView();
+                                  },
+                                );
                                 _submitEditAdopt();
-                                Navigator.pop(context);
                               });
                             }
                           },

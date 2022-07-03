@@ -96,54 +96,65 @@ class _BuildRequestAdoptStatus extends StatelessWidget {
                     final statusComplete = state.adoptList
                         .where((element) => element.status == 'completed')
                         .toList();
-                    if (statusWaiting.isNotEmpty) {
+                    print(statusComplete);
+                    if (statusWaiting.isNotEmpty || statusComplete.isNotEmpty) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            'Waiting for confirmation',
-                            style: kTextTheme.headline3,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: statusWaiting.length,
-                              itemBuilder: (context, index) {
-                                return ActivityStatusCard(
-                                    adopt: statusWaiting[index]);
-                              }),
-                        ],
-                      );
-                    } else if (statusComplete.isNotEmpty) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            'Request Adopt Success',
-                            style: kTextTheme.headline3,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: statusComplete.length,
-                              itemBuilder: (context, index) {
-                                return ActivityStatusCard(
-                                    adopt: statusComplete[index]);
-                              }),
+                          statusWaiting.isNotEmpty
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      'Waiting for confirmation',
+                                      style: kTextTheme.headline3,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: statusWaiting.length,
+                                        itemBuilder: (context, index) {
+                                          return ActivityStatusCard(
+                                              adopt: statusWaiting[index]);
+                                        }),
+                                  ],
+                                )
+                              : Container(),
+                          statusComplete.isNotEmpty
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      'Request Adopt Success',
+                                      style: kTextTheme.headline3,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: statusComplete.length,
+                                        itemBuilder: (context, index) {
+                                          return ActivityStatusCard(
+                                              adopt: statusComplete[index]);
+                                        })
+                                  ],
+                                )
+                              : Container()
                         ],
                       );
                     } else {
@@ -188,54 +199,65 @@ class _BuildOpenAdoptStatus extends StatelessWidget {
                     final statusWaiting = state.adoptList
                         .where((element) => element.status == 'wait')
                         .toList();
-                    if (statusWaiting.isNotEmpty) {
+
+                    if (statusOpen.isNotEmpty || statusWaiting.isNotEmpty) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            'Pending your confirmation',
-                            style: kTextTheme.headline3,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: statusWaiting.length,
-                              itemBuilder: (context, index) {
-                                return ActivityStatusCard(
-                                    adopt: statusWaiting[index]);
-                              }),
-                        ],
-                      );
-                    } else if (statusOpen.isNotEmpty) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            'Waiting for adopters',
-                            style: kTextTheme.headline3,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: statusOpen.length,
-                              itemBuilder: (context, index) {
-                                return ActivityStatusCard(
-                                    adopt: statusOpen[index]);
-                              }),
+                          statusOpen.isNotEmpty
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      'Waiting for adopters',
+                                      style: kTextTheme.headline3,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: statusOpen.length,
+                                        itemBuilder: (context, index) {
+                                          return ActivityStatusCard(
+                                              adopt: statusOpen[index]);
+                                        }),
+                                  ],
+                                )
+                              : Container(),
+                          statusWaiting.isNotEmpty
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      'Pending your confirmation',
+                                      style: kTextTheme.headline3,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: statusWaiting.length,
+                                        itemBuilder: (context, index) {
+                                          return ActivityStatusCard(
+                                              adopt: statusWaiting[index]);
+                                        })
+                                  ],
+                                )
+                              : Container()
                         ],
                       );
                     } else {

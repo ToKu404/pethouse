@@ -112,8 +112,7 @@ class _EditPetPageState extends State<EditPetPage> {
       gender: petGender,
       petDescription: petDescription,
     );
-
-    context.read<UpdatePetBloc>().add(SubmitUpdatePetEvent(
+    BlocProvider.of<UpdatePetBloc>(context).add(SubmitUpdatePetEvent(
         petEntityNew: petEntity, petEntityOld: widget.pet));
   }
 
@@ -128,7 +127,14 @@ class _EditPetPageState extends State<EditPetPage> {
               listener: (context, state) {
         if (state is UpdatePetError) {
           print(state.message);
-        } else if (state is UpdatePetSuccess) {}
+        } else if (state is UpdatePetSuccess) {
+          showSuccessDialog(context, title: 'Success Edit Pet');
+          Future.delayed(const Duration(seconds: 2), () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+        }
         if (state is UpdatePetPhotoSuccess) {
           _petPhotoPath = state.petPhotoPath;
         }
@@ -212,8 +218,6 @@ class _EditPetPageState extends State<EditPetPage> {
                                     },
                                   );
                                   _submitUpdatePet();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
                                 },
                               );
                             }

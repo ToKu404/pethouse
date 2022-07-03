@@ -109,7 +109,7 @@ class AdoptDataSourceImpl implements AdoptDataSource {
       //generate unique file name for certificate name
       const uuid = Uuid();
       final ext = filename.split('.');
-      filename = uuid.v1() + ext[1];
+      filename = "${uuid.v1()}.${ext[1]}";
       final ref =
           firebaseStorage.ref().child('pet_certificates').child(filename);
       await ref.putFile(File(petCertificatePath));
@@ -206,8 +206,11 @@ class AdoptDataSourceImpl implements AdoptDataSource {
     adoptMap['status'] = adopt.status;
     adoptMap['adopter_id'] = adopt.adopterId;
     adoptMap['adopter_name'] = adopt.adopterName;
-    await firebaseFirestore.collection('pet_adopts').doc(adopt.adoptId).update(
-        adoptMap); // await firebaseFirestore.collection('notifications').doc(adopt.userId)
+    await firebaseFirestore
+        .collection('pet_adopts')
+        .doc(adopt.adoptId)
+        .update(adoptMap);
+    // firebaseFirestore.collection('notifications').doc(adopt.userId);
   }
 
   // remove open adopt data from firestore

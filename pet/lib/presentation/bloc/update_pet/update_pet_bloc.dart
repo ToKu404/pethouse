@@ -1,4 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
+import 'package:core/core.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:equatable/equatable.dart';
@@ -23,12 +24,11 @@ class UpdatePetBloc extends Bloc<UpdatePetEvent, UpdatePetState> {
     on<SubmitUpdatePetEvent>(
       (event, emit) async {
         try {
-          final firebaseRegex = RegExp(r'%2F([\d\D]*\.[\D]+)\?',
-              multiLine: false, caseSensitive: false);
+         
           String oldPhotoName = '';
           if (event.petEntityOld.petPictureUrl != null &&
               event.petEntityOld.petPictureUrl != '') {
-            final result = firebaseRegex
+            final result = TextGeneratorHelper.firestorageLinkRegex
                 .allMatches(event.petEntityOld.petPictureUrl!)
                 .map((e) => e.group(1))
                 .toList();
@@ -47,7 +47,7 @@ class UpdatePetBloc extends Bloc<UpdatePetEvent, UpdatePetState> {
           String petCertificateUrl = "";
           if (event.petEntityOld.certificateUrl != null &&
               event.petEntityOld.certificateUrl != '') {
-            final result = firebaseRegex
+            final result = TextGeneratorHelper.firestorageLinkRegex
                 .allMatches(event.petEntityOld.certificateUrl!)
                 .map((e) => e.group(1))
                 .toList();

@@ -93,8 +93,8 @@ class DetailAdoptBloc extends Bloc<DetailAdoptEvent, DetailAdoptState> {
             gender: '',
             adoptId: event.adoptEntity.adoptId,
             status: 'completed',
-            adopterId: '',
-            adopterName: '',
+            adopterId: event.adoptEntity.adopterId,
+            adopterName: event.adoptEntity.adopterName,
             userId: event.adoptEntity.userId);
         await requestAdoptUsecase.execute(adopt);
         emit(SuccessAgreeRequestAdopt());

@@ -1,4 +1,3 @@
-
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:core/core.dart';
@@ -27,7 +26,6 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
   }) : super(EditAdoptInitial()) {
     on<SubmitUpdateAdopt>(
       (event, emit) async {
-        // emit(EditAdoptLoading());
         try {
           String oldPhotoName = '';
           if (event.adoptEntityOld.petPictureUrl != null &&
@@ -36,8 +34,10 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
                 .allMatches(event.adoptEntityOld.petPictureUrl!)
                 .map((e) => e.group(1))
                 .toList();
+            print(result);
             oldPhotoName = result[0] ?? '';
           }
+
           String petPhotoUrl = "";
           if (event.adoptEntityNew.petPictureUrl != null &&
               event.adoptEntityNew.petPictureUrl != '') {
@@ -49,6 +49,7 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
           }
           String oldCertificateName = '';
           String petCertificateUrl = "";
+          print(event.adoptEntityOld.certificateUrl);
           if (event.adoptEntityOld.certificateUrl != null &&
               event.adoptEntityOld.certificateUrl != '') {
             final result = TextGeneratorHelper.firestorageLinkRegex
@@ -68,7 +69,9 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
           }
           String petName = '';
           List<String> caseSearchList = [];
-          if (event.adoptEntityNew.petName != event.adoptEntityOld.petName) {
+          if (event.adoptEntityNew.petName != event.adoptEntityOld.petName &&
+              event.adoptEntityNew.petName != null &&
+              event.adoptEntityNew.petName != "") {
             petName = event.adoptEntityNew.petName ?? '';
             String temp = "";
             for (int i = 0; i < petName.length; i++) {
@@ -76,6 +79,7 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
               caseSearchList.add(temp.toLowerCase());
             }
           }
+
           AdoptEntity adoptEntity = AdoptEntity(
             petName: petName,
             petType:
@@ -109,12 +113,14 @@ class EditAdoptBloc extends Bloc<EditAdoptEvent, EditAdoptState> {
             certificateUrl: petCertificateUrl,
             adoptId: event.adoptEntityOld.adoptId,
             status: event.adoptEntityOld.status,
+            // userId: event.adoptEntityOld.userId,
             titleSearch: caseSearchList.isNotEmpty ? caseSearchList : null,
           );
 
           await updateAdoptUsecase.execute(adoptEntity);
           emit(EditAdoptSuccess());
-        } catch (_) {
+        } catch (e) {
+          print(e.toString());
           emit(EditAdoptError(message: 'failed edit open adopt'));
         }
       },
